@@ -67,6 +67,7 @@ namespace Common
             {
                 transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _posRef, .1f);
 
+                // TODO - should position be checked with some delta?
                 if (transform.position == _targetPosition)
                 {
                     if (OnTargetReached != null) OnTargetReached.Invoke();
