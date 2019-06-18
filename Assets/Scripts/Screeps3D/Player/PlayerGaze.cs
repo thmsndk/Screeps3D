@@ -10,6 +10,8 @@ namespace Screeps3D.Player
 {
     public class PlayerGaze : MonoBehaviour
     {
+        public bool allowFocus;
+
         public const int ViewDistance = 2;
         public const int SubscribeLimit = 2;
         public const float MapDistance = 200;
@@ -18,6 +20,11 @@ namespace Screeps3D.Player
         private Queue<Room> queue = new Queue<Room>();
         private List<Room> _mapRooms = new List<Room>();
         private double _nextMap;
+
+        PlayerGaze()
+        {
+            allowFocus = true;
+        }
 
         private void Update()
         {
@@ -112,7 +119,8 @@ namespace Screeps3D.Player
             }
             queue.Enqueue(room);
 
-            room.ShowObjects(true);
+            if (allowFocus)
+                room.ShowObjects(true);
             LoadNeighbors(room);
         }
         
