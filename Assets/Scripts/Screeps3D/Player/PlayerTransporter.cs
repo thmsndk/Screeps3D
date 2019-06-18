@@ -28,6 +28,7 @@ namespace Screeps3D.Player
             if (_playerGaze != null)
             {
                 _playerGaze.allowFocus = false;
+                CameraRig.Instance.OnTargetReached += OnTargetReached;
                 // disable player gaze while traveling to new room looks like we are subscribing to all the rooms we are scrolling past.
                 // while this prevents the subscription of too many rooms, it also breaks the subscriptions in general so they are not behaving as expected   
                 //CameraRig.Instance.OnTargetReached += OnTargetReached;
