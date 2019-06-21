@@ -20,13 +20,17 @@ namespace Screeps3D.RoomObjects
 	        "creepId": "5d095b6724f8af4e7189d6dc",
 	        "creepName": "r8970_1557",
 	        "creepTicksToLive": 1,
-	        "creepBody": ["ranged_attack", "move"],
+	        "creepBody": ["tough", "ranged_attack", "ranged_attack", "heal", "move", "move", "move", "move"],
 	        "creepSaying": null
+            "energy": ‭‭684‬‬,
+            "XKHO2":54,
+            "XLHO2":27,
+            "XGH2O":27,
         }
 
     */
 
-    internal class Tombstone : RoomObject, INamedObject, IOwnedObject 
+    internal class Tombstone : RoomObject, INamedObject, IOwnedObject, IDecay, IStoreObject
     {
         public string UserId { get; set; }
         public ScreepsUser Owner { get; set; }
@@ -35,14 +39,19 @@ namespace Screeps3D.RoomObjects
         public int TTL { get; set; } // How is TTL set on a creep?
         //public long AgeTime { get; set; }
         public long DeathTime { get; set; }
-        public long DecayTime { get; set; }
+        public float NextDecayTime { get; set; }
         public Vector3 PrevPosition { get; protected set; }
         public Vector3 BumpPosition { get; private set; }
         public Quaternion Rotation { get; private set; }
+        
+        public Dictionary<string, float> Store { get; private set; }
+        public float StoreCapacity { get; set; }
+        public float TotalResources { get; set; }
 
         internal Tombstone()
         {
             //Body = new CreepBody();
+            Store = new Dictionary<string, float>();
         }
 
         internal override void Unpack(JSONObject data, bool initial)
@@ -65,12 +74,14 @@ namespace Screeps3D.RoomObjects
             {
                 DeathTime = (long)deathData.n;
             }
-
-            var decayData = data["decayTime"];
-            if (deathData != null)
+            
+            var decayTime = data["decayTime"];
+            if (decayTime != null)
             {
-                DecayTime = (long)deathData.n;
+                NextDecayTime = (long)decayTime.n;
             }
+
+            UnpackUtility.Store(this, data);
 
             //Body.Unpack(data);
         }
