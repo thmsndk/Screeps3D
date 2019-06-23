@@ -44,6 +44,8 @@ namespace Screeps3D.RoomObjects
                     return new Source();
                 case Constants.TypeTombstone:
                     return new Tombstone();
+                case Constants.TypeResource:
+                    return new Resource();
                 default:
                     return new RoomObject();
             }
