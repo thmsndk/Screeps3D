@@ -22,22 +22,34 @@ Here are the major areas that I'd like to tackle next:
 * Creep Say (I'm imagining a floating text that appears above their heads and drifts up to eventually disappear)
 * ~Figure out the best way to subscribe/unsubscribe from rooms, fog of war, etc.~
   
----
-The following was added by thmsn
 
-## Requirements
+## Installation
+
+The Project is built using Unity and C# so the following software is required to run it.
+
+### Software Requirements
+* Visual Studio 2019 Community Edition
 * Unity 2018.3.7f1
 * Blender 2.79
   * If no models are showing up, you need to install blender, .blend files are used in unity
+  * Models might take a while before showing up after installing blender, it has to "reimport" the .blend files before they render.
+
+After installation you can open the project in unity, and in the asset menu you can "Open C# Project" to open visual studio
+* The C# Solution is constructed every time you open the project with Unity.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. If there is an existing issue you would like to tackle, please mention that in the issue to allow others to collab with you :)
 
 
+---
+Things thmsn came up with initially while streaming botarena
 
 ### ideas
 * Crumble walls based on hitpoints
 * Render alliances
   * Render your "friends" in another color than red
 * Make resource/material nodes larger / smaller based on resource amount available
-* color code material nodes based on the type of material
+* ~color code material nodes based on the type of material~
 * minimap
 
 ### stuff found when rendering BotArena
