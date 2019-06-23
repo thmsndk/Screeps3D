@@ -35,7 +35,6 @@ namespace Screeps3D.RoomObjects
 
         public Resource()
         {
-            Debug.Log("creating resource");
         }
 
         internal override void Unpack(JSONObject data, bool initial)
