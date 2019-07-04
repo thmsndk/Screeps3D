@@ -109,6 +109,7 @@ namespace Screeps3D
         {
             "energy", 
             "power", 
+            "ops",
             "H",
             "O",
             "U",
