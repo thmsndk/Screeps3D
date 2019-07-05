@@ -15,7 +15,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         public override string Name
         {
-            get { return "Energy"; }
+            get { return "Power"; }
         }
 
         public override Type ObjectType
@@ -40,7 +40,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         private void OnDelta(JSONObject obj)
         {
-            var hitsData = obj["energy"];
+            var hitsData = obj["power"];
             if (hitsData == null) return;
             UpdateLabel();
         }
