@@ -2,6 +2,7 @@
 using Common;
 using Screeps_API;
 using UnityEngine;
+using Screeps3D.RoomObjects.Views;
 
 namespace Screeps3D.Rooms.Views
 {
@@ -26,6 +27,7 @@ namespace Screeps3D.Rooms.Views
 
         private MapDotView[,] _dots = new MapDotView[50, 50];
         private List<MapDotView> _dotList = new List<MapDotView>();
+        private List<SourceKeeperLairView> _lairList = new List<SourceKeeperLairView>();
 
         public void Init(Room room)
         {
@@ -36,9 +38,17 @@ namespace Screeps3D.Rooms.Views
 
         private void OnShowObjects(bool show)
         {
-            if (!show)
-                return;
-            ClearDots();
+            if (show)
+            {
+                ClearDots();
+                foreach (var lair in _lairList)
+                    lair.Hide();
+            }
+            else
+            {   
+                foreach (var lair in _lairList)
+                    lair.Show();
+            }
         }
 
         private void OnMapData(JSONObject data)
@@ -48,51 +58,73 @@ namespace Screeps3D.Rooms.Views
             if (Room.ShowingObjects)
                 return;
             
-            SpawnDots(data);
-        }
-
-        private void SpawnDots(JSONObject data)
-        {
             foreach (var key in data.keys)
             {
-                if (key.Length <= 2)
+                // player
+                if (key.Length > 2)
+                    SpawnDots(key, data[key].list);
+
+                else if (key.Equals("k"))
+                    SpawnLairs(data[key].list);
+            }
+        }
+        
+        private void SpawnLairs(List<JSONObject> list)
+        {
+            foreach (var numArray in list)
+            {
+                var x = (int) numArray.list[0].n;
+                var y = (int) numArray.list[1].n;
+                var pos = PosUtility.Convert(x, y, Room);
+
+                if (_lairList.FindIndex(l => l.transform.position == pos) != -1)
                     continue;
 
-                Color randomEnemyColor;
-                if (!GameManager.Instance.PlayerColors.TryGetValue(key, out randomEnemyColor))
+                var lair = PoolLoader.Load(SourceKeeperLairView.Path);
+                var lairView = lair.GetComponent<SourceKeeperLairView>();
+
+                lairView.Load(null);
+                lairView.transform.position = PosUtility.Convert(x, y, Room);
+                lairView.Show();
+
+                _lairList.Add(lairView);
+            }
+        }
+        
+        private void SpawnDots(string key, List<JSONObject> list)
+        {
+            Color randomEnemyColor;
+            if (!GameManager.Instance.PlayerColors.TryGetValue(key, out randomEnemyColor))
+            {
+                randomEnemyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                GameManager.Instance.PlayerColors.Add(key, randomEnemyColor);
+            }
+
+
+            var color = key == ScreepsAPI.Me.UserId ? Color.green : randomEnemyColor;
+            foreach (var numArray in list)
+            {
+                var x = (int) numArray.list[0].n;
+                var y = (int) numArray.list[1].n;
+                var view = _dots[x, y];
+                if (!view || view.Color != color)
                 {
-                    randomEnemyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-                    GameManager.Instance.PlayerColors.Add(key, randomEnemyColor);
+                    var go = PoolLoader.Load(MapDotView.Path);
+                    view = go.GetComponent<MapDotView>();
                 }
-
-
-                var color = key == ScreepsAPI.Me.UserId ? Color.green : randomEnemyColor;
-                foreach (var numArray in data[key].list)
-                {
-                    var x = (int) numArray.list[0].n;
-                    var y = (int) numArray.list[1].n;
-                    var view = _dots[x, y];
-                    if (!view || view.Color != color)
-                    {
-                        var go = PoolLoader.Load(MapDotView.Path);
-                        view = go.GetComponent<MapDotView>();
-                    }
                     
-                    view.Load(x, y, this);
-                    view.Color = color;
-                    view.Show();
-                    _dots[x, y] = view;
-                    _dotList.Add(view);
-                }
+                view.Load(x, y, this);
+                view.Color = color;
+                view.Show();
+                _dots[x, y] = view;
+                _dotList.Add(view);
             }
         }
 
         private void ClearDots()
         {
             foreach (var dot in _dotList)
-            {
                 dot.Hide();
-            }
             _dotList.Clear();
         }
 
