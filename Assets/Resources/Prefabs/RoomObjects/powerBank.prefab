@@ -96,6 +96,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _powerScaleVisibility: {fileID: 3510289316301859309}
   _Power: 0
+  hits: 100
+  destroyed: {fileID: 5667585055767862771, guid: 32f1a4ebe99072345b9777bd9adb813e,
+    type: 3}
 --- !u!1 &2193485393721761997
 GameObject:
   m_ObjectHideFlags: 0
