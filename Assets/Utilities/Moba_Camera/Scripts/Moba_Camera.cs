@@ -337,7 +337,7 @@ public class Moba_Camera : MonoBehaviour {
 		// Camera rotate
 		float changeInRotationX = 0.0f;
 		float changeInRotationY = 0.0f;
-		Screen.lockCursor = false;
+		Cursor.lockState = CursorLockMode.None;
 		
 		if((inputs.useKeyCodeInputs)?
 			(Input.GetKey(inputs.keycodes.RotateCamera)&&inputs.useKeyCodeInputs):

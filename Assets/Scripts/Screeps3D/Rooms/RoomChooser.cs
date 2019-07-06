@@ -72,7 +72,7 @@ namespace Screeps3D.Rooms
 
                     this.RoomSwap();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     throw;

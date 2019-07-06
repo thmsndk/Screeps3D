@@ -60,9 +60,7 @@ namespace UnityEngine.Rendering.PostProcessing
                 { TextureFormat.ASTC_RGBA_6x6, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ASTC_RGBA_8x8, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ASTC_RGBA_10x10, RenderTextureFormat.ARGB32 },
-                { TextureFormat.ASTC_RGBA_12x12, RenderTextureFormat.ARGB32 },
-                { TextureFormat.ETC_RGB4_3DS, RenderTextureFormat.ARGB32 },
-                { TextureFormat.ETC_RGBA8_3DS, RenderTextureFormat.ARGB32 }
+                { TextureFormat.ASTC_RGBA_12x12, RenderTextureFormat.ARGB32 }
             };
         }
 
