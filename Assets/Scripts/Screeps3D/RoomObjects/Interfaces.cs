@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Screeps3D.Rooms;
 using Screeps_API;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects
 {
@@ -11,6 +12,14 @@ namespace Screeps3D.RoomObjects
         void Load(RoomObject roomObject);
         void Delta(JSONObject data);
         void Unload(RoomObject roomObject);
+    }
+
+    internal interface IMapViewComponent
+    {
+        void Show();
+        void Hide();
+        
+        Transform transform { get; }
     }
 
     internal interface IRoomObject

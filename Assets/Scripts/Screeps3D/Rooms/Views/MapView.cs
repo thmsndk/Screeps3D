@@ -3,6 +3,7 @@ using Common;
 using Screeps_API;
 using UnityEngine;
 using Screeps3D.RoomObjects.Views;
+using Screeps3D.RoomObjects;
 
 namespace Screeps3D.Rooms.Views
 {
@@ -27,7 +28,7 @@ namespace Screeps3D.Rooms.Views
 
         private MapDotView[,] _dots = new MapDotView[50, 50];
         private List<MapDotView> _dotList = new List<MapDotView>();
-        private List<SourceKeeperLairView> _lairList = new List<SourceKeeperLairView>();
+        private List<IMapViewComponent> _objectList = new List<IMapViewComponent>();
 
         public void Init(Room room)
         {
@@ -41,13 +42,13 @@ namespace Screeps3D.Rooms.Views
             if (show)
             {
                 ClearDots();
-                foreach (var lair in _lairList)
-                    lair.Hide();
+                foreach (var obj in _objectList)
+                    obj.Hide();
             }
             else
             {   
-                foreach (var lair in _lairList)
-                    lair.Show();
+                foreach (var obj in _objectList)
+                    obj.Show();
             }
         }
 
@@ -65,11 +66,24 @@ namespace Screeps3D.Rooms.Views
                     SpawnDots(key, data[key].list);
 
                 else if (key.Equals("k"))
-                    SpawnLairs(data[key].list);
+                    SpawnRoomObjects<SourceKeeperLairView>(data[key].list, SourceKeeperLairView.Path);
+
+                else if (key.Equals("c"))
+                    SpawnRoomObjects<ControllerView>(data[key].list, ControllerView.Path);
+
+                else if (key.Equals("s"))
+                    SpawnRoomObjects<SourceView>(data[key].list, SourceView.Path);
+
+                else if (key.Equals("m"))
+                    SpawnRoomObjects<MineralView>(data[key].list, MineralView.Path);
+
+                else if (key.Equals("w"))
+                    SpawnRoomObjects<WallView>(data[key].list, WallView.Path);
             }
         }
         
-        private void SpawnLairs(List<JSONObject> list)
+        private void SpawnRoomObjects<T>(List<JSONObject> list, string PrefabPath)
+            where T: IMapViewComponent
         {
             foreach (var numArray in list)
             {
@@ -77,17 +91,16 @@ namespace Screeps3D.Rooms.Views
                 var y = (int) numArray.list[1].n;
                 var pos = PosUtility.Convert(x, y, Room);
 
-                if (_lairList.FindIndex(l => l.transform.position == pos) != -1)
+                if (_objectList.FindIndex(l => l.transform.position == pos) != -1)
                     continue;
 
-                var lair = PoolLoader.Load(SourceKeeperLairView.Path);
-                var lairView = lair.GetComponent<SourceKeeperLairView>();
+                var obj = PoolLoader.Load(PrefabPath);
+                var objView = obj.GetComponent<T>();
 
-                lairView.Load(null);
-                lairView.transform.position = PosUtility.Convert(x, y, Room);
-                lairView.Show();
+                objView.transform.position = PosUtility.Convert(x, y, Room);
+                objView.Show();
 
-                _lairList.Add(lairView);
+                _objectList.Add(objView);
             }
         }
         
