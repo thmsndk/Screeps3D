@@ -59,7 +59,7 @@ namespace Common
         {
             if (!_pools.ContainsKey(path))
             {
-                throw new Exception("returned pooled object to unused pool");
+                throw new Exception(path + " returned pooled object to unused pool");
             }
 
             _pools[path].Push(go);

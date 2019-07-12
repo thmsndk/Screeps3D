@@ -74,12 +74,8 @@ namespace Screeps3D.RoomObjects
             {
                 DeathTime = (long)deathData.n;
             }
-            
-            var decayTime = data["decayTime"];
-            if (decayTime != null)
-            {
-                NextDecayTime = (long)decayTime.n;
-            }
+
+            UnpackUtility.Decay(this, data);
 
             UnpackUtility.Store(this, data);
 

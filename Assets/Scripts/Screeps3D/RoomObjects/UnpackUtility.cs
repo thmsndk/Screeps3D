@@ -104,11 +104,19 @@ namespace Screeps3D.RoomObjects
         internal static void Decay(IDecay obj, JSONObject data)
         {
             var decayData = data["nextDecayTime"];
+
+            if (decayData == null)
+            {
+                decayData = data["decayTime"];
+            }
+
             if (decayData != null)
             {
                 obj.NextDecayTime = decayData.n;
             }
         }
+
+
 
         internal static void Progress(IProgress progressObj, JSONObject data)
         {

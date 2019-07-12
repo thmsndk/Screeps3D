@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 398931696216430506, guid: ead5c32941b6837419ff8f8e28e837c6, type: 2}
+  - {fileID: 21204587506113762, guid: b5730ad4389d12d4a9e46c4a62dd1607, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,8 +116,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Sample text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ead5c32941b6837419ff8f8e28e837c6, type: 2}
-  m_sharedMaterial: {fileID: 398931696216430506, guid: ead5c32941b6837419ff8f8e28e837c6,
+  m_fontAsset: {fileID: 11400000, guid: b5730ad4389d12d4a9e46c4a62dd1607, type: 2}
+  m_sharedMaterial: {fileID: 21204587506113762, guid: b5730ad4389d12d4a9e46c4a62dd1607,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -189,7 +189,7 @@ MonoBehaviour:
     linkCount: 0
     lineCount: 1
     pageCount: 1
-    materialCount: 2
+    materialCount: 1
   m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 661847642210331852}
   - component: {fileID: 2327728711459400403}
   m_Layer: 0
-  m_Name: TMP SubMesh [Inconsolata-Extended Material + LiberationSans SDF Atlas]
+  m_Name: TMP SubMesh [NotoEmoji-Regular SDF emoji Material + LiberationSans SDF Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
