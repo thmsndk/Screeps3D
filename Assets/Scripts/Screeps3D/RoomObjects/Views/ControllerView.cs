@@ -85,11 +85,13 @@ namespace Screeps3D.RoomObjects.Views
             _rend.materials[1].SetColor ("_EmissionColor", finalColor);
         }
         
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
         public void Show()
         {
             _vis.Show();
         }
-
         public void Hide()
         {
             _vis.Hide();

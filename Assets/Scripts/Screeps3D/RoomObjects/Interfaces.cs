@@ -18,7 +18,8 @@ namespace Screeps3D.RoomObjects
     {
         void Show();
         void Hide();
-        
+        int roomPosX { get; set; }
+        int roomPosY { get; set; }
         Transform transform { get; }
     }
 

@@ -84,11 +84,13 @@ namespace Screeps3D.RoomObjects.Views
             //_rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _tombstone.Rotation, Time.deltaTime * 5);
         }
         
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
         public void Show()
         {
             _vis.Show();
         }
-
         public void Hide()
         {
             _vis.Hide();

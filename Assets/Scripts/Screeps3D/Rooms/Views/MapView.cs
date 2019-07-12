@@ -28,6 +28,9 @@ namespace Screeps3D.Rooms.Views
 
         private MapDotView[,] _dots = new MapDotView[50, 50];
         private List<MapDotView> _dotList = new List<MapDotView>();
+        
+        // assuming maximum one object per tile
+        private IMapViewComponent[,] _objects = new IMapViewComponent[50, 50];
         private List<IMapViewComponent> _objectList = new List<IMapViewComponent>();
 
         public void Init(Room room)
@@ -89,17 +92,18 @@ namespace Screeps3D.Rooms.Views
             {
                 var x = (int) numArray.list[0].n;
                 var y = (int) numArray.list[1].n;
-                var pos = PosUtility.Convert(x, y, Room);
-
-                if (_objectList.FindIndex(l => l.transform.position == pos) != -1)
+                if (_objects[x, y] != null)
                     continue;
 
                 var obj = PoolLoader.Load(PrefabPath);
                 var objView = obj.GetComponent<T>();
 
+                objView.roomPosX = x;
+                objView.roomPosY = y;
                 objView.transform.position = PosUtility.Convert(x, y, Room);
                 objView.Show();
 
+                _objects[x, y] = objView;
                 _objectList.Add(objView);
             }
         }

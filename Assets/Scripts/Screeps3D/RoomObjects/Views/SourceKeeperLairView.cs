@@ -9,6 +9,7 @@ namespace Screeps3D.RoomObjects.Views
         
         [SerializeField] private ScaleVisibility _vis;
         private SourceKeeperLair _sourceKeeperLair;
+        
 
         public void Init()
         {
@@ -27,11 +28,13 @@ namespace Screeps3D.RoomObjects.Views
         {
         }
         
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
         public void Show()
         {
             _vis.Show();
         }
-
         public void Hide()
         {
             _vis.Hide();
