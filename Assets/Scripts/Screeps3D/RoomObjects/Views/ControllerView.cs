@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class ControllerView : MonoBehaviour, IObjectViewComponent
+    public class ControllerView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
     {
+        public const string Path = "Prefabs/RoomObjects/controller";
+
         [SerializeField] private Renderer _rend;
         [SerializeField] private Renderer _playerRend;
+        [SerializeField] private ScaleVisibility _vis;
         private Texture2D _texture;
         private Color _controllerWhite;
         private Controller _controller;
@@ -79,6 +83,18 @@ namespace Screeps3D.RoomObjects.Views
             float emission = floor + Mathf.PingPong (Time.time * .2f, ceiling - floor);
             Color finalColor = Color.white * emission;
             _rend.materials[1].SetColor ("_EmissionColor", finalColor);
+        }
+        
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
+        public void Show()
+        {
+            _vis.Show();
+        }
+        public void Hide()
+        {
+            _vis.Hide();
         }
     }
 }

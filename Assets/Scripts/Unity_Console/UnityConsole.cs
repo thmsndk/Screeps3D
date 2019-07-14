@@ -23,7 +23,6 @@ namespace Unity_Console
         [SerializeField] public RectTransform _content;
         private List<ConsoleLine> _lines = new List<ConsoleLine>();
         private Queue<Message> _messages = new Queue<Message>();
-        private int _index = 0;
         private float _nextMessage;
         private List<string> _inputLog = new List<string>();
         private int _cycleIndex;

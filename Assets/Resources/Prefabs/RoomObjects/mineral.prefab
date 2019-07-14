@@ -168,3 +168,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mineral: {fileID: 23407070794174552}
+  _vis: {fileID: 114201680228044910}

@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class SourceKeeperLairView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
+    public class SourceView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
     {
-        public const string Path = "Prefabs/RoomObjects/keeperLair";
-        
+        public const string Path = "Prefabs/RoomObjects/source";
+
         [SerializeField] private ScaleVisibility _vis;
-        private SourceKeeperLair _sourceKeeperLair;
+        private Source _source;
         
 
         public void Init()
         {
         }
-        
+
         public void Load(RoomObject roomObject)
         {
-            _sourceKeeperLair = roomObject as SourceKeeperLair;
+            _source = roomObject as Source;
         }
 
         public void Delta(JSONObject data)

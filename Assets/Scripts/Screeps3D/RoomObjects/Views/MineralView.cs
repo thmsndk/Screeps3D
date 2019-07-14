@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    internal class MineralView : ObjectView
+    internal class MineralView : ObjectView, IMapViewComponent
     {
+        public const string Path = "Prefabs/RoomObjects/mineral";
+
         [SerializeField] private Renderer _mineral;
+        [SerializeField] private ScaleVisibility _vis;
         //[SerializeField] private Transform _rotationRoot;
 
         private Quaternion _rotTarget;
@@ -78,6 +82,18 @@ namespace Screeps3D.RoomObjects.Views
                 return;
             //transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
             //_rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _tombstone.Rotation, Time.deltaTime * 5);
+        }
+        
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
+        public void Show()
+        {
+            _vis.Show();
+        }
+        public void Hide()
+        {
+            _vis.Hide();
         }
     }
 }
