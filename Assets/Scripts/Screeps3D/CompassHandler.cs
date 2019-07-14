@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using TMPro;
+using Screeps3D.Player;
 
 public class CompassHandler : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class CompassHandler : MonoBehaviour
     public RawImage compass;
     //public SVGImage compass;
     public Transform player;
+
+    public TMP_Text roomName;
 
     void Start()
     {
@@ -34,5 +38,9 @@ public class CompassHandler : MonoBehaviour
         // RawImage
         compass.uvRect = new Rect(player.localEulerAngles.y / 360f, 0, 1, 1);
 
+        if (roomName != null)
+        {
+            roomName.text = PlayerPosition.Instance.RoomName;
+        }
     }
 }
