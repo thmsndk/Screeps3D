@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git#0.8.1",
     "com.unity.ads": "2.0.8",
     "com.unity.analytics": "3.3.2",
     "com.unity.collab-proxy": "1.2.16",
@@ -7,6 +8,7 @@
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.purchasing": "2.0.6",
     "com.unity.timeline": "1.0.0",
+    "com.unity.vectorgraphics": "1.0.0-preview.28",
     "com.unity.xr.legacyinputhelpers": "2.0.2",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -38,5 +40,11 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
+  },
+  "lock": {
+    "com.coffee.softmask-for-ugui": {
+      "hash": "7c895725406715e9ae1882bdab60c3430efab04d",
+      "revision": "0.8.1"
+    }
   }
 }

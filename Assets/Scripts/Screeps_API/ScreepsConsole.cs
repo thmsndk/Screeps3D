@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,15 +8,19 @@ namespace Screeps_API
     public class ScreepsConsole : MonoBehaviour
     {
 
-        public Action<string> OnConsoleMessage;
+        public Action<ConsoleMessage> OnConsoleMessage;
         public Action<string> OnConsoleError;
         public Action<string> OnConsoleResult;
         
         private Queue<JSONObject> queue = new Queue<JSONObject>();
 
+        internal List<IConsoleClientAbuse> consoleClientAbuses = new List<IConsoleClientAbuse>();
+
         private void Start()
         {
             ScreepsAPI.OnConnectionStatusChange += OnConnectionStatusChange;
+            consoleClientAbuses.Add(new FontColor());
+            consoleClientAbuses.Add(new RoomLink());
         }
 
         public void Input(string javascript)
@@ -53,7 +58,14 @@ namespace Screeps_API
                 {
                     foreach (var msgData in log.list)
                     {
-                        OnConsoleMessage(RemoveEscapes(msgData.str));
+                        var message = new ConsoleMessage(msgData.str);
+
+                        foreach (var abuser in consoleClientAbuses)
+                        {
+                           abuser.Abuse(message);
+                        }
+
+                        OnConsoleMessage(message);
                     }
                 }
                 var results = messages["results"];
@@ -75,19 +87,32 @@ namespace Screeps_API
             ScreepsAPI.Instance.IncrementTime();
         }
 
-        private string AddEscapes(string str)
+        private static string AddEscapes(string str)
         {
             str = str.Replace("\"", "\\\"");
             return str;
         }
 
-        private string RemoveEscapes(string str)
+        private static string RemoveEscapes(string str)
         {
             str = str.Replace("\\n", "\n");
             str = str.Replace("\\\\", "\\");
             // handle "html" <a href=\"...
             str = str.Replace("\\\"", "\"");
             return str;
+        }
+
+        public class ConsoleMessage
+        {
+            public ConsoleMessage(string message)
+            {
+                RawMessage = message;
+                Message = RemoveEscapes(message);
+            }
+            public string Message { get; set; }
+            public string RawMessage { get; set; }
+
+            public static implicit operator string(ConsoleMessage message) { return message.Message.ToString(); }
         }
     }
 }

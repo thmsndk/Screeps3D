@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class SourceView : MonoBehaviour, IObjectViewComponent
+    public class SourceView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
     {
-        //[SerializeField] private ScaleAxes _energyDisplay;
-        [SerializeField] private ScaleVisibility _Visibility;
+        public const string Path = "Prefabs/RoomObjects/source";
+
+        [SerializeField] private ScaleVisibility _vis;
         private Source _source;
+        
 
         public void Init()
         {
@@ -36,11 +38,23 @@ namespace Screeps3D.RoomObjects.Views
             // Map range to visibility range
             var visibility = minVisibility + (maxVisibility - minVisibility) * ((current - minimum) / (maximum - minimum));
 
-            _Visibility.SetVisibility(visibility);
+            _vis.SetVisibility(visibility);
         }
 
         public void Unload(RoomObject roomObject)
         {
+        }
+        
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
+        public void Show()
+        {
+            _vis.Show();
+        }
+        public void Hide()
+        {
+            _vis.Hide();
         }
     }
 }

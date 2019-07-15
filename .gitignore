@@ -43,4 +43,5 @@ Icon?
 ehthumbs.db
 Thumbs.db
 dist/*
-Assets/*.blend1
+*.blend1
+*.blend1.meta

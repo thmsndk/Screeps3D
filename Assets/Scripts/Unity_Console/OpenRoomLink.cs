@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Screeps3D.Rooms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Assets.Scripts.Screeps3D
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class OpenRoomLink : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
     {
+        [SerializeField] private RoomChooser _chooser;
         private TextMeshProUGUI pTextMeshPro;
 
         private void Awake()
@@ -31,7 +33,9 @@ namespace Assets.Scripts.Screeps3D
 
                 // open the link id as a url, which is the metadata we added in the text field
                 //Application.OpenURL(linkInfo.GetLinkID());
-                Debug.Log("link!!" + linkInfo.GetLinkID());
+                //Debug.Log("link!!" + linkInfo.GetLinkID());
+                var linkId = linkInfo.GetLinkID();
+                _chooser.GetAndChooseRoom(linkId);
 
             }
         }

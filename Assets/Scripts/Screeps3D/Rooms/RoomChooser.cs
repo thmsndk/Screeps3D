@@ -72,7 +72,7 @@ namespace Screeps3D.Rooms
 
                     this.RoomSwap();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     throw;
@@ -172,7 +172,7 @@ namespace Screeps3D.Rooms
              * */
         }
 
-        private void GetAndChooseRoom(string roomName)
+        public void GetAndChooseRoom(string roomName)
         {
             // _roomInput.text
             var room = RoomManager.Instance.Get(roomName, _shards[_shardInput.value]);
