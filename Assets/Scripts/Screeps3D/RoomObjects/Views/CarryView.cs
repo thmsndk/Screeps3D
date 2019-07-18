@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
     public class CarryView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private GameObject _carry;
-        private Creep _creep;
+        private IStoreObject _creep;
 
         public void Init()
         {
@@ -13,8 +13,12 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _creep = roomObject as Creep;
-            _carry.SetActive(_creep.StoreCapacity > 0);
+            _creep = roomObject as IStoreObject;
+
+            if (_creep != null)
+            {
+                _carry.SetActive(_creep.StoreCapacity > 0);
+            }
         }
 
         public void Delta(JSONObject data)

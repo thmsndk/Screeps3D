@@ -26,6 +26,7 @@ namespace Screeps3D
         public const string TypeResource = "energy";
         public const string TypeSourceKeeperLair = "keeperLair";
         public const string TypePowerBank = "powerBank";
+        public const string TypePowerCreep = "powerCreep";
 
 
         public const float ShardHeight = 100;

@@ -6,7 +6,7 @@ namespace Screeps3D.RoomObjects.Views
     {
 
         [SerializeField] private Transform _bumpRoot;
-        private Creep _creep;
+        private IBump _creep;
         private Vector3 _bumpTarget;
         private Vector3 _bumpRef;
         private bool _bumping;
@@ -18,7 +18,7 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _creep = roomObject as Creep;
+            _creep = roomObject as IBump;
         }
 
         public void Delta(JSONObject data)

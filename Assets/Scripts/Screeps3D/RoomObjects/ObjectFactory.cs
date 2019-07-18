@@ -50,6 +50,8 @@ namespace Screeps3D.RoomObjects
                     return new SourceKeeperLair();
                 case Constants.TypePowerBank:
                     return new PowerBank();
+                case Constants.TypePowerCreep:
+                    return new PowerCreep();
                 default:
                     return new RoomObject();
             }

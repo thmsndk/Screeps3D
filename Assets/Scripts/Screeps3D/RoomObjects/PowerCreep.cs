@@ -6,63 +6,74 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects
 {
-    /*{
-        
-        "body":[
-            {
-                "type":"work",
-                "hits":100
-            },
-            {
-                "type":"work",
-                "hits":100
-            },
-            {
-                "type":"carry",
-                "hits":100
-            },
-            {
-                "type":"carry",
-                "hits":100
-            },
-            {
-                "type":"move",
-                "hits":100
-            }
-        ],
-        "energy":0,
-        "energyCapacity":100,
-        "type":"creep",
-        "room":"E2S7",
-        "user":"5a0da017ab17fd00012bf0e7",
-        "hits":500,
-        "hitsMax":500,
-        "spawning":false,
-        "fatigue":0,
-        "notifyWhenAttacked":true,
-        "ageTime":8598,
-        "actionLog":{
-            "attacked":null,
-            "healed":null,
-            "attack":null,
-            "rangedAttack":null,
-            "rangedMassAttack":null,
-            "rangedHeal":null,
-            "harvest":null,
-            "heal":null,
-            "repair":null,
-            "build":null,
-            "say":null,
-            "upgradeController":null,
-            "reserveController":null
+    /*
+     {
+	        "_id": "5cccd296b0d5ab7bb6ab8117",
+	        "name": "OP_2",
+	        "className": "operator",
+	        "user": "598d908641d70d5a4845c623",
+	        "level": 25,
+	        "hitsMax": 26000,
+	        "energyCapacity": 2600,
+	        "spawnCooldownTime": null,
+	        "powers": {
+		        "1": {
+			        "level": 5,
+			        "cooldownTime": 8738803
+		        },
+		        "2": {
+			        "level": 3,
+			        "cooldownTime": 8737320
+		        },
+		        "5": {
+			        "level": 5
+		        },
+		        "6": {
+			        "level": 3,
+			        "cooldownTime": 8737447
+		        },
+		        "8": {
+			        "level": 3,
+			        "cooldownTime": 7091739
+		        },
+		        "13": {
+			        "level": 5,
+			        "cooldownTime": 8738855
+		        },
+		        "16": {
+			        "level": 1,
+			        "cooldownTime": 8699186
+		        }
+	        },
+	        "shard": "shard3",
+	        "deleteTime": null,
+	        "type": "powerCreep",
+	        "room": "W3S5",
+	        "x": 39,
+	        "y": 40,
+	        "hits": 26000,
+	        "ageTime": 8740670,
+	        "actionLog": {
+		        "spawned": null,
+		        "attack": null,
+		        "attacked": null,
+		        "healed": null,
+		        "power": {"id":1,"x":13,"y":27},
+		        "say": null
+	        },
+	        "notifyWhenAttacked": true,
+	        "ops": 616,
+	        "energy": 500
         }
-    }*/
+    */
 
-    internal class Creep : RoomObject, INamedObject, IHitpointsObject, IOwnedObject, IStoreObject, IActionObject, IBump 
+    // TODO: we need to map powers per class, I mean, what is power 1,8, 16?
+
+    internal class PowerCreep : RoomObject, INamedObject, IHitpointsObject, IOwnedObject, IStoreObject, IActionObject, IBump
     {
         public string UserId { get; set; }
         public ScreepsUser Owner { get; set; }
-        public CreepBody Body { get; private set; }
+        //public CreepBody Body { get; private set; }
         public string Name { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
         public float Hits { get; set; }
@@ -77,9 +88,9 @@ namespace Screeps3D.RoomObjects
         public float StoreCapacity { get; set; }
         public float TotalResources { get; set; }
 
-        internal Creep()
+        internal PowerCreep()
         {
-            Body = new CreepBody();
+            //Body = new CreepBody();
             Actions = new Dictionary<string, JSONObject>();
             Store = new Dictionary<string, float>();
         }
@@ -109,7 +120,7 @@ namespace Screeps3D.RoomObjects
                 Fatigue = fatigueData.n;
             }
             
-            Body.Unpack(data);
+            //Body.Unpack(data);
         }
         
         internal override void Delta(JSONObject delta, Room room)

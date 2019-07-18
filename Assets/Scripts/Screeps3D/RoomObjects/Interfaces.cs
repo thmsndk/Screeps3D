@@ -96,4 +96,10 @@ namespace Screeps3D.RoomObjects
     {
         Dictionary<string, JSONObject> Actions { get; }
     }
+
+    internal interface IBump
+    {
+        Vector3 PrevPosition { get; }
+        Vector3 BumpPosition { get; }
+    }
 }

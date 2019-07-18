@@ -17,7 +17,7 @@ namespace Screeps3D.RoomObjects.Views
             {"upgradeController", new BeamConfig(Color.yellow, 0.3f, 1f)}
         };
 
-        private Creep _creep;
+        private IActionObject _creep;
 
         public void Init()
         {
@@ -25,15 +25,16 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _creep = roomObject as Creep;
+            _creep = roomObject as IActionObject;
         }
 
         public void Delta(JSONObject data)
         {
             var beam = BeamConfigs.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
             if (beam.Value == null) return;
-            EffectsUtility.Beam(_creep, _creep.Actions[beam.Key], beam.Value);
+            EffectsUtility.Beam(_creep as RoomObject, _creep.Actions[beam.Key], beam.Value);
             // StartCoroutine(Beam.Draw(_creep, _creep.Actions[beam.Key], _lineRenderer, beam.Value));
+            
         }
 
         public void Unload(RoomObject roomObject)
