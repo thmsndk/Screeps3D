@@ -10,6 +10,7 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _rend;
         [SerializeField] private Renderer _playerRend;
         [SerializeField] private ScaleVisibility _vis;
+        [SerializeField] private Collider _collider;
         private Texture2D _texture;
         private Color _controllerWhite;
         private Controller _controller;
@@ -91,10 +92,12 @@ namespace Screeps3D.RoomObjects.Views
         public void Show()
         {
             _vis.Show();
+            _collider.enabled = false;
         }
         public void Hide()
         {
             _vis.Hide();
+            _collider.enabled = true;
         }
     }
 }

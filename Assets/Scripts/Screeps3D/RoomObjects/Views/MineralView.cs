@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
         public const string Path = "Prefabs/RoomObjects/mineral";
 
         [SerializeField] private Renderer _mineral;
+        [SerializeField] private Collider _collider;
         [SerializeField] private ScaleVisibility _vis;
         //[SerializeField] private Transform _rotationRoot;
 
@@ -90,10 +91,12 @@ namespace Screeps3D.RoomObjects.Views
         public void Show()
         {
             _vis.Show();
+            _collider.enabled = false;
         }
         public void Hide()
         {
             _vis.Hide();
+            _collider.enabled = true;
         }
     }
 }

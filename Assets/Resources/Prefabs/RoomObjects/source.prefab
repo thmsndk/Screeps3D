@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _vis: {fileID: 114410195828170554}
+  _collider: {fileID: 135085256801886540}

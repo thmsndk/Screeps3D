@@ -190,6 +190,7 @@ MonoBehaviour:
   _rend: {fileID: 23382158306647882}
   _playerRend: {fileID: 23815849170721894}
   _vis: {fileID: 114740769647534536}
+  _collider: {fileID: 136180094341036114}
 --- !u!1 &1828175654539502
 GameObject:
   m_ObjectHideFlags: 0
