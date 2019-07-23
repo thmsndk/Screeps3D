@@ -1,13 +1,15 @@
 ﻿using Common;
-using Screeps3D.RoomObjects;
 using System.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.Screeps3D.RoomObjects.Views
+namespace Screeps3D.RoomObjects.Views
 {
-    class PowerBankView : MonoBehaviour, IObjectViewComponent
+    public class PowerBankView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
     {
+        public const string Path = "Prefabs/RoomObjects/powerBank";
+
         [SerializeField] private ScaleVisibility _powerScaleVisibility;
+        [SerializeField] private Collider _collider;
         private PowerBank _powerBank;
 
         [SerializeField] private float _Power;
@@ -63,6 +65,20 @@ namespace Assets.Scripts.Screeps3D.RoomObjects.Views
                 StopCoroutine(_despawnDebris);
                 _despawnDebris = null;
             }
+        }
+        
+        // IMapViewComponent *****************
+        public int roomPosX { get; set; }
+        public int roomPosY { get; set; }
+        public void Show()
+        {
+            _powerScaleVisibility.Show();
+            _collider.enabled = false;
+        }
+        public void Hide()
+        {
+            _powerScaleVisibility.Hide();
+            _collider.enabled = true;
         }
     }
 }

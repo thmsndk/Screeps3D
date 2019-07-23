@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1092113716102967340}
   - component: {fileID: 3003608407090080956}
   - component: {fileID: 6495379366328342017}
+  - component: {fileID: 6451037822034829650}
   m_Layer: 0
   m_Name: powerBank
   m_TagString: Untagged
@@ -95,10 +96,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _powerScaleVisibility: {fileID: 3510289316301859309}
+  _collider: {fileID: 6451037822034829650}
   _Power: 0
   hits: 100
   destroyed: {fileID: 5667585055767862771, guid: 32f1a4ebe99072345b9777bd9adb813e,
     type: 3}
+--- !u!65 &6451037822034829650
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126925853384401034}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.923982, y: 0.923982, z: 1.416243}
+  m_Center: {x: 0, y: 0.452385, z: -0.01184848}
 --- !u!1 &2193485393721761997
 GameObject:
   m_ObjectHideFlags: 0
