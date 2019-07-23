@@ -82,9 +82,12 @@ namespace Screeps3D.Rooms.Views
 
                 else if (key.Equals("w"))
                     SpawnRoomObjects<WallView>(data[key].list, WallView.Path);
+
+                else if (key.Equals("pb"))
+                    SpawnRoomObjects<PowerBankView>(data[key].list, PowerBankView.Path);
             }
         }
-        
+
         private void SpawnRoomObjects<T>(List<JSONObject> list, string PrefabPath)
             where T: IMapViewComponent
         {
