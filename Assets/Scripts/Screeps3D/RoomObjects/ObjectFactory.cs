@@ -52,6 +52,8 @@ namespace Screeps3D.RoomObjects
                     return new PowerBank();
                 case Constants.TypePowerCreep:
                     return new PowerCreep();
+                case Constants.TypePortal:
+                    return new Portal();
                 default:
                     return new RoomObject();
             }
