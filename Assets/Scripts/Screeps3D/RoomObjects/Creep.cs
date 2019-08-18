@@ -58,6 +58,8 @@ namespace Screeps3D.RoomObjects
         }
     }*/
 
+    // TODO TeleportView?
+
     internal class Creep : RoomObject, INamedObject, IHitpointsObject, IOwnedObject, IStoreObject, IActionObject, IBump 
     {
         public string UserId { get; set; }

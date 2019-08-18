@@ -26,6 +26,13 @@ namespace Screeps3D.Effects
             var effect = go.GetComponent<SpeechEffect>();
             effect.Load(creep, message);
         }
+
+        public static void Teleport(RoomObject origin)
+        {
+            var go = PoolLoader.Load(TeleportEffect.PATH);
+            var effect = go.GetComponent<TeleportEffect>();
+            effect.Load(origin); // TODO: need to unload if creep exists / portals
+        }
     }
     
     public class BeamConfig
