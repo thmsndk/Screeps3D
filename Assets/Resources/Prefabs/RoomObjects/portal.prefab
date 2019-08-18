@@ -4799,7 +4799,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5685606399384417516}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8608,7 +8608,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0.2358512
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -8616,8 +8616,17 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
+          time: 0.44970348
+          value: 0.5282876
+          inSlope: 0.21668941
+          outSlope: 0.21668941
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 1
-          value: 1
+          value: 0.08490372
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -8654,7 +8663,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14345,6 +14354,7 @@ GameObject:
   - component: {fileID: 2847102336065010561}
   - component: {fileID: 2733105904521920026}
   - component: {fileID: 1769999368269067348}
+  - component: {fileID: 4885610857697748668}
   m_Layer: 0
   m_Name: portal
   m_TagString: Untagged
@@ -14416,3 +14426,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c143c9faac4c8193ea547a8365995a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &4885610857697748668
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174864213260412136}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.4439235
+  m_Center: {x: 0, y: 0.9439235, z: 0}
