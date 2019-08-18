@@ -36,7 +36,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
             if (!string.IsNullOrEmpty(_destinationObject.DestinationShard))
             {
                 // inter shard
-                _label.text = string.Format("{0} / {1} ({2})", _destinationObject.DestinationShard, _destinationObject.DestinationRoom, _destinationObject.DestinationPosition);
+                _label.text = string.Format("{0} / {1}", _destinationObject.DestinationShard, _destinationObject.DestinationRoom);
             }
             else
             {
