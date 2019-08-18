@@ -21,12 +21,17 @@ namespace Screeps3D.RoomObjects
 
     */
 
-    internal class Portal : Structure, IDecay
+    internal class Portal : Structure, IDecay, IPortalDestination
     {
         public float NextDecayTime { get; set; }
 
         public bool Stable { get; set; }
 
+        // PortalDestination
+        public string DestinationShard { get;set;}
+        public string DestinationRoom { get; set; }
+        public string DestinationPosition { get; set; }
+        
         // TODO: Destination
         internal Portal()
         {
@@ -42,7 +47,38 @@ namespace Screeps3D.RoomObjects
 
                 this.Stable = this.NextDecayTime == 0f;
 
+                UnpackDestination(data);
+
                 Initialized = true;
+            }
+        }
+
+        private void UnpackDestination(JSONObject data)
+        {
+            var destinationData = data["destination"];
+
+            if (destinationData != null)
+            {
+                var destinationShardData = destinationData["shard"];
+                if (destinationShardData != null)
+                {
+                    DestinationShard = destinationShardData.str;
+                }
+
+                var destinationRoomData = destinationData["room"];
+
+                if (destinationRoomData != null)
+                {
+                    DestinationRoom = destinationRoomData.str;
+                }
+
+                var destinationX = destinationData["x"];
+                var destinationY = destinationData["y"];
+
+                if (destinationX != null && destinationY != null)
+                {
+                    DestinationPosition = string.Format("{0}, {1}", destinationX.n, destinationY.n);
+                }
             }
         }
     }

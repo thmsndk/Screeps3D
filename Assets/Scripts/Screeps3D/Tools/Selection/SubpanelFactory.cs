@@ -17,7 +17,7 @@ namespace Screeps3D.Tools.Selection
         {
             "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Progress", "Construction", 
             "Capacity", "Store", "Cooldown", "Resource", "Spawning", "Regeneration",
-            "Power"
+            "Power", "Destination"
         };
         
         private void Start()

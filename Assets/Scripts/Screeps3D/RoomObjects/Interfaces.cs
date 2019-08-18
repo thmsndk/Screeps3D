@@ -102,4 +102,13 @@ namespace Screeps3D.RoomObjects
         Vector3 PrevPosition { get; }
         Vector3 BumpPosition { get; }
     }
+
+    internal interface IPortalDestination
+    {
+        string DestinationShard { get; set; }
+
+        // RoomPosition
+        string DestinationRoom { get; set; }
+        string DestinationPosition { get; set; }
+    }
 }
