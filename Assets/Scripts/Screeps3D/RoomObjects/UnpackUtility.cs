@@ -110,13 +110,16 @@ namespace Screeps3D.RoomObjects
                 decayData = data["decayTime"];
             }
 
+            if (decayData == null)
+            {
+                decayData = data["ticksToDecay"]; // Portals: The amount of game ticks when the portal disappears, or undefined when the portal is stable.
+            }
+
             if (decayData != null)
             {
                 obj.NextDecayTime = decayData.n;
             }
         }
-
-
 
         internal static void Progress(IProgress progressObj, JSONObject data)
         {

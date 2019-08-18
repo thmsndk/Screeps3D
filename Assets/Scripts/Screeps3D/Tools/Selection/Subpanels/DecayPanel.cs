@@ -42,6 +42,12 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         private void UpdateLabel()
         {
+            if (_decay.NextDecayTime == 0f)
+            {
+                Hide();
+                return;
+            }
+
             _label.text = string.Format("{0:n0}", _decay.NextDecayTime - _decay.Room.GameTime);
         }
     }

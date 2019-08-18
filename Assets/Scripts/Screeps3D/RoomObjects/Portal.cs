@@ -21,8 +21,12 @@ namespace Screeps3D.RoomObjects
 
     */
 
-    internal class Portal : RoomObject
+    internal class Portal : Structure, IDecay
     {
+        public float NextDecayTime { get; set; }
+
+        public bool Stable { get; set; }
+
         // TODO: Destination
         internal Portal()
         {
@@ -34,6 +38,10 @@ namespace Screeps3D.RoomObjects
 
             if (initial)
             {
+                UnpackUtility.Decay(this, data);
+
+                this.Stable = this.NextDecayTime == 0f;
+
                 Initialized = true;
             }
         }
