@@ -27,11 +27,26 @@ namespace Screeps3D.Effects
             effect.Load(creep, message);
         }
 
+        /// <summary>
+        /// Render a creep teleporting away
+        /// </summary>
+        /// <param name="origin"></param>
         public static void Teleport(RoomObject origin)
         {
             var go = PoolLoader.Load(TeleportEffect.PATH);
             var effect = go.GetComponent<TeleportEffect>();
             effect.Load(origin); // TODO: need to unload if creep exists / portals
+        }
+
+        /// <summary>
+        /// Render a creep spawning from a teleport
+        /// </summary>
+        /// <param name="position"></param>
+        public static void Teleport(Vector3 position)
+        {
+            var go = PoolLoader.Load(TeleportEffect.PATH);
+            var effect = go.GetComponent<TeleportEffect>();
+            effect.Load(position);
         }
     }
     

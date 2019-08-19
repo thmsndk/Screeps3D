@@ -24,6 +24,8 @@ namespace Screeps3D.RoomObjects
         public event Action<bool> OnShow;
         public event Action<JSONObject> OnDelta;
 
+        public event Action<RoomObject, Vector3> OnPosition;
+
         internal virtual void Delta(JSONObject delta, Room room)
         {
             if (!Initialized)
@@ -103,7 +105,19 @@ namespace Screeps3D.RoomObjects
 
         protected void SetPosition()
         {
-            Position = PosUtility.Convert(X, Y, Room);
+            var newPosition = PosUtility.Convert(X, Y, Room);
+            
+            if (newPosition == Position)
+            {
+                return;
+            }
+
+            Position = newPosition;
+
+            if (OnPosition != null)
+            {
+                OnPosition(this, newPosition);
+            }
         }
 
         public void DetachView()

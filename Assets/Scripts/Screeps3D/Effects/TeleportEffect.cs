@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Common;
 using Screeps3D.RoomObjects;
 using UnityEngine;
@@ -22,6 +23,38 @@ namespace Screeps3D.Effects
                 gameObject.transform.parent = origin.View.transform; // attach to creep
                 gameObject.transform.localPosition = Vector3.zero; // center it
             }
+        }
+
+        private const float _spawnDuration = 3;
+        private float _time;
+        private Vector3 _position;
+        internal void Load(Vector3 position)
+        {
+            _time = 0f;
+
+            _position = position;
+            StartCoroutine(DisplaySpawnEffect());
+        }
+
+        private IEnumerator DisplaySpawnEffect()
+        {
+            gameObject.transform.SetPositionAndRotation(_position, gameObject.transform.rotation);
+            // pretty sure this causes the effect to be underground currently, and a missmatch between the TP effect and TP Spawn
+            //gameObject.transform.Rotate(Vector3.right, 180); // make the animation go the other way to simulate "spawning" 
+            // TODO: should be a courutine so the spawning effect is only rendered for a specific amount of time
+
+            particleSystem.Play();
+
+            while (_time < _spawnDuration)
+            {
+                _time += Time.unscaledDeltaTime;
+
+                yield return null;
+            }
+
+            particleSystem.Stop();
+
+            PoolLoader.Return(PATH, gameObject);
         }
 
         private void Origin_OnShow(bool show)

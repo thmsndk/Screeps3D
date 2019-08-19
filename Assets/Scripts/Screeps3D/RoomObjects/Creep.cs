@@ -89,6 +89,7 @@ namespace Screeps3D.RoomObjects
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
+
             if (initial)
             {
                 UnpackUtility.Owner(this, data);
@@ -116,6 +117,8 @@ namespace Screeps3D.RoomObjects
         
         internal override void Delta(JSONObject delta, Room room)
         {
+            
+
             if (!Initialized)
             {
                 Unpack(delta, true);
@@ -130,8 +133,10 @@ namespace Screeps3D.RoomObjects
                 EnterRoom(room);
             }
 
-            PrevPosition = Position;
-            SetPosition();
+            // Acquire previous position before updating it.
+            PrevPosition = Position; // TODO: this really belongs before unpacking, pretty sure whatever PrevPosition stuff was supposed to do, it aint working like this.
+
+            SetPosition(); 
             AssignBumpPosition();
             AssignRotation();
             
