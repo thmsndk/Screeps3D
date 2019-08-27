@@ -42,7 +42,7 @@ namespace Screeps3D.Effects
         /// Render a creep spawning from a teleport
         /// </summary>
         /// <param name="position"></param>
-        public static void Teleport(Vector3 position)
+        public static void TeleportSpawn(Vector3 position)
         {
             var go = PoolLoader.Load(TeleportEffect.PATH);
             var effect = go.GetComponent<TeleportEffect>();

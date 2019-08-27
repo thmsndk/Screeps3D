@@ -100,7 +100,7 @@ namespace Screeps3D.RoomObjects
                 // visualize that a creep just teleported in here
                 // this appears to not be working, I assume because creep.View is null
                 //Debug.Log("Spawning teleport at " + creep.Position);
-                EffectsUtility.Teleport(creep.Position);
+                EffectsUtility.TeleportSpawn(creep.Position);
                 //EffectsUtility.Teleport(creep);
                 // TODO: limit the teleport/spawn effect in time, should be a TeleportSpawn effect instead I guess where the animation goes downwards, could just rotate the element
             }

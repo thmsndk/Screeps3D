@@ -10,16 +10,18 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/TeleportEffect";
 
-        [SerializeField] private ParticleSystem particleSystem;
+        [SerializeField] private ParticleSystem teleportEffect;
+        [SerializeField] private ParticleSystem spawnEffect;
 
-        public void Load(RoomObject origin/*, Vector3 endPos, Color color*/)
+        public void Load(RoomObject origin)
         {
             origin.OnShow += Origin_OnShow; // can't really unregister the effect with this design
 
             // Add TeleportEffect as child
             if (origin.View != null)
             {
-                particleSystem.Play();
+                spawnEffect.Stop();
+                teleportEffect.Play();
                 gameObject.transform.parent = origin.View.transform; // attach to creep
                 gameObject.transform.localPosition = Vector3.zero; // center it
             }
@@ -42,8 +44,8 @@ namespace Screeps3D.Effects
             // pretty sure this causes the effect to be underground currently, and a missmatch between the TP effect and TP Spawn
             //gameObject.transform.Rotate(Vector3.right, 180); // make the animation go the other way to simulate "spawning" 
             // TODO: should be a courutine so the spawning effect is only rendered for a specific amount of time
-
-            particleSystem.Play();
+            teleportEffect.Stop();
+            spawnEffect.Play();
 
             while (_time < _spawnDuration)
             {
@@ -52,7 +54,7 @@ namespace Screeps3D.Effects
                 yield return null;
             }
 
-            particleSystem.Stop();
+            spawnEffect.Stop();
 
             PoolLoader.Return(PATH, gameObject);
         }
@@ -62,7 +64,8 @@ namespace Screeps3D.Effects
             if (!show)
             {
                 gameObject.transform.parent = null; // Detatch effect from creep ... also causes the effect to not really dissapear....
-                particleSystem.Stop();
+                teleportEffect.Stop();
+                spawnEffect.Stop();
                 PoolLoader.Return(PATH, gameObject);
             }
         }
