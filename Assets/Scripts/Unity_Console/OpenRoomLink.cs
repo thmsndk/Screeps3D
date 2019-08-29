@@ -13,12 +13,14 @@ namespace Assets.Scripts.Screeps3D
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class OpenRoomLink : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
     {
-        [SerializeField] private RoomChooser _chooser;
+        private RoomChooser _chooser;
         private TextMeshProUGUI pTextMeshPro;
 
         private void Awake()
         {
             pTextMeshPro = GetComponent<TextMeshProUGUI>();
+            var roomChooserGameObject = GameObject.FindGameObjectWithTag("RoomChooser");
+            _chooser = roomChooserGameObject.GetComponent<RoomChooser>();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -35,7 +37,15 @@ namespace Assets.Scripts.Screeps3D
                 //Application.OpenURL(linkInfo.GetLinkID());
                 //Debug.Log("link!!" + linkInfo.GetLinkID());
                 var linkId = linkInfo.GetLinkID();
-                _chooser.GetAndChooseRoom(linkId);
+                Debug.Log(linkId);
+                var shardAndRoom = linkId.Split('/');
+                var shard = shardAndRoom[0];
+                var room = shardAndRoom[1];
+                if (!string.IsNullOrEmpty(shard))
+                {
+                    _chooser.OnSelectedShardChanged(shard);
+                }
+                _chooser.GetAndChooseRoom(room);
 
             }
         }

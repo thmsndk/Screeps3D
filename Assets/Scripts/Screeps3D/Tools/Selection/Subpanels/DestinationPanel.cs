@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 using Common;
 using Screeps3D.RoomObjects;
 using TMPro;
@@ -31,17 +32,17 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         private void UpdateLabel()
         {
-            // TODO: convert to room links
-
             if (!string.IsNullOrEmpty(_destinationObject.DestinationShard))
             {
                 // inter shard
-                _label.text = string.Format("{0} / {1}", _destinationObject.DestinationShard, _destinationObject.DestinationRoom);
+                var linkText = string.Format("{0} / {1}", _destinationObject.DestinationShard, _destinationObject.DestinationRoom);
+                _label.text = RoomLink.FormatTMPLink(_destinationObject.DestinationShard, _destinationObject.DestinationRoom, linkText);
             }
             else
             {
                 // inter room
-                _label.text = string.Format("{1} ({2})", _destinationObject.DestinationShard, _destinationObject.DestinationRoom, _destinationObject.DestinationPosition);
+                var linkText = string.Format("{1} ({2})", _destinationObject.DestinationShard, _destinationObject.DestinationRoom, _destinationObject.DestinationPosition);
+                _label.text = RoomLink.FormatTMPLink(_destinationObject.DestinationShard, _destinationObject.DestinationRoom, linkText);
             }
             
         }

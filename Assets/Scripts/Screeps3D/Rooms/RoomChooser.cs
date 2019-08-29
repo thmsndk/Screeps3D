@@ -173,6 +173,11 @@ namespace Screeps3D.Rooms
             }
              * */
         }
+        public void OnSelectedShardChanged(string shardName)
+        {
+            var shardIndex = _shardInput.options.FindIndex(s => s.text == shardName);
+            _shardInput.value = shardIndex;
+        }
         public void OnSelectedShardChanged(int shardIndex)
         {
             PlayerPrefs.SetInt(GetServerPrefKey(_prefShard), shardIndex);

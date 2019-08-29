@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 224564532937786048}
   - component: {fileID: 222712323694158484}
   - component: {fileID: 114195270897123990}
+  - component: {fileID: 4594622188054561782}
   m_Layer: 5
   m_Name: DestinationLabel
   m_TagString: Untagged
@@ -205,13 +206,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: ' shard3 / W7N7'
+  m_text: ' shard3 / W7N7 <link="something">Test </link>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6e6270be85e9caf4ba0da3128d14784e, type: 2}
   m_sharedMaterial: {fileID: 21435435344835980, guid: 6e6270be85e9caf4ba0da3128d14784e,
@@ -279,11 +280,11 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 114195270897123990}
-    characterCount: 14
+    characterCount: 20
     spriteCount: 0
-    spaceCount: 3
-    wordCount: 3
-    linkCount: 0
+    spaceCount: 5
+    wordCount: 4
+    linkCount: 1
     lineCount: 1
     pageCount: 1
     materialCount: 1
@@ -305,6 +306,18 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4594622188054561782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880558959869466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a48d4e37c450554d9243852bdc6d60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1882792566701866
 GameObject:
   m_ObjectHideFlags: 0
