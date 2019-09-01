@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Screeps3D;
+using Screeps3D.Menus.ServerList;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,8 @@ namespace Screeps_API
         private int _serverIndex;
         private string _savePath = "servers";
 
+        private ServerListTableViewController _serverListTableViewController;
+
         private void Start()
         {
             GameManager.OnModeChange += OnModeChange;
@@ -42,6 +45,8 @@ namespace Screeps_API
             _serverSelect.onValueChanged.AddListener(OnServerChange);
             _addServer.onClick.AddListener(OnAddServer);
             _removeServer.onClick.AddListener(OnRemoveServer);
+
+            _serverListTableViewController = GetComponent<ServerListTableViewController>();
         }
 
         private void OnModeChange(GameMode mode)
@@ -146,6 +151,7 @@ namespace Screeps_API
             // Fetch servers from other sources
             // If we just append theese servers to the list, when the server list is saved, they will suddenly appear twice, 
             // but we still want to cache the server terrain for next time we connect.
+            // TODO: move to a "generic" "server load" component, that can have different ways of getting servers.
             Action<string> serverCallback = str =>
             {
                 var obj = new JSONObject(str);
@@ -179,6 +185,8 @@ namespace Screeps_API
                 _servers.AddRange(cachedOfficialServers.OrderByDescending(s => s.LikeCount));
 
                 // TODO: likes
+                _serverListTableViewController.UpdateServerList(_servers);
+
                 UpdateServerDropdown();
             };
             var officialServer = _servers.SingleOrDefault(s => s.Address.HostName == "Screeps.com");
@@ -187,10 +195,6 @@ namespace Screeps_API
                 ScreepsAPI.Cache = officialServer; // Allow calling api endpoint without having connected.
                 ScreepsAPI.Http.GetServerList(serverCallback);
             }
-
-            
-
-            // TODO: Official Server List
 
             // TODO: SS3 Unified Credentials File .yml
             // TODO: SS3 Unified Credentials File .ini
