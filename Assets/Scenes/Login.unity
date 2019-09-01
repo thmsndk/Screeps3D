@@ -7106,6 +7106,10 @@ PrefabInstance:
       propertyPath: m_VerticalScrollbar
       value: 
       objectReference: {fileID: 1816804411}
+    - target: {fileID: 11446004, guid: de9c2ec912e8f2d4cae1a7a05f83655a, type: 3}
+      propertyPath: m_ScrollSensitivity
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 11495712, guid: de9c2ec912e8f2d4cae1a7a05f83655a, type: 3}
       propertyPath: m_Value
       value: 0
