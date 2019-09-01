@@ -46,7 +46,7 @@ namespace Screeps3D.Menus.ServerList
 
             var server = _servers[row];
 
-            cell.SetServerName(server.Name ?? server.Address.HostName);
+            cell.Update(server);
             return cell;
         }
 
@@ -57,10 +57,10 @@ namespace Screeps3D.Menus.ServerList
         //Will be called by the TableView when a cell's visibility changed
         public void TableViewCellVisibilityChanged(int row, bool isVisible) {
             //Debug.Log(string.Format("Row {0} visibility changed to {1}", row, isVisible));
-            if (isVisible) {
-                var cell = m_tableView.GetCellAtRow(row) as ServerListItemCell;
-                cell.NotifyBecameVisible();
-            }
+            //if (isVisible) {
+            //    var cell = m_tableView.GetCellAtRow(row) as ServerListItemCell;
+            //    //cell.NotifyBecameVisible();
+            //}
         }
 
         internal void UpdateServerList(CacheList servers)
