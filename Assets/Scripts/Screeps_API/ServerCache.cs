@@ -14,7 +14,6 @@ namespace Screeps_API
         public bool SaveCredentials;
 
         public int LikeCount { get; set; }
-
-        
+        public bool MMO { get; internal set; }
     }
 }

@@ -200,11 +200,18 @@ namespace Screeps_API
                 UpdateServerDropdown();
             };
             var officialServer = _servers.SingleOrDefault(s => s.Address.HostName == "Screeps.com");
-            if (officialServer != null && !string.IsNullOrEmpty(officialServer.Credentials.Token))
+            if (officialServer != null)
             {
-                ScreepsAPI.Cache = officialServer; // Allow calling api endpoint without having connected.
-                ScreepsAPI.Http.GetServerList(serverCallback);
+                // convert database
+                officialServer.MMO = true;
+
+                if (!string.IsNullOrEmpty(officialServer.Credentials.Token))
+                {
+                    ScreepsAPI.Cache = officialServer; // Allow calling api endpoint without having connected.
+                    ScreepsAPI.Http.GetServerList(serverCallback);
+                }
             }
+            
 
             // TODO: SS3 Unified Credentials File .yml
             // TODO: SS3 Unified Credentials File .ini

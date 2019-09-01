@@ -4260,6 +4260,11 @@ MonoBehaviour:
     type: 3}
   m_tableView: {fileID: 1816804409}
   m_numRows: 0
+  onServerSelected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Screeps3D.Menus.ServerList.OnServerSelected, Assembly-CSharp, Version=1.0.2.29814,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1059910558
 GameObject:
   m_ObjectHideFlags: 0
@@ -7052,7 +7057,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22492706, guid: de9c2ec912e8f2d4cae1a7a05f83655a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -179
+      value: -182
       objectReference: {fileID: 0}
     - target: {fileID: 22492706, guid: de9c2ec912e8f2d4cae1a7a05f83655a, type: 3}
       propertyPath: m_SizeDelta.x

@@ -41,12 +41,30 @@ namespace Screeps3D.Menus.ServerList
         {
             this.server = server;
 
+
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
             ServerAddressHostLabel.text = server.Address.HostName;
             ServerAddressPortLabel.text = server.Address.Port;
             ServerAddressSSLToggle.isOn = server.Address.Ssl;
             //UserCountLabel.text = server.UserCount
-            LikesLabel.text = server.LikeCount.ToString();
+            if (!server.MMO)
+            {
+                LikesLabel.text = server.LikeCount.ToString();
+                foreach (Transform child in LikesLabel.transform)
+                {
+                    child.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                LikesLabel.text = string.Empty;
+                foreach (Transform child in LikesLabel.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+            }
+
+            
             //PackageVersionLabel.text = server.PackageVersion
         }
 
