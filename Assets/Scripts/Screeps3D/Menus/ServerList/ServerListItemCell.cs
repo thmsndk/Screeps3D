@@ -4,9 +4,13 @@ using Tacticsoft;
 using UnityEngine.UI;
 using Screeps_API;
 using System;
+using UnityEngine.Events;
 
 namespace Screeps3D.Menus.ServerList
 {
+    [System.Serializable]
+    public class OnServerSelected : UnityEvent<ServerCache> { }
+
     //Inherit from TableViewCell instead of MonoBehavior to use the GameObject
     //containing this component as a cell in a TableView
     public class ServerListItemCell : TableViewCell
@@ -19,10 +23,24 @@ namespace Screeps3D.Menus.ServerList
         public Text UserCountLabel;
         public Text LikesLabel;
         public Text PackageVersionLabel;
+        
+        public OnServerSelected onServerSelected;
 
+        private ServerCache server;
 
-        internal void Update(ServerCache server)
+        public void Selected()
         {
+            if (onServerSelected != null)
+            {
+                onServerSelected.Invoke(server);
+            }
+            
+        }
+
+        internal void SetServer(ServerCache server)
+        {
+            this.server = server;
+
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
             ServerAddressHostLabel.text = server.Address.HostName;
             ServerAddressPortLabel.text = server.Address.Port;
@@ -32,11 +50,7 @@ namespace Screeps3D.Menus.ServerList
             //PackageVersionLabel.text = server.PackageVersion
         }
 
-        //private int m_numTimesBecameVisible;
-        //public void NotifyBecameVisible() {
-        //    m_numTimesBecameVisible++;
-        //    m_visibleCountText.text = "# rows this cell showed : " + m_numTimesBecameVisible.ToString();
-        //}
+        
 
     }
 }

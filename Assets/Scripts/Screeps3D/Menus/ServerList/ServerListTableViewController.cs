@@ -3,6 +3,7 @@ using System.Collections;
 using Tacticsoft;
 using Screeps_API;
 using System;
+using UnityEngine.Events;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -16,6 +17,8 @@ namespace Screeps3D.Menus.ServerList
         private int m_numInstancesCreated = 0;
         private CacheList _servers;
 
+        public OnServerSelected onServerSelected;
+
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
         void Start() {
@@ -27,7 +30,7 @@ namespace Screeps3D.Menus.ServerList
         //Will be called by the TableView to know how many rows are in this table
         public int GetNumberOfRowsForTableView(TableView tableView) {
             // Should return the amount of servers in the list
-            return _servers.Count;
+            return _servers != null ? _servers.Count : 0;
         }
 
         //Will be called by the TableView to know what is the height of each row
@@ -41,27 +44,18 @@ namespace Screeps3D.Menus.ServerList
             if (cell == null) {
                 cell = GameObject.Instantiate(m_cellPrefab) as ServerListItemCell;
                 cell.name = "ServerListItemCell_" + (++m_numInstancesCreated).ToString();
+                cell.onServerSelected.AddListener(OnServerSelected);
             }
-            // how the hell am I supposed to get the servername? do I access a data source by row?
 
             var server = _servers[row];
 
-            cell.Update(server);
+            cell.SetServer(server);
             return cell;
         }
 
         #endregion
 
         #region Table View event handlers
-
-        //Will be called by the TableView when a cell's visibility changed
-        public void TableViewCellVisibilityChanged(int row, bool isVisible) {
-            //Debug.Log(string.Format("Row {0} visibility changed to {1}", row, isVisible));
-            //if (isVisible) {
-            //    var cell = m_tableView.GetCellAtRow(row) as ServerListItemCell;
-            //    //cell.NotifyBecameVisible();
-            //}
-        }
 
         internal void UpdateServerList(CacheList servers)
         {
@@ -70,6 +64,14 @@ namespace Screeps3D.Menus.ServerList
         }
 
         #endregion
+
+        private void OnServerSelected(ServerCache server)
+        {
+            if (this.onServerSelected != null)
+            {
+                this.onServerSelected.Invoke(server);
+            }
+        }
 
     }
 }

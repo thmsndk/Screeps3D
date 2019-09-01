@@ -46,7 +46,9 @@ namespace Screeps_API
             _addServer.onClick.AddListener(OnAddServer);
             _removeServer.onClick.AddListener(OnRemoveServer);
 
-            _serverListTableViewController = GetComponent<ServerListTableViewController>();
+            _serverListTableViewController = gameObject.GetComponent<ServerListTableViewController>();
+
+            _serverListTableViewController.onServerSelected.AddListener(OnServerSelected);
         }
 
         private void OnModeChange(GameMode mode)
@@ -98,6 +100,14 @@ namespace Screeps_API
             OnServerChange(_servers.IndexOf(server));
             UpdateServerDropdown();
             SaveManager.Save(_savePath, _servers);
+        }
+
+        private void OnServerSelected(ServerCache server)
+        {
+            int serverIndex = _servers.IndexOf(server);
+            _serverSelect.value = serverIndex;
+            OnServerChange(serverIndex);
+            
         }
 
         private void OnServerChange(int serverIndex)
