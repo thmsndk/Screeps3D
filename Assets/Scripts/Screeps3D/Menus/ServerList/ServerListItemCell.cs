@@ -34,19 +34,22 @@ namespace Screeps3D.Menus.ServerList
             {
                 onServerSelected.Invoke(server);
             }
-            
         }
 
         internal void SetServer(ServerCache server)
         {
             this.server = server;
 
+            OnlineIndicator.color = server.Online ? Color.green : Color.red;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
+
             ServerAddressHostLabel.text = server.Address.HostName;
             ServerAddressPortLabel.text = server.Address.Port;
             ServerAddressSSLToggle.isOn = server.Address.Ssl;
-            //UserCountLabel.text = server.UserCount
+
+            UserCountLabel.text = server.Users.ToString();
+
             if (!server.MMO)
             {
                 LikesLabel.text = server.LikeCount.ToString();
@@ -64,11 +67,8 @@ namespace Screeps3D.Menus.ServerList
                 }
             }
 
-            
-            //PackageVersionLabel.text = server.PackageVersion
+
+            PackageVersionLabel.text = server.Version;
         }
-
-        
-
     }
 }

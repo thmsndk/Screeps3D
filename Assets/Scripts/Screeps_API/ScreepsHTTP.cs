@@ -18,7 +18,7 @@ namespace Screeps_API
         {
             // Debug.Log(string.Format("HTTP: attempting {0} to {1}", requestMethod, path));
             UnityWebRequest www;
-            var fullPath = path.StartsWith("api") ? ScreepsAPI.Cache.Address.Http(path) : path;
+            var fullPath = path.StartsWith("/api") ? ScreepsAPI.Cache.Address.Http(path) : path;
             if (requestMethod == UnityWebRequest.kHttpVerbGET)
             {
                 if (body != null)
@@ -145,6 +145,12 @@ namespace Screeps_API
         public void GetServerList(Action<string> onSuccess)
         {
             Request("POST", "https://screeps.com/api/servers/list", onSuccess: onSuccess);
+        }
+
+        public void GetVersion(Action<string> onSuccess, Action onError)
+        {
+            // this call does not require authentication, and thus we only need the hostname
+            Request("GET", "/api/version", onSuccess: onSuccess, onError: onError);
         }
     }
 }

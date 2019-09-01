@@ -195,10 +195,17 @@ namespace Screeps_API
                 _servers.AddRange(cachedOfficialServers.OrderByDescending(s => s.LikeCount));
 
                 // TODO: likes
-                _serverListTableViewController.UpdateServerList(_servers);
+                // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
+                if (_serverListTableViewController != null)
+                {
+                    _serverListTableViewController.UpdateServerList(_servers);
+                }
 
                 UpdateServerDropdown();
             };
+
+            
+
             var officialServer = _servers.SingleOrDefault(s => s.Address.HostName == "Screeps.com");
             if (officialServer != null)
             {
@@ -209,13 +216,77 @@ namespace Screeps_API
                 {
                     ScreepsAPI.Cache = officialServer; // Allow calling api endpoint without having connected.
                     ScreepsAPI.Http.GetServerList(serverCallback);
+                    
                 }
             }
-            
+
 
             // TODO: SS3 Unified Credentials File .yml
             // TODO: SS3 Unified Credentials File .ini
 
+            // Get status of servers, should probably be async for each server and a coroutine.
+            // TODO: I really feel this parsing of the response belongs inside the api 🤔
+
+            // Need to double wrap it to keep a reference to the server
+           
+
+            Action<ServerCache> queryServerInfo = server =>
+            {
+                ScreepsAPI.Cache = server;
+
+                Action<string> queryServerInfoCallback = str =>
+                {
+                    // {"ok":1,"package":159,"protocol":13,"serverData":{"historyChunkSize":100,"shards":["shard0","shard1","shard2","shard3"]},"users":1606}
+                    var obj = new JSONObject(str);
+                    var package = obj["package"]; // MMO
+                    var packageVersion = obj["packageVersion"]; // Private Server
+                    var users = Convert.ToInt32(obj["users"].n);
+
+                    var cachedServer = _servers.SingleOrDefault(cache => cache.Address.HostName == server.Address.HostName);
+                    if (cachedServer != null)
+                    {
+                        cachedServer.Online = true;
+                        // TODO: timestamp of online status?
+                        cachedServer.Users = users;
+                        cachedServer.Version = "v"+ (cachedServer.MMO ? package.n.ToString() : packageVersion.str);
+
+                        // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
+                        if (_serverListTableViewController != null)
+                        {
+                            _serverListTableViewController.UpdateServerList(_servers);
+                        }
+
+                        UpdateServerDropdown();
+                    }
+                };
+
+                Action queryServerInfoErrorCallback = () =>
+                {
+                    var cachedServer = _servers.SingleOrDefault(cache => cache.Address.HostName == server.Address.HostName);
+                    if (cachedServer != null)
+                    {
+                        cachedServer.Online = false;
+
+                        // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
+                        if (_serverListTableViewController != null)
+                        {
+                            _serverListTableViewController.UpdateServerList(_servers);
+                        }
+
+                        UpdateServerDropdown();
+                    }
+                };
+
+                ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
+            };
+
+            var currentAPIServer = ScreepsAPI.Cache;
+            foreach (var server in _servers)
+            {
+                queryServerInfo(server);
+            }
+
+            ScreepsAPI.Cache = currentAPIServer;
         }
 
         private void OnClick()
