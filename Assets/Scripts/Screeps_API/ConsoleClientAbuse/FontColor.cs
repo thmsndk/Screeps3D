@@ -14,16 +14,22 @@ namespace Assets.Scripts.Screeps_API.ConsoleClientAbuse
         {
             // find font tag
             // <font color=\"#ff5555\" type=\"highlight\">console test string</font>
-            string fontPattern = @"<font (?:color=\""(?<color>.+?)\"")?\s*?(?:type=\""(?<type>.+?)\"")?\s*?>(?<text>.+?)<\/font>";
+            string fontPattern = @"<font (?:color=[\""'](?<color>.+?)[\""'])?\s*?(?:type=\""(?<type>.+?)\"")?\s*?>(?<text>.+?)<\/font>";
             foreach (Match m in Regex.Matches(message, fontPattern))
             {
-                var hexColor = m.Groups["color"].Value;
+                var fontColor = m.Groups["color"].Value;
                 var type = m.Groups["type"].Value;
                 var text = m.Groups["text"].Value;
 
+                if (!fontColor.StartsWith("#"))
+                {
+                    var hexColor = ColorToHex.Parse(fontColor);
+                    fontColor = hexColor != null ? hexColor.Hex : fontColor;
+                }
+
                 //Color messageColor;
                 //ColorUtility.TryParseHtmlString(color, out messageColor);
-                message.Message = message.Message.Replace(m.Value, string.Format("<color={0}>{1}</color>", hexColor, text));
+                message.Message = message.Message.Replace(m.Value, string.Format("<color={0}>{1}</color>", fontColor, text));
             }
         }
     }

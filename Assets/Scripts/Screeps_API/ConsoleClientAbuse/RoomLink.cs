@@ -18,7 +18,7 @@ namespace Assets.Scripts.Screeps_API.ConsoleClientAbuse
         {
             // find room link
             // <a href=\"#!/room//W2N2\">[W2N2 17,24]</a>
-            string roomLinkPattern = @"<a href=\""#!\/room\/(?<shard>.*?)\/(?<room>.+)\"">(?<text>.+)<\/a>";
+            string roomLinkPattern = @"<a href=\""#!\/room\/(?<shard>.*?)\/(?<room>.+?)\"">(?<text>.+?)<\/a>";
             foreach (Match m in Regex.Matches(message, roomLinkPattern))
             {
                 // #!/room/botarena/W2N2

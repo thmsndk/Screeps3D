@@ -15,7 +15,7 @@ namespace Assets.Scripts.Screeps_API.ConsoleClientAbuse
             // we use <color to color the font in TMP
             // we use <mark to simulate an alpha colored background color
             // `<log severity="1" style="color: yellow; background-color: red">[1] log level yellow and bg color</log>
-            string stylePattern = @"<.*?(?:style=\""(?<style>.+?)\"").*?>(?<text>.+?)<\/.+?>";
+            string stylePattern = @"<.*?(?:style=[\""'](?<style>.+?)[\""']).*?>(?<text>.+?)<\/.+?>";
 
             string propertyPattern = @"((?<cssProperty>.+?):\s?(?<cssValue>\w+|#[0-9a-fA-F]{6});?)";
             foreach (Match m in Regex.Matches(message, stylePattern))
@@ -36,6 +36,13 @@ namespace Assets.Scripts.Screeps_API.ConsoleClientAbuse
                     {
                         case "color":
                             fontColor = cssValue;
+
+                            if (!fontColor.StartsWith("#"))
+                            {
+                                var hexColor = ColorToHex.Parse(cssValue);
+                                fontColor = hexColor != null ? hexColor.Hex : cssValue;
+                            }
+
                             break;
                         case "background-color":
                             backgroundColor = cssValue;
