@@ -40,7 +40,8 @@ namespace Screeps3D.Menus.ServerList
         {
             this.server = server;
 
-            OnlineIndicator.color = server.Online ? Color.green : Color.red;
+            
+            OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
 

@@ -15,7 +15,7 @@ namespace Screeps_API
 
         public int LikeCount { get; set; }
         public bool MMO { get; internal set; }
-        public bool Online { get; internal set; }
+        public bool? Online { get; internal set; }
         public int Users { get; internal set; }
         public string Version { get; internal set; }
     }

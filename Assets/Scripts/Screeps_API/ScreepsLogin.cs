@@ -233,7 +233,7 @@ namespace Screeps_API
             Action<ServerCache> queryServerInfo = server =>
             {
                 ScreepsAPI.Cache = server;
-
+                server.Online = null;
                 Action<string> queryServerInfoCallback = str =>
                 {
                     // {"ok":1,"package":159,"protocol":13,"serverData":{"historyChunkSize":100,"shards":["shard0","shard1","shard2","shard3"]},"users":1606}
@@ -249,14 +249,11 @@ namespace Screeps_API
                         // TODO: timestamp of online status?
                         cachedServer.Users = users;
                         cachedServer.Version = "v"+ (cachedServer.MMO ? package.n.ToString() : packageVersion.str);
+                    }
 
-                        // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
-                        if (_serverListTableViewController != null)
-                        {
-                            _serverListTableViewController.UpdateServerList(_servers);
-                        }
-
-                        UpdateServerDropdown();
+                    if (_serverListTableViewController != null)
+                    {
+                        _serverListTableViewController.UpdateServerList(_servers);
                     }
                 };
 
@@ -266,14 +263,11 @@ namespace Screeps_API
                     if (cachedServer != null)
                     {
                         cachedServer.Online = false;
+                    }
 
-                        // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
-                        if (_serverListTableViewController != null)
-                        {
-                            _serverListTableViewController.UpdateServerList(_servers);
-                        }
-
-                        UpdateServerDropdown();
+                    if (_serverListTableViewController != null)
+                    {
+                        _serverListTableViewController.UpdateServerList(_servers);
                     }
                 };
 
@@ -332,6 +326,7 @@ namespace Screeps_API
             {
                 path = path.Substring(1);
             }
+
             var protocol = Ssl ? "https" : "http";
             var port = HostName.ToLowerInvariant() == "screeps.com" ? "" : string.Format(":{0}", this.Port);
             // Debug.Log(string.Format("{0}://{1}{2}{3}{4}", protocol, hostName, port, this.path, path));
