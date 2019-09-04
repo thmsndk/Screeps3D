@@ -16,7 +16,7 @@ namespace Screeps_API
         [SerializeField] private Toggle _save;
         [SerializeField] private Toggle _ssl;
         [SerializeField] private TMP_InputField _port;
-        [SerializeField] private TMP_InputField _email;
+        [SerializeField] private TMP_InputField _username;
         [SerializeField] private TMP_InputField _password;
         [SerializeField] private TMP_InputField _token;
         [SerializeField] private TMP_Dropdown _serverSelect;
@@ -37,7 +37,7 @@ namespace Screeps_API
             GameManager.OnModeChange += OnModeChange;
             
             LoadCache();
-            UpdateServerDropdown();
+            //UpdateServerDropdown();
             UpdateFieldVisibility();
             UpdateFieldContent();
             
@@ -66,7 +66,7 @@ namespace Screeps_API
             
             _servers.RemoveAt(_serverIndex);
             OnServerChange(_serverIndex - 1);
-            UpdateServerDropdown();
+            UpdateServerList();
             SaveManager.Save(_savePath, _servers);
         }
 
@@ -98,7 +98,7 @@ namespace Screeps_API
             server.Address.HostName = hostName;
             _servers.Add(server);
             OnServerChange(_servers.IndexOf(server));
-            UpdateServerDropdown();
+            UpdateServerList();
             SaveManager.Save(_savePath, _servers);
         }
 
@@ -120,20 +120,28 @@ namespace Screeps_API
 
         private void UpdateFieldVisibility()
         {
-            var isPublic = _servers[_serverIndex].Address.HostName.ToLowerInvariant() == "screeps.com";
-            _ssl.gameObject.SetActive(!isPublic);
-            _port.gameObject.SetActive(!isPublic);
-            _email.gameObject.SetActive(!isPublic);
-            _password.gameObject.SetActive(!isPublic);
-            _removeServer.gameObject.SetActive(_serverIndex != 0);
-            _token.gameObject.SetActive(isPublic);
+            var selectedServer = _servers[_serverIndex];
+            var isPublic = selectedServer.MMO;
+
+            //_ssl.gameObject.SetActive(!isPublic);
+            //_port.gameObject.SetActive(!isPublic);
+
+            var showCredentialInput = string.IsNullOrEmpty(!isPublic ? selectedServer.Credentials.Email : selectedServer.Credentials.Token);
+
+            _username.gameObject.SetActive(showCredentialInput);
+            _password.gameObject.SetActive(showCredentialInput);
+            _token.gameObject.SetActive(showCredentialInput);
+
+            _removeServer.gameObject.SetActive(!selectedServer.MMO);
+
+            
         }
 
         private void UpdateFieldContent()
         {
             var cache = _servers[_serverIndex];
             _port.text = cache.Address.Port ?? "";
-            _email.text = cache.Credentials.Email ?? "";
+            _username.text = cache.Credentials.Email ?? "";
             _token.text = cache.Credentials.Token ?? "";
             _password.text = cache.Credentials.Password ?? "";
             _ssl.isOn = cache.Address.Ssl;
@@ -196,12 +204,7 @@ namespace Screeps_API
 
                 // TODO: likes
                 // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
-                if (_serverListTableViewController != null)
-                {
-                    _serverListTableViewController.UpdateServerList(_servers);
-                }
-
-                UpdateServerDropdown();
+                UpdateServerList();
             };
 
             
@@ -251,10 +254,7 @@ namespace Screeps_API
                         cachedServer.Version = "v"+ (cachedServer.MMO ? package.n.ToString() : packageVersion.str);
                     }
 
-                    if (_serverListTableViewController != null)
-                    {
-                        _serverListTableViewController.UpdateServerList(_servers);
-                    }
+                    UpdateServerList();
                 };
 
                 Action queryServerInfoErrorCallback = () =>
@@ -265,10 +265,7 @@ namespace Screeps_API
                         cachedServer.Online = false;
                     }
 
-                    if (_serverListTableViewController != null)
-                    {
-                        _serverListTableViewController.UpdateServerList(_servers);
-                    }
+                    UpdateServerList();
                 };
 
                 ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
@@ -283,17 +280,27 @@ namespace Screeps_API
             ScreepsAPI.Cache = currentAPIServer;
         }
 
+        private void UpdateServerList()
+        {
+            if (_serverListTableViewController != null)
+            {
+                _serverListTableViewController.UpdateServerList(_servers);
+            }
+
+            UpdateFieldVisibility();
+        }
+
         private void OnClick()
         {
             var cache = _servers[_serverIndex];
             cache.SaveCredentials = _save.isOn;
-            cache.Address.Port = _port.text;
-            cache.Address.Ssl = _ssl.isOn;
+            //cache.Address.Port = _port.text;
+            //cache.Address.Ssl = _ssl.isOn;
             
             cache.SaveCredentials = _save.isOn;
             if (cache.SaveCredentials)
             {
-                cache.Credentials.Email = _email.text;
+                cache.Credentials.Email = _username.text;
                 cache.Credentials.Password = _password.text;
                 cache.Credentials.Token = _token.text;
             }
