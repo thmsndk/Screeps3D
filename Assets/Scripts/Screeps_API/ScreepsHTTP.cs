@@ -13,8 +13,8 @@ namespace Screeps_API
     {
         public string Token { get; private set; }
 
-        public void Request(string requestMethod, string path, RequestBody body = null,
-            Action<string> onSuccess = null, Action onError = null)
+        public IEnumerator<UnityWebRequestAsyncOperation> Request(string requestMethod, string path, RequestBody body = null,
+            Action<string> onSuccess = null, Action onError = null, int timeout = 0)
         {
             // Debug.Log(string.Format("HTTP: attempting {0} to {1}", requestMethod, path));
             UnityWebRequest www;
@@ -39,8 +39,9 @@ namespace Screeps_API
                 www.SetRequestHeader("Content-Type", "application/json");
             } else
             {
-                Debug.Log(string.Format("HTTP: request method {0} unrecognized", requestMethod));
-                return;
+                var message = string.Format("HTTP: request method {0} unrecognized", requestMethod);
+                Debug.Log(message);
+                throw new Exception(message);
             }
 
             Action<UnityWebRequest> onComplete = (UnityWebRequest outcome) =>
@@ -82,17 +83,23 @@ namespace Screeps_API
                 }
             };
 
-            StartCoroutine(SendRequest(www, onComplete));
+            www.timeout = timeout;
+
+            var request = SendRequest(www, onComplete);
+
+            StartCoroutine(request);
+
+            return request;
         }
 
-        private IEnumerator SendRequest(UnityWebRequest www, Action<UnityWebRequest> onComplete)
+        private IEnumerator<UnityWebRequestAsyncOperation> SendRequest(UnityWebRequest www, Action<UnityWebRequest> onComplete)
         {
             if (Token != null)
             {
                 www.SetRequestHeader("X-Token", Token);
                 www.SetRequestHeader("X-Username", Token);
             }
-            yield return www.Send();
+            yield return www.SendWebRequest();
             onComplete(www);
         }
 
@@ -147,10 +154,10 @@ namespace Screeps_API
             Request("POST", "https://screeps.com/api/servers/list", onSuccess: onSuccess);
         }
 
-        public void GetVersion(Action<string> onSuccess, Action onError)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetVersion(Action<string> onSuccess, Action onError)
         {
             // this call does not require authentication, and thus we only need the hostname
-            Request("GET", "/api/version", onSuccess: onSuccess, onError: onError);
+            return Request("GET", "/api/version", onSuccess: onSuccess, onError: onError, timeout: 2);
         }
     }
 }

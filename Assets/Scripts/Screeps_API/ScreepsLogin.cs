@@ -128,9 +128,9 @@ namespace Screeps_API
 
             var showCredentialInput = string.IsNullOrEmpty(!isPublic ? selectedServer.Credentials.Email : selectedServer.Credentials.Token);
 
-            _username.gameObject.SetActive(showCredentialInput);
-            _password.gameObject.SetActive(showCredentialInput);
-            _token.gameObject.SetActive(showCredentialInput);
+            _username.gameObject.SetActive(!isPublic && showCredentialInput);
+            _password.gameObject.SetActive(!isPublic && showCredentialInput);
+            _token.gameObject.SetActive(isPublic && showCredentialInput);
 
             _removeServer.gameObject.SetActive(!selectedServer.MMO);
 
@@ -198,6 +198,15 @@ namespace Screeps_API
 
                     cachedServer.Name = name;
                     cachedServer.LikeCount = likeCount;
+
+                    if (cachedServer.Address.HostName.EndsWith(".screepspl.us"))
+                    {
+                        // WebSocketSharp has issues connecting to SSL
+                        //cachedServer.Address.Ssl = true;
+                        //cachedServer.Address.Port = "443";
+                        cachedServer.Address.Ssl = false;
+                        cachedServer.Address.Port = port;
+                    }
                 }
 
                 _servers.AddRange(cachedOfficialServers.OrderByDescending(s => s.LikeCount));
@@ -268,7 +277,8 @@ namespace Screeps_API
                     UpdateServerList();
                 };
 
-                ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
+                var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
+                //stuff.Current
             };
 
             var currentAPIServer = ScreepsAPI.Cache;
@@ -304,6 +314,17 @@ namespace Screeps_API
                 cache.Credentials.Password = _password.text;
                 cache.Credentials.Token = _token.text;
             }
+
+            // TODO: When saving servers, we do not wish to persist servers we've gotten from third party sources, 
+            // UNLESS we have saved credentials for them that we did not get from the third party source.
+            // If we however already have credentials from the third party source, then we don't want to save it either.
+
+            // TODO: We also wish to load the terrain cache from disk when we connect to a server.
+
+            // Sources column
+            // Official, UCF, Custom
+
+            // TODO: look into SSL
 
             SaveManager.Save(_savePath, _servers);
             NotifyText.Message("Connecting...");

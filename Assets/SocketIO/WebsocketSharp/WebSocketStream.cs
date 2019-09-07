@@ -221,13 +221,25 @@ namespace WebSocketSharp
     {
       var netStream = client.GetStream ();
       if (secure) {
-        if (validationCallback == null)
-          validationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+                if (validationCallback == null){
+                    validationCallback = (sender, certificate, chain, sslPolicyErrors) =>
+                    {
+                        return true;
+                    };
+                }
 
-        var sslStream = new SslStream (netStream, false, validationCallback);
-        sslStream.AuthenticateAsClient (host);
+                try
+                {
+                    var sslStream = new SslStream(netStream, false, validationCallback);
+                    sslStream.AuthenticateAsClient(host,null, System.Security.Authentication.SslProtocols.Default, false);
 
-        return new WebSocketStream (sslStream);
+                    return new WebSocketStream(sslStream);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
       }
 
       return new WebSocketStream (netStream);

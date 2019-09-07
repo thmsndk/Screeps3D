@@ -10,6 +10,7 @@ namespace Screeps_API
 
         public Address Address = new Address();
         public Credentials Credentials = new Credentials();
+        [Obsolete("We should not cache terrain on disk")] // can't remove it without breaking deserilization, have to figure out how to write some migration
         public Dictionary<string, string> Terrain = new Dictionary<string, string>();
         public bool SaveCredentials;
 
