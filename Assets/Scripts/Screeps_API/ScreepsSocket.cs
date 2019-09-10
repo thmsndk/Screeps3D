@@ -30,10 +30,13 @@ namespace Screeps_API
             }
 
             var protocol = ScreepsAPI.Cache.Address.Ssl ? "wss" : "ws";
-            var port = ScreepsAPI.Cache.Address.Ssl ? "443" : ScreepsAPI.Cache.Address.Port;
-            Debug.Log(string.Format("{0}://{1}:{2}/socket/websocket", protocol, ScreepsAPI.Cache.Address.HostName, port));
-            Socket = new WebSocket(
-                string.Format("{0}://{1}:{2}/socket/websocket", protocol, ScreepsAPI.Cache.Address.HostName, port));
+            var port = ScreepsAPI.Cache.MMO ? "" : string.Format(":{0}", ScreepsAPI.Cache.Address.Ssl ? "443" : ScreepsAPI.Cache.Address.Port);
+
+            var url = string.Format("{0}://{1}{2}{3}/socket/websocket", protocol, ScreepsAPI.Cache.Address.HostName, port, ScreepsAPI.Cache.Address.Path);
+            Debug.Log(url);
+
+            Socket = new WebSocket(url);
+
             Socket.OnOpen += Open;
             Socket.OnError += Error;
             Socket.OnMessage += Message;

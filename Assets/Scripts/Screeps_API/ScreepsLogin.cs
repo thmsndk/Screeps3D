@@ -155,14 +155,27 @@ namespace Screeps_API
             {
                 _servers = new CacheList();
                 var publicServer = new ServerCache();
+                publicServer.MMO = true;
                 publicServer.Name = "Screeps.com";
                 publicServer.Address.HostName = "Screeps.com";
                 publicServer.Address.Ssl = true;
                 _servers.Add(publicServer);
             }
 
+            var ptr = _servers.SingleOrDefault(cache => cache.MMO && cache.Address.HostName == "Screeps.com/ptr");
+            if (ptr == null)
+            {
+                var publicServer = new ServerCache();
+                publicServer.MMO = true;
+                publicServer.Name = "PTR Screeps.com";
+                publicServer.Address.HostName = "screeps.com";
+                publicServer.Address.Ssl = true;
+                publicServer.Address.Path = "/ptr";
+                _servers.Add(publicServer);
+            }
+
             var sortedCache = new CacheList();
-            sortedCache.AddRange(_servers.OrderByDescending(s => s.Address.HostName == "Screeps.com").ThenBy(s => s.Address.HostName));
+            sortedCache.AddRange(_servers.OrderByDescending(s => s.MMO).ThenBy(s => s.Address.Path).ThenBy(s => s.Address.HostName));
             _servers = sortedCache;
             
 
@@ -276,7 +289,7 @@ namespace Screeps_API
 
                     UpdateServerList();
                 };
-
+                // TODO: silent, make it silent so no notification is made on timeout.
                 var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
                 //stuff.Current
             };
@@ -357,8 +370,9 @@ namespace Screeps_API
 
             var protocol = Ssl ? "https" : "http";
             var port = HostName.ToLowerInvariant() == "screeps.com" ? "" : string.Format(":{0}", this.Port);
-            // Debug.Log(string.Format("{0}://{1}{2}{3}{4}", protocol, hostName, port, this.path, path));
-            return string.Format("{0}://{1}{2}{3}{4}", protocol, HostName, port, this.Path, path);
+            var url = string.Format("{0}://{1}{2}{3}{4}", protocol, HostName, port, this.Path, path);
+            //Debug.Log(url);
+            return url;
         }
     }
     
