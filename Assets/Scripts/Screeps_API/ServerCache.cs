@@ -19,5 +19,12 @@ namespace Screeps_API
         public bool? Online { get; internal set; }
         public int Users { get; internal set; }
         public string Version { get; internal set; }
+        public bool HasCredentials
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Credentials.Token) || (!string.IsNullOrEmpty(Credentials.Email) && !string.IsNullOrEmpty(Credentials.Email));
+            }
+        }
     }
 }

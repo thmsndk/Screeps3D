@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Screeps_API.ServerListProviders;
 using Common;
 using Screeps3D;
 using Screeps3D.Menus.ServerList;
@@ -32,15 +33,22 @@ namespace Screeps_API
 
         private ServerListTableViewController _serverListTableViewController;
 
+        internal List<IServerListProvider> serverListProviders = new List<IServerListProvider>();
+
         private void Start()
         {
             GameManager.OnModeChange += OnModeChange;
-            
-            LoadCache();
+            serverListProviders.Add(new OfficialServerListProvider());
+            serverListProviders.Add(new OfficialCommunityServerListProvider());
+            // TODO: SS3 Unified Credentials File .yml
+            // TODO: SS3 Unified Credentials File .ini
+            // https://screeps.online/ ?
+
+            LoadServers();
             //UpdateServerDropdown();
             UpdateFieldVisibility();
             UpdateFieldContent();
-            
+
             _connect.onClick.AddListener(OnClick);
             _serverSelect.onValueChanged.AddListener(OnServerChange);
             _addServer.onClick.AddListener(OnAddServer);
@@ -55,7 +63,7 @@ namespace Screeps_API
         {
             if (mode == GameMode.Login)
                 _panel.Show();
-            else 
+            else
                 _panel.Hide();
         }
 
@@ -63,7 +71,7 @@ namespace Screeps_API
         {
             if (_serverIndex == 0)
                 return;
-            
+
             _servers.RemoveAt(_serverIndex);
             OnServerChange(_serverIndex - 1);
             UpdateServerList();
@@ -76,9 +84,9 @@ namespace Screeps_API
             var options = new List<TMP_Dropdown.OptionData>();
             foreach (var server in _servers)
             {
-                options.Add(new TMP_Dropdown.OptionData(string.Format("{0} {1}", 
-                    server.Name ?? server.Address.HostName, 
-                    server.LikeCount > 0 ? string.Format("({0} Likes)",server.LikeCount) : string.Empty)));
+                options.Add(new TMP_Dropdown.OptionData(string.Format("{0} {1}",
+                    server.Name ?? server.Address.HostName,
+                    server.LikeCount > 0 ? string.Format("({0} Likes)", server.LikeCount) : string.Empty)));
             }
             _serverSelect.AddOptions(options);
             _serverSelect.value = _serverIndex;
@@ -93,7 +101,7 @@ namespace Screeps_API
         {
             if (hostName == null)
                 return;
-            
+
             var server = new ServerCache();
             server.Address.HostName = hostName;
             _servers.Add(server);
@@ -107,7 +115,7 @@ namespace Screeps_API
             int serverIndex = _servers.IndexOf(server);
             _serverSelect.value = serverIndex;
             OnServerChange(serverIndex);
-            
+
         }
 
         private void OnServerChange(int serverIndex)
@@ -134,7 +142,7 @@ namespace Screeps_API
 
             _removeServer.gameObject.SetActive(!selectedServer.MMO);
 
-            
+
         }
 
         private void UpdateFieldContent()
@@ -148,113 +156,15 @@ namespace Screeps_API
             _save.isOn = cache.SaveCredentials;
         }
 
-        private void LoadCache()
+        private void LoadServers()
         {
-            _servers = SaveManager.Load<CacheList>(_savePath); //TODO: we are loading cached terrain for ALL servers? seems like something that should be loaded when connecting to the selected server
-            if (_servers == null)
-            {
-                _servers = new CacheList();
-                var publicServer = new ServerCache();
-                publicServer.MMO = true;
-                publicServer.Name = "Screeps.com";
-                publicServer.Address.HostName = "Screeps.com";
-                publicServer.Address.Ssl = true;
-                _servers.Add(publicServer);
-            }
+            //SaveManager.Save(_savePath, new CacheList()); // clear servers
 
-            var ptr = _servers.SingleOrDefault(cache => cache.MMO && cache.Address.HostName == "Screeps.com/ptr");
-            if (ptr == null)
-            {
-                var publicServer = new ServerCache();
-                publicServer.MMO = true;
-                publicServer.Name = "PTR Screeps.com";
-                publicServer.Address.HostName = "screeps.com";
-                publicServer.Address.Ssl = true;
-                publicServer.Address.Path = "/ptr";
-                _servers.Add(publicServer);
-            }
+            _servers = SaveManager.Load<CacheList>(_savePath);
 
-            var sortedCache = new CacheList();
-            sortedCache.AddRange(_servers.OrderByDescending(s => s.MMO).ThenBy(s => s.Address.Path).ThenBy(s => s.Address.HostName));
-            _servers = sortedCache;
-            
-
-            // Fetch servers from other sources
-            // If we just append theese servers to the list, when the server list is saved, they will suddenly appear twice, 
-            // but we still want to cache the server terrain for next time we connect.
-            // TODO: move to a "generic" "server load" component, that can have different ways of getting servers.
-            Action<string> serverCallback = str =>
-            {
-                var obj = new JSONObject(str);
-                var servers = obj["servers"].list;
-
-                var cachedOfficialServers = new List<ServerCache>();
-                foreach (var server in servers)
-                {
-                    var name = server["name"].str;
-                    var status = server["status"].str;
-                    var likeCount = Convert.ToInt32(server["likeCount"].n);
-
-                    var settings = server["settings"];
-                    var host = settings["host"].str;
-                    var port = settings["port"].str;
-
-                    var cachedServer = _servers.SingleOrDefault(cache => cache.Address.HostName == host);
-                    if (cachedServer == null)
-                    {
-                        cachedServer = new ServerCache();
-                        cachedServer.Address.HostName = host;
-                        cachedServer.Address.Port = port;
-                        //officialServerListServer.Address.Ssl = true; // not sure how to determine if ssl or not
-                        cachedOfficialServers.Add(cachedServer);
-                    }
-
-                    cachedServer.Name = name;
-                    cachedServer.LikeCount = likeCount;
-
-                    if (cachedServer.Address.HostName.EndsWith(".screepspl.us"))
-                    {
-                        // WebSocketSharp has issues connecting to SSL
-                        //cachedServer.Address.Ssl = true;
-                        //cachedServer.Address.Port = "443";
-                        cachedServer.Address.Ssl = false;
-                        cachedServer.Address.Port = port;
-                    }
-                }
-
-                _servers.AddRange(cachedOfficialServers.OrderByDescending(s => s.LikeCount));
-
-                // TODO: likes
-                // all of this and the above needs to be wrapped in a coroutine that does not finish before everything is fetched.
-                UpdateServerList();
-            };
-
-            
-
-            var officialServer = _servers.SingleOrDefault(s => s.Address.HostName == "Screeps.com");
-            if (officialServer != null)
-            {
-                // convert database
-                officialServer.MMO = true;
-
-                if (!string.IsNullOrEmpty(officialServer.Credentials.Token))
-                {
-                    ScreepsAPI.Cache = officialServer; // Allow calling api endpoint without having connected.
-                    ScreepsAPI.Http.GetServerList(serverCallback);
-                    
-                }
-            }
-
-
-            // TODO: SS3 Unified Credentials File .yml
-            // TODO: SS3 Unified Credentials File .ini
 
             // Get status of servers, should probably be async for each server and a coroutine.
-            // TODO: I really feel this parsing of the response belongs inside the api 🤔
-
             // Need to double wrap it to keep a reference to the server
-           
-
             Action<ServerCache> queryServerInfo = server =>
             {
                 ScreepsAPI.Cache = server;
@@ -267,25 +177,17 @@ namespace Screeps_API
                     var packageVersion = obj["packageVersion"]; // Private Server
                     var users = Convert.ToInt32(obj["users"].n);
 
-                    var cachedServer = _servers.SingleOrDefault(cache => cache.Address.HostName == server.Address.HostName);
-                    if (cachedServer != null)
-                    {
-                        cachedServer.Online = true;
-                        // TODO: timestamp of online status?
-                        cachedServer.Users = users;
-                        cachedServer.Version = "v"+ (cachedServer.MMO ? package.n.ToString() : packageVersion.str);
-                    }
+                    server.Online = true;
+                    // TODO: timestamp of online status?
+                    server.Users = users;
+                    server.Version = "v" + (server.MMO ? package.n.ToString() : packageVersion.str);
 
                     UpdateServerList();
                 };
 
                 Action queryServerInfoErrorCallback = () =>
                 {
-                    var cachedServer = _servers.SingleOrDefault(cache => cache.Address.HostName == server.Address.HostName);
-                    if (cachedServer != null)
-                    {
-                        cachedServer.Online = false;
-                    }
+                    server.Online = false;
 
                     UpdateServerList();
                 };
@@ -294,13 +196,48 @@ namespace Screeps_API
                 //stuff.Current
             };
 
-            var currentAPIServer = ScreepsAPI.Cache;
-            foreach (var server in _servers)
-            {
-                queryServerInfo(server);
-            }
 
-            ScreepsAPI.Cache = currentAPIServer;
+
+            foreach (var provider in serverListProviders)
+            {
+                provider.Load((IEnumerable<ServerCache> servers) =>
+                {
+                    foreach (var server in servers)
+                    {
+                        if (provider.MergeWithCache)
+                        {
+                            var cachedServer = _servers.SingleOrDefault(cache =>
+                            cache.Address.HostName == server.Address.HostName
+                            && cache.Address.Path == server.Address.Path
+                            && cache.Address.Port == server.Address.Port);
+
+                            if (cachedServer == null)
+                            {
+                                _servers.Add(server);
+                            }
+                            else
+                            {
+                                cachedServer.Name = server.Name;
+                                cachedServer.LikeCount = server.LikeCount;
+                            }
+                        }
+                        else
+                        {
+                            _servers.AddRange(servers);
+                            // TODO: servers also need to be marked if they should be saved to the cachelist or not. e.g. SS3 should not be persisted, they already contain passwords
+                            // TODO: server icon
+                        }
+
+                        queryServerInfo(server);
+                    }
+
+                    var sortedCache = new CacheList();
+                    sortedCache.AddRange(_servers.OrderByDescending(s => s.MMO).ThenBy(s => s.Address.Path).ThenBy(s => s.Address.HostName));
+                    _servers = sortedCache;
+
+                    UpdateServerList();
+                });
+            }
         }
 
         private void UpdateServerList()
@@ -319,7 +256,7 @@ namespace Screeps_API
             cache.SaveCredentials = _save.isOn;
             //cache.Address.Port = _port.text;
             //cache.Address.Ssl = _ssl.isOn;
-            
+
             cache.SaveCredentials = _save.isOn;
             if (cache.SaveCredentials)
             {
@@ -332,14 +269,16 @@ namespace Screeps_API
             // UNLESS we have saved credentials for them that we did not get from the third party source.
             // If we however already have credentials from the third party source, then we don't want to save it either.
 
-            // TODO: We also wish to load the terrain cache from disk when we connect to a server.
-
             // Sources column
             // Official, UCF, Custom
 
             // TODO: look into SSL
 
-            SaveManager.Save(_savePath, _servers);
+            var filteredServers = new CacheList();
+            filteredServers.AddRange(_servers.Where(s => s.HasCredentials));
+
+
+            SaveManager.Save(_savePath, filteredServers);
             NotifyText.Message("Connecting...");
             _api.Connect(cache);
         }
@@ -375,9 +314,8 @@ namespace Screeps_API
             return url;
         }
     }
-    
+
+    // The Binary Formatter checks for the serializable attribute, thus this workaround
     [Serializable]
-    public class CacheList : List<ServerCache> { } 
-    // I'm not sure why it is necessary to use this class rather than just the list, but the binary formatter
-    // seems to require it
+    public class CacheList : List<ServerCache> { }
 }
