@@ -25,6 +25,7 @@ namespace Screeps_API
         [SerializeField] private FadePanel _panel;
         [SerializeField] private Button _addServer;
         [SerializeField] private Button _removeServer;
+        [SerializeField] private Button _editServer;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
         private CacheList _servers;
@@ -34,6 +35,8 @@ namespace Screeps_API
         private ServerListTableViewController _serverListTableViewController;
 
         internal List<IServerListProvider> serverListProviders = new List<IServerListProvider>();
+
+        private bool editServer = false;
 
         private void Start()
         {
@@ -49,10 +52,11 @@ namespace Screeps_API
             UpdateFieldVisibility();
             UpdateFieldContent();
 
-            _connect.onClick.AddListener(OnClick);
+            _connect.onClick.AddListener(OnConnect);
             _serverSelect.onValueChanged.AddListener(OnServerChange);
             _addServer.onClick.AddListener(OnAddServer);
             _removeServer.onClick.AddListener(OnRemoveServer);
+            _editServer.onClick.AddListener(OnEditServer);
 
             _serverListTableViewController = gameObject.GetComponent<ServerListTableViewController>();
 
@@ -65,6 +69,13 @@ namespace Screeps_API
                 _panel.Show();
             else
                 _panel.Hide();
+        }
+
+        private void OnEditServer()
+        {
+            editServer = true;
+            UpdateFieldVisibility();
+
         }
 
         private void OnRemoveServer()
@@ -120,6 +131,7 @@ namespace Screeps_API
 
         private void OnServerChange(int serverIndex)
         {
+            editServer = false;
             PlayerPrefs.SetInt("serverIndex", serverIndex);
             _serverIndex = serverIndex;
             UpdateFieldVisibility();
@@ -134,7 +146,7 @@ namespace Screeps_API
             //_ssl.gameObject.SetActive(!isPublic);
             //_port.gameObject.SetActive(!isPublic);
 
-            var showCredentialInput = string.IsNullOrEmpty(!isPublic ? selectedServer.Credentials.Email : selectedServer.Credentials.Token);
+            var showCredentialInput = string.IsNullOrEmpty(!isPublic ? selectedServer.Credentials.Email : selectedServer.Credentials.Token) || editServer;
 
             _username.gameObject.SetActive(!isPublic && showCredentialInput);
             _password.gameObject.SetActive(!isPublic && showCredentialInput);
@@ -250,14 +262,13 @@ namespace Screeps_API
             UpdateFieldVisibility();
         }
 
-        private void OnClick()
+        private void OnConnect()
         {
             var cache = _servers[_serverIndex];
             cache.SaveCredentials = _save.isOn;
             //cache.Address.Port = _port.text;
             //cache.Address.Ssl = _ssl.isOn;
 
-            cache.SaveCredentials = _save.isOn;
             if (cache.SaveCredentials)
             {
                 cache.Credentials.Email = _username.text;
