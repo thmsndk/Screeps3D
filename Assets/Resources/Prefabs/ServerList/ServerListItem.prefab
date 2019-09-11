@@ -393,7 +393,7 @@ MonoBehaviour:
   onServerSelected:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Screeps3D.Menus.ServerList.OnServerSelected, Assembly-CSharp, Version=1.0.2.36496,
+    m_TypeName: Screeps3D.Menus.ServerList.OnServerSelected, Assembly-CSharp, Version=1.0.2.40304,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2950283923576847190
 MonoBehaviour:

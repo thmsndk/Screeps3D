@@ -26,5 +26,7 @@ namespace Screeps_API
                 return !string.IsNullOrEmpty(Credentials.Token) || (!string.IsNullOrEmpty(Credentials.Email) && !string.IsNullOrEmpty(Credentials.Email));
             }
         }
+
+        public bool Selected { get; internal set; }
     }
 }

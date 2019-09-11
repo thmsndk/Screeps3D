@@ -27,6 +27,12 @@ namespace Screeps3D.Menus.ServerList
         public OnServerSelected onServerSelected;
 
         private ServerCache server;
+        private Image buttonImage;
+
+        void Start()
+        {
+            buttonImage = GetComponent<Image>();
+        }
 
         public void Selected()
         {
@@ -40,6 +46,9 @@ namespace Screeps3D.Menus.ServerList
         {
             this.server = server;
 
+            if (buttonImage != null) {
+                buttonImage.color = server.Selected ? UnityEngine.Random.ColorHSV() : Color.white;
+            }
             
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 

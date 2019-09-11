@@ -89,19 +89,19 @@ namespace Screeps_API
             SaveManager.Save(_savePath, _servers);
         }
 
-        private void UpdateServerDropdown()
-        {
-            _serverSelect.ClearOptions();
-            var options = new List<TMP_Dropdown.OptionData>();
-            foreach (var server in _servers)
-            {
-                options.Add(new TMP_Dropdown.OptionData(string.Format("{0} {1}",
-                    server.Name ?? server.Address.HostName,
-                    server.LikeCount > 0 ? string.Format("({0} Likes)", server.LikeCount) : string.Empty)));
-            }
-            _serverSelect.AddOptions(options);
-            _serverSelect.value = _serverIndex;
-        }
+        //private void UpdateServerDropdown()
+        //{
+        //    _serverSelect.ClearOptions();
+        //    var options = new List<TMP_Dropdown.OptionData>();
+        //    foreach (var server in _servers)
+        //    {
+        //        options.Add(new TMP_Dropdown.OptionData(string.Format("{0} {1}",
+        //            server.Name ?? server.Address.HostName,
+        //            server.LikeCount > 0 ? string.Format("({0} Likes)", server.LikeCount) : string.Empty)));
+        //    }
+        //    _serverSelect.AddOptions(options);
+        //    _serverSelect.value = _serverIndex;
+        //}
 
         private void OnAddServer()
         {
@@ -124,13 +124,29 @@ namespace Screeps_API
         private void OnServerSelected(ServerCache server)
         {
             int serverIndex = _servers.IndexOf(server);
-            _serverSelect.value = serverIndex;
+            //_serverSelect.value = serverIndex; // Updates dropdown
             OnServerChange(serverIndex);
 
         }
 
         private void OnServerChange(int serverIndex)
         {
+            // deselect previous server
+            var previousServer = _servers[_serverIndex];
+            if (previousServer != null)
+            {
+                previousServer.Selected = false;
+            }
+
+            // select new server
+            var selectedServer = _servers[serverIndex];
+            if (selectedServer != null)
+            {
+                selectedServer.Selected = true;
+            }
+
+            UpdateServerList();
+
             editServer = false;
             PlayerPrefs.SetInt("serverIndex", serverIndex);
             _serverIndex = serverIndex;
@@ -207,8 +223,6 @@ namespace Screeps_API
                 var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback);
                 //stuff.Current
             };
-
-
 
             foreach (var provider in serverListProviders)
             {
