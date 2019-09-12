@@ -261,6 +261,9 @@ namespace Screeps_API
                     sortedCache.AddRange(_servers.OrderByDescending(s => s.MMO).ThenBy(s => s.Address.Path).ThenBy(s => s.Address.HostName));
                     _servers = sortedCache;
 
+                    // preselecting selected server might be an issue when the selected server status is not saved for like SS3
+                    _serverIndex = sortedCache.FindIndex(s => s.Selected);
+
                     UpdateServerList();
                 });
             }
