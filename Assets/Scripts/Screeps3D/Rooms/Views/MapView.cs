@@ -63,42 +63,52 @@ namespace Screeps3D.Rooms.Views
 
             if (Room.ShowingObjects)
                 return;
-            
+
             foreach (var key in data.keys)
             {
                 // player
                 if (key.Length > 2)
+                {
                     SpawnDots(key, data[key].list);
-
+                }
                 else if (key.Equals("k"))
                 {
                     foreach (var numArray in data[key].list)
                     {
-                        var x = (int) numArray.list[0].n;
-                        var y = (int) numArray.list[1].n;
+                        var x = (int)numArray.list[0].n;
+                        var y = (int)numArray.list[1].n;
                         _terrainView.addLair(x, y);
                     }
                     SpawnRoomObjects<SourceKeeperLairView>(data[key].list, SourceKeeperLairView.Path);
                 }
-
                 else if (key.Equals("c"))
+                {
                     SpawnRoomObjects<ControllerView>(data[key].list, ControllerView.Path);
-
+                }
                 else if (key.Equals("s"))
+                {
                     SpawnRoomObjects<SourceView>(data[key].list, SourceView.Path);
-
+                }
                 else if (key.Equals("m"))
+                {
                     SpawnRoomObjects<MineralView>(data[key].list, MineralView.Path);
-
+                }
                 else if (key.Equals("w"))
+                {
                     SpawnRoomObjects<WallView>(data[key].list, WallView.Path);
-
+                }
                 else if (key.Equals("pb"))
+                {
                     SpawnRoomObjects<PowerBankView>(data[key].list, PowerBankView.Path);
+                }
+                else if (key.Equals("p"))
+                {
+                    SpawnRoomObjects<PortalView>(data[key].list, PortalView.Path);
+                }
             }
         }
 
-        private void SpawnRoomObjects<T>(List<JSONObject> list, string PrefabPath)
+        private void SpawnRoomObjects<T>(List<JSONObject> list, string prefabPath)
             where T: IMapViewComponent
         {
             foreach (var numArray in list)
@@ -108,7 +118,7 @@ namespace Screeps3D.Rooms.Views
                 if (_objects[x, y] != null)
                     continue;
 
-                var obj = PoolLoader.Load(PrefabPath);
+                var obj = PoolLoader.Load(prefabPath);
                 var objView = obj.GetComponent<T>();
 
                 objView.roomPosX = x;
