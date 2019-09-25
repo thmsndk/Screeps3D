@@ -21,10 +21,12 @@ namespace Screeps3D.Rooms.Views
              "f4b532d08c3952a":[[32,18],[33,17],[32,16],[31,15],[33,16]]            // player
          }
      */
-
+    
     public class MapView : MonoBehaviour, IRoomViewComponent
     {
         public Room Room { get; private set; }
+        
+        [SerializeField] private TerrainView _terrainView;
 
         private MapDotView[,] _dots = new MapDotView[50, 50];
         private List<MapDotView> _dotList = new List<MapDotView>();
@@ -44,12 +46,12 @@ namespace Screeps3D.Rooms.Views
         {
             if (show)
             {
-                ClearDots();
+            ClearDots();
                 foreach (var obj in _objectList)
                     obj.Hide();
             }
             else
-            {
+            {   
                 foreach (var obj in _objectList)
                     obj.Show();
             }
@@ -61,56 +63,52 @@ namespace Screeps3D.Rooms.Views
 
             if (Room.ShowingObjects)
                 return;
-
+            
             foreach (var key in data.keys)
             {
                 // player
                 if (key.Length > 2)
-                {
                     SpawnDots(key, data[key].list);
-                }
+
                 else if (key.Equals("k"))
                 {
+                    foreach (var numArray in data[key].list)
+                    {
+                        var x = (int) numArray.list[0].n;
+                        var y = (int) numArray.list[1].n;
+                        _terrainView.addLair(x, y);
+                    }
                     SpawnRoomObjects<SourceKeeperLairView>(data[key].list, SourceKeeperLairView.Path);
                 }
+
                 else if (key.Equals("c"))
-                {
                     SpawnRoomObjects<ControllerView>(data[key].list, ControllerView.Path);
-                }
+
                 else if (key.Equals("s"))
-                {
                     SpawnRoomObjects<SourceView>(data[key].list, SourceView.Path);
-                }
+
                 else if (key.Equals("m"))
-                {
                     SpawnRoomObjects<MineralView>(data[key].list, MineralView.Path);
-                }
+
                 else if (key.Equals("w"))
-                {
                     SpawnRoomObjects<WallView>(data[key].list, WallView.Path);
-                }
+
                 else if (key.Equals("pb"))
-                {
                     SpawnRoomObjects<PowerBankView>(data[key].list, PowerBankView.Path);
-                }
-                else if (key.Equals("p"))
-                {
-                    SpawnRoomObjects<PortalView>(data[key].list, PortalView.Path);
-                }
             }
         }
 
-        private void SpawnRoomObjects<T>(List<JSONObject> list, string prefabPath)
-            where T : IMapViewComponent
+        private void SpawnRoomObjects<T>(List<JSONObject> list, string PrefabPath)
+            where T: IMapViewComponent
         {
             foreach (var numArray in list)
             {
-                var x = (int)numArray.list[0].n;
-                var y = (int)numArray.list[1].n;
+                var x = (int) numArray.list[0].n;
+                var y = (int) numArray.list[1].n;
                 if (_objects[x, y] != null)
                     continue;
 
-                var obj = PoolLoader.Load(prefabPath);
+                var obj = PoolLoader.Load(PrefabPath);
                 var objView = obj.GetComponent<T>();
 
                 objView.roomPosX = x;
@@ -122,36 +120,36 @@ namespace Screeps3D.Rooms.Views
                 _objectList.Add(objView);
             }
         }
-
+        
         private void SpawnDots(string key, List<JSONObject> list)
         {
-            Color randomEnemyColor;
-            if (!GameManager.Instance.PlayerColors.TryGetValue(key, out randomEnemyColor))
-            {
-                randomEnemyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-                GameManager.Instance.PlayerColors.Add(key, randomEnemyColor);
-            }
-
-
-            var color = key == ScreepsAPI.Me.UserId ? Color.green : randomEnemyColor;
-            foreach (var numArray in list)
-            {
-                var x = (int)numArray.list[0].n;
-                var y = (int)numArray.list[1].n;
-                var view = _dots[x, y];
-                if (!view || view.Color != color)
+                Color randomEnemyColor;
+                if (!GameManager.Instance.PlayerColors.TryGetValue(key, out randomEnemyColor))
                 {
-                    var go = PoolLoader.Load(MapDotView.Path);
-                    view = go.GetComponent<MapDotView>();
+                    randomEnemyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                    GameManager.Instance.PlayerColors.Add(key, randomEnemyColor);
                 }
 
-                view.Load(x, y, this);
-                view.Color = color;
-                view.Show();
-                _dots[x, y] = view;
-                _dotList.Add(view);
+
+                var color = key == ScreepsAPI.Me.UserId ? Color.green : randomEnemyColor;
+            foreach (var numArray in list)
+                {
+                    var x = (int) numArray.list[0].n;
+                    var y = (int) numArray.list[1].n;
+                    var view = _dots[x, y];
+                    if (!view || view.Color != color)
+                    {
+                        var go = PoolLoader.Load(MapDotView.Path);
+                        view = go.GetComponent<MapDotView>();
+                    }
+                    
+                    view.Load(x, y, this);
+                    view.Color = color;
+                    view.Show();
+                    _dots[x, y] = view;
+                    _dotList.Add(view);
+                }
             }
-        }
 
         private void ClearDots()
         {
@@ -165,6 +163,6 @@ namespace Screeps3D.Rooms.Views
             _dots[x, y] = null;
         }
 
-
+        
     }
 }
