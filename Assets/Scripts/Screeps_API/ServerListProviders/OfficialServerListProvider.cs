@@ -10,37 +10,33 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
     {
         public bool MergeWithCache
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public void Load(Action<IEnumerable<ServerCache>> callback)
         {
             var serverList = new List<ServerCache>();
 
-            var publicServer = new ServerCache();
-            publicServer.MMO = true;
-            publicServer.Name = "Screeps.com";
-            publicServer.Address.HostName = "Screeps.com";
-            publicServer.Address.Path = "/";
-            publicServer.Address.Port = "";
-            publicServer.Address.Ssl = true;
+            var publicServer = new ServerCache
+            {
+                MMO = true,
+                Type = ServerType.Official,
+                Name = "Screeps.com",
+                Address = {HostName = "Screeps.com", Path = "/", Port = "", Ssl = true}
+            };
             serverList.Add(publicServer);
 
-            var ptr = new ServerCache();
-            ptr.MMO = true;
-            ptr.Name = "PTR Screeps.com";
-            ptr.Address.HostName = "screeps.com";
-            ptr.Address.Path = "/ptr";
-            ptr.Address.Port = "";
-            ptr.Address.Ssl = true;
+            var ptr = new ServerCache
+            {
+                MMO = true,
+                Type = ServerType.Official,
+                Name = "PTR Screeps.com",
+                Address = {HostName = "screeps.com", Path = "/ptr", Port = "", Ssl = true}
+            };
 
             serverList.Add(ptr);
 
             callback(serverList);
-
         }
     }
 }

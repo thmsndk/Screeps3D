@@ -41,11 +41,10 @@ namespace Common
                 catch (Exception e)
                 {
                     Debug.LogError(e);
-                    if (file != null)
-                        file.Close();
+                    file?.Close();
                     return null;
                 }
-            } 
+            }
             else
             {
                 Debug.LogError("saved data not found");
@@ -55,7 +54,7 @@ namespace Common
 
         private static string GetPath(string identifier)
         {
-            return string.Format("{0}/{1}.dat", Application.persistentDataPath, identifier);
+            return $"{Application.persistentDataPath}/{identifier}.dat";
         }
     }
 }

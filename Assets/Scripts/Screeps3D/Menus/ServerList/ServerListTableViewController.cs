@@ -21,27 +21,32 @@ namespace Screeps3D.Menus.ServerList
 
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
-        void Start() {
+        private void Start()
+        {
             m_tableView.dataSource = this;
         }
 
         #region ITableViewDataSource
 
         //Will be called by the TableView to know how many rows are in this table
-        public int GetNumberOfRowsForTableView(TableView tableView) {
+        public int GetNumberOfRowsForTableView(TableView tableView)
+        {
             // Should return the amount of servers in the list
-            return _servers != null ? _servers.Count : 0;
+            return _servers?.Count ?? 0;
         }
 
         //Will be called by the TableView to know what is the height of each row
-        public float GetHeightForRowInTableView(TableView tableView, int row) {
-            return (m_cellPrefab.transform as RectTransform).rect.height;
+        public float GetHeightForRowInTableView(TableView tableView, int row)
+        {
+            return ((RectTransform) m_cellPrefab.transform).rect.height;
         }
 
         //Will be called by the TableView when a cell needs to be created for display
-        public TableViewCell GetCellForRowInTableView(TableView tableView, int row) {
+        public TableViewCell GetCellForRowInTableView(TableView tableView, int row)
+        {
             var cell = tableView.GetReusableCell(m_cellPrefab.reuseIdentifier) as ServerListItemCell;
-            if (cell == null) {
+            if (cell == null)
+            {
                 cell = GameObject.Instantiate(m_cellPrefab) as ServerListItemCell;
                 cell.name = "ServerListItemCell_" + (++m_numInstancesCreated).ToString();
                 cell.onServerSelected.AddListener(OnServerSelected);
@@ -59,7 +64,7 @@ namespace Screeps3D.Menus.ServerList
 
         internal void UpdateServerList(CacheList servers)
         {
-            this._servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object without cache
+            _servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object without cache
             m_tableView.ReloadData();
         }
 
@@ -67,11 +72,7 @@ namespace Screeps3D.Menus.ServerList
 
         private void OnServerSelected(ServerCache server)
         {
-            if (this.onServerSelected != null)
-            {
-                this.onServerSelected.Invoke(server);
-            }
+            onServerSelected?.Invoke(server);
         }
-
     }
 }

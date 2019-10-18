@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Screeps_API;
 
 namespace Assets.Scripts.Screeps_API.ServerListProviders
@@ -10,10 +8,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
     {
         public bool MergeWithCache
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public void Load(Action<IEnumerable<ServerCache>> callback)
@@ -28,6 +23,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                 foreach (var server in servers)
                 {
                     var name = server["name"].str;
+                    //TODO implement status
                     var status = server["status"].str;
                     var likeCount = Convert.ToInt32(server["likeCount"].n);
 
@@ -35,11 +31,13 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                     var host = settings["host"].str;
                     var port = settings["port"].str;
 
-                    var cachedServer = new ServerCache();
-                    cachedServer.Address.HostName = host;
-                    cachedServer.Address.Port = port;
-                    cachedServer.Name = name;
-                    cachedServer.LikeCount = likeCount;
+                    var cachedServer = new ServerCache
+                    {
+                        Address = {HostName = host, Port = port},
+                        Type = ServerType.Community,
+                        Name = name,
+                        LikeCount = likeCount
+                    };
 
                     serverList.Add(cachedServer);
 
@@ -53,15 +51,10 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                 callback(serverList);
             };
 
-            Action errorCallBack = () =>
-            {
-                callback(serverList);
-            };
+            Action errorCallBack = () => { callback(serverList); };
 
 
             ScreepsAPI.Http.GetServerList(serverCallback, errorCallBack);
         }
-
-        
     }
 }

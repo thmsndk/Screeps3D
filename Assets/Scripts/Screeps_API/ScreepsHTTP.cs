@@ -50,7 +50,7 @@ namespace Screeps_API
                 www.SetRequestHeader("Content-Type", "application/json");
             } else
             {
-                var message = string.Format("HTTP: request method {0} unrecognized", requestMethod);
+                var message = $"HTTP: request method {requestMethod} unrecognized";
                 Debug.Log(message);
                 throw new Exception(message);
             }
@@ -93,11 +93,11 @@ namespace Screeps_API
                         if (token != null)
                         {
                             Token = token.str;
-                            Debug.Log(string.Format("HTTP: found a token! {0}", Token));
+                            Debug.Log($"HTTP: found a token! {Token}");
                         }
                     }
 
-                    if (onSuccess != null) onSuccess.Invoke(outcome.downloadHandler.text);
+                    onSuccess?.Invoke(outcome.downloadHandler.text);
                 }
             };
 
