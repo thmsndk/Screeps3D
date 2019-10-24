@@ -1,5 +1,4 @@
 ﻿using Common;
-using Screeps3D.Player;
 using UnityEngine;
 
 namespace Screeps3D.Rooms.Views
