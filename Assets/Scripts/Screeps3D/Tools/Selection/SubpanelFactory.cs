@@ -16,7 +16,7 @@ namespace Screeps3D.Tools.Selection
         private readonly string[] _prefabNames =
         {
             "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Progress", "Construction", 
-            "Capacity", "Store", "Cooldown", "Resource", "Spawning", "Regeneration",
+            "Capacity", "Store", "Cooldown", "Resource", "Spawning", "SpawningIn", "Regeneration",
             "Power", "Destination"
         };
         

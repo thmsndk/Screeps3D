@@ -47,9 +47,14 @@ namespace Screeps3D.RoomObjects
         string ResourceType { get; set; }
     }
 
-    internal interface IRegenerationObject: IRoomObject
+    internal interface IRegenerationObject : IRoomObject
     {
         float NextRegenerationTime { get; set; }
+    }
+
+    internal interface ISpawningInObject : IRoomObject
+    {
+        float NextSpawnTime { get; set; }
     }
 
     internal interface INamedObject
