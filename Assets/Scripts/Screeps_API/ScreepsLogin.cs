@@ -115,7 +115,8 @@ namespace Screeps_API
                 return;
             }
 
-            var server = new ServerCache {Type = ServerType.Custom, Address = {HostName = input, Port = "21025"}};
+            var server = new ServerCache
+                {Type = SourceProviderType.Custom, Address = {HostName = input, Port = "21025"}};
 
             // split/parse http url and port and assign properly e.g. http://screeps.reggaemuffin.me:21025
             var urlPattern =
@@ -199,7 +200,7 @@ namespace Screeps_API
             }
 
             var selectedServer = _servers[_serverIndex];
-            var isPublic = selectedServer.MMO;
+            var isPublic = selectedServer.Official;
 
             //_ssl.gameObject.SetActive(!isPublic);
             //_port.gameObject.SetActive(!isPublic);
@@ -212,7 +213,7 @@ namespace Screeps_API
             _password.gameObject.SetActive(!isPublic && showCredentialInput);
             _token.gameObject.SetActive(isPublic && showCredentialInput);
 
-            _removeServer.gameObject.SetActive(!selectedServer.MMO);
+            _removeServer.gameObject.SetActive(!selectedServer.Official);
 
             if (!isPublic && (string.IsNullOrEmpty(selectedServer.Address.Port) || editServer))
             {
@@ -264,7 +265,7 @@ namespace Screeps_API
                     server.Online = true;
                     // TODO: timestamp of online status?
                     server.Users = users;
-                    server.Version = "v" + (server.MMO ? package.n.ToString() : packageVersion.str);
+                    server.Version = "v" + (server.Official ? package.n.ToString() : packageVersion.str);
                     UpdateServerList();
                 };
 
@@ -320,8 +321,10 @@ namespace Screeps_API
                     }
 
                     var sortedCache = new CacheList();
-                    sortedCache.AddRange(_servers.OrderBy(s => s.Type).ThenByDescending(s => s.LikeCount)
-                        .ThenBy(s => s.Address.Path).ThenBy(s => s.Address.HostName));
+                    sortedCache.AddRange(_servers.OrderByDescending(s => s.Type == SourceProviderType.Official)
+                        .ThenByDescending(s => s.LikeCount)
+                        .ThenBy(s => s.Address.Path)
+                        .ThenBy(s => s.Address.HostName));
                     _servers = sortedCache;
 
                     // preselecting selected server might be an issue when the selected server status is not saved for like SS3

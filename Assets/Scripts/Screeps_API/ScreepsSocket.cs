@@ -30,7 +30,7 @@ namespace Screeps_API
             }
 
             var protocol = ScreepsAPI.Cache.Address.Ssl ? "wss" : "ws";
-            var port = ScreepsAPI.Cache.MMO ? "" : string.Format(":{0}", ScreepsAPI.Cache.Address.Ssl ? "443" : ScreepsAPI.Cache.Address.Port);
+            var port = ScreepsAPI.Cache.Official ? "" : string.Format(":{0}", ScreepsAPI.Cache.Address.Ssl ? "443" : ScreepsAPI.Cache.Address.Port);
 
             var path = ScreepsAPI.Cache.Address.Path;
             if (path.StartsWith("/") && path.EndsWith("/"))

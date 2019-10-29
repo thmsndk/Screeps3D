@@ -60,7 +60,7 @@ namespace Screeps3D.Menus.ServerList
 
             UserCountLabel.text = server.Users.ToString();
 
-            if (!server.MMO)
+            if (!server.Official)
             {
                 LikesLabel.text = server.LikeCount.ToString();
                 foreach (Transform child in LikesLabel.transform)

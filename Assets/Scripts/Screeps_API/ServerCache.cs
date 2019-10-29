@@ -21,9 +21,9 @@ namespace Screeps_API
         public int LikeCount { get; set; }
 
         [Obsolete("This boolean is not needed anymore, kept for compatibility See ServerType.")]
-        public bool MMO { get; internal set; }
+        public bool Official { get; internal set; }
 
-        public ServerType Type { get; internal set; }
+        public SourceProviderType Type { get; internal set; }
         public bool? Online { get; internal set; }
         public int Users { get; internal set; }
         public string Version { get; internal set; }
@@ -40,7 +40,7 @@ namespace Screeps_API
         public bool Selected { get; internal set; }
     }
 
-    public enum ServerType
+    public enum SourceProviderType
     {
         NONE,
         Official,

@@ -34,7 +34,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                     var cachedServer = new ServerCache
                     {
                         Address = {HostName = host, Port = port},
-                        Type = ServerType.Community,
+                        Type = SourceProviderType.Community,
                         Name = name,
                         LikeCount = likeCount
                     };
