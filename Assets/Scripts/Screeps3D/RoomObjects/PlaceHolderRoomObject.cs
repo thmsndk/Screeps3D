@@ -2,7 +2,7 @@
 
 namespace Screeps3D.RoomObjects
 {
-    public class PlaceHolderRoomObject : RoomObject
+    public class PlaceHolderRoomObject : OwnedStoreStructure
     {
         protected internal override void AssignView()
         {

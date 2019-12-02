@@ -19,7 +19,7 @@ namespace Screeps3D.RoomObjects
         "cooldownTime":2.247301E+07
     }*/
 
-    public class Nuker : StoreStructure, IResourceObject//, IEnergyObject
+    public class Nuker : OwnedStoreStructure, IResourceObject//, IEnergyObject
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }

@@ -57,7 +57,17 @@ namespace Screeps3D.RoomObjects
                 case Constants.TypeRoad:
                     return new RoomObject(); // Roads are implemented in a different way
                 case Constants.TypeObserver:
-                    return new RoomObject(); // Observers are implemented in a different way for some reason
+                    return new Observer();
+                case Constants.TypeExtractor:
+                    return new Extractor();
+                case Constants.TypeFactory:
+                    return new Factory();
+                case Constants.TypeDeposit:
+                    return new Deposit();
+                case Constants.TypeRuin:
+                    return new Ruin();
+                case Constants.TypeInvaderCore:
+                    return new InvaderCore();
                 default:
                     return new PlaceHolderRoomObject();
             }

@@ -520,6 +520,12 @@ namespace WebSocketSharp
         reason = wsex.Message;
       }
 
+      if (UnityEngine.Debug.isDebugBuild)
+      {
+          UnityEngine.Debug.Log("Exception in ScreepSocket.OnClose");
+          UnityEngine.Debug.LogException(exception);
+      }
+
       if (code == CloseStatusCode.Abnormal || code == CloseStatusCode.TlsHandshakeFailure)
         _logger.Fatal (exception.ToString ());
       else

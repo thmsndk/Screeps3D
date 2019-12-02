@@ -17,7 +17,7 @@ namespace Screeps3D.RoomObjects
       "off": false
     }*/
 
-    public class Extension : StoreStructure//, IEnergyObject
+    public class Extension : OwnedStoreStructure//, IEnergyObject
     {
         internal override void Unpack(JSONObject data, bool initial)
         {

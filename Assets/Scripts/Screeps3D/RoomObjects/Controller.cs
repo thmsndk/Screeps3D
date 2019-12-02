@@ -16,11 +16,9 @@ namespace Screeps3D.RoomObjects
       "safeModeAvailable": 7
     }*/
 
-    public class Controller : Structure, IOwnedObject, IProgress
+    public class Controller : OwnedStructure, IOwnedObject, IProgress
     {
         public int Level { get; private set; }
-        public string UserId { get; set; }
-        public ScreepsUser Owner { get; set; }
         public float Progress { get; set; }
         public float ProgressMax { get; set; }
         public float DowngradeTime { get; set; }
@@ -31,7 +29,6 @@ namespace Screeps3D.RoomObjects
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
-            UnpackUtility.Owner(this, data);
 
             var levelObj = data["level"];
             if (levelObj != null)

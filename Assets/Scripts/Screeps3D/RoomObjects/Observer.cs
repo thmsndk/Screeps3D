@@ -12,7 +12,7 @@
         "hitsMax":500,
         "observeRoom":null
     }*/
-    public class Observer : Structure
+    public class Observer : OwnedStructure
     {
     }
 }

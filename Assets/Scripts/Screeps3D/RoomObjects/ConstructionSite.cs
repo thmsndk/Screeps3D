@@ -1,6 +1,6 @@
 ﻿namespace Screeps3D.RoomObjects
 {
-    public class ConstructionSite : RoomObject, IProgress
+    public class ConstructionSite : OwnedRoomObject, IProgress
     {
         public float Progress { get; set; }
         public float ProgressMax { get; set; }

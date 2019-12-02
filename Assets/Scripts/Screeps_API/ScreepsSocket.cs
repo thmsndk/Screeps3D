@@ -59,7 +59,8 @@ namespace Screeps_API
                 if (OnOpen != null) OnOpen.Invoke(e);
             } catch (Exception exception)
             {
-                Debug.Log(string.Format("Exception in ScreepSocket.OnOpen\n{0}", exception));
+                Debug.Log("Exception in ScreepSocket.OnOpen");
+                Debug.LogException(exception);
             }
         }
 
@@ -71,7 +72,8 @@ namespace Screeps_API
                 if (OnClose != null) OnClose.Invoke(e);
             } catch (Exception exception)
             {
-                Debug.Log(string.Format("Exception in ScreepSocket.OnClose\n{0}", exception));
+                Debug.Log("Exception in ScreepSocket.OnClose");
+                Debug.LogException(exception);
             }
         }
 
@@ -88,7 +90,8 @@ namespace Screeps_API
                 if (OnError != null) OnError.Invoke(e);
             } catch (Exception exception)
             {
-                Debug.Log(string.Format("Exception in ScreepSocket.OnError\n{0}", exception));
+                Debug.Log("Exception in ScreepSocket.OnError");
+                Debug.LogException(exception);
             }
         }
 

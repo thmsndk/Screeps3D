@@ -17,7 +17,7 @@ namespace Screeps3D.RoomObjects
         "hits":5000,
         "hitsMax":5000
     }*/
-    public class PowerSpawn : StoreStructure, IResourceObject//, IEnergyObject
+    public class PowerSpawn : OwnedStoreStructure, IResourceObject//, IEnergyObject
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }

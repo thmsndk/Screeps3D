@@ -21,7 +21,7 @@ namespace Screeps3D.RoomObjects
         }
     }*/
 
-    public class Tower : StoreStructure/*, IEnergyObject*/, IActionObject
+    public class Tower : OwnedStoreStructure/*, IEnergyObject*/, IActionObject
     {
         public Dictionary<string, JSONObject> Actions { get; set; }
 

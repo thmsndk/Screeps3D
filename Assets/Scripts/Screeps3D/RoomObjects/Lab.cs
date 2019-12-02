@@ -24,7 +24,7 @@ namespace Screeps3D.RoomObjects
             "runReaction":null || "runReaction":{"x1":19,"y1":31,"x2":18,"y2":32}
         }
     }*/
-    public class Lab : StoreStructure, IActionObject, IResourceObject, ICooldownObject//, IEnergyObject
+    public class Lab : OwnedStoreStructure, IActionObject, IResourceObject, ICooldownObject//, IEnergyObject
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }

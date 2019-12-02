@@ -14,16 +14,13 @@ namespace Screeps3D.RoomObjects
       "hitsMax": 300000000,
       "nextDecayTime": 1164543
     }*/
-    public class Rampart : Structure, IOwnedObject, IDecay
+    public class Rampart : OwnedStructure, IOwnedObject, IDecay
     {
-        public string UserId { get; set; }
-        public ScreepsUser Owner { get; set; }
         public float NextDecayTime { get; set; }
 
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
-            UnpackUtility.Owner(this, data);
             UnpackUtility.Decay(this, data);
         }
 

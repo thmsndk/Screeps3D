@@ -23,7 +23,7 @@ namespace Screeps3D.RoomObjects
       "off": false
     }*/
 
-    public class Spawn : StoreStructure//, IEnergyObject
+    public class Spawn : OwnedStoreStructure//, IEnergyObject
     {
         public string SpawningName { get; set; }
         public float SpawningNeedTime { get; set; }

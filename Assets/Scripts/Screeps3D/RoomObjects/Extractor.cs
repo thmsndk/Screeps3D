@@ -1,4 +1,6 @@
-﻿namespace Screeps3D.RoomObjects
+﻿using UnityEngine;
+
+namespace Screeps3D.RoomObjects
 {
     /*{
         "_id":"5949e649dd5848a527eaafd6",
@@ -12,7 +14,14 @@
         "hitsMax":500,
         "cooldown":0
     }*/
-    public class Extractor : Structure
+    public class Extractor : OwnedStructure, ICooldownObject, IOwnedObject
     {
+        public float Cooldown { get; set; }
+
+        internal override void Unpack(JSONObject data, bool initial)
+        {
+            base.Unpack(data, initial);
+            UnpackUtility.Cooldown(this, data);
+        }
     }
 }

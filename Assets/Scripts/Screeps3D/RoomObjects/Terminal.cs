@@ -28,7 +28,7 @@ namespace Screeps3D.RoomObjects
         "UH":30,
         "OH":5,
     }*/
-    public class Terminal : StoreStructure
+    public class Terminal : OwnedStoreStructure
     {
         internal override void Unpack(JSONObject data, bool initial)
         {

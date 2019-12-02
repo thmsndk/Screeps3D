@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Screeps_API;
 
 namespace Screeps3D.RoomObjects
 {
@@ -13,20 +13,24 @@ namespace Screeps3D.RoomObjects
         }
     */
 
-    public class SourceKeeperLair : RoomObject
+    public class SourceKeeperLair : RoomObject, ISpawningInObject, IOwnedObject
     {
-        public float NextSpawnTime { get; set; }
+        const string SourceKeeperUserId = "3";
 
+        public float NextSpawnTime { get; set; }
+        public string UserId { get; set; }
+        public ScreepsUser Owner { get; set; }
 
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
-
+            
+            Owner = ScreepsAPI.UserManager.GetUser(SourceKeeperUserId);
+            UserId = Owner.Username;
             var nextSpawnTime = data["nextSpawnTime"];
             if (nextSpawnTime != null)
             {
-                NextSpawnTime = nextSpawnTime.n; // is this the game tick of spawning?
-                Debug.Log(this.Id + "" + NextSpawnTime);
+                NextSpawnTime = nextSpawnTime.n;
             }
         }
     }

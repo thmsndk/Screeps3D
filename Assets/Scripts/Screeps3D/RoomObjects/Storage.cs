@@ -33,7 +33,7 @@ namespace Screeps3D.RoomObjects
         "U":0
     }*/
 
-    public class Storage : StoreStructure
+    public class Storage : OwnedStoreStructure
     {
         internal override void Unpack(JSONObject data, bool initial)
         {

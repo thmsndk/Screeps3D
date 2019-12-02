@@ -30,7 +30,14 @@ namespace Screeps3D
         public const string TypePortal = "portal";
         public const string TypeRoad = "road";
         public const string TypeObserver = "observer";
+        public const string TypeExtractor = "extractor";
+        public const string TypeFactory = "factory";
+        public const string TypeDeposit = "deposit";
+        public const string TypeRuin = "ruin";
+        public const string TypeInvaderCore = "invadercore";
         
+
+
 
         public const float ShardHeight = 100;
 
@@ -126,9 +133,16 @@ namespace Screeps3D
             "Z",
             "X",
             "G",
+
+            "silicon",
+            "metal",
+            "biomass",
+            "mist",
+
             "OH",
             "ZK",
             "UL",
+
             "UH",
             "UO",
             "KH",
@@ -139,6 +153,7 @@ namespace Screeps3D
             "ZO",
             "GH",
             "GO",
+
             "UH2O",
             "UHO2",
             "KH2O",
@@ -149,6 +164,7 @@ namespace Screeps3D
             "ZHO2",
             "GH2O",
             "GHO2",
+
             "XUH2O",
             "XUHO2",
             "XKH2O",
@@ -159,6 +175,49 @@ namespace Screeps3D
             "XZHO2",
             "XGH2O",
             "XGHO2",
+            
+            "utrium_bar",
+            "lemergium_bar",
+            "zynthium_bar",
+            "keanium_bar",
+            "ghodium_melt",
+            "oxidant",
+            "reductant",
+            "purifier",
+            "battery",
+
+            "composite",
+            "crystal",
+            "liquid",
+
+            "wire",
+            "switch",
+            "transistor",
+            "microchip",
+            "circuit",
+            "device",
+
+            "cell",
+            "phlegm",
+            "tissue",
+            "muscle",
+            "organoid",
+            "organism",
+
+            "alloy",
+            "tube",
+            "fixtures",
+            "frame",
+            "hydraulics",
+            "machine",
+
+            "condensate",
+            "concentrate",
+            "extract",
+            "spirit",
+            "emanation",
+            "essence",
+
         }; 
     }
 }

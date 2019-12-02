@@ -19,7 +19,7 @@ namespace Screeps3D.RoomObjects
             "transferEnergy":null
         }
     }*/
-    public class Link : StoreStructure, ICooldownObject, IActionObject//, IEnergyObject
+    public class Link : OwnedStoreStructure, ICooldownObject, IActionObject//, IEnergyObject
     {
         public Dictionary<string, JSONObject> Actions { get; set; }
         public float Cooldown { get; set; }

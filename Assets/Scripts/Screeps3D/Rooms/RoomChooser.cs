@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+using Common;
 using Screeps_API;
 using Screeps3D.Player;
 using Screeps3D.RoomObjects;
@@ -21,6 +22,11 @@ namespace Screeps3D.Rooms
         [SerializeField] private TMP_Dropdown _shardInput;
         [SerializeField] private TMP_InputField _roomInput;
         [SerializeField] private Toggle _pvpSpectateToggle;
+        //[SerializeField] private GameObject _roomList;
+        [SerializeField] private VerticalPanelElement _roomList;
+        private bool showRoomList;
+        [SerializeField] private GameObject _roomListContent;
+        
 
         private readonly string _prefPvpSpectateToggle = "PvpSpectateToggle";
         private readonly string _prefShard = "shard";
@@ -28,6 +34,11 @@ namespace Screeps3D.Rooms
 
         private List<string> _shards = new List<string>();
         private System.Random random;
+
+        /// <summary>
+        /// A list of owned room names on each shard
+        /// </summary>
+        private Dictionary<string, List<string>> _shardRooms = new Dictionary<string, List<string>>();
 
         private IEnumerator _findPvpRooms;
 
@@ -37,6 +48,8 @@ namespace Screeps3D.Rooms
             _pvpSpectateToggle.isOn = PlayerPrefs.GetInt(_prefPvpSpectateToggle, 1) == 1;
             _shardInput.onValueChanged.AddListener(OnSelectedShardChanged);
             _roomInput.onSubmit.AddListener(OnSelectedRoomChanged);
+            _roomInput.onSelect.AddListener(OnToggleRoomList);
+            _roomInput.onDeselect.AddListener(OnToggleRoomList);
             _pvpSpectateToggle.onValueChanged.AddListener(OnTogglePvpSpectate);
 
             if (ScreepsAPI.IsConnected)
@@ -47,6 +60,8 @@ namespace Screeps3D.Rooms
             {
                 throw new Exception("RoomChooser assumes ScreepsAPI.IsConnected == true at start of scene");
             }
+
+            _roomList.Hide();
         }
 
         private void OnTogglePvpSpectate(bool isOn)
@@ -178,10 +193,35 @@ namespace Screeps3D.Rooms
         {
             var shardIndex = _shardInput.options.FindIndex(s => s.text == shardName);
             _shardInput.value = shardIndex;
+            ClearAndPropulateRoomList(shardName);
         }
+
+        private void ClearAndPropulateRoomList(string shardName)
+        {
+            // clear available rooms
+            Debug.Log($"clearing rooms {_roomListContent.transform.childCount}");
+            foreach (Transform child in _roomListContent.transform)
+            {
+                child.SetParent(null);
+                //child.parent = null;
+                PoolLoader.Return("Prefabs/RoomList/roomName", child.gameObject);
+            }
+
+            var roomList = _shardRooms[shardName];
+            foreach (var room in roomList)
+            {
+                AddRoomToRoomListGameObject(shardName, room);
+            }
+
+            // adjust height of content, cause content fitters and such apparently can't set it properly
+            var rect = _roomListContent.transform.parent.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, Math.Max(roomList.Count * 6, 60));
+        }
+
         public void OnSelectedShardChanged(int shardIndex)
         {
             PlayerPrefs.SetInt(GetServerPrefKey(_prefShard), shardIndex);
+            ClearAndPropulateRoomList(_shards[shardIndex]);
         }
 
         public void OnSelectedRoomChanged(string roomName)
@@ -192,6 +232,30 @@ namespace Screeps3D.Rooms
             }
 
             this.GetAndChooseRoom(roomName);
+        }
+        public void OnToggleRoomList(string roomName)
+        {
+            StartCoroutine(DelayToggleRoomList());
+        }
+
+        /// <summary>
+        /// Delay room toggle to allow clicking a room link
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator DelayToggleRoomList()
+        {
+            //if (_roomList.activeSelf){
+            if (showRoomList)
+            {
+                yield return new WaitForSeconds(0.25f);
+            }
+
+            if (_roomListContent.transform.childCount > 0)
+            {
+                showRoomList = !showRoomList;
+                _roomList.Show(showRoomList);
+                //_roomList.SetActive(!_roomList.activeSelf);
+            }
         }
 
         public void GetAndChooseRoom(string roomName)
@@ -241,7 +305,7 @@ namespace Screeps3D.Rooms
             var controller = room.Objects.SingleOrDefault(ro => ro.Value.Type == Constants.TypeController);
             if (controller.Value != null)
             {
-                Debug.Log("and a controller!");
+                //Debug.Log("and a controller!");
                 //controller.Value.OnShow += SelectOnShow;
                 Selection.Instance.SelectObject(controller.Value);
             }
@@ -249,7 +313,7 @@ namespace Screeps3D.Rooms
             var storage = room.Objects.SingleOrDefault(ro => ro.Value.Type == Constants.TypeStorage);
             if (storage.Value != null)
             {
-                Debug.Log("and a storage!");
+                //Debug.Log("and a storage!");
                 //storage.Value.OnShow += SelectOnShow;
                 Selection.Instance.SelectObject(storage.Value);
             }
@@ -257,7 +321,7 @@ namespace Screeps3D.Rooms
             var terminal = room.Objects.SingleOrDefault(ro => ro.Value.Type == Constants.TypeTerminal);
             if (terminal.Value != null)
             {
-                Debug.Log("and a terminal!");
+                //Debug.Log("and a terminal!");
                 //terminal.Value.OnShow += SelectOnShow;
                 Selection.Instance.SelectObject(terminal.Value);
             }
@@ -292,6 +356,10 @@ namespace Screeps3D.Rooms
                 foreach (var shardName in shardNames)
                 {
                     _shards.Add(shardName);
+
+                    var shardRooms = new List<string>();
+                    _shardRooms.Add(shardName, shardRooms);
+
                     var roomList = shardObj[shardName].list;
                     if (roomList.Count > 0 && _roomInput.text.Length == 0)
                     {
@@ -299,6 +367,11 @@ namespace Screeps3D.Rooms
                         defaultShardIndex = shardIndex;
                         defaultRoom = roomList[0].str;
 
+                        foreach (var room in roomList)
+                        {
+                            shardRooms.Add(room.str);
+                            AddRoomToRoomListGameObject(shardName, room.str);
+                        }
                     }
 
                     shardIndex++;
@@ -306,15 +379,27 @@ namespace Screeps3D.Rooms
             }
             else
             {
+                const string shardName = "shard0";
+
                 _shardInput.gameObject.SetActive(false);
                 _shards.Clear();
-                _shards.Add("shard0");
+                _shards.Add(shardName);
                 _shardInput.value = 0;
+
+                var shardRooms = new List<string>();
+                _shardRooms.Add(shardName, shardRooms);
 
                 var roomObj = obj["rooms"];
                 if (roomObj != null && roomObj.list.Count > 0)
                 {
-                    defaultRoom = roomObj.list[0].str;
+                    var roomList = roomObj.list;
+                    defaultRoom = roomList[0].str;
+
+                    foreach (var room in roomList)
+                    {
+                        shardRooms.Add(room.str);
+                        AddRoomToRoomListGameObject(shardName, room.str);
+                    }
                 }
             }
 
@@ -335,6 +420,14 @@ namespace Screeps3D.Rooms
             {
                 this.OnTogglePvpSpectate(_pvpSpectateToggle.isOn);
             }
+        }
+
+        private void AddRoomToRoomListGameObject(string shardName, string romName)
+        {
+            var go = PoolLoader.Load("Prefabs/RoomList/roomName");
+            var text = go.GetComponent<TMP_Text>();
+            text.text = RoomLink.FormatTMPLink(shardName, romName, $"{romName}");
+            go.transform.parent = _roomListContent.transform;
         }
 
         private string GetServerPrefKey(string prefKey)
