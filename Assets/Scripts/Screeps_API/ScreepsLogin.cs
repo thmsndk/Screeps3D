@@ -265,7 +265,7 @@ namespace Screeps_API
                     server.Online = true;
                     // TODO: timestamp of online status?
                     server.Users = users;
-                    server.Version = "v" + (server.Official ? package.n.ToString() : packageVersion.str);
+                    server.Version = "v" + (server.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
                     UpdateServerList();
                 };
 
@@ -305,8 +305,13 @@ namespace Screeps_API
                             }
                             else
                             {
+                                
                                 cachedServer.Name = server.Name;
                                 cachedServer.LikeCount = server.LikeCount;
+
+                                //Backwards compatibility
+                                cachedServer.Official = server.Official;
+                                cachedServer.Type = server.Type;
                             }
                         }
                         else
