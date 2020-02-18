@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Screeps3D.RoomObjects;
 using UnityEngine;
@@ -17,7 +18,8 @@ namespace Screeps3D.Tools.Selection
         {
             "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Level", "Progress", "Construction", 
             "Capacity", "Store", "Cooldown", "Resource", "Spawning", "SpawningIn", "Regeneration",
-            "Power", "Destination"
+            "Power", "Destination",
+            "Buttons"
         };
         
         private void Start()
@@ -38,7 +40,19 @@ namespace Screeps3D.Tools.Selection
                 {
                     if (!component.ObjectType.IsInstanceOfType(roomObject))
                     {
-                        return null;
+                        ////if (component.ObjectType.IsGenericType)
+                        ////{
+                        ////    // This is to support IButtons<T> where T: IRoomObject
+                        ////    Type[] typeParameters = component.ObjectType.GetGenericArguments();
+                        ////    if (!typeParameters.Any(t => t.IsInstanceOfType(roomObject)))
+                        ////    {
+                        ////        return null;
+                        ////    }
+                        ////}
+                        ////else
+                        ////{
+                            return null;
+                        ////}
                     }
                     return PoolLoader.Load(path).GetComponent<SelectionSubpanel>();
                 });

@@ -63,6 +63,9 @@ namespace Screeps3D.RoomObjects.Views
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
+
+            // Move mineral up "above" the terrain
+            transform.localPosition = roomObject.Position + (Vector3.up * 0.3f);
         }
 
         internal override void Delta(JSONObject data)
@@ -84,7 +87,7 @@ namespace Screeps3D.RoomObjects.Views
             //transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
             //_rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _tombstone.Rotation, Time.deltaTime * 5);
         }
-        
+
         // IMapViewComponent *****************
         public int roomPosX { get; set; }
         public int roomPosY { get; set; }

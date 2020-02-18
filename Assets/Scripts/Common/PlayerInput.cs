@@ -13,6 +13,8 @@ namespace Common
         [SerializeField] private Button _submit;
         [SerializeField] private Button _cancel;
         private Action<string> _onInput;
+        private Action<bool> _onAnswerQuestion;
+        private TextMeshProUGUI _submitText;
 
         public static void Get(string label, Action<string> onInput)
         {
@@ -21,6 +23,7 @@ namespace Common
 
         private void Start()
         {
+            _submitText = _submit.GetComponentInChildren<TextMeshProUGUI>();
             _submit.onClick.AddListener(OnSubmit);
             _input.onSubmit.AddListener(OnSubmit);
             _cancel.onClick.AddListener(OnCancel);
@@ -28,13 +31,37 @@ namespace Common
 
         private void OnCancel()
         {
-            _onInput(null);
+            if (_onInput != null)
+            {
+                _onInput(null);
+
+                _onInput = null;
+            }
+
+            if (_onAnswerQuestion != null)
+            {
+                _onAnswerQuestion(false);
+                _onAnswerQuestion = null;
+            }
+
             _panel.Hide();
         }
 
         private void OnSubmit()
         {
-            OnSubmit(_input.text);
+            if (_onInput != null)
+            {
+                OnSubmit(_input.text);
+
+                _onInput = null;
+            }
+
+            if (_onAnswerQuestion != null)
+            {
+                _onAnswerQuestion(true);
+                _onAnswerQuestion = null;
+                _panel.Hide();
+            }
         }
 
         private void OnSubmit(string text)
@@ -45,9 +72,33 @@ namespace Common
 
         private void GetInput(string label, Action<string> onInput)
         {
+            if (_submitText != null)
+            {
+                _submitText.text = "Submit";
+            }
+
             _onInput = onInput;
+            _input.gameObject.SetActive(true);
             _label.text = label;
             _panel.Show();
+        }
+
+        private void Question(string label, Action<bool> onAnswerQuestion)
+        {
+            if (_submitText != null)
+            {
+                _submitText.text = "Yes";
+            }
+
+            _onAnswerQuestion = onAnswerQuestion;
+            _input.gameObject.SetActive(false);
+            _label.text = label;
+            _panel.Show();
+        }
+
+        public static void AskQuestion(string label, Action<bool> onAnswerQuestion)
+        {
+            Instance.Question(label, onAnswerQuestion);
         }
     }
 }

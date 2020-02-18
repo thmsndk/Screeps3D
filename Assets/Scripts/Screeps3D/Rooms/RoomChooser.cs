@@ -165,28 +165,14 @@ namespace Screeps3D.Rooms
 
         private void ChooseRandomOwnedRoom()
         {
-            GetMapRooms(_shards[_shardInput.value], (jsonRooms, jsonUsers) =>
-            {
-                //  use the mapStats endpoint to get owned rooms and randomly select one
-                //const { rooms: rawRooms } = await getMapRooms(api)
-                //rooms = rawRooms.filter(r => r.own && r.own.level)
-                //room = rooms[Math.floor(Math.random() * rooms.length)].id    
-
-                //        "own": {
-                //            "user": "5d7934a9e0b2b571f857b212",
-                //"level": 0
-
-                //        },
-                var ownedRooms = jsonRooms.Where(r => r.HasField("own") && r["own"].HasField("level") && r["own"]["level"].n > 0);
+                var ownedRooms = MapStatsUpdater.Instance.RoomInfo.Values.Where(r => r.User != null && r.Level.HasValue && r.Level > 0);
                 var random = new System.Random();
                 var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                var user = jsonUsers[room["own"]["user"].str];
-                var roomName = room["id"].str;
+                var roomName = room?.RoomName;
 
-                Debug.Log($"Going to room {roomName} owned by {user["username"].str}");
+                Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
                 _roomInput.text = roomName;
                 this.GetAndChooseRoom(roomName);
-            });
         }
 
         public void OnSelectedShardChanged(string shardName)
@@ -436,123 +422,6 @@ namespace Screeps3D.Rooms
             var port = ScreepsAPI.Cache.Address.Port;
 
             return string.Format("{0} {1} {2}", hostname, port, prefKey);
-        }
-
-        // We already do something like this in RoomManager, parts of it probably belongs there
-        private string XYToRoomName(int x, int y)
-        {
-            var dx = "E";
-            var dy = "S";
-            if (x < 0)
-            {
-                x = -x - 1;
-                dx = "W";
-            }
-            if (y < 0)
-            {
-                y = -y - 1;
-                dy = "N";
-            }
-            return $"{dx}{x}{dy}{y}";
-        }
-
-        private (int, int) XYFromRoom(string room)
-        {
-            var match = Regex.Match(room, @"^(?<dx>[WE])(?<x>\d+)(?<dy>[NS])(?<y>\d+)$");
-            //let[, dx, x, dy, y] = room.match(/ /)
-            var dx = match.Groups["dx"].Value;
-            var x = int.Parse(match.Groups["x"].Value);
-
-            var dy = match.Groups["dy"].Value;
-            var y = int.Parse(match.Groups["y"].Value);
-            if (dx == "W") x = -x - 1;
-            if (dy == "N") y = -y - 1;
-            return (x, y);
-        }
-
-        private List<string> mapRoomsCache = new List<string>();
-        private void GetMapRooms(string shard, Action<List<JSONObject>, JSONObject> callback) /* callback rooms & users*/
-        {
-            // scan sectors
-            if (mapRoomsCache.Count == 0)
-            {
-                Debug.Log("Scanning sectors");
-                ScanSectors(shard, (jsonRooms, jsonUsers) =>
-                {
-                    //console.log('Sectors found:', sectors)
-                    foreach (var jsonRoom in jsonRooms)
-                    {
-                        var roomName = jsonRoom["id"].str;
-
-                        (int x, int y) = XYFromRoom(roomName);
-                        for (var xx = 0; xx < 12; xx++)
-                        {
-                            for (var yy = 0; yy < 12; yy++)
-                            {
-                                var roomName2 = XYToRoomName(x + xx - 6, y + yy - 6);
-                                mapRoomsCache.Add(roomName2);
-                            }
-                        }
-                    }
-                    // TODO: should probably cache this, doubt it changes that often.
-                    Scan(shard, mapRoomsCache, (jsonRooms2, jsonUsers2) =>
-                    {
-                        callback(jsonRooms2, jsonUsers2);
-                    });
-                });
-            }
-            else
-            {
-                // cache maprooms
-                Scan(shard, mapRoomsCache, (jsonRooms, jsonUsers) =>
-                {
-                    callback(jsonRooms, jsonUsers);
-                });
-            }
-        }
-
-        private void ScanSectors(string shard, Action<List<JSONObject>, JSONObject> callback)
-        {
-            var rooms = new List<string>();
-            for (var yo = -10; yo <= 10; yo++)
-            {
-                for (var xo = -10; xo <= 10; xo++)
-                {
-                    var room = XYToRoomName((xo * 10) + 5, (yo * 10) + 5);
-                    rooms.Add(room);
-                }
-            }
-
-            Scan(shard, rooms, (jsonRooms, jsonUsers) =>
-            {
-                callback(jsonRooms, jsonUsers);
-            });
-        }
-
-        private void Scan(string shard, List<string> rooms, Action<List<JSONObject>, JSONObject> callback) /* callback rooms & users*/
-        {
-
-            ScreepsAPI.Http.GetMapStats(rooms, shard, "owner0", (jsonString) =>
-            {
-                var ret = new List<JSONObject>();
-
-                var result = new JSONObject(jsonString);
-                var stats = result["stats"];
-                foreach (var k in stats.keys)
-                {
-                    var kObj = stats[k];
-                    var status = kObj["status"];
-                    var own = kObj["own"];
-                    kObj.AddField("id", k);
-                    if (status.str == "normal")
-                    {
-                        ret.Add(kObj);
-                    }
-                }
-
-                callback(ret, result["users"]);
-
-            });
         }
     }
 }

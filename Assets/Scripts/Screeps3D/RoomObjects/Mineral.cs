@@ -1,4 +1,6 @@
-﻿namespace Screeps3D.RoomObjects
+﻿using Screeps3D.RoomObjects.Views;
+
+namespace Screeps3D.RoomObjects
 {
     /*{
       "_id": "5a0b5e99ab17fd00012befef",
@@ -45,6 +47,57 @@
                 ResourceAmount = minAmountData.n;
             }
             
+        }
+
+        protected internal override void AssignView()
+        {
+            if (Shown && View == null)
+            {
+                var type = this.Type;
+
+                string alternative = null;
+
+                switch (this.ResourceType)
+                {
+                    case Constants.BaseMineral.Hydrogen:
+                        alternative = "hydrogen";
+                        break;
+                    case Constants.BaseMineral.Oxygen:
+                        alternative = "oxygen";
+                        break;
+                    case Constants.BaseMineral.Utrium:
+                        alternative = "utrium";
+                        break;
+                    case Constants.BaseMineral.Keanium:
+                        alternative = "keanium";
+                        break;
+                    case Constants.BaseMineral.Lemergium:
+                        alternative = "lemergium";
+                        break;
+                    case Constants.BaseMineral.Zynthium:
+                        alternative = "zynthium";
+                        break;
+                    case Constants.BaseMineral.Catalyst:
+                        alternative = "catalyst";
+                        break;
+                }
+
+                if (alternative == null)
+                {
+                    base.AssignView(); // Fallback to "old" mineral model.
+                    return;
+                }
+
+                this.Type = $"Minerals/{alternative}";
+                View = ObjectViewFactory.Instance.NewView(this);
+
+                this.Type = type;
+
+                if (View)
+                {
+                    View.Load(this);
+                }
+            }
         }
 
     }

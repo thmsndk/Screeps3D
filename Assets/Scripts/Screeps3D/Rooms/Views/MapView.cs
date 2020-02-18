@@ -91,6 +91,7 @@ namespace Screeps3D.Rooms.Views
                 }
                 else if (key.Equals("m"))
                 {
+                    // TODO: calling map-stats with the statName: "minerals0" returns mineral type and density for the room, we could utilize thata
                     SpawnRoomObjects<MineralView>(data[key].list, MineralView.Path);
                 }
                 else if (key.Equals("w"))

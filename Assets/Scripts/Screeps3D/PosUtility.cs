@@ -1,4 +1,5 @@
-﻿using Screeps3D.RoomObjects;
+﻿using System;
+using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using UnityEngine;
 
@@ -36,6 +37,14 @@ namespace Screeps3D
         {
             var delta = new Vector3(xDelta, 0, -yDelta);
             return roomObject.Position + delta;
+        }
+
+        internal static Vector2Int ConvertToXY(Vector3 point, Room room)
+        {
+            var basePosition = room.Position - point;
+            var x = Mathf.FloorToInt(Math.Abs(basePosition.x));
+            var y = 49 - Mathf.FloorToInt(Math.Abs(basePosition.z));
+            return new Vector2Int(x, y);
         }
     }
 }
