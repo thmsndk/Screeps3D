@@ -9,6 +9,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class CreepBodyPanel : LinePanel
     {
+        [SerializeField] private TMP_Text _BodyPartCountLabel;
         [SerializeField] private GridLayoutGroup _bodyParts;
         [SerializeField] private Toggle _bodyPartPrefab;
 
@@ -34,6 +35,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
             // TODO: use the objectfactory so we don't instantiate objects all the time.
             DestroyBodyParts();
+
+            _BodyPartCountLabel.SetText($"{_creep.Body.Parts.Count} parts");
 
             for (int i = 0; i < _creep.Body.Parts.Count; i++)
             {
