@@ -35,7 +35,7 @@ namespace Screeps3D
         public const string TypeDeposit = "deposit";
         public const string TypeRuin = "ruin";
         public const string TypeInvaderCore = "invadercore";
-        
+
 
 
 
@@ -64,7 +64,7 @@ namespace Screeps3D
             {"repair", false},
             {"upgradeController", false}
         };
-        
+
         // TODO: this kinda belongsin Screeps_API theese flag colors are API specific.
         public enum FlagColor
         {
@@ -94,6 +94,30 @@ namespace Screeps3D
             {(int)FlagColor.White, new Color(1f, 1f, 1f)},
         };
 
+        public static class CreepBodyPartColors
+        {
+            public static readonly Color Move;
+            public static readonly Color Work;
+            public static readonly Color Attack;
+            public static readonly Color RangedAttack;
+            public static readonly Color Heal;
+            public static readonly Color Tough;
+            public static readonly Color Claim;
+            public static readonly Color Carry;
+
+            static CreepBodyPartColors()
+            {
+                ColorUtility.TryParseHtmlString("#A9B7C6", out Move);
+                ColorUtility.TryParseHtmlString("#FFE56D", out Work);
+                ColorUtility.TryParseHtmlString("#F93842", out Attack);
+                ColorUtility.TryParseHtmlString("#5D80B2", out RangedAttack);
+                ColorUtility.TryParseHtmlString("#65FD62", out Heal);
+                ColorUtility.TryParseHtmlString("#FFFFFF", out Tough);
+                ColorUtility.TryParseHtmlString("#B99CFB", out Claim);
+                ColorUtility.TryParseHtmlString("#777777", out Carry);
+            }
+        }
+
         public static readonly Dictionary<string, float> ConstructionCost = new Dictionary<string, float>
         {
             {"spawn", 15000},
@@ -112,7 +136,7 @@ namespace Screeps3D
             {"container", 5000},
             {"nuker", 100000},
         };
-        
+
         public static readonly Dictionary<float, float> MineralDensity = new Dictionary<float, float>
         {
             {1, 15000},
@@ -137,8 +161,8 @@ namespace Screeps3D
         //   const depositTypes = [C.RESOURCE_SILICON, C.RESOURCE_METAL, C.RESOURCE_BIOMASS, C.RESOURCE_MIST];
         public static readonly HashSet<string> ResourcesAll = new HashSet<string>()
         {
-            "energy", 
-            "power", 
+            "energy",
+            "power",
             "ops",
             "H",
             "O",
@@ -190,7 +214,7 @@ namespace Screeps3D
             "XZHO2",
             "XGH2O",
             "XGHO2",
-            
+
             "utrium_bar",
             "lemergium_bar",
             "zynthium_bar",
@@ -233,7 +257,7 @@ namespace Screeps3D
             "emanation",
             "essence",
 
-        }; 
+        };
 
         public static int NUKE_ROOM_RANGE = 10;
         public static int NUKE_TRAVEL_TICKS = 50000;

@@ -19,6 +19,7 @@ namespace Screeps3D.Tools.Selection
             "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Level", "Progress", "Construction", 
             "Capacity", "Store", "Cooldown", "Resource", "Spawning", "SpawningIn", "Regeneration",
             "Power", "Destination",
+            "CreepBody",
             "Buttons"
         };
         

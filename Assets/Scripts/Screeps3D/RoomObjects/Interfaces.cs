@@ -138,4 +138,9 @@ namespace Screeps3D.RoomObjects
     {
         void OnClick(T roomObject);
     }
+
+    public interface ICreepBody
+    {
+        CreepBody Body { get; }
+    }
 }
