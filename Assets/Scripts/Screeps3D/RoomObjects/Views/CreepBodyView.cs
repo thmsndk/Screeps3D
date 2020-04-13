@@ -7,7 +7,6 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _rend;
         private Creep _creep;
         private Texture2D _texture;
-        private Color _rangedAttackColor;
 
         public void Init()
         {
@@ -25,7 +24,6 @@ namespace Screeps3D.RoomObjects.Views
 
         private void InitTexture()
         {
-            ColorUtility.TryParseHtmlString("#4a708b", out _rangedAttackColor);
             _texture = new Texture2D(50, 1);
             _texture.filterMode = FilterMode.Point;
             _rend.material.mainTexture = _texture;
@@ -48,34 +46,34 @@ namespace Screeps3D.RoomObjects.Views
             var frontIndex = 0;
             for (var i = 0; i < PartCount("ranged_attack"); i++)
             {
-                _texture.SetPixel(frontIndex, 0, _rangedAttackColor);
+                _texture.SetPixel(frontIndex, 0, Constants.CreepBodyPartColors.RangedAttack);
                 frontIndex++;
             }
             for (var i = 0; i < PartCount("attack"); i++)
             {
-                _texture.SetPixel(frontIndex, 0, Color.red);
+                _texture.SetPixel(frontIndex, 0, Constants.CreepBodyPartColors.Attack);
                 frontIndex++;
             }
             for (var i = 0; i < PartCount("heal"); i++)
             {
-                _texture.SetPixel(frontIndex, 0, Color.green);
+                _texture.SetPixel(frontIndex, 0, Constants.CreepBodyPartColors.Heal);
                 frontIndex++;
             }
             for (var i = 0; i < PartCount("work"); i++)
             {
-                _texture.SetPixel(frontIndex, 0, Color.yellow);
+                _texture.SetPixel(frontIndex, 0, Constants.CreepBodyPartColors.Work);
                 frontIndex++;
             }
             for (var i = 0; i < PartCount("claim"); i++)
             {
-                _texture.SetPixel(frontIndex, 0, Color.magenta);
+                _texture.SetPixel(frontIndex, 0, Constants.CreepBodyPartColors.Claim);
                 frontIndex++;
             }
 
             var backIndex = 0;
             for (; backIndex < PartCount("move"); backIndex++)
             {
-                _texture.SetPixel(49 - backIndex, 0, Color.gray);
+                _texture.SetPixel(49 - backIndex, 0, Constants.CreepBodyPartColors.Move);
             }
 
             var toughAlpha = Mathf.Min(PartCount("tough") / 10f, 1);
