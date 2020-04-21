@@ -118,6 +118,24 @@ namespace Screeps3D
             }
         }
 
+        public static class CreepBodyPartBoostColors
+        {
+            public static readonly Color BOOST_TYPE_UH_UO;
+            public static readonly Color BOOST_TYPE_KH_KO;
+            public static readonly Color BOOST_TYPE_LH_LO;
+            public static readonly Color BOOST_TYPE_ZH_ZO;
+            public static readonly Color BOOST_TYPE_GH_GO;
+
+            static CreepBodyPartBoostColors()
+            {
+                ColorUtility.TryParseHtmlString("#50D7F9", out BOOST_TYPE_UH_UO);
+                ColorUtility.TryParseHtmlString("#A071FF", out BOOST_TYPE_KH_KO);
+                ColorUtility.TryParseHtmlString("#00F4A2", out BOOST_TYPE_LH_LO);
+                ColorUtility.TryParseHtmlString("#FDD388", out BOOST_TYPE_ZH_ZO);
+                ColorUtility.TryParseHtmlString("#FFFFFF", out BOOST_TYPE_GH_GO);
+            }
+        }
+
         public static readonly Dictionary<string, float> ConstructionCost = new Dictionary<string, float>
         {
             {"spawn", 15000},

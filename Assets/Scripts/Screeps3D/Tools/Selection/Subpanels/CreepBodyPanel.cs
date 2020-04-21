@@ -4,6 +4,7 @@ using Screeps_API;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.Screeps3D.Tools.Selection.Subpanels;
 
 namespace Screeps3D.Tools.Selection.Subpanels
 {
@@ -11,7 +12,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
     {
         [SerializeField] private TMP_Text _BodyPartCountLabel;
         [SerializeField] private GridLayoutGroup _bodyParts;
-        [SerializeField] private Toggle _bodyPartPrefab;
+        [SerializeField] private CreepBodyPart _bodyPartPrefab;
 
         private RoomObject _roomObject;
         private ICreepBody _creep;
@@ -42,45 +43,11 @@ namespace Screeps3D.Tools.Selection.Subpanels
             {
                 CreepPart part = _creep.Body.Parts[i];
 
-                var toggle = Instantiate(_bodyPartPrefab, _bodyParts.transform);
+                var bodyPart = Instantiate(_bodyPartPrefab, _bodyParts.transform);
 
-                var color = Color.clear;
+                bodyPart.Load(part);
 
-                switch (part.Type)
-                {
-                    case "move":
-                        color = Constants.CreepBodyPartColors.Move;
-                        break;
-                    case "work":
-                        color = Constants.CreepBodyPartColors.Work;
-                        break;
-                    case "attack":
-                        color = Constants.CreepBodyPartColors.Attack;
-                        break;
-                    case "ranged_attack":
-                        color = Constants.CreepBodyPartColors.RangedAttack;
-                        break;
-                    case "heal":
-                        color = Constants.CreepBodyPartColors.Heal;
-                        break;
-                    case "tough":
-                        color = Constants.CreepBodyPartColors.Tough;
-                        break;
-                    case "claim":
-                        color = Constants.CreepBodyPartColors.Claim;
-                        break;
-                    case "carry":
-                        color = Constants.CreepBodyPartColors.Carry;
-                        break;
-                }
-
-                var colors = toggle.colors;
-                
-                colors.normalColor = color;
-                colors.selectedColor = UnityEngine.Random.ColorHSV(); // use for boosted?
-                toggle.colors = colors;
-
-                toggle.name = $"{i} {part.Type}";
+                bodyPart.name = $"{i} {part.Type}";
                 //toggle.isOn = color == SelectedColor;
                 //this.ScaleToggleButton(toggle, toggle.isOn);
             }
