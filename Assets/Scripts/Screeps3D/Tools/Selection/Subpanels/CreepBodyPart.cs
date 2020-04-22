@@ -30,6 +30,18 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
             SetBoost(part.Boost);
 
             // hitpoint
+            ScaleHitpoints(part);
+        }
+        internal void Delta(CreepPart part)
+        {
+            ScaleHitpoints(part);
+
+            SetBoost(part.Boost);
+        }
+
+        private void ScaleHitpoints(CreepPart part)
+        {
+            _part.fillAmount = part.Hits / 100f;
         }
 
         private void SetBoost(string boost)
@@ -41,23 +53,23 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
                 return;
             }
 
-            if (boost.Contains("UH") || boost.Contains("UO"))
+            if (boost.Contains("U"))
             {
                 _boost.color = Constants.CreepBodyPartBoostColors.BOOST_TYPE_UH_UO;
             }
-            else if (boost.Contains("KH") || boost.Contains("KO"))
+            else if (boost.Contains("K"))
             {
                 _boost.color = Constants.CreepBodyPartBoostColors.BOOST_TYPE_KH_KO;
             }
-            else if (boost.Contains("LH") || boost.Contains("LO"))
+            else if (boost.Contains("L"))
             {
                 _boost.color = Constants.CreepBodyPartBoostColors.BOOST_TYPE_LH_LO;
             }
-            else if (boost.Contains("ZH") || boost.Contains("ZO"))
+            else if (boost.Contains("Z"))
             {
                 _boost.color = Constants.CreepBodyPartBoostColors.BOOST_TYPE_ZH_ZO;
             }
-            else if (boost.Contains("GH") || boost.Contains("GO"))
+            else if (boost.Contains("G"))
             {
                 _boost.color = Constants.CreepBodyPartBoostColors.BOOST_TYPE_GH_GO;
             }
@@ -97,5 +109,7 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
 
             this._part.color = color;
         }
+
+        
     }
 }

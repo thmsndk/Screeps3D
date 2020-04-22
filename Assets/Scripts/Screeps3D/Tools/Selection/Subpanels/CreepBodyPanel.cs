@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Screeps3D.Tools.Selection.Subpanels;
+using Common;
 
 namespace Screeps3D.Tools.Selection.Subpanels
 {
@@ -37,6 +38,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
             // TODO: use the objectfactory so we don't instantiate objects all the time.
             DestroyBodyParts();
 
+            ////SetTestBodyParts(_creep);
+
             _BodyPartCountLabel.SetText($"{_creep.Body.Parts.Count} parts");
 
             for (int i = 0; i < _creep.Body.Parts.Count; i++)
@@ -53,6 +56,49 @@ namespace Screeps3D.Tools.Selection.Subpanels
             }
         }
 
+        private void SetTestBodyParts(ICreepBody creep)
+        {
+            creep.Body.Parts.Clear();
+            creep.Body.Parts.Add(new CreepPart { Type = "move" });
+            creep.Body.Parts.Add(new CreepPart { Type = "move", Boost = "ZO" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "work" });
+            creep.Body.Parts.Add(new CreepPart { Type = "work", Boost = "UH" });
+            creep.Body.Parts.Add(new CreepPart { Type = "work", Boost = "LH" });
+            creep.Body.Parts.Add(new CreepPart { Type = "work", Boost = "ZH" });
+            creep.Body.Parts.Add(new CreepPart { Type = "work", Boost = "GH" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "attack" });
+            creep.Body.Parts.Add(new CreepPart { Type = "attack", Boost = "UH" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "ranged_attack" });
+            creep.Body.Parts.Add(new CreepPart { Type = "ranged_attack", Boost = "KO" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "heal" });
+            creep.Body.Parts.Add(new CreepPart { Type = "heal", Boost = "LO" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "tough" });
+            creep.Body.Parts.Add(new CreepPart { Type = "tough", Boost = "GO" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "claim" });
+
+            creep.Body.Parts.Add(new CreepPart { Type = "carry" });
+            creep.Body.Parts.Add(new CreepPart { Type = "carry", Boost = "KH" });
+
+            for (int i = creep.Body.Parts.Count; i < 50; i++)
+            {
+                creep.Body.Parts.Add(new CreepPart { Type = "claim" });
+            }
+        }
+
+        private void SetTestBoostsAndHitpoints(ICreepBody creep)
+        {
+            foreach (var part in creep.Body.Parts)
+            {
+                part.Hits = UnityEngine.Random.Range(0, 100);
+            }
+        }
+
         private void DestroyBodyParts()
         {
             foreach (Transform child in _bodyParts.transform)
@@ -66,11 +112,24 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         private void OnDelta(JSONObject obj)
         {
+            ////SetTestBoostsAndHitpoints(_creep);
+
             // TODO: how do we update the correct bodypart? - index should be preserved, we should be able to loop parts and look up data
             foreach (Transform child in _bodyParts.transform)
             {
                 // TODO: look up data in body parts relative to index
                 // TODO: scale image based on hitpoints
+            }
+
+            for (int i = 0; i < _bodyParts.transform.childCount; i++)
+            {
+                var child = _bodyParts.transform.GetChild(i);
+
+                var part = _creep.Body.Parts[i];
+
+                var bodyPart = child.GetComponent<CreepBodyPart>();
+                
+                bodyPart?.Delta(part);
             }
         }
 
@@ -98,7 +157,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
         ////    _label.text = string.Format("{0:n0}", _decay.NextDecayTime - _decay.Room.GameTime);
         ////}
-        
+
         //// For adjusting body part sizes
         ////protected void AdjustSize(string partType, float min, float flex)
         ////{
