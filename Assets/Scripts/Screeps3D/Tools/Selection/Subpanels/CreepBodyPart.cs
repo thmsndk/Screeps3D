@@ -6,15 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
 {
-    public class CreepBodyPart : MonoBehaviour
+    public class CreepBodyPart : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Image _part;
         [SerializeField] private Image _boost;
 
+        private CreepPart creepPart;
         
 
         private void Start()
@@ -24,6 +26,8 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
 
         internal void Load(CreepPart part)
         {
+            creepPart = part;
+
             SetBodyPartType(part);
 
             // boost
@@ -110,6 +114,15 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
             this._part.color = color;
         }
 
-        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            // TODO: raise tooltip event, with tooltip data. should it update while hovering?
+            Debug.Log($"Hovering {creepPart.Type} {creepPart.Hits}/100");
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            Debug.Log($"Leaving {creepPart.Type} {creepPart.Hits}/100");
+        }
     }
 }

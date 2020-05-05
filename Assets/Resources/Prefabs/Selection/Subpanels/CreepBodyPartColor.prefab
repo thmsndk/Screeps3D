@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 4575891948655372718}
   - component: {fileID: 8245138424416660377}
   - component: {fileID: 8194054136397984155}
+  - component: {fileID: 1258380532078424807}
   m_Layer: 5
   m_Name: Part
   m_TagString: Untagged
@@ -146,6 +147,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!65 &1258380532078424807
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864487811132786238}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7460367256131257384
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +244,7 @@ GameObject:
   - component: {fileID: 2883575582285924904}
   - component: {fileID: 8294087625589997573}
   - component: {fileID: 1321350989966579929}
+  - component: {fileID: 2289735382484481361}
   m_Layer: 5
   m_Name: CreepBodyPartColor
   m_TagString: Untagged
@@ -281,3 +296,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _part: {fileID: 8194054136397984155}
   _boost: {fileID: 5393695464560655898}
+--- !u!65 &2289735382484481361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8744417958459517367}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

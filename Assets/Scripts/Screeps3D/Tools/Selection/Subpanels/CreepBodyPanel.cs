@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Screeps3D.RoomObjects;
 using Screeps_API;
 using TMPro;
@@ -9,6 +9,8 @@ using Common;
 
 namespace Screeps3D.Tools.Selection.Subpanels
 {
+    // Stats https://github.com/Arcath/screeps-tools/blob/master/src/tools/creep-designer.tsx#L82
+    // TODO: info button that displays a tooltip with stats on hover?
     public class CreepBodyPanel : LinePanel
     {
         [SerializeField] private TMP_Text _BodyPartCountLabel;
