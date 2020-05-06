@@ -12,5 +12,9 @@ namespace Screeps3D.Tools.Selection
         public abstract Type ObjectType { get; }
         public abstract void Load(RoomObject roomObject);
         public abstract void Unload();
+
+        public virtual bool IsPanelAvailabelForObject(RoomObject roomObject){
+            return ObjectType.IsInstanceOfType(roomObject);
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Screeps3D.RoomObjects
       "safeModeAvailable": 7
     }*/
 
-    public class Controller : OwnedStructure, IOwnedObject, IProgress, ILevel
+    public class Controller : OwnedStructure, IOwnedObject, IProgress, ILevel, IReserved
     {
         public int Level { get; set; }
         public int LevelMax { get; set; }
@@ -29,6 +29,7 @@ namespace Screeps3D.RoomObjects
 
         internal override void Unpack(JSONObject data, bool initial)
         {
+            
             base.Unpack(data, initial);
 
             UnpackUtility.Level(this, data);
@@ -36,6 +37,7 @@ namespace Screeps3D.RoomObjects
 
             UnpackUtility.Progress(this, data);
             ProgressMax = 0;
+
             if (Constants.ControllerLevels.ContainsKey(Level))
             {
                 ProgressMax = Constants.ControllerLevels[Level];

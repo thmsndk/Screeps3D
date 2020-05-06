@@ -31,6 +31,11 @@ namespace Screeps3D.Tools.Selection.Subpanels
             UpdateLabel();
         }
 
+        public override bool IsPanelAvailabelForObject(RoomObject roomObject)
+        {
+            return base.IsPanelAvailabelForObject(roomObject) && !roomObject.Type.Equals(Constants.TypeController);
+        }
+
         private void UpdateLabel()
         {
             _meter.SetVisibility(_hitsObject.Hits / _hitsObject.HitsMax);

@@ -99,6 +99,12 @@ namespace Screeps3D.RoomObjects
         float ProgressMax { get; set; }
     }
 
+    internal interface IReserved: IRoomObject
+    {
+        float ReservationEnd { get; set; }
+        ScreepsUser ReservedBy { get; set; }
+    }
+
     internal interface IActionObject
     {
         Dictionary<string, JSONObject> Actions { get; }

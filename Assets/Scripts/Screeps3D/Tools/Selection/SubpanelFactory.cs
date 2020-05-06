@@ -16,7 +16,7 @@ namespace Screeps3D.Tools.Selection
 
         private readonly string[] _prefabNames =
         {
-            "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Level", "Progress", "Construction", 
+            "Type", "Owner", "Name", "Pos", "Hits", "Energy", "Age", "Fatigue", "Decay", "Level", "Reserved", "Progress", "Construction", 
             "Capacity", "Store", "Cooldown", "Resource", "Spawning", "SpawningIn", "Regeneration",
             "Power", "Destination",
             "CreepBody",
@@ -39,7 +39,7 @@ namespace Screeps3D.Tools.Selection
                 
                 _factories.Add(roomObject =>
                 {
-                    if (!component.ObjectType.IsInstanceOfType(roomObject))
+                    if (!component.IsPanelAvailabelForObject(roomObject))
                     {
                         ////if (component.ObjectType.IsGenericType)
                         ////{
