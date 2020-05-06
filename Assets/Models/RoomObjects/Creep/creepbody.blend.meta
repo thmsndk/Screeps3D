@@ -1,37 +1,98 @@
 fileFormatVersion: 2
 guid: 50879aa7dee3b4f4c8ee781f55f94936
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: BezierCircle
-    100002: //RootNode
-    100004: Cylinder
-    100006: body
-    100008: innertube
-    400000: BezierCircle
-    400002: //RootNode
-    400004: Cylinder
-    400006: body
-    400008: innertube
-    2300000: BezierCircle
-    2300002: Cylinder
-    2300004: //RootNode
-    2300006: body
-    2300008: innertube
-    3300000: BezierCircle
-    3300002: Cylinder
-    3300004: //RootNode
-    3300006: body
-    3300008: innertube
-    4300000: BezierCircle
-    4300002: Cylinder
-    4300004: Torus
-    4300006: body
-    4300008: innertube
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: BezierCircle
+  - first:
+      1: 100002
+    second: //RootNode
+  - first:
+      1: 100004
+    second: Cylinder
+  - first:
+      1: 100006
+    second: body
+  - first:
+      1: 100008
+    second: innertube
+  - first:
+      4: 400000
+    second: BezierCircle
+  - first:
+      4: 400002
+    second: //RootNode
+  - first:
+      4: 400004
+    second: Cylinder
+  - first:
+      4: 400006
+    second: body
+  - first:
+      4: 400008
+    second: innertube
+  - first:
+      23: 2300000
+    second: BezierCircle
+  - first:
+      23: 2300002
+    second: Cylinder
+  - first:
+      23: 2300004
+    second: //RootNode
+  - first:
+      23: 2300006
+    second: body
+  - first:
+      23: 2300008
+    second: innertube
+  - first:
+      33: 3300000
+    second: BezierCircle
+  - first:
+      33: 3300002
+    second: Cylinder
+  - first:
+      33: 3300004
+    second: //RootNode
+  - first:
+      33: 3300006
+    second: body
+  - first:
+      33: 3300008
+    second: innertube
+  - first:
+      43: 4300000
+    second: BezierCircle
+  - first:
+      43: 4300002
+    second: Cylinder
+  - first:
+      43: 4300004
+    second: Torus
+  - first:
+      43: 4300006
+    second: body
+  - first:
+      43: 4300008
+    second: innertube
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: a3bddeed264fe814ba49c5536735a58d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -40,18 +101,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: innertube__bodymap_png
-    second: {fileID: 2100000, guid: 00e43344f67f9ea4b9e1df8bfbaa8086, type: 2}
+      name: innertube
+    second: {fileID: 2100000, guid: b3b10a2c5b066174f930baee6f69c75f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: unnamed
-    second: {fileID: 2100000, guid: 327391ae74b263b45bbb79856ae61f65, type: 2}
+      name: innertube__bodymap_png
+    second: {fileID: 2100000, guid: 00e43344f67f9ea4b9e1df8bfbaa8086, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -81,6 +142,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -88,18 +150,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -108,10 +171,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -121,13 +184,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

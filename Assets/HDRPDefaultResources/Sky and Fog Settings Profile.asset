@@ -18,7 +18,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   colorMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   color:
     m_OverrideState: 0
@@ -26,9 +26,15 @@ MonoBehaviour:
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
-  maxFogDistance:
+  tint:
     m_OverrideState: 0
-    m_Value: 5000
+    m_Value: {r: 0.2719384, g: 0.35862222, b: 0.5943396, a: 1}
+    hdr: 1
+    showAlpha: 0
+    showEyeDropper: 1
+  maxFogDistance:
+    m_OverrideState: 1
+    m_Value: 500
     min: 0
   mipFogMaxMip:
     m_OverrideState: 0
@@ -44,8 +50,8 @@ MonoBehaviour:
     m_Value: 1000
     min: 0
   baseHeight:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: -5
   maximumHeight:
     m_OverrideState: 0
     m_Value: 50
@@ -60,11 +66,11 @@ MonoBehaviour:
     m_Value: 200
     min: 1
   enableVolumetricFog:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   anisotropy:
-    m_OverrideState: 1
-    m_Value: 0.65
+    m_OverrideState: 0
+    m_Value: 0.97
     min: -1
     max: 1
   globalLightProbeDimmer:
@@ -118,8 +124,8 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   skyAmbientMode:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   fogType:
     m_OverrideState: 1
     m_Value: 3
@@ -138,16 +144,16 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   rotation:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: 0
     max: 360
   skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   exposure:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 0.2
   multiplier:
     m_OverrideState: 0
     m_Value: 1
@@ -160,8 +166,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 0.18750611, y: 0.29181966, z: 0.5}
   desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
+    m_OverrideState: 1
+    m_Value: 2000
   updateMode:
     m_OverrideState: 0
     m_Value: 0

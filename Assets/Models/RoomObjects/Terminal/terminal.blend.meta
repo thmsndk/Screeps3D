@@ -1,29 +1,74 @@
 fileFormatVersion: 2
 guid: 3799c270efae05444852742d18daed5a
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Casing
-    100002: Container
-    100004: Energy
-    100006: //RootNode
-    400000: Casing
-    400002: Container
-    400004: Energy
-    400006: //RootNode
-    2300000: Casing
-    2300002: Container
-    2300004: Energy
-    3300000: Casing
-    3300002: Container
-    3300004: Energy
-    4300000: Casing
-    4300002: Container
-    4300004: Energy
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Casing
+  - first:
+      1: 100002
+    second: Container
+  - first:
+      1: 100004
+    second: Energy
+  - first:
+      1: 100006
+    second: //RootNode
+  - first:
+      4: 400000
+    second: Casing
+  - first:
+      4: 400002
+    second: Container
+  - first:
+      4: 400004
+    second: Energy
+  - first:
+      4: 400006
+    second: //RootNode
+  - first:
+      23: 2300000
+    second: Casing
+  - first:
+      23: 2300002
+    second: Container
+  - first:
+      23: 2300004
+    second: Energy
+  - first:
+      33: 3300000
+    second: Casing
+  - first:
+      33: 3300002
+    second: Container
+  - first:
+      33: 3300004
+    second: Energy
+  - first:
+      43: 4300000
+    second: Casing
+  - first:
+      43: 4300002
+    second: Container
+  - first:
+      43: 4300004
+    second: Energy
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 3d6370f4bd5c11a45b92faf0c2641dd2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -34,16 +79,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: terminalBevel
     second: {fileID: 2100000, guid: 157d5ef31ddb814469e2d18dedea0165, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: unnamed
-    second: {fileID: 2100000, guid: 7642215c460c87f46979ef59a5cce7ff, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -73,6 +113,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -80,18 +121,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -100,10 +142,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -113,13 +155,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
