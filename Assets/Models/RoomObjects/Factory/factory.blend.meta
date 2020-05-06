@@ -21,7 +21,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Energy
-    second: {fileID: 2100000, guid: ca0c9eb9da3b6f040a2423ca31e56773, type: 2}
+    second: {fileID: 2100000, guid: 283ff4931ac559448b843bc4b862d2f8, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -31,7 +31,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Glass
-    second: {fileID: 2100000, guid: 90e0a8b628ff27b45964fdecf06acf1c, type: 2}
+    second: {fileID: 2100000, guid: df2ceda8ce35a1244865b163121a9016, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
