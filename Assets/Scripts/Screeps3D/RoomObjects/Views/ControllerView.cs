@@ -30,7 +30,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             _texture = new Texture2D(8, 1);
             _texture.filterMode = FilterMode.Point;
-            _rend.materials[1].mainTexture = _texture;
+            //_rend.materials[1].mainTexture = _texture;
+            _rend.materials[1].SetTexture("_BaseColorMap", _texture); // main texture
             _rend.materials[1].SetTexture("_EmissionMap", _texture);
             ColorUtility.TryParseHtmlString("#FDF5E6", out _controllerWhite);
         }
@@ -64,7 +65,8 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_controller.Owner != null)
             {
-                _playerRend.materials[0].mainTexture = _controller.Owner.Badge;
+                _playerRend.materials[0].SetTexture("_BaseColorMap", _controller.Owner.Badge); // main texture
+                //_playerRend.materials[0].mainTexture = _controller.Owner.Badge;
                 _playerRend.materials[0].color = Color.white;
             }
             else

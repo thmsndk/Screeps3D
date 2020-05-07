@@ -16,7 +16,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);
             _PowerCreep = roomObject as PowerCreep;
-            _body.material.mainTexture = _PowerCreep.Owner.Badge;
+            _body.material.SetTexture("_BaseColorMap", _PowerCreep?.Owner?.Badge); // main texture
+            //_body.material.mainTexture = _PowerCreep.Owner.Badge;
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;

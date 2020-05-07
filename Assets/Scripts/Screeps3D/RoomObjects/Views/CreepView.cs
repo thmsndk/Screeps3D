@@ -16,7 +16,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);
             _creep = roomObject as Creep;
-            _body.material.mainTexture = _creep?.Owner?.Badge;
+            _body.material.SetTexture("_BaseColorMap", _creep?.Owner?.Badge); // main texture
+            //_body.material.mainTexture = _creep?.Owner?.Badge;
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");

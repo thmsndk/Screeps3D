@@ -46,8 +46,10 @@ namespace Screeps3D.RoomObjects.Views
                 //renderer.material.SetColor("_EmissionColor", Color.grey);
             }
 
-            renderer.material.SetColor("_Color", color);
-            renderer.material.SetColor("_EmissionColor", emissionColor);
+            renderer.material.SetColor("_BaseColor", color);
+            
+            renderer.material.SetColor("_EmissiveColor", emissionColor);
+            //renderer.material.SetColor("_EmissionColor", emissionColor);
         }
 
         public void Delta(JSONObject data)
