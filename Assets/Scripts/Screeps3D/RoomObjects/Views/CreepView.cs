@@ -16,7 +16,9 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);
             _creep = roomObject as Creep;
-            _body.material.SetTexture("Texture2D_D3D1C11C", _creep?.Owner?.Badge); // main texture
+            _body.material.SetTexture("ColorTexture", _creep?.Owner?.Badge); // main texture
+            _body.material.SetColor("BaseColor", new Color(0.5f,0.5f,0.5f,1f));
+            _body.material.SetFloat("ColorMix", 1);
             //_body.material.mainTexture = _creep?.Owner?.Badge;
 
             if (_creep?.Owner?.Badge == null) {

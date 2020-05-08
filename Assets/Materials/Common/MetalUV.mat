@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NodeMetalNoUV
-  m_Shader: {fileID: -6465566751694194690, guid: c2d307355f0be6e4a8dac8514766a4a0,
+  m_Name: MetalUV
+  m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -23,12 +23,24 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - ColorTexture:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_11286322:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_3E866369:
+        m_Texture: {fileID: 2800000, guid: 21baca494b92698429826a2a35d097ea, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_712D8098:
         m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_8BFCE1C6:
-        m_Texture: {fileID: 2800000, guid: 21baca494b92698429826a2a35d097ea, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6f25cdf438e04ef4aba709a17ce60fc2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_96045E16:
@@ -36,11 +48,23 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_D3D1C11C:
+        m_Texture: {fileID: 2800000, guid: deb7ea3bd8fbfa346b4f705f991314a4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F7766877:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F9979DE5:
         m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - ColorMix: 1
+    - NormalStrenght: 0.5
     - Vector1_A84FA659: 1
+    - Vector1_E094F33F: 0.5
+    - Vector1_E11C7DA1: 0.5
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
@@ -75,11 +99,13 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - Color_D9DD3E10: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 0.3764706}
-    - Vector2_E1DCD0F2: {r: 1, g: 1, b: 0, a: 0}
+    - BaseColor: {r: 0, g: 0, b: 0, a: 0}
+    - Color_49862E07: {r: 0, g: 0, b: 0, a: 0}
+    - Color_D9DD3E10: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0}
+    - Vector2_E1DCD0F2: {r: 5, g: 5, b: 5, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &6069192566391930540
+--- !u!114 &5284378852062683035
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
