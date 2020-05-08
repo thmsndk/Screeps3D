@@ -164,7 +164,12 @@ namespace Screeps3D.RoomObjects
                 // ----- POST STORE UPDATE 
 
                 var store = data.HasField("store") ? data["store"] : data; // this supports both PRE and POST store update
-                if (store != null && !store.IsNull)
+
+                if (store == null)
+                {
+                    obj.Store.Clear();
+                }
+                else if (!store.IsNull)
                 {
                     foreach (var resourceType in store.keys)
                     {
@@ -182,11 +187,6 @@ namespace Screeps3D.RoomObjects
                 }
 
                 obj.TotalResources = obj.Store.Sum(a => a.Value);
-
-                if (data.HasField("storeCapacity")) // Labs seems to have this and not storeCapacityResource when they do not contain a mineral type?, atleast according to this https://github.com/screeps/storage/blob/b045531aca745f0942293bd32e0bdb5813bc12e2/lib/db.js#L123-L131
-                {
-                    obj.TotalCapacity = data["storeCapacity"].n;
-                }
 
                 if (data.HasField("storeCapacityResource"))
                 {
@@ -210,7 +210,18 @@ namespace Screeps3D.RoomObjects
                             {
                                 obj.Capacity.Add(resourceType, storeCapacityResource[resourceType].n);
                             }
-                        } 
+                        }
+                    }
+                }
+
+                if (data.HasField("storeCapacity")) // Labs seems to have this and not storeCapacityResource when they do not contain a mineral type?, atleast according to this https://github.com/screeps/storage/blob/b045531aca745f0942293bd32e0bdb5813bc12e2/lib/db.js#L123-L131
+                {
+                    var storeCapacity = data["storeCapacity"].n;
+
+                    if (storeCapacity > 0)
+                    {
+
+                        obj.TotalCapacity = storeCapacity;
                     }
                 }
             }

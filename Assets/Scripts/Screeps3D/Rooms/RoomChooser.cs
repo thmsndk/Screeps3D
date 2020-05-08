@@ -136,13 +136,20 @@ namespace Screeps3D.Rooms
             {
                 var ownedRooms = MapStatsUpdater.Instance.RoomInfo.Values.Where(r => r.User != null
                                                                                      && r.User.UserId == ScreepsAPI.Me.UserId);
-                var random = new System.Random();
-                var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                var roomName = room?.RoomName;
+                if (ownedRooms.Any())
+                {
+                    var random = new System.Random();
+                    var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                    var roomName = room?.RoomName;
 
-                Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-                _roomInput.text = roomName;
-                this.GetAndChooseRoom(roomName);
+                    Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                    _roomInput.text = roomName;
+                    this.GetAndChooseRoom(roomName);
+                }
+                else
+                {
+                    Debug.Log($"Could not find any of your owned rooms :/");
+                }
 
                 yield return new WaitForSeconds(30);
             }
@@ -210,13 +217,21 @@ namespace Screeps3D.Rooms
         private void ChooseRandomOwnedRoom()
         {
             var ownedRooms = MapStatsUpdater.Instance.RoomInfo.Values.Where(r => r.User != null && r.Level.HasValue && r.Level > 0);
-            var random = new System.Random();
-            var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-            var roomName = room?.RoomName;
 
-            Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-            _roomInput.text = roomName;
-            this.GetAndChooseRoom(roomName);
+            if (ownedRooms.Any())
+            {
+                var random = new System.Random();
+                var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                var roomName = room?.RoomName;
+
+                Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                _roomInput.text = roomName;
+                this.GetAndChooseRoom(roomName);
+            }
+            else
+            {
+                Debug.Log($"Could not find any owned rooms :/");
+            }
         }
 
         public void OnSelectedShardChanged(string shardName)

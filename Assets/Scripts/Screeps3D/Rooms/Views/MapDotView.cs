@@ -17,7 +17,10 @@ namespace Screeps3D.Rooms.Views
         public Color Color
         {
             get { return _rend.material.color; }
-            set { _rend.material.color = value; }
+            set {
+                _rend.material.SetColor("_BaseColor", value);
+                //_rend.material.color = value;
+            }
         }
 
         private void Start()
