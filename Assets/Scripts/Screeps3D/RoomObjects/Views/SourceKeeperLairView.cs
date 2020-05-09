@@ -1,6 +1,5 @@
 ﻿using Common;
 using UnityEngine;
-using Screeps3D.Rooms.Views;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -9,7 +8,6 @@ namespace Screeps3D.RoomObjects.Views
         public const string Path = "Prefabs/RoomObjects/keeperLair";
         
         [SerializeField] private ScaleVisibility _vis;
-        private SourceKeeperLair _sourceKeeperLair;
         
 
         public void Init()
@@ -18,10 +16,6 @@ namespace Screeps3D.RoomObjects.Views
         
         public void Load(RoomObject roomObject)
         {
-            _sourceKeeperLair = roomObject as SourceKeeperLair;
-            var terrainView = _sourceKeeperLair.Room.View.GetComponentInChildren<TerrainView>();
-            if (terrainView)
-                terrainView.addLair(_sourceKeeperLair.X, _sourceKeeperLair.Y);
         }
 
         public void Delta(JSONObject data)
