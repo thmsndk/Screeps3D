@@ -17,8 +17,13 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);
             _tombstone = roomObject as Tombstone;
-            _body.material.SetTexture("_BaseColorMap", _tombstone?.Owner?.Badge); // main texture
-            //_body.material.mainTexture = _tombstone?.Owner.Badge;
+            _body.materials[1].SetTexture("ColorTexture", _tombstone?.Owner?.Badge); // main texture
+            _body.materials[1].SetColor("BaseColor", new Color(0.5f,0.5f,0.5f,1f));
+            _body.materials[1].SetFloat("ColorMix", 1);
+            // _body.materials[1].SetTexture("ColorTexture", _tombstone?.Owner?.Badge); 
+            // _body.material.SetTexture("_BaseColorMap", _tombstone?.Owner?.Badge); // main texture
+            // _body.material.SetTexture("_BaseColorMap", _tombstone?.Owner?.Badge); // main texture
+            // _body.material.mainTexture = _tombstone?.Owner.Badge;
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
