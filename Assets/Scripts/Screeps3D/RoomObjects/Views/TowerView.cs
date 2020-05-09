@@ -6,12 +6,14 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class TowerView : MonoBehaviour, IObjectViewComponent
+    public class TowerView : ObjectView, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private Renderer _body;
         [SerializeField] private Transform _rotationRoot;
         private Quaternion _targetRot;
         private bool _idle;
+        private Color _actionColor;
         private float _nextRot;
         private bool _rotating;
         private Tower _tower;
@@ -46,8 +48,8 @@ namespace Screeps3D.RoomObjects.Views
 
                 var endPos = PosUtility.Convert(action.Value, _tower.Room);
                 _rotationRoot.rotation = Quaternion.LookRotation(endPos - _tower.Position);
-                var color = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
-                EffectsUtility.Beam(_tower, action.Value, new BeamConfig(color, 0.6f, 0.3f));
+                _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
+                EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
             }
             // StartCoroutine(Beam.Draw(_tower, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
@@ -73,8 +75,18 @@ namespace Screeps3D.RoomObjects.Views
                 return;
             }
 
-            if (!_idle || _rotating || !(Time.time > _nextRot)) return; // Early
-            
+            if(!_idle) {
+                _body?.sharedMaterials[0].SetFloat("EmissionStrength", 50 * 1000f);
+                _body?.sharedMaterials[0].SetColor("EmissionColor", _actionColor);
+                return;
+            }            
+
+            if (!_idle || _rotating || !(Time.time > _nextRot))  {
+                _body?.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
+                _body?.sharedMaterials[0].SetColor("EmissionColor", new Color(0f, 0f, 0f));
+                return; // Early
+            }            
+
             _rotator = Rotate();
             StartCoroutine(_rotator);
         }

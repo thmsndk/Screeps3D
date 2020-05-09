@@ -21,13 +21,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ground
-  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
-  m_ShaderKeywords: _NORMALMAP _NORMALMAP_TANGENT_SPACE
+  m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
+    type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
-  stringTagMap: {}
+  stringTagMap:
+    MotionVector: User
   disabledShaderPasses:
   - DistortionVectors
   - MOTIONVECTORS
@@ -37,6 +39,34 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - ColorTexture:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_11286322:
+        m_Texture: {fileID: 2800000, guid: fe4b46d5e6121d64db07a8f49d38a30a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_3E866369:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_712D8098:
+        m_Texture: {fileID: 2800000, guid: f3b66722997832f468fdc0fe28468793, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8BFCE1C6:
+        m_Texture: {fileID: 2800000, guid: 50a3bb6e33b7ad54fa6f1ddffb42fe77, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_96045E16:
+        m_Texture: {fileID: 2800000, guid: f3b66722997832f468fdc0fe28468793, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F9979DE5:
+        m_Texture: {fileID: 2800000, guid: fe4b46d5e6121d64db07a8f49d38a30a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -154,6 +184,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - ColorMix: 1
+    - EmissionStrength: 0
+    - MetallicStrength: 0.22
+    - NormalStrenght: 0.5
+    - SmoothStrength: 0.2
+    - Vector1_8128E921: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -239,6 +275,7 @@ Material:
     - _Parallax: 0.02
     - _ReceivesSSR: 1
     - _RefractionModel: 0
+    - _RequireSplitLighting: 0
     - _SSRefractionProjectionModel: 0
     - _Smoothness: 0.489
     - _SmoothnessRemapMax: 0.5
@@ -285,6 +322,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - BaseColor: {r: 0.122641504, g: 0.09893212, b: 0.06537023, a: 0}
     - _BaseColor: {r: 0.46226418, g: 0.44373, b: 0.42955682, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.46226412, g: 0.44372997, b: 0.4295568, a: 1}

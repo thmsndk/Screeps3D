@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _energyDisplay: {fileID: 114386479590967782}
+  _body: {fileID: 2300002, guid: f4e2c175fe406f9429358549ab176cd6, type: 3}
   _rotationRoot: {fileID: 4072462316019136}
 --- !u!136 &136759589217628250
 CapsuleCollider:
@@ -326,7 +327,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f08ac3dfe7dd3494c9c64f655d37b48e, type: 2}
+  - {fileID: 2100000, guid: 0b1eeb23622c89b40a7b7f6f2e5e8a9b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -406,7 +407,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f08ac3dfe7dd3494c9c64f655d37b48e, type: 2}
+  - {fileID: 2100000, guid: 0b1eeb23622c89b40a7b7f6f2e5e8a9b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -487,6 +488,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 0b1eeb23622c89b40a7b7f6f2e5e8a9b, type: 2}
   - {fileID: 2100000, guid: df2ceda8ce35a1244865b163121a9016, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

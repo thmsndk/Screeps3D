@@ -97,18 +97,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: BodyMaterial
+    second: {fileID: 2100000, guid: 0b1eeb23622c89b40a7b7f6f2e5e8a9b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Energy
+    second: {fileID: 2100000, guid: 283ff4931ac559448b843bc4b862d2f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GlassMaterial
+    second: {fileID: 2100000, guid: df2ceda8ce35a1244865b163121a9016, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: No Name
-    second: {fileID: 2100000, guid: 5731960322ee7d64483b0af3157fb666, type: 2}
+    second: {fileID: 2100000, guid: 17969ff3e924dcb4abfdcbbc54ad970e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: towerGlass
-    second: {fileID: 2100000, guid: ff7fc96fc25ccc34db6dec995f1ff1cd, type: 2}
+    second: {fileID: 2100000, guid: df2ceda8ce35a1244865b163121a9016, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: unnamed
-    second: {fileID: 2100000, guid: 83ee400d448475d4e8983248e1bb3e28, type: 2}
+      name: towerOpaque
+    second: {fileID: 2100000, guid: 78924e5a70d38234eac23477a96602c4, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

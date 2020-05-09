@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalUV
+  m_Name: MetalTowerCircuits
   m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     MotionVector: User
   disabledShaderPasses:
@@ -24,50 +24,42 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - ColorTexture:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Texture: {fileID: 2800000, guid: 896073101cb9ad14886a95f18bb2a531, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MetallicTexture:
+        m_Texture: {fileID: 2800000, guid: 02d564afaebfb7d458c3b5afd207e8f8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SmoothTexture:
+        m_Texture: {fileID: 2800000, guid: 104efd6736fc15743b16ec0b8b13d54d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3e10f9d1e72346f47812448d7b1c5ad4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_3E866369:
-        m_Texture: {fileID: 2800000, guid: 21baca494b92698429826a2a35d097ea, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_712D8098:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Texture: {fileID: 2800000, guid: 72bad32b264f10743870aeba812db26f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_8BFCE1C6:
-        m_Texture: {fileID: 2800000, guid: 6f25cdf438e04ef4aba709a17ce60fc2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_96045E16:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_D3D1C11C:
-        m_Texture: {fileID: 2800000, guid: deb7ea3bd8fbfa346b4f705f991314a4, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_F7766877:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Texture: {fileID: 2800000, guid: 50a3bb6e33b7ad54fa6f1ddffb42fe77, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_F9979DE5:
-        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Texture: {fileID: 2800000, guid: b440e72b2625f144a9372fef6a1dbdf0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - ColorMix: 1
     - EmissionStrength: 0
-    - MetallicStrength: 0.7
-    - NormalStrenght: 0.5
-    - SmoothStrength: 0.5
-    - Vector1_A84FA659: 1
-    - Vector1_E094F33F: 0.5
-    - Vector1_E11C7DA1: 0.5
+    - MetallicStrength: -1
+    - NormalStrenght: 0
+    - Scaling: 0.58
+    - SmoothStrength: 0
+    - UVScale: 1
+    - Vector1_6F1CD831: 0
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
@@ -102,13 +94,11 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - BaseColor: {r: 0, g: 0, b: 0, a: 0}
-    - Color_49862E07: {r: 0, g: 0, b: 0, a: 0}
-    - Color_D9DD3E10: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0}
-    - Vector2_E1DCD0F2: {r: 5, g: 5, b: 5, a: 0}
+    - BaseColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
+    - EmissionColor: {r: 1, g: 0.8999914, b: 0.21226418, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &5284378852062683035
+--- !u!114 &2469717440987754232
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

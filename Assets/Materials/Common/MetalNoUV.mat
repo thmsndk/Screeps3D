@@ -27,6 +27,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - MetallicTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SmoothTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_712D8098:
         m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -45,6 +53,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - ColorMix: 0.896
+    - MetallicStrength: 0
+    - Scaling: 1
+    - SmoothStrength: 0.5
+    - Vector1_6F1CD831: 0
     - Vector1_8128E921: 1
     - Vector1_A84FA659: 1
     - _AlphaCutoffEnable: 0
