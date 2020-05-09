@@ -10,59 +10,63 @@ namespace Screeps3D.Rooms.Views
         [SerializeField] private MeshFilter _swampMesh;
         [SerializeField] private MeshFilter _wallMesh;
 
+        private bool _hasTerrainData;
         private string _terrain;
+        private bool _hasMapData;
         private List<Vector2> _lairPositions;
-        
+
         private int _x;
         private int _y;
         private bool[,] _wallPositions;
         private bool[,] _swampPositions;
-        private bool needsUpdate;
-        private bool isDuringUpdate;
-        private bool isDuringDeform;
+        private bool isInitialized;
+        private bool isInitializing;
 
         public void Init(Room room)
         {
-            TerrainFinder.Instance.Find(room, InitRender);
+            _hasTerrainData = false;
+            _hasMapData = false;
+
+            TerrainFinder.Instance.Find(room, OnTerrainData);
+            room.MapStream.OnData += OnMapData;
             _lairPositions = new List<Vector2>();
             enabled = true;
-            needsUpdate = false;
-            isDuringUpdate = false;
-            isDuringDeform = false;
+            isInitialized = false;
         }
-
-        public void addLair(int x, int y)
+        private void OnMapData(JSONObject data)
         {
-            if (_lairPositions.Exists(l => l.x == x && l.y == y))
-                return;
-            _lairPositions.Add(new Vector2((float)x, (float)y));
-            needsUpdate = true;
+            _hasMapData = true;
+            if (data["k"] != null)
+            {
+                foreach (var numArray in data["k"].list)
+                {
+                    var x = (int)numArray.list[0].n;
+                    var y = (int)numArray.list[1].n;
+                    _lairPositions.Add(new Vector2((float)x, (float)y));
+                }
+            }
         }
-
-        private void InitRender(string terrain)
+        private void OnTerrainData(string terrain)
         {
-            this._terrain = terrain;
-            needsUpdate = true;
+            _terrain = terrain;
+            _hasTerrainData = true;
         }
 
         private void Update()
         {
-            if (_terrain == null)
+            if (isInitialized)
                 return;
-            if (isDuringDeform)
+            if (!_hasTerrainData || !_hasMapData)
                 return;
-            if (!needsUpdate && !isDuringUpdate)
-                return;
-            if (!isDuringUpdate)
+            if (!isInitializing)
             {
-                needsUpdate = false;
-                isDuringUpdate = true;
+                isInitializing = true;
                 _wallPositions = new bool[50, 50];
                 _swampPositions = new bool[50, 50];
                 _x = 0;
                 _y = 0;
             }
-            
+
             var time = Time.time;
             for (; _x < 50; _x++)
             {
@@ -90,9 +94,9 @@ namespace Screeps3D.Rooms.Views
                 }
                 _y = 0;
             }
-            
-            isDuringUpdate = false;
-            isDuringDeform = true;
+
+            isInitializing = false;
+            isInitialized = true;
             Scheduler.Instance.Add(Deform);
         }
 
@@ -105,7 +109,7 @@ namespace Screeps3D.Rooms.Views
             const float lairDeformRange = 1.0f;
             const float lairConstant = 0.35f;
             const float lairRandom = 0.05f;
-            
+
             // walls
             var vertices = _wallMesh.mesh.vertices;
             for (var i = 0; i < vertices.Length; i++)
@@ -113,18 +117,18 @@ namespace Screeps3D.Rooms.Views
                 var point = vertices[i];
                 if (point.x < 0 || point.x > 50 || point.z < 0 || point.z > 50)
                     continue;
-                
-                var xf =  point.x;
-                var x = (int) point.x;
+
+                var xf = point.x;
+                var x = (int)point.x;
                 if (x >= _wallPositions.GetLength(0))
                     continue;
-                
+
                 var yf = 50.0 - point.z;
-                var y = 49 - (int) point.z;
+                var y = 49 - (int)point.z;
                 if (y >= _wallPositions.GetLength(1))
                     continue;
-                
-                if (!_wallPositions[x,y])
+
+                if (!_wallPositions[x, y])
                     continue;
 
                 bool isLair = false;
@@ -142,7 +146,7 @@ namespace Screeps3D.Rooms.Views
             }
             _wallMesh.mesh.vertices = vertices;
             _wallMesh.mesh.RecalculateNormals();
-            
+
             // swamps
             vertices = _swampMesh.mesh.vertices;
             for (var i = 0; i < vertices.Length; i++)
@@ -151,25 +155,24 @@ namespace Screeps3D.Rooms.Views
                 if (point.x < 0 || point.x > 50 || point.z < 0 || point.z > 50)
                     continue;
 
-                var x = (int) point.x;
+                var x = (int)point.x;
                 if (x >= _swampPositions.GetLength(0))
                     continue;
 
-                var y = 49 - (int) point.z;
+                var y = 49 - (int)point.z;
                 if (y >= _swampPositions.GetLength(1))
                     continue;
-                
-                if (!_swampPositions[x,y])
+
+                if (!_swampPositions[x, y])
                     continue;
 
                 vertices[i] = new Vector3(point.x, swampConstant + UnityEngine.Random.value * swampRandom, point.z);
             }
             _swampMesh.mesh.vertices = vertices;
             _swampMesh.mesh.RecalculateNormals();
-            
+
             _wallPositions = null;
             _swampPositions = null;
-            isDuringDeform = false;
         }
     }
 }
