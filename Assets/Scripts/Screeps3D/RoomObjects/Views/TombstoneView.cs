@@ -21,10 +21,6 @@ namespace Screeps3D.RoomObjects.Views
             _body.materials[1].SetColor("BaseColor", new Color(0.8f,0.8f,0.8f,1f));
             _body.materials[1].SetFloat("ColorMix", 1);
             _body.materials[1].SetFloat("EmissionStrength", 0.5f);
-            // _body.materials[1].SetTexture("ColorTexture", _tombstone?.Owner?.Badge); 
-            // _body.material.SetTexture("_BaseColorMap", _tombstone?.Owner?.Badge); // main texture
-            // _body.material.SetTexture("_BaseColorMap", _tombstone?.Owner?.Badge); // main texture
-            // _body.material.mainTexture = _tombstone?.Owner.Badge;
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
