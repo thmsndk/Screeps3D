@@ -73,12 +73,6 @@ namespace Screeps3D.Rooms.Views
                 }
                 else if (key.Equals("k"))
                 {
-                    foreach (var numArray in data[key].list)
-                    {
-                        var x = (int)numArray.list[0].n;
-                        var y = (int)numArray.list[1].n;
-                        _terrainView.addLair(x, y);
-                    }
                     SpawnRoomObjects<SourceKeeperLairView>(data[key].list, SourceKeeperLairView.Path);
                 }
                 else if (key.Equals("c"))
