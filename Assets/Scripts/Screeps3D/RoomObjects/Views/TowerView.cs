@@ -14,11 +14,14 @@ namespace Screeps3D.RoomObjects.Views
         private Quaternion _targetRot;
         private bool _idle;
         private Color _actionColor;
+        private float _time;
         private float _nextRot;
         private bool _rotating;
+        private bool _doPowerUp;
         private Tower _tower;
         private LineRenderer _lineRenderer;
         private IEnumerator _rotator;
+        private IEnumerator _powerUp;
 
         public void Init()
         {
@@ -28,6 +31,7 @@ namespace Screeps3D.RoomObjects.Views
         public void Load(RoomObject roomObject)
         {
             _tower = roomObject as Tower;
+            _time = 0f;
             AdjustScale();
         }
 
@@ -41,6 +45,9 @@ namespace Screeps3D.RoomObjects.Views
                 if (action.Value == null)
                 {
                     _idle = true;
+                    if(_powerUp != null) {
+                        StopCoroutine(_powerUp);
+                    }
                     return; // Early
                 }
                 _idle = false;
@@ -50,6 +57,12 @@ namespace Screeps3D.RoomObjects.Views
                 _rotationRoot.rotation = Quaternion.LookRotation(endPos - _tower.Position);
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
                 EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
+
+                _powerUp = PowerUp();
+                if(_powerUp != null) {
+                    StopCoroutine(_powerUp);
+                }
+                StartCoroutine(_powerUp);
             }
             // StartCoroutine(Beam.Draw(_tower, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
@@ -75,15 +88,14 @@ namespace Screeps3D.RoomObjects.Views
                 return;
             }
 
-            if(!_idle) {
-                _body?.sharedMaterials[0].SetFloat("EmissionStrength", 50 * 1000f);
-                _body?.sharedMaterials[0].SetColor("EmissionColor", _actionColor);
+            if(_idle) {
+                _body.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
                 return;
-            }            
+            }
 
-            if (!_idle || _rotating || !(Time.time > _nextRot))  {
-                _body?.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
-                _body?.sharedMaterials[0].SetColor("EmissionColor", new Color(0f, 0f, 0f));
+            if (!_idle || _rotating || !(Time.time > _nextRot || _doPowerUp))  {
+            //     _body?.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
+            //     _body?.sharedMaterials[0].SetColor("EmissionColor", new Color(0f, 0f, 0f));
                 return; // Early
             }            
 
@@ -105,5 +117,19 @@ namespace Screeps3D.RoomObjects.Views
             _rotating = false;
         }
 
+        private IEnumerator PowerUp() {
+            _doPowerUp = true;
+            var targetEmission = 150;
+            var keepPowerTime = 2;            
+            _body.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
+            _body?.sharedMaterials[0].SetColor("EmissionColor", _actionColor);
+
+            while (_body?.sharedMaterials[0].GetFloat("EmissionStrength") < targetEmission)
+            {    
+
+                _body.sharedMaterials[0].SetFloat("EmissionStrength", _body.sharedMaterials[0].GetFloat("EmissionStrength") + 5f);
+                yield return new WaitForSeconds(.1f);
+            }
+        }
     }
 }

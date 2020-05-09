@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
     type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
@@ -24,6 +24,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - ColorTexture:
+        m_Texture: {fileID: 2800000, guid: c6bbec71c67a6bc49b02fd82c93b7d10, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - EmissionTexture:
         m_Texture: {fileID: 2800000, guid: 896073101cb9ad14886a95f18bb2a531, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -36,11 +40,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
-        m_Texture: {fileID: 2800000, guid: 3e10f9d1e72346f47812448d7b1c5ad4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2cf64fc6dacbab24ab3749e72170ab9e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_3E866369:
-        m_Texture: {fileID: 2800000, guid: 72bad32b264f10743870aeba812db26f, type: 3}
+        m_Texture: {fileID: 2800000, guid: e8b6f351f5e7c4b4e9e454f41f8dc3e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_8BFCE1C6:
@@ -48,16 +52,17 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_F9979DE5:
-        m_Texture: {fileID: 2800000, guid: b440e72b2625f144a9372fef6a1dbdf0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2dc13ac1d287adb4eafa6aaf8f53d588, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - ColorMix: 1
+    - ColorMix: 0.7
+    - EmissionOnOff: 1
     - EmissionStrength: 0
-    - MetallicStrength: -1
-    - NormalStrenght: 0
+    - MetallicStrength: 0.91
+    - NormalStrenght: 0.07
     - Scaling: 0.58
-    - SmoothStrength: 0
+    - SmoothStrength: 0.51
     - UVScale: 1
     - Vector1_6F1CD831: 0
     - _AlphaCutoffEnable: 0
@@ -94,8 +99,8 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - BaseColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
-    - EmissionColor: {r: 1, g: 0.8999914, b: 0.21226418, a: 1}
+    - BaseColor: {r: 0, g: 0, b: 0, a: 0}
+    - EmissionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2469717440987754232
