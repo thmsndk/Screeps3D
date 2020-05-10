@@ -99,17 +99,19 @@ namespace Screeps3D.RoomObjects.Views
             }
             _texture.Apply();
 
+
+            Texture2D texture = null;
+            var color = Color.grey;
             if (_controller.Owner != null)
             {
-                _playerRend.materials[0].SetTexture("_BaseColorMap", _controller.Owner.Badge); // main texture
-                //_playerRend.materials[0].mainTexture = _controller.Owner.Badge;
-                _playerRend.materials[0].color = Color.white;
+                texture = _controller.Owner.Badge;
+                color = Color.white;
             }
-            else
-            {
-                _playerRend.materials[0].mainTexture = null;
-                _playerRend.materials[0].color = Color.grey;
-            }
+
+            // TODO: what about using the badge if it is reserved? :thinking:
+
+            _playerRend.materials[0].SetTexture("_BaseColorMap", texture); // main texture
+            _playerRend.materials[0].SetColor("_BaseColor", color);
         }
 
         private void Update()
