@@ -135,8 +135,21 @@ namespace Screeps_API
             {
                 return;
             }
-
+            if(list[0].str.IndexOf("room:")==0)
+            {
+                findAndUpdateTimeInRoomSubscription(list[1]);
+            }
             _subscriptions[list[0].str].Invoke(list[1]);
+        }
+
+        private void findAndUpdateTimeInRoomSubscription(JSONObject json)
+        {
+            if(!json.HasField("gameTime") || json["gameTime"] == null)
+            {
+                return;
+            }
+            long currentTime = (long)json["gameTime"].n;
+            ScreepsAPI.Instance.UpdateTime(currentTime);
         }
 
         public void Subscribe(string path, Action<JSONObject> callback)
