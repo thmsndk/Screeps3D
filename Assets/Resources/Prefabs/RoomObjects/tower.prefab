@@ -252,7 +252,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _energyDisplay: {fileID: 114386479590967782}
-  _body: {fileID: 2300002, guid: f4e2c175fe406f9429358549ab176cd6, type: 3}
+  _base: {fileID: 23018812236741642}
+  _stand: {fileID: 23083708945994768}
+  _body: {fileID: 23532430145203780}
   _rotationRoot: {fileID: 4072462316019136}
 --- !u!136 &136759589217628250
 CapsuleCollider:
@@ -537,7 +539,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776288774275864}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.3156e-11, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4923355305127262}

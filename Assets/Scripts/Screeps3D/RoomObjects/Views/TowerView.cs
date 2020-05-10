@@ -9,23 +9,36 @@ namespace Screeps3D.RoomObjects.Views
     public class TowerView : ObjectView, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private Renderer _base;
+        [SerializeField] private Renderer _stand;
         [SerializeField] private Renderer _body;
         [SerializeField] private Transform _rotationRoot;
         private Quaternion _targetRot;
         private bool _idle;
-        private Color _actionColor;
         private float _time;
         private float _nextRot;
         private bool _rotating;
-        private bool _doPowerUp;
         private Tower _tower;
+        private Color _actionColor;
         private LineRenderer _lineRenderer;
-        private IEnumerator _rotator;
         private IEnumerator _powerUp;
+        private IEnumerator _rotator;
 
         public void Init()
         {
             _lineRenderer = gameObject.GetComponent<LineRenderer>();
+        }
+
+        private void setEmission(Color color, float strength) {
+
+            _base.material.SetFloat("EmissionStrength", strength);
+            _base.material.SetColor("EmissionColor", color);
+
+            _body.material.SetFloat("EmissionStrength", strength);
+            _body.material.SetColor("EmissionColor", color);
+
+            _stand.material.SetFloat("EmissionStrength", strength);
+            _stand.material.SetColor("EmissionColor", color);            
         }
 
         public void Load(RoomObject roomObject)
@@ -45,9 +58,6 @@ namespace Screeps3D.RoomObjects.Views
                 if (action.Value == null)
                 {
                     _idle = true;
-                    if(_powerUp != null) {
-                        StopCoroutine(_powerUp);
-                    }
                     return; // Early
                 }
                 _idle = false;
@@ -57,11 +67,8 @@ namespace Screeps3D.RoomObjects.Views
                 _rotationRoot.rotation = Quaternion.LookRotation(endPos - _tower.Position);
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
                 EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
-
+                
                 _powerUp = PowerUp();
-                if(_powerUp != null) {
-                    StopCoroutine(_powerUp);
-                }
                 StartCoroutine(_powerUp);
             }
             // StartCoroutine(Beam.Draw(_tower, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
@@ -89,13 +96,10 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             if(_idle) {
-                _body.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
-                return;
+                setEmission(Color.black, 0f);
             }
 
-            if (!_idle || _rotating || !(Time.time > _nextRot || _doPowerUp))  {
-            //     _body?.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
-            //     _body?.sharedMaterials[0].SetColor("EmissionColor", new Color(0f, 0f, 0f));
+            if (!_idle || _rotating || !(Time.time > _nextRot ))  {
                 return; // Early
             }            
 
@@ -118,17 +122,19 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private IEnumerator PowerUp() {
-            _doPowerUp = true;
             var targetEmission = 150;
-            var keepPowerTime = 2;            
-            _body.sharedMaterials[0].SetFloat("EmissionStrength", 0f);
-            _body?.sharedMaterials[0].SetColor("EmissionColor", _actionColor);
-
-            while (_body?.sharedMaterials[0].GetFloat("EmissionStrength") < targetEmission)
+            setEmission(_actionColor, 0f);
+            // powerUp - brightness up
+            while (_base.material.GetFloat("EmissionStrength") < targetEmission)
             {    
-
-                _body.sharedMaterials[0].SetFloat("EmissionStrength", _body.sharedMaterials[0].GetFloat("EmissionStrength") + 5f);
-                yield return new WaitForSeconds(.1f);
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") +15f);
+                yield return null;
+            }
+            // powerUp - wind down
+            while (_base.material.GetFloat("EmissionStrength") > 0)
+            {    
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") -5f);
+                yield return null;
             }
         }
     }
