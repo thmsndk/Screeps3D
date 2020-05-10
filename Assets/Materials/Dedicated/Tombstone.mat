@@ -57,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - ColorMix: 0.5
+    - ColorMix: 0.6
     - EmissionStrength: 0
     - MetallicStrength: 0.7
     - NormalStrenght: 0.5
@@ -97,7 +97,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - BaseColor: {r: 0.40566036, g: 0.40566036, b: 0.40566036, a: 0}
+    - BaseColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
     - EmissionColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

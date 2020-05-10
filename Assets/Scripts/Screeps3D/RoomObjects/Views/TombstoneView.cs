@@ -76,12 +76,12 @@ namespace Screeps3D.RoomObjects.Views
             _blinking = true;
             while (_body.materials[1].GetFloat("EmissionStrength") < max)
             {
-                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") + 0.5f);
+                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") + 0.1f);
                 yield return null;
             }
             while (_body.materials[1].GetFloat("EmissionStrength") > min)
             {
-                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") - 0.5f);
+                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") - 0.1f);
                 yield return null;
             }
             _nextBlink = Time.time + Random.value + 1;
