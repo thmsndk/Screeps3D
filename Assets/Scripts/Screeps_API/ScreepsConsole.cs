@@ -85,8 +85,6 @@ namespace Screeps_API
             {
                 OnConsoleError(RemoveEscapes(errorData.str));
             }
-
-            ScreepsAPI.Instance.IncrementTime(); // TODO: should the console be responsible for this?
         }
 
         private static string AddEscapes(string str)

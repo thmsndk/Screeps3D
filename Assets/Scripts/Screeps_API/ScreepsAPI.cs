@@ -64,9 +64,17 @@ namespace Screeps_API
             Socket.Disconnect();
         }
 
-        internal void IncrementTime()
+        internal void UpdateTime(long currentTime)
         {
-            Time++;
+            if(currentTime == Time)
+            {
+                return;
+            }
+            if(currentTime - Time > 1)
+            {
+                Debug.LogWarning("Lost ticks count: " + (currentTime - Time));
+            }
+            Time = currentTime;
             if (OnTick != null)
                 OnTick(Time);
         }

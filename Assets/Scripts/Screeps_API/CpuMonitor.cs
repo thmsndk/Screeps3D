@@ -37,6 +37,7 @@ namespace Screeps_API
             if (queue.Count == 0)
                 return;
             UnpackCpu(queue.Dequeue());
+
         }
 
         private void UnpackCpu(JSONObject data)
