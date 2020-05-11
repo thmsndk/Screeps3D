@@ -200,7 +200,7 @@ namespace Screeps_API
             }
 
             var selectedServer = _servers[_serverIndex];
-            var isPublic = (ScreepsAPI.Cache.Type == SourceProviderType.Official);
+            var isPublic = (selectedServer.Type == SourceProviderType.Official);
 
             //_ssl.gameObject.SetActive(!isPublic);
             //_port.gameObject.SetActive(!isPublic);
@@ -213,7 +213,7 @@ namespace Screeps_API
             _password.gameObject.SetActive(!isPublic && showCredentialInput);
             _token.gameObject.SetActive(isPublic && showCredentialInput);
 
-            _removeServer.gameObject.SetActive(ScreepsAPI.Cache.Type != SourceProviderType.Official);
+            _removeServer.gameObject.SetActive(selectedServer.Type != SourceProviderType.Official);
 
             if (!isPublic && (string.IsNullOrEmpty(selectedServer.Address.Port) || editServer))
             {
@@ -265,7 +265,7 @@ namespace Screeps_API
                     server.Online = true;
                     // TODO: timestamp of online status?
                     server.Users = users;
-                    server.Version = "v" + (ScreepsAPI.Cache.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
+                    server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
                     UpdateServerList();
                 };
 
