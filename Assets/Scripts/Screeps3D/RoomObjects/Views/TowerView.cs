@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class TowerView : ObjectView, IObjectViewComponent
+    public class TowerView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay;
         [SerializeField] private Renderer _base;
