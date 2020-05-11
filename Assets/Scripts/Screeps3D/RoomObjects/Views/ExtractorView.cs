@@ -4,8 +4,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class ExtractorView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private Renderer rend;
-        [SerializeField] private Animator anim;
+        [SerializeField] private Renderer rend = default;
+        [SerializeField] private Animator anim = default;
 
         private Extractor _extractor;
         // TODO: we also need the mineral on the location to get regen time if we want to do something specific in regards to that

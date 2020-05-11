@@ -9,8 +9,8 @@ namespace Screeps3D.Player
 {
     public class PlayerTransporter : BaseSingleton<PlayerTransporter>
     {
-        [SerializeField] private RoomChooser _chooser;
-        [SerializeField] private PlayerGaze _playerGaze;
+        [SerializeField] private RoomChooser _chooser = default;
+        [SerializeField] private PlayerGaze _playerGaze = default;
 
         private Stack<Room> _loadStack = new Stack<Room>();
 

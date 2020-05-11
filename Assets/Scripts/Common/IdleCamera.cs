@@ -6,7 +6,7 @@ namespace Common
 {
     public class IdleCamera : BaseSingleton<CameraRig>
     {
-        [SerializeField] private CameraRig _cameraRig;
+        [SerializeField] private CameraRig _cameraRig = default;
         private Vector3 lastRotation;
         private float lastZoom;
         private bool wasIdle;

@@ -4,7 +4,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class CreepBodyView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private Renderer _rend;
+        [SerializeField] private Renderer _rend = default;
         private Creep _creep;
         private Texture2D _texture;
 

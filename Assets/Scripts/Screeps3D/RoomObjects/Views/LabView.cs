@@ -7,8 +7,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class LabView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _mineral;
-        [SerializeField] private ScaleAxes _energy;
+        [SerializeField] private ScaleAxes _mineral = default;
+        [SerializeField] private ScaleAxes _energy = default;
         private LineRenderer _lineRenderer;
         private Lab _lab;
 

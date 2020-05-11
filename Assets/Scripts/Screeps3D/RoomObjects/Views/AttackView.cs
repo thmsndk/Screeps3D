@@ -4,7 +4,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class AttackView : CreepPartView
     {
-        [SerializeField] private Animator _anim;
+        [SerializeField] private Animator _anim = default;
 
         public override void Load(RoomObject roomObject)
         {

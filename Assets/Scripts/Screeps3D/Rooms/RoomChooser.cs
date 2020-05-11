@@ -19,14 +19,14 @@ namespace Screeps3D.Rooms
     {
         public Action<Room> OnChooseRoom;
 
-        [SerializeField] private TMP_Dropdown _shardInput;
-        [SerializeField] private TMP_InputField _roomInput;
-        [SerializeField] private Toggle _pvpSpectateToggle;
-        [SerializeField] private Toggle _SpectateToggle;
-        //[SerializeField] private GameObject _roomList;
-        [SerializeField] private VerticalPanelElement _roomList;
+        [SerializeField] private TMP_Dropdown _shardInput = default;
+        [SerializeField] private TMP_InputField _roomInput = default;
+        [SerializeField] private Toggle _pvpSpectateToggle = default;
+        [SerializeField] private Toggle _SpectateToggle = default;
+        //[SerializeField] private GameObject _roomList = default;
+        [SerializeField] private VerticalPanelElement _roomList = default;
         private bool showRoomList;
-        [SerializeField] private GameObject _roomListContent;
+        [SerializeField] private GameObject _roomListContent = default;
 
         private readonly string _prefSpectateToggle = "SpectateToggle";
         private readonly string _prefPvpSpectateToggle = "PvpSpectateToggle";

@@ -6,7 +6,7 @@ namespace Common
 {
     public class NotifyText : BaseSingleton<NotifyText>
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         private float _expire;
 
         public static void Message(string msg, Color color = default(Color), float duration = 5)

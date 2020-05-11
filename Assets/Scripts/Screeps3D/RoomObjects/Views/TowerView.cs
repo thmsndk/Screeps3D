@@ -8,14 +8,13 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class TowerView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay;
-        [SerializeField] private Renderer _base;
-        [SerializeField] private Renderer _stand;
-        [SerializeField] private Renderer _body;
-        [SerializeField] private Transform _rotationRoot;
+        [SerializeField] private ScaleAxes _energyDisplay = default;
+        [SerializeField] private Renderer _base = default;
+        [SerializeField] private Renderer _stand = default;
+        [SerializeField] private Renderer _body = default;
+        [SerializeField] private Transform _rotationRoot = default;
         private Quaternion _targetRot;
         private bool _idle;
-        private float _time;
         private float _nextRot;
         private bool _rotating;
         private Tower _tower;
@@ -44,7 +43,6 @@ namespace Screeps3D.RoomObjects.Views
         public void Load(RoomObject roomObject)
         {
             _tower = roomObject as Tower;
-            _time = 0f;
             AdjustScale();
         }
 

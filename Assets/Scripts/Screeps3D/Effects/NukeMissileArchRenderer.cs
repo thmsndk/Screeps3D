@@ -24,8 +24,6 @@ public class NukeMissileArchRenderer : MonoBehaviour
 
     public int vertexCount = 12;
 
-    protected float animation;
-
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();

@@ -26,8 +26,6 @@ namespace Screeps3D.Rooms.Views
     {
         public Room Room { get; private set; }
 
-        [SerializeField] private TerrainView _terrainView;
-
         private MapDotView[,] _dots = new MapDotView[50, 50];
         private List<MapDotView> _dotList = new List<MapDotView>();
 

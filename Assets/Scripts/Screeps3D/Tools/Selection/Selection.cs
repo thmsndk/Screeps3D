@@ -11,8 +11,8 @@ namespace Screeps3D.Tools.Selection
 {
     public class Selection : BaseSingleton<Selection>
     {
-        [SerializeField] private GameObject _circlePrefab;
-        [SerializeField] private GameObject _labelPrefab;
+        [SerializeField] private GameObject _circlePrefab = default;
+        [SerializeField] private GameObject _labelPrefab = default;
 
         public static GameObject CircleTemplate;
         public static GameObject LabelTemplate;

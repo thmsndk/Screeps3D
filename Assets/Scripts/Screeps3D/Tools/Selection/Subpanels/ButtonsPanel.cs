@@ -12,8 +12,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
     public class ButtonsPanel : SelectionSubpanel
     {
         public new const float LineHeight = 30;
-        [SerializeField] private GameObject _buttonPrefab;
-        [SerializeField] private VerticalPanelGroup _buttonList;
+        [SerializeField] private GameObject _buttonPrefab = default;
+        [SerializeField] private VerticalPanelGroup _buttonList = default;
 
         private IButtons _buttons;
         private RoomObject _roomObject;
@@ -41,7 +41,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 
             //this.Rect.sizeDelta = Vector2.up; // reset height from previous  buttons
             var actions = _buttons.GetButtonActions();
-                ////Height = actions.Count * LineHeight;
+            ////Height = actions.Count * LineHeight;
             foreach (var button in actions)
             {
                 AddButtonToSelectionPanel(button, roomObject);

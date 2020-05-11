@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class StorageView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private ScaleAxes _energyDisplay = default;
 
         private Storage _energyObject;
 

@@ -84,15 +84,11 @@ namespace Screeps3D.RoomObjects
         public Vector3 PrevPosition { get; protected set; }
         public Vector3 BumpPosition { get; private set; }
         public Quaternion Rotation { get; private set; }
-        public Dictionary<string, float> Store { get; private set; }
-        public float TotalCapacity { get; set; }
-        public float TotalResources { get; set; }
 
         internal PowerCreep()
         {
             //Body = new CreepBody();
             Actions = new Dictionary<string, JSONObject>();
-            Store = new Dictionary<string, float>();
         }
 
         internal override void Unpack(JSONObject data, bool initial)

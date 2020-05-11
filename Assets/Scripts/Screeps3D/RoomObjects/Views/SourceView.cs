@@ -7,8 +7,8 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/source";
 
-        [SerializeField] private ScaleVisibility _vis;
-        [SerializeField] private Collider _collider;
+        [SerializeField] private ScaleVisibility _vis = default;
+        [SerializeField] private Collider _collider = default;
         private Source _source;
         
 

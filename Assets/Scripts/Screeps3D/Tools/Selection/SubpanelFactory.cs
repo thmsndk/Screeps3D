@@ -9,7 +9,7 @@ namespace Screeps3D.Tools.Selection
 {
     public class SubpanelFactory : BaseSingleton<SubpanelFactory>
     {
-        [SerializeField] private Transform _inactiveParent;
+        [SerializeField] private Transform _inactiveParent = default;
 
         private readonly List<Func<RoomObject, SelectionSubpanel>> _factories = new List<Func<RoomObject, SelectionSubpanel>>();
         private const string Path = "Prefabs/Selection/Subpanels/";

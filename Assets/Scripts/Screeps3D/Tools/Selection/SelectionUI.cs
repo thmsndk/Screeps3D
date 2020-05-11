@@ -8,7 +8,7 @@ namespace Screeps3D.Tools.Selection
 {
     public class SelectionUI : BaseSingleton<SelectionUI>
     {
-        [SerializeField] private VerticalPanelGroup _panelGroup;
+        [SerializeField] private VerticalPanelGroup _panelGroup = default;
 
         private Dictionary<string, SelectionPanel> _panels = new Dictionary<string, SelectionPanel>();
 

@@ -13,7 +13,7 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/ElectricExplosionEffect";
 
-        [SerializeField] private ParticleSystem electricExplosion;
+        [SerializeField] private ParticleSystem electricExplosion = default;
 
         public void Load(RoomObject origin)
         {

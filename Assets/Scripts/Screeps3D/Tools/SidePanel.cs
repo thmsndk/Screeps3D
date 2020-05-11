@@ -6,7 +6,7 @@ namespace Screeps3D.Tools
 {
     public class SidePanel : MonoBehaviour
     {
-        [SerializeField] private FadePanel _panel;
+        [SerializeField] private FadePanel _panel = default;
         
         private void Start()
         {

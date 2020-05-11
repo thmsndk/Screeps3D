@@ -6,7 +6,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class ObjectViewFactory : BaseSingleton<ObjectViewFactory>
     {
-        [SerializeField] private Transform _objectParent;
+        [SerializeField] private Transform _objectParent = default;
         private Dictionary<string, Stack<ObjectView>> _pools = new Dictionary<string, Stack<ObjectView>>();
         private string _path = "Prefabs/RoomObjects/";
 

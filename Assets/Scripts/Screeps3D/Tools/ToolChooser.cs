@@ -7,9 +7,9 @@ namespace Screeps3D.Tools
 {
     public class ToolChooser : BaseSingleton<ToolChooser>
     {
-        [SerializeField] private Toggle _selectionToggle;
-        [SerializeField] private Toggle _flagToggle;
-        [SerializeField] private Toggle _constructionToggle;
+        [SerializeField] private Toggle _selectionToggle = default;
+        [SerializeField] private Toggle _flagToggle = default;
+        [SerializeField] private Toggle _constructionToggle = default;
         
         private IVisibilityMod _vis;
         public ToolType CurrentTool { get; private set; }

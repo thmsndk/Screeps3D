@@ -11,7 +11,7 @@ namespace Screeps3D.Effects
         private const float BeamDuration = 1;
         private const float HalfDuration = BeamDuration / 2;
 
-        [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private LineRenderer lineRenderer = default;
         private float _time;
         private Vector3 _startPos;
         private Vector3 _endPos;

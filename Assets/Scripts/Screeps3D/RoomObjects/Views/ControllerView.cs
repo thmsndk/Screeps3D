@@ -7,11 +7,11 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/controller";
 
-        [SerializeField] private Renderer _rend;
-        [SerializeField] private Renderer _playerRend;
-        [SerializeField] private ScaleVisibility _vis;
-        [SerializeField] private Collider _collider;
-        [SerializeField] private ParticleSystem _ps;
+        [SerializeField] private Renderer _rend = default;
+        [SerializeField] private Renderer _playerRend = default;
+        [SerializeField] private ScaleVisibility _vis = default;
+        [SerializeField] private Collider _collider = default;
+        [SerializeField] private ParticleSystem _ps = default;
 
         private Texture2D _texture;
         private Color _controllerWhite;

@@ -7,8 +7,8 @@ namespace Screeps3D.Player
 {
     public class PerformanceView : MonoBehaviour
     {
-        [SerializeField] private ScaleAxes _cpuMeter;
-        [SerializeField] private ScaleAxes _memMeter;
+        [SerializeField] private ScaleAxes _cpuMeter = default;
+        [SerializeField] private ScaleAxes _memMeter = default;
         
         private Color _baseColor = new Color(0, 0.65f, .5f);
         private Image _cpuImage;

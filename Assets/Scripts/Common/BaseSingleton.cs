@@ -5,7 +5,7 @@ namespace Common
 {
     public class BaseSingleton<T>: MonoBehaviour where T: Component
     {
-        [SerializeField] private bool _keepAlive;
+        [SerializeField] private bool _keepAlive = default;
         private static T _instance;
 
         public static T Instance 

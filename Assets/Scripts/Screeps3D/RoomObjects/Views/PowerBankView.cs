@@ -8,13 +8,13 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/powerBank";
 
-        [SerializeField] private ScaleVisibility _powerScaleVisibility;
-        [SerializeField] private Collider _collider;
+        [SerializeField] private ScaleVisibility _powerScaleVisibility = default;
+        [SerializeField] private Collider _collider = default;
         private PowerBank _powerBank;
 
-        [SerializeField] private float _Power;
-        [SerializeField] private float hits;
-        [SerializeField] private GameObject destroyed;
+        [SerializeField] private float _Power = default;
+        [SerializeField] private float hits = default;
+        [SerializeField] private GameObject destroyed = default;
         private GameObject spawnedDebris;
         private IEnumerator _despawnDebris;
 

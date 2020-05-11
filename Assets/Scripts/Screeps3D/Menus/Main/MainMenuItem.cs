@@ -10,7 +10,7 @@ namespace Screeps3D.Menus.Main
         public abstract string Description { get; }
         public abstract void Invoke();
         
-        [SerializeField] private MainMenu _menu;
+        [SerializeField] private MainMenu _menu = default;
         
         private Button _button;
 

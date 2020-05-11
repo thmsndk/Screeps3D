@@ -7,9 +7,9 @@ using UnityEngine;
 
 public class ServerInfo : MonoBehaviour
 {
-    [SerializeField] private TMP_Text ServerHostname;
-    [SerializeField] private TMP_Text CurrentTick;
-    [SerializeField] private TMP_Text TickRate;
+    [SerializeField] private TMP_Text ServerHostname = default;
+    [SerializeField] private TMP_Text CurrentTick = default;
+    [SerializeField] private TMP_Text TickRate = default;
 
     private DateTime lastTick;
 

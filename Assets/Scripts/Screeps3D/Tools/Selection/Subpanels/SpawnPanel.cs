@@ -10,8 +10,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class SpawnPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private ScaleAxes _meter = default;
         private Spawn _spawn;
         private RoomObject _roomObject;
 

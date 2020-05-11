@@ -9,8 +9,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class OwnerPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private Image _badge;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private Image _badge = default;
 
         private IOwnedObject _selected;
 

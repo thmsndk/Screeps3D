@@ -7,11 +7,11 @@ namespace Common
 {
     public class PlayerInput : BaseSingleton<PlayerInput>
     {
-        [SerializeField] private FadePanel _panel;
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private TMP_InputField _input;
-        [SerializeField] private Button _submit;
-        [SerializeField] private Button _cancel;
+        [SerializeField] private FadePanel _panel = default;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private TMP_InputField _input = default;
+        [SerializeField] private Button _submit = default;
+        [SerializeField] private Button _cancel = default;
         private Action<string> _onInput;
         private Action<bool> _onAnswerQuestion;
         private TextMeshProUGUI _submitText;

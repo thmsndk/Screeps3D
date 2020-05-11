@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class ContainerView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private ScaleAxes _energyDisplay = default;
         private Container _container;
 
         public void Init()

@@ -8,8 +8,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class ProgressPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private ScaleAxes _meter = default;
         
         private IProgress _progressor;
         private RoomObject _roomObject;

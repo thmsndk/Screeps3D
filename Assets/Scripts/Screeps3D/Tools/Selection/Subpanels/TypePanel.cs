@@ -8,8 +8,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class TypePanel : LinePanel
     {
-        [SerializeField] private TMP_Text _label;
-        [SerializeField] private Button _button;
+        [SerializeField] private TMP_Text _label = default;
+        [SerializeField] private Button _button = default;
         private RoomObject _selected;
 
         public override string Name

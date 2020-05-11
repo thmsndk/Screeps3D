@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class TerminalView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private ScaleAxes _energyDisplay = default;
         private Terminal _terminal;
 
         public void Init()

@@ -12,7 +12,7 @@ namespace Screeps3D.Tools.Selection
 {
     public class PlaceFlag : BaseSingleton<PlaceFlag>
     {
-        [SerializeField] private EditFlagPopup _editFlagPopup;
+        [SerializeField] private EditFlagPopup _editFlagPopup = default;
 
         private bool _showEditDialog;
         private Vector2Int _position;

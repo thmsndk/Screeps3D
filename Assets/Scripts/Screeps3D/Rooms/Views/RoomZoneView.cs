@@ -7,10 +7,10 @@ namespace Screeps3D.Rooms.Views
 {
     public class RoomZoneView : MonoBehaviour, IRoomViewComponent
     {
-        [SerializeField] private ParticleSystem _north;
-        [SerializeField] private ParticleSystem _south;
-        [SerializeField] private ParticleSystem _west;
-        [SerializeField] private ParticleSystem _east;
+        [SerializeField] private ParticleSystem _north = default;
+        [SerializeField] private ParticleSystem _south = default;
+        [SerializeField] private ParticleSystem _west = default;
+        [SerializeField] private ParticleSystem _east = default;
 
         private Room room;
         private RoomInfo _roomInfo;

@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
     public class BumpView : MonoBehaviour, IObjectViewComponent
     {
 
-        [SerializeField] private Transform _bumpRoot;
+        [SerializeField] private Transform _bumpRoot = default;
         private IBump _creep;
         private Vector3 _bumpTarget;
         private Vector3 _bumpRef;

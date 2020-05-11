@@ -6,7 +6,7 @@ namespace Common
     public class ThirdPersonCamera : MonoBehaviour
     {
         [SerializeField] private float _zoomSpeed = 10;
-        [SerializeField] private Transform _followTransform;
+        [SerializeField] private Transform _followTransform = default;
         private Vector3 _posRef;
         private Quaternion _camRotation;
         private float _zoom;

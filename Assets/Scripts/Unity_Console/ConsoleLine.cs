@@ -5,7 +5,7 @@ namespace Unity_Console
 {
     public class ConsoleLine : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] private TextMeshProUGUI _text = default;
         private float _target;
         private float _targetRef;
 

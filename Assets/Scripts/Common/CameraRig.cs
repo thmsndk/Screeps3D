@@ -6,11 +6,11 @@ namespace Common
 {
     public class CameraRig : BaseSingleton<CameraRig>
     {
-        [SerializeField] private Transform _boom;
-        [SerializeField] private Transform _pivot;
-        [SerializeField] private int _rigLayer;
-        [SerializeField] private float _defaultZoom;
-        [SerializeField] private float _defaultAngle;
+        [SerializeField] private Transform _boom = default;
+        [SerializeField] private Transform _pivot = default;
+        [SerializeField] private int _rigLayer = default;
+        [SerializeField] private float _defaultZoom = default;
+        [SerializeField] private float _defaultAngle = default;
         [SerializeField] private float _zoomSpeed = 5;
         [SerializeField] private float _minZoom = 1;
         [SerializeField] private float _maxZoom = 400;

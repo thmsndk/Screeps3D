@@ -10,9 +10,9 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class ReservedPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private Image _badge;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private Image _badge = default;
+        [SerializeField] private ScaleAxes _meter = default;
 
         private RoomObject _roomObject;
         private IReserved _reservedObject;

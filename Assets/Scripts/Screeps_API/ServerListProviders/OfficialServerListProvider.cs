@@ -19,7 +19,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
 
             var publicServer = new ServerCache
             {
-                Official = true,
                 Type = SourceProviderType.Official,
                 Name = "Screeps.com",
                 Address = {HostName = "Screeps.com", Path = "/", Port = "", Ssl = true}
@@ -28,7 +27,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
 
             var ptr = new ServerCache
             {
-                Official = true,
                 Type = SourceProviderType.Official,
                 Name = "PTR Screeps.com",
                 Address = {HostName = "screeps.com", Path = "/ptr", Port = "", Ssl = true}

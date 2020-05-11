@@ -8,8 +8,8 @@ namespace Screeps3D.Menus.Options
     {
         public static bool IsOn { get; private set; }
 
-        [SerializeField] private Toggle _multiToggle;
-        [SerializeField] private Toggle _clickDragToggle;
+        [SerializeField] private Toggle _multiToggle = default;
+        [SerializeField] private Toggle _clickDragToggle = default;
 
         private readonly string _prefsKey = "MultiSelect";
 

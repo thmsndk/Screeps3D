@@ -7,8 +7,8 @@ namespace Screeps3D.Rooms.Views
 {
     public class TerrainView : MonoBehaviour, IRoomViewComponent
     {
-        [SerializeField] private MeshFilter _swampMesh;
-        [SerializeField] private MeshFilter _wallMesh;
+        [SerializeField] private MeshFilter _swampMesh = default;
+        [SerializeField] private MeshFilter _wallMesh = default;
 
         private bool _hasTerrainData;
         private string _terrain;

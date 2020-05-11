@@ -27,7 +27,7 @@ namespace Screeps_API
 
         private string _token;
 
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
 

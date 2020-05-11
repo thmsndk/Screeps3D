@@ -4,7 +4,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class CreepPartView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private Transform _partDisplay;
+        [SerializeField] private Transform _partDisplay = default;
 
         internal Creep creep;
         internal CreepView view;

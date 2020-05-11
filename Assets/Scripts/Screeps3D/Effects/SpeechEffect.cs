@@ -13,7 +13,7 @@ namespace Screeps3D.Effects
         
         private const float SpeechDuration = 1;
 
-        [SerializeField] private TextMeshPro _label;
+        [SerializeField] private TextMeshPro _label = default;
         private float _time;
         private Vector3 _endPos;
         private Vector3 _startPos;

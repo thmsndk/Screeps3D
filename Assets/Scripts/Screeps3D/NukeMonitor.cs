@@ -60,7 +60,7 @@ namespace Assets.Scripts.Screeps3D
             }
 
             // Should probably do this lookup on connect
-            if (ScreepsAPI.Cache.Official)
+            if (ScreepsAPI.Cache.Type == SourceProviderType.Official)
             {
                 ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
                 {
@@ -117,7 +117,7 @@ namespace Assets.Scripts.Screeps3D
                     var status = obj["ok"];
                     var nukes = obj["nukes"];
                     var nukesShardName = nukes.keys[shardIndex];
-                    var shardName = ScreepsAPI.Cache.Official? nukesShardName : $"shard{shardIndex}";
+                    var shardName = ScreepsAPI.Cache.Type == SourceProviderType.Official ? nukesShardName : $"shard{shardIndex}";
                     var shardNukes = nukes[nukesShardName].list;
                     //NotifyText.Message($"{nukesShardName} has {shardNukes.Count} nukes!", Color.red);
                     Debug.Log($"{nukesShardName} has {shardNukes.Count} nukes!");

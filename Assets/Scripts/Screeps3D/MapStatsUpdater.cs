@@ -140,7 +140,7 @@ namespace Screeps3D
                 {
                     ScreepsAPI.UserManager.CacheUser(userData);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //Debug.LogError(ex.Message);
                     Debug.Log(userData.ToString());

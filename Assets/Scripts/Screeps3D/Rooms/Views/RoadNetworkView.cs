@@ -5,7 +5,7 @@ namespace Screeps3D.Rooms.Views
 {
     internal class RoadNetworkView : MonoBehaviour, IRoomViewComponent
     {
-        [SerializeField] private RoadView _roadPrototype;
+        [SerializeField] private RoadView _roadPrototype = default;
         public RoadView[,] roads = new RoadView[50, 50];
         private Room _room;
 
