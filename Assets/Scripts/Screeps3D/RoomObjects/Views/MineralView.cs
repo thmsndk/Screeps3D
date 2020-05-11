@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    internal class MineralView : ObjectView, IMapViewComponent
+    internal class MineralView : MonoBehaviour, IObjectViewComponent, IMapViewComponent
     {
         public const string Path = "Prefabs/RoomObjects/mineral";
 
@@ -17,9 +17,12 @@ namespace Screeps3D.RoomObjects.Views
         private Vector3 _posRef;
         private Mineral _mineralObject;
 
-        internal override void Load(RoomObject roomObject)
+        public void Init()
         {
-            base.Load(roomObject);
+        }
+
+        public void Load(RoomObject roomObject)
+        {
             _mineralObject = roomObject as Mineral;
             if (_mineralObject != null)
             {
@@ -72,24 +75,12 @@ namespace Screeps3D.RoomObjects.Views
             transform.localPosition = roomObject.Position + (Vector3.up * 0.3f);
         }
 
-        internal override void Delta(JSONObject data)
+        public void Delta(JSONObject data)
         {
-            base.Delta(data);
-
-            //var posDelta = _posTarget - RoomObject.Position;
-
-            //if (posDelta.sqrMagnitude > .01)
-            //{
-            //    _posTarget = RoomObject.Position;
-            //} 
         }
 
-        private void Update()
+        public void Unload(RoomObject roomObject)
         {
-            if (_mineralObject == null)
-                return;
-            //transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
-            //_rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _tombstone.Rotation, Time.deltaTime * 5);
         }
 
         // IMapViewComponent *****************
