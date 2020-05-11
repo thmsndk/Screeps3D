@@ -77,12 +77,8 @@ namespace Screeps3D.RoomObjects.Views
             }
             // if tick changed
             if(_lastTickUpdate != ScreepsAPI.Time) {
-                StopCoroutine(_blink);
-                _blinking = false;
                 _currentEmission = _body.materials[1].GetFloat("EmissionStrength") - _emissionDecayFactor;
-                _body.materials[1].SetFloat("EmissionStrength", _currentEmission);
                 _lastTickUpdate = ScreepsAPI.Time;
-                Debug.Log("EmissionStrength " + _currentEmission.ToString());
             }
 
             if(!_blinking ) {
