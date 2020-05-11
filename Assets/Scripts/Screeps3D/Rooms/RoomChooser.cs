@@ -472,7 +472,7 @@ namespace Screeps3D.Rooms
             var go = PoolLoader.Load("Prefabs/RoomList/roomName");
             var text = go.GetComponent<TMP_Text>();
             text.text = RoomLink.FormatTMPLink(shardName, romName, $"{romName}");
-            go.transform.parent = _roomListContent.transform;
+            go.transform.SetParent(_roomListContent.transform);
         }
 
         private string GetServerPrefKey(string prefKey)
