@@ -9,7 +9,7 @@ namespace Screeps3D.RoomObjects.Views
 
         [SerializeField] private Renderer _mineral;
         [SerializeField] private Collider _collider;
-        [SerializeField] private new ScaleVisibility _vis;
+        [SerializeField] private ScaleVisibility _vis;
         //[SerializeField] private Transform _rotationRoot;
 
         private Quaternion _rotTarget;
