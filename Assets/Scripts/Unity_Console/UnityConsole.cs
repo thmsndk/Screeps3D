@@ -17,10 +17,10 @@ namespace Unity_Console
 
         public Action<string> OnInput;
     
-        [SerializeField] private ConsoleLine _prototype;
-        [SerializeField] private TMP_InputField _input;
-        [SerializeField] public FadePanel _panel;
-        [SerializeField] public RectTransform _content;
+        [SerializeField] private ConsoleLine _prototype = default;
+        [SerializeField] private TMP_InputField _input = default;
+        [SerializeField] public FadePanel _panel = default;
+        [SerializeField] public RectTransform _content = default;
         private List<ConsoleLine> _lines = new List<ConsoleLine>();
         private Queue<Message> _messages = new Queue<Message>();
         private float _nextMessage;

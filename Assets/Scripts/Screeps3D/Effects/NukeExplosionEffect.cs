@@ -10,7 +10,7 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/WFX_Nuke";
 
-        [SerializeField] private ParticleSystem nukeExplosionEffect;
+        [SerializeField] private ParticleSystem nukeExplosionEffect = default;
 
 
         private const float _spawnDuration = 30;

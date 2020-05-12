@@ -9,7 +9,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class StorePanel : SelectionSubpanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
 
         private IStoreObject _selected;
         private RoomObject _roomObject;

@@ -4,7 +4,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class CarryView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private GameObject _carry;
+        [SerializeField] private GameObject _carry = default;
         private IStoreObject _creep;
 
         public void Init()

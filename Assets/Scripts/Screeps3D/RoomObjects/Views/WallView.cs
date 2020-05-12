@@ -7,9 +7,9 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/constructedWall";
 
-        [SerializeField] private ScaleVisibility _vis;
-        [SerializeField] private MeshRenderer _rend;
-        [SerializeField] private Collider _collider;
+        [SerializeField] private ScaleVisibility _vis = default;
+        [SerializeField] private MeshRenderer _rend = default;
+        [SerializeField] private Collider _collider = default;
         
         public int roomPosX { get; set; }
         public int roomPosY { get; set; }

@@ -5,7 +5,7 @@ namespace Screeps3D.Rooms.Views
 {
     public class RoomView : MonoBehaviour
     {
-        [SerializeField] private ScaleVisibility _vis;
+        [SerializeField] private ScaleVisibility _vis = default;
         
         public Room Room { get; private set; }
         private IRoomViewComponent[] _viewComponents;

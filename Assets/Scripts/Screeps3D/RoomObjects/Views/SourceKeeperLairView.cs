@@ -7,7 +7,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/keeperLair";
         
-        [SerializeField] private ScaleVisibility _vis;
+        [SerializeField] private ScaleVisibility _vis = default;
         
 
         public void Init()

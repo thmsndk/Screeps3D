@@ -5,7 +5,7 @@ namespace Common
     public class AutoRotate : MonoBehaviour
     {
         [SerializeField] private Vector3 _rotation;
-        [SerializeField] private bool _mutateRandomly;
+        [SerializeField] private bool _mutateRandomly = default;
         private Vector3 _mutator;
 
         // Update is called once per frame

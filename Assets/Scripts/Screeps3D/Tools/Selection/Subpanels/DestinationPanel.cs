@@ -9,7 +9,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class DestinationPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         private IPortalDestination _destinationObject;
         private RoomObject _roomObject;
 

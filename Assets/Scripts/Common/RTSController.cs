@@ -4,7 +4,7 @@ namespace Common
 {
     public class RTSController : MonoBehaviour
     {
-        [SerializeField] private Collider _dragCollider;
+        [SerializeField] private Collider _dragCollider = default;
         private Vector3 _posLastFrame;
         private bool _dragging;
 

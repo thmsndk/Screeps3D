@@ -11,7 +11,7 @@ namespace Screeps3D.Tools.Selection
     {
         private List<SelectionSubpanel> _subpanels = new List<SelectionSubpanel>();
         
-        [SerializeField] private VerticalPanelGroup _panelGroup;
+        [SerializeField] private VerticalPanelGroup _panelGroup = default;
         
         private bool _inPosition;
         private float _targetRef;

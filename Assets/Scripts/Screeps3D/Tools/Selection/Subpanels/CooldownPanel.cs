@@ -7,7 +7,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class CooldownPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
 
         private RoomObject _roomObject;
         private ICooldownObject _cooldownObject;

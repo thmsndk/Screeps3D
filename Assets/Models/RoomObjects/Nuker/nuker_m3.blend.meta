@@ -4,8 +4,8 @@ ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable:
   - first:
-      74: 1989289236423521904
-    second: Default Take
+      0: 0
+    second: 
   - first:
       74: -623603649343465320
     second: Scene
@@ -95,7 +95,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

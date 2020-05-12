@@ -4,7 +4,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class FlagView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private MeshRenderer rend;
+        [SerializeField] private MeshRenderer rend = default;
         private Flag _flag;
 
         public void Init()

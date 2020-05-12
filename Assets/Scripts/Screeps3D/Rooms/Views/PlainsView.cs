@@ -4,6 +4,7 @@ namespace Screeps3D.Rooms.Views
 {
     public class PlainsView : MonoBehaviour, IRoomViewComponent
     {
+        private const string BaseColor = "BaseColor";
         private Renderer _rend;
         private float _original;
         private float _current;
@@ -32,7 +33,8 @@ namespace Screeps3D.Rooms.Views
             if (!_rend)
             {
                 _rend = GetComponent<Renderer>();
-                _original = _rend.material.color.r;
+                var baseColor = _rend.material.GetColor(BaseColor);
+                _original = baseColor.r;
             }
             _target = _original + .1f;
             enabled = true;
@@ -51,8 +53,10 @@ namespace Screeps3D.Rooms.Views
                 enabled = false;
                 return;
             }
-            _current = Mathf.SmoothDamp(_rend.material.color.r, _target, ref _targetRef, 1);
-            _rend.material.color = new Color(_current, _current, _current);
+            var baseColor = _rend.material.GetColor(BaseColor);
+
+            _current = Mathf.SmoothDamp(baseColor.r, _target, ref _targetRef, 1);
+            _rend.material.SetColor(BaseColor, new Color(_current, _current, _current));
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     internal class PowerCreepView : ObjectView
     {
-        [SerializeField] private Renderer _body;
-        [SerializeField] private Transform _rotationRoot;
+        [SerializeField] private Renderer _body = default;
+        [SerializeField] private Transform _rotationRoot = default;
 
         private Quaternion _rotTarget;
         private Vector3 _posTarget;
@@ -16,8 +16,9 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);
             _PowerCreep = roomObject as PowerCreep;
-            _body.material.SetTexture("_BaseColorMap", _PowerCreep?.Owner?.Badge); // main texture
-            //_body.material.mainTexture = _PowerCreep.Owner.Badge;
+            _body.material.SetTexture("ColorTexture", _PowerCreep?.Owner?.Badge); // main texture
+            _body.material.SetColor("BaseColor", new Color(0.5f, 0.5f, 0.5f, 1f));
+            _body.material.SetFloat("ColorMix", 1);
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;

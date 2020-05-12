@@ -13,7 +13,7 @@ namespace Screeps3D.Tools.Selection
 {
     public class EditFlag : BaseSingleton<EditFlag>
     {
-        [SerializeField] private EditFlagPopup _editFlagPopup;
+        [SerializeField] private EditFlagPopup _editFlagPopup = default;
 
         private void Start()
         {

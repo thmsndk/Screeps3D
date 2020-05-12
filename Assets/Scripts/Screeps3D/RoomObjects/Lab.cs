@@ -54,7 +54,7 @@ namespace Screeps3D.RoomObjects
                     ResourceAmount = this.Store.ContainsKey(ResourceType) ? this.Store[ResourceType] : 0;
                 }
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 throw;
             }

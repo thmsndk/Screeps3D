@@ -8,8 +8,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class HitpointsPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private ScaleAxes _meter = default;
         private IHitpointsObject _hitsObject;
         private RoomObject _roomObject;
 

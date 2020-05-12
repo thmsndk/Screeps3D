@@ -7,8 +7,8 @@ namespace Screeps3D.Rooms.Views
     {
         public const string Path = "Prefabs/mapDot";
         
-        [SerializeField] private ScaleVisibility _vis;
-        [SerializeField] private MeshRenderer _rend;
+        [SerializeField] private ScaleVisibility _vis = default;
+        [SerializeField] private MeshRenderer _rend = default;
         private MapView _mapView;
 
         public int X { get; private set; }

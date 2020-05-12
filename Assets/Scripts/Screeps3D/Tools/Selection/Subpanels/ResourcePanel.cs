@@ -9,9 +9,9 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class ResourcePanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _typeLabel;
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _typeLabel = default;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private ScaleAxes _meter = default;
         private IResourceObject _resourceObject;
         private RoomObject _roomObject;
 

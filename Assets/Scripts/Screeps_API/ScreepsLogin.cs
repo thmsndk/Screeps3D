@@ -14,19 +14,19 @@ namespace Screeps_API
 {
     public class ScreepsLogin : MonoBehaviour
     {
-        [SerializeField] private ScreepsAPI _api;
-        [SerializeField] private Toggle _save;
-        [SerializeField] private Toggle _ssl;
-        [SerializeField] private TMP_InputField _port;
-        [SerializeField] private TMP_InputField _username;
-        [SerializeField] private TMP_InputField _password;
-        [SerializeField] private TMP_InputField _token;
-        [SerializeField] private TMP_Dropdown _serverSelect;
-        [SerializeField] private Button _connect;
-        [SerializeField] private FadePanel _panel;
-        [SerializeField] private Button _addServer;
-        [SerializeField] private Button _removeServer;
-        [SerializeField] private Button _editServer;
+        [SerializeField] private ScreepsAPI _api = default;
+        [SerializeField] private Toggle _save = default;
+        [SerializeField] private Toggle _ssl = default;
+        [SerializeField] private TMP_InputField _port = default;
+        [SerializeField] private TMP_InputField _username = default;
+        [SerializeField] private TMP_InputField _password = default;
+        [SerializeField] private TMP_InputField _token = default;
+        [SerializeField] private TMP_Dropdown _serverSelect = default;
+        [SerializeField] private Button _connect = default;
+        [SerializeField] private FadePanel _panel = default;
+        [SerializeField] private Button _addServer = default;
+        [SerializeField] private Button _removeServer = default;
+        [SerializeField] private Button _editServer = default;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
         private CacheList _servers;
@@ -200,7 +200,7 @@ namespace Screeps_API
             }
 
             var selectedServer = _servers[_serverIndex];
-            var isPublic = selectedServer.Official;
+            var isPublic = (selectedServer.Type == SourceProviderType.Official);
 
             //_ssl.gameObject.SetActive(!isPublic);
             //_port.gameObject.SetActive(!isPublic);
@@ -213,7 +213,7 @@ namespace Screeps_API
             _password.gameObject.SetActive(!isPublic && showCredentialInput);
             _token.gameObject.SetActive(isPublic && showCredentialInput);
 
-            _removeServer.gameObject.SetActive(!selectedServer.Official);
+            _removeServer.gameObject.SetActive(selectedServer.Type != SourceProviderType.Official);
 
             if (!isPublic && (string.IsNullOrEmpty(selectedServer.Address.Port) || editServer))
             {
@@ -265,7 +265,7 @@ namespace Screeps_API
                     server.Online = true;
                     // TODO: timestamp of online status?
                     server.Users = users;
-                    server.Version = "v" + (server.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
+                    server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
                     UpdateServerList();
                 };
 
@@ -310,7 +310,6 @@ namespace Screeps_API
                                 cachedServer.LikeCount = server.LikeCount;
 
                                 //Backwards compatibility
-                                cachedServer.Official = server.Official;
                                 cachedServer.Type = server.Type;
                             }
                         }

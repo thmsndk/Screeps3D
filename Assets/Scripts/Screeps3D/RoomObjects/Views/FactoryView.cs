@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class FactoryView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay;
+        [SerializeField] private ScaleAxes _energyDisplay = default;
 
         private Factory _factory;
         // TODO: we also need the mineral on the location to get regen time if we want to do something specific in regards to that

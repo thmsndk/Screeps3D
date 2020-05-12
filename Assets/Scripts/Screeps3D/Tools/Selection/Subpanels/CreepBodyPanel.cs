@@ -13,9 +13,9 @@ namespace Screeps3D.Tools.Selection.Subpanels
     // TODO: info button that displays a tooltip with stats on hover?
     public class CreepBodyPanel : LinePanel
     {
-        [SerializeField] private TMP_Text _BodyPartCountLabel;
-        [SerializeField] private GridLayoutGroup _bodyParts;
-        [SerializeField] private CreepBodyPart _bodyPartPrefab;
+        [SerializeField] private TMP_Text _BodyPartCountLabel = default;
+        [SerializeField] private GridLayoutGroup _bodyParts = default;
+        [SerializeField] private CreepBodyPart _bodyPartPrefab = default;
 
         private RoomObject _roomObject;
         private ICreepBody _creep;

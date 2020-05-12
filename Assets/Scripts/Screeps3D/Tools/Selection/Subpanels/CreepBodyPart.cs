@@ -13,8 +13,8 @@ namespace Assets.Scripts.Screeps3D.Tools.Selection.Subpanels
 {
     public class CreepBodyPart : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] private Image _part;
-        [SerializeField] private Image _boost;
+        [SerializeField] private Image _part = default;
+        [SerializeField] private Image _boost = default;
 
         private CreepPart creepPart;
         

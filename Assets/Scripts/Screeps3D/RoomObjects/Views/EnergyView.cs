@@ -6,7 +6,7 @@ namespace Screeps3D.RoomObjects.Views
     // TODO: do we actually have anything that uses energyview anymore? should this script be replaced by storeview on most gameobjects?
     public class EnergyView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleVisibility _energyDisplay;
+        [SerializeField] private ScaleVisibility _energyDisplay = default;
 
         private IEnergyObject _energyObject;
         private IStoreObject _storeObject;

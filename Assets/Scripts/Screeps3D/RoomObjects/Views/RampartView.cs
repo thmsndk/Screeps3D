@@ -6,8 +6,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class RampartView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private Renderer renderer;
-
+        [SerializeField] private Renderer rend = default;
         private Rampart _rampart;
 
         public void Init()
@@ -46,9 +45,9 @@ namespace Screeps3D.RoomObjects.Views
                 //renderer.material.SetColor("_EmissionColor", Color.grey);
             }
 
-            renderer.material.SetColor("_BaseColor", color);
+            rend.material.SetColor("_BaseColor", color);
             
-            renderer.material.SetColor("_EmissiveColor", emissionColor);
+            rend.material.SetColor("_EmissiveColor", emissionColor);
             //renderer.material.SetColor("_EmissionColor", emissionColor);
         }
 

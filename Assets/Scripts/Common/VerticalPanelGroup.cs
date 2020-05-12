@@ -5,10 +5,10 @@ namespace Common
 {
     public class VerticalPanelGroup : MonoBehaviour
     {
-        [SerializeField] private VerticalPanelElement _element;
-        [SerializeField] private float _spacing;
-        [SerializeField] private float _bottomPadding;
-        [SerializeField] private bool _autoFindElements;
+        [SerializeField] private VerticalPanelElement _element = default;
+        [SerializeField] private float _spacing = default;
+        [SerializeField] private float _bottomPadding = default;
+        [SerializeField] private bool _autoFindElements = default;
         
         private List<VerticalPanelElement> _elements = new List<VerticalPanelElement>();
         private bool _updateGeometry;

@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - EmissionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
         m_Texture: {fileID: 2800000, guid: fe4b46d5e6121d64db07a8f49d38a30a, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -189,6 +193,7 @@ Material:
     - MetallicStrength: 0.22
     - NormalStrenght: 0.5
     - SmoothStrength: 0.2
+    - UVScale: 1
     - Vector1_8128E921: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
@@ -322,7 +327,8 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - BaseColor: {r: 0.122641504, g: 0.09893212, b: 0.06537023, a: 0}
+    - BaseColor: {r: 0, g: 0, b: 0, a: 0}
+    - EmissionColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
     - _BaseColor: {r: 0.46226418, g: 0.44373, b: 0.42955682, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.46226412, g: 0.44372997, b: 0.4295568, a: 1}

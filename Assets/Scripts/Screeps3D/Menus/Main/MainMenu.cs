@@ -8,8 +8,8 @@ namespace Screeps3D.Menus.Main
 {
     public class MainMenu : VerticalPanelElement
     {
-        [SerializeField] private TextMeshProUGUI _description;
-        [SerializeField] private Toggle _toggle;
+        [SerializeField] private TextMeshProUGUI _description = default;
+        [SerializeField] private Toggle _toggle = default;
 
         private void Start()
         {

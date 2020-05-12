@@ -5,8 +5,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     internal class ResourceView : ObjectView
     {
-        [SerializeField] private Renderer _renderer;
-        [SerializeField] private ScaleAxes _scale;
+        [SerializeField] private Renderer _renderer = default;
+        [SerializeField] private ScaleAxes _scale = default;
 
         private bool _initialized;
         private Resource _resource;

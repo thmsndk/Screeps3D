@@ -7,10 +7,8 @@ namespace Screeps3D.RoomObjects.Views
     [ExecuteAlways]
     public class PlaceHolderObjectView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleVisibility _vis;
-        [SerializeField] private GameObject _rotation;
-        [SerializeField] private TextMeshPro _label;
-        [SerializeField] private LineRenderer _line;
+        [SerializeField] private GameObject _rotation = default;
+        [SerializeField] private TextMeshPro _label = default;
 
         private PlaceHolderRoomObject _roomObject;
 

@@ -5,7 +5,7 @@ namespace Screeps3D.World.Views
 {
     public class WorldView : MonoBehaviour
     {
-        //[SerializeField] private ScaleVisibility _vis;
+        //[SerializeField] private ScaleVisibility _vis = default;
 
         public WorldOverlay Overlay { get; private set; }
         private IWorldOverlayViewComponent[] _viewComponents;

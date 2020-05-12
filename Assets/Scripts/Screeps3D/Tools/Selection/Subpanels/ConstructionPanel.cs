@@ -8,7 +8,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
     public class ConstructionPanel : LinePanel
     {
 
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         
         public override string Name
         {

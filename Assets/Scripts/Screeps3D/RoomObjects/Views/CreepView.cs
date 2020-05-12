@@ -4,8 +4,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     internal class CreepView : ObjectView
     {
-        [SerializeField] private Renderer _body;
-        [SerializeField] private Transform _rotationRoot;
+        [SerializeField] private Renderer _body = default;
+        [SerializeField] private Transform _rotationRoot = default;
 
         private Quaternion _rotTarget;
         private Vector3 _posTarget;

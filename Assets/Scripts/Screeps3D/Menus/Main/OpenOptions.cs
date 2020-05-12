@@ -5,7 +5,7 @@ namespace Screeps3D.Menus.Main
 {
     public class OpenOptions : MainMenuItem
     {
-        [SerializeField] private OptionsMenu _options;
+        [SerializeField] private OptionsMenu _options = default;
         
         public override string Description
         {

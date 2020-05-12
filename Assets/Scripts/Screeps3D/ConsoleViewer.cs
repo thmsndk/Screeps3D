@@ -11,7 +11,7 @@ namespace Screeps3D
 {
     public class ConsoleViewer : MonoBehaviour
     {
-        [SerializeField] private UnityConsole _console;
+        [SerializeField] private UnityConsole _console = default;
 
         private void Start()
         {

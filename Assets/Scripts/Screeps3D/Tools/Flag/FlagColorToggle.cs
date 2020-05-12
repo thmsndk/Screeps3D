@@ -6,15 +6,13 @@ namespace Screeps3D.Tools.Selection
 {
     public class FlagColorToggle : MonoBehaviour
     {
-        [SerializeField] private ToggleGroup _colors;
-        [SerializeField] private Toggle _colorPrefab;
+        [SerializeField] private ToggleGroup _colors = default;
+        [SerializeField] private Toggle _colorPrefab = default;
         // need the group to fill with colors
         // need to determine wich one is toggled on.
         // _selectionToggle.onValueChanged.AddListener(isOn => ToggleInput(isOn, ToolType.Selection));
         public Constants.FlagColor SelectedColor { get; private set; }
         public Action<Constants.FlagColor> OnColorChange;
-
-        private bool initialized;
 
         private void Start()
         {
@@ -42,8 +40,6 @@ namespace Screeps3D.Tools.Selection
                 toggle.isOn = color == SelectedColor;
                 this.ScaleToggleButton(toggle, toggle.isOn);
             }
-
-            initialized = true;
         }
 
         private void ToggleInput(Toggle toggle, bool isOn, Constants.FlagColor flagColor)

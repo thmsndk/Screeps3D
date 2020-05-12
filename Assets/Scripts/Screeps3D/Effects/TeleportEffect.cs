@@ -10,8 +10,8 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/TeleportEffect";
 
-        [SerializeField] private ParticleSystem teleportEffect;
-        [SerializeField] private ParticleSystem spawnEffect;
+        [SerializeField] private ParticleSystem teleportEffect = default;
+        [SerializeField] private ParticleSystem spawnEffect = default;
 
         public void Load(RoomObject origin)
         {

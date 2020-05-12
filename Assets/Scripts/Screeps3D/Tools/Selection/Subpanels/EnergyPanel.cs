@@ -8,8 +8,8 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class EnergyPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private ScaleAxes _meter;
+        [SerializeField] private TextMeshProUGUI _label = default;
+        [SerializeField] private ScaleAxes _meter = default;
         private IEnergyObject _energyObject;
         private RoomObject _roomObject;
 

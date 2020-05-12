@@ -5,7 +5,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class ExtensionView: MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _size;
+        [SerializeField] private ScaleAxes _size = default;
         private Extension _extension;
 
         public void Init()

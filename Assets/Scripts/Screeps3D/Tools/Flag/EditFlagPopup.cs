@@ -11,12 +11,12 @@ namespace Screeps3D.Tools.Selection
 
     public class EditFlagPopup : MonoBehaviour
     {
-        [SerializeField] private TMP_InputField _flagName;
-        [SerializeField] private TMP_Text _flagNameWarning;
-        [SerializeField] private FlagColorToggle _primaryFlagColor;
-        [SerializeField] private FlagColorToggle _secondaryFlagColor;
-        [SerializeField] private Button _cancelButton;
-        [SerializeField] private Button _okButton;
+        [SerializeField] private TMP_InputField _flagName = default;
+        [SerializeField] private TMP_Text _flagNameWarning = default;
+        [SerializeField] private FlagColorToggle _primaryFlagColor = default;
+        [SerializeField] private FlagColorToggle _secondaryFlagColor = default;
+        [SerializeField] private Button _cancelButton = default;
+        [SerializeField] private Button _okButton = default;
 
         private bool _newFlag;
         private Flag _flag;

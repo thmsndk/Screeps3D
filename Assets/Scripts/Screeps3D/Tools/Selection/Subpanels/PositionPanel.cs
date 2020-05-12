@@ -7,7 +7,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class PositionPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         
         private RoomObject _roomObject;
         private Creep _creep;

@@ -9,7 +9,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class SpawningInPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         private ISpawningInObject _spawningInObject;
         private RoomObject _roomObject;
 

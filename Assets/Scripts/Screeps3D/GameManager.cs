@@ -12,8 +12,8 @@ namespace Screeps3D
         public static GameMode CurrentMode { get; private set; }
         public static event Action<GameMode> OnModeChange;
 
-        [SerializeField] private GameMode _defaultMode;
-        [SerializeField] private FadePanel _exitCue;
+        [SerializeField] private GameMode _defaultMode = default;
+        [SerializeField] private FadePanel _exitCue = default;
 
         public Dictionary<string, Color> PlayerColors { get; private set; }
 

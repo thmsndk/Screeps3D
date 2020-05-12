@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 135201818668498066}
   - component: {fileID: 114612420582581000}
   - component: {fileID: 1453467313594893630}
+  - component: {fileID: 3020949016984270398}
   m_Layer: 0
   m_Name: mineral
   m_TagString: Untagged
@@ -156,3 +157,15 @@ MonoBehaviour:
   _mineral: {fileID: 23407070794174552}
   _collider: {fileID: 135201818668498066}
   _vis: {fileID: 114612420582581000}
+--- !u!114 &3020949016984270398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470691814702614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c143c9faac4c8193ea547a8365995a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

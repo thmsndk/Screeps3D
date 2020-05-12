@@ -5,8 +5,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class ConstructionView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private Image _circleOutline;
-        [SerializeField] private Image _circleFill;
+        [SerializeField] private Image _circleOutline = default;
+        [SerializeField] private Image _circleFill = default;
         private ConstructionSite _site;
         private float _offset;
         private float _fillTarget;

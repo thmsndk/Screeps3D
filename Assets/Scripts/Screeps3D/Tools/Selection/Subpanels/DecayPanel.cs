@@ -8,7 +8,7 @@ namespace Screeps3D.Tools.Selection.Subpanels
 {
     public class DecayPanel : LinePanel
     {
-        [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private TextMeshProUGUI _label = default;
         
         private IDecay _decay;
 
