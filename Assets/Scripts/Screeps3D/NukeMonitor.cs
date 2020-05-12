@@ -1,4 +1,4 @@
-﻿using Common;
+using Common;
 using Screeps_API;
 using Screeps3D;
 using Screeps3D.Player;
@@ -38,6 +38,11 @@ namespace Assets.Scripts.Screeps3D
         private IEnumerator getNukes;
 
         private bool nukesInitialized = false;
+
+        // Should we just have the raw data available? and then only generate overlays on the current shard?
+        public Dictionary<string, NukeMissileOverlay> Nukes => _nukes;
+
+        public Action OnNukesRefreshed;
 
         private void Start()
         {
@@ -203,6 +208,8 @@ namespace Assets.Scripts.Screeps3D
                             // TODO: detect removed nukes and clean up the arc / missile / view
 
                             if (!this.nukesInitialized) { this.nukesInitialized = true; }
+
+                            OnNukesRefreshed?.Invoke();
                         });
 
 
