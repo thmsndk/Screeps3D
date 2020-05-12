@@ -52,22 +52,22 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_invadeCore != null)
             {
-                var action = _invadeCore.Actions.FirstOrDefault(c => !c.Value.IsNull);
-                if (action.Value == null)
-                {
-                    _idle = true;
-                    return; // Early
-                }
-                _idle = false;
-                if (_rotator != null) StopCoroutine(_rotator);
+                // // var action = _invadeCore.Actions.FirstOrDefault(c => !c.Value.IsNull);
+                // if (action.Value == null)
+                // {
+                //     _idle = true;
+                //     return; // Early
+                // }
+                // _idle = false;
+                // if (_rotator != null) StopCoroutine(_rotator);
 
-                var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
-                _rotationRoot.rotation = Quaternion.LookRotation(endPos - _invadeCore.Position);
-                _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
-                EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
+                // var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
+                // _rotationRoot.rotation = Quaternion.LookRotation(endPos - _invadeCore.Position);
+                // _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
+                // EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
                 
-                _powerUp = PowerUp();
-                StartCoroutine(_powerUp);
+                // _powerUp = PowerUp();
+                // StartCoroutine(_powerUp);
             }
             // StartCoroutine(Beam.Draw(_invadeCore, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
@@ -97,7 +97,7 @@ namespace Screeps3D.RoomObjects.Views
                 setEmission(Color.black, 0f);
             }
 
-            if (!_idle || _rotating || !(Time.time > _nextRot ))  {
+            if (!_idle || _rotating)  {
                 return; // Early
             }            
 

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 namespace Screeps3D.RoomObjects
 {
 
-    public class InvaderCore : OwnedStoreStructure, ICooldownObject, IActionObject
+    public class InvaderCore : OwnedStoreStructure, ICooldownObject//, IActionObject
     {
         // TODO: Effects
         public float Cooldown { get; set; }
-        public Dictionary<string, JSONObject> Actions { get; set; }
+        // public Dictionary<string, JSONObject> Actions { get; set; }
 
         internal InvaderCore()
         {
-            Actions = new Dictionary<string, JSONObject>();
+            // Actions = new Dictionary<string, JSONObject>();
         }
 
         internal override void Unpack(JSONObject data, bool initial)

@@ -34,7 +34,7 @@ namespace Screeps3D
         public const string TypeFactory = "factory";
         public const string TypeDeposit = "deposit";
         public const string TypeRuin = "ruin";
-        public const string TypeInvaderCore = "invadercore";
+        public const string TypeInvaderCore = "invaderCore";
 
 
 
