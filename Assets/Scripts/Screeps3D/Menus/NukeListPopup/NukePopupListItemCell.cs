@@ -16,14 +16,14 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
     //containing this component as a cell in a TableView
     public class NukePopupListItemCell : TableViewCell
     {
-        public Image OnlineIndicator;
-        public Text ServerNameLabel;
-        public Text ServerAddressHostLabel;
-        public Text ServerAddressPortLabel;
-        public Toggle ServerAddressSSLToggle;
-        public Text UserCountLabel;
-        public Text LikesLabel;
-        public Text PackageVersionLabel;
+        public Text LaunchRoom;
+        public Text LaunchTime;
+        public Text ImpactRoom;
+        public Text ImpactTime;
+        public Text TicksLeft;
+        public Text ETAEarly;
+        public Text ETALate;
+
 
         public OnNukeSelected onSelected;
 
@@ -47,7 +47,17 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
         {
             this.nuke = nuke;
 
-            ServerNameLabel.text = nuke.LaunchRoom?.Name;
+            LaunchRoom.text = nuke.LaunchRoom?.RoomName;
+            LaunchTime.text = nuke.InitialLaunchTick.ToString();
+
+            ImpactRoom.text = nuke.ImpactRoom?.RoomName;
+            ImpactTime.text = nuke.LandingTime.ToString();
+
+            TicksLeft.text = (nuke.LandingTime - ScreepsAPI.Time).ToString();
+
+            ETAEarly.text = nuke.EtaEarly.ToString();
+            ETALate.text = nuke.EtaLate.ToString();
+
 
             //if (buttonImage != null)
             //{

@@ -196,6 +196,9 @@ namespace Assets.Scripts.Screeps3D
                                     var etaEarly = eta.AddSeconds(-diff);
                                     var etaLate = eta.AddSeconds(diff);
 
+                                    overlay.EtaEarly = etaEarly;
+                                    overlay.EtaLate = etaLate;
+
                                     Debug.Log($"{id} {overlay?.ImpactRoom?.Name} {eta.ToString()} => {etaEarly.ToString()} - {etaLate.ToString()}");
                                     Debug.Log($"TicksLeft:{ticksLeft} ETA:{etaSeconds}s Early:{etaEarly}s Late:{etaLate}s");
                                 }

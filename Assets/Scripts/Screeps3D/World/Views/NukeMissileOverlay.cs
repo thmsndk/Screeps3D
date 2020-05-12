@@ -1,4 +1,5 @@
-﻿using Screeps3D.Rooms;
+﻿using System;
+using Screeps3D.Rooms;
 using UnityEngine;
 
 namespace Screeps3D.World.Views
@@ -24,5 +25,7 @@ namespace Screeps3D.World.Views
         public long LandingTime { get; internal set; }
         public long InitialLaunchTick { get; internal set; }
         public float Progress { get; internal set; }
+        public DateTime EtaEarly { get; internal set; }
+        public DateTime EtaLate { get; internal set; }
     }
 }
