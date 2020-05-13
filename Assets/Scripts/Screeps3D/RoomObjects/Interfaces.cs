@@ -74,6 +74,16 @@ namespace Screeps3D.RoomObjects
         float Cooldown { get; set; }
     }
 
+    internal interface IEffect {
+        string effect {get; set;}
+        string power {get; set;}
+        long endTime {get; set;}
+        long duration {get; set;}
+    }
+    internal interface IEffectObject {
+        JSONObject[] Effects {get; set;}
+    }
+
     internal interface IHitpointsObject
     {
         float Hits { get; set; }

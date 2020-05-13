@@ -15,34 +15,35 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _top;
         [SerializeField] private Transform _rotationRoot;
         private Quaternion _targetRot;
-        private bool _idle;
-        private float _time;
-        private float _nextRot;
-        private bool _rotating;
         private InvaderCore _invadeCore;
-        private Color _actionColor;
+        private Color _actionColor = Color.red;
         private LineRenderer _lineRenderer;
-        private IEnumerator _powerUp;
-        private IEnumerator _rotator;
+        private IEnumerator _pulse;
+        private bool _pulsing;
+        private bool _idle;
 
         public void Init()
         {
             _lineRenderer = gameObject.GetComponent<LineRenderer>();
         }
 
-        private void setEmission(Color color, float strength) {
+        private void pulseEmission() {
 
-            _top.material.SetFloat("EmissionStrength", strength);
-            _top.material.SetColor("EmissionColor", color);
+            float tSin = Mathf.Sin(Time.time);
 
-            _decayDisplay.material.SetFloat("EmissionStrength", strength);
-            _decayDisplay.material.SetColor("EmissionColor", color);            
+            // Texture
+            _core.materials[0].SetColor("EmissionColor", _actionColor);
+            _core.materials[0].SetFloat("EmissionStrength", 6 + Mathf.Abs(tSin) * 8);
+
+            // decay on top
+            _decayDisplay.materials[0].SetFloat("EmissionStrength", 2 + Mathf.Abs(tSin) * 4);         
         }
 
         public void Load(RoomObject roomObject)
         {
             _invadeCore = roomObject as InvaderCore;
-            _time = 0f;
+            _actionColor = Color.red;
+            _pulsing = false;
             AdjustScale();
         }
 
@@ -52,24 +53,18 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_invadeCore != null)
             {
-                // // var action = _invadeCore.Actions.FirstOrDefault(c => !c.Value.IsNull);
-                // if (action.Value == null)
-                // {
-                //     _idle = true;
-                //     return; // Early
-                // }
-                // _idle = false;
-                // if (_rotator != null) StopCoroutine(_rotator);
-
-                // var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
-                // _rotationRoot.rotation = Quaternion.LookRotation(endPos - _invadeCore.Position);
-                // _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
-                // EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
-                
-                // _powerUp = PowerUp();
-                // StartCoroutine(_powerUp);
+                var action = _invadeCore.Actions.FirstOrDefault(c => !c.Value.IsNull);
+                if (action.Value == null)
+                {
+                    return;
+                }
+                if(action.Key == "reserveController") {
+                    var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
+                    EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 1.8f, 0.8f));
+                } else {
+                }
+                _decayDisplay.materials[0].SetColor("EmissionColor", _actionColor);
             }
-            // StartCoroutine(Beam.Draw(_invadeCore, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
 
         public void Unload(RoomObject roomObject)
@@ -92,49 +87,18 @@ namespace Screeps3D.RoomObjects.Views
                 // TODO: perhaps we want it to point downwards towards the ground?
                 return;
             }
-
-            if(_idle) {
-                setEmission(Color.black, 0f);
-            }
-
-            if (!_idle || _rotating)  {
-                return; // Early
-            }            
-
-            _rotator = Rotate();
-            StartCoroutine(_rotator);
+            // Debug.Log("Update _invadeCore.Effects.ToString: " +  _invadeCore.Effects.ToString());
+            pulseEmission();
+            return;
         }
 
-        private IEnumerator Rotate()
-        {
-            var direction = Random.value > 0.5 ? 1 : -1;
-            _targetRot = _rotationRoot.rotation * Quaternion.Euler(0, 180 * Random.value * direction, 0);
-            _rotating = true;
-            while (_rotationRoot.rotation != _targetRot)
-            {
-                _rotationRoot.rotation = Quaternion.Slerp(_rotationRoot.rotation, _targetRot, Time.deltaTime);
-                yield return null;
-            }
-            _nextRot = Time.time + Random.value + 1;
-            _rotating = false;
-        }
-
-        private IEnumerator PowerUp() {
-            var targetEmission = 150;
-            setEmission(_actionColor, 0f);
-            // powerUp - brightness up
-            while (_core.material.GetFloat("EmissionStrength") < targetEmission)
-            {    
-                setEmission(_actionColor, _core.material.GetFloat("EmissionStrength") +15f);
-                yield return null;
-            }
-            // powerUp - wind down
-            while (_core.material.GetFloat("EmissionStrength") > 0)
-            {    
-                setEmission(_actionColor, _core.material.GetFloat("EmissionStrength") -5f);
-                yield return null;
-            }
-            setEmission(Color.black, 0f);
-        }
+        // private IEnumerator Pulse() {
+        //     var targetEmission = 150;
+        //     _pulsing = true;
+        //     // while(true) {                
+        //     // }
+        //     _pulsing = false;
+        //     Debug.Log("Finished Pulse(), setting _pulsing to " + _pulsing.ToString());
+        // }
     }
 }

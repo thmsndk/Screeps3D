@@ -122,6 +122,27 @@ namespace Screeps3D.RoomObjects
             }
         }
 
+        internal static void Effects(IEffectObject obj, JSONObject data)
+        {
+            // Invader Core effects example:
+            // "effects":[
+            //     {"effect":1001,"power":1001,"endTime":2,641389E+07,"duration":5000},
+            //     {"effect":1002,"power":1002,"endTime":2,649596E+07,"duration":82074}
+            // ],
+
+            // var effects = data["effects"];
+
+            // if (effectsArray != null)
+            // {
+            //     effectsArray.Clear();
+            //     foreach (var effect in effects)
+            //     {
+            //         var actionData = actionLog[key];
+            //         actionObject.Actions[key] = actionData;
+            //     }
+            // }
+        }
+
         internal static void Progress(IProgress progressObj, JSONObject data)
         {
             var progressData = data["progress"];
