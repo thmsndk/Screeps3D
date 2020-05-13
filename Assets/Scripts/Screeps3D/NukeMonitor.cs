@@ -108,7 +108,7 @@ namespace Assets.Scripts.Screeps3D
 
                 // We might have an issue if people use custom shard names, so we can't use shardName, because playerposition shardname is shardX
                 var shardIndex = PlayerPosition.Instance.ShardLevel;
-
+                Debug.LogError("shardIndex " + shardIndex.ToString());
                 // Should probably cache this, and refresh it at an interval to detect new nukes.
                 ScreepsAPI.Http.GetExperimentalNukes((jsonString) =>
                 {
@@ -145,23 +145,23 @@ namespace Assets.Scripts.Screeps3D
                                         NotifyText.Message($"{nukesShardName} => Nuclear Launch Detected", Color.red);
                                     }
 
-                                    overlay = new NukeMissileOverlay(id);
+                                    // overlay = new NukeMissileOverlay(id);
                                     _nukes.Add(key, overlay);
                                 }
 
-                                // TODO: overlay.Unpack?
+                                // // TODO: overlay.Unpack?
 
-                                if (overlay.LaunchRoom == null)
-                                {
-                                    overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
+                                // if (overlay.LaunchRoom == null)
+                                // {
+                                //     overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
 
-                                }
+                                // }
 
-                                if (overlay.ImpactRoom == null)
-                                {
-                                    overlay.ImpactRoom = RoomManager.Instance.Get(nuke["room"].str, shardName);
-                                    overlay.ImpactPosition = PosUtility.Convert(nuke, overlay.ImpactRoom);
-                                }
+                                // if (overlay.ImpactRoom == null)
+                                // {
+                                //     overlay.ImpactRoom = RoomManager.Instance.Get(nuke["room"].str, shardName);
+                                //     overlay.ImpactPosition = PosUtility.Convert(nuke, overlay.ImpactRoom);
+                                // }
 
                                 var nukeLandTime = nuke["landTime"];
 
@@ -170,9 +170,9 @@ namespace Assets.Scripts.Screeps3D
                                 var initialLaunchTick = Math.Max(landingTime - Constants.NUKE_TRAVEL_TICKS, 0);
                                 var progress = (float)(time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
 
-                                overlay.LandingTime = landingTime;
-                                overlay.InitialLaunchTick = initialLaunchTick;
-                                overlay.Progress = progress;
+                                // overlay.LandingTime = landingTime;
+                                // overlay.InitialLaunchTick = initialLaunchTick;
+                                // overlay.Progress = progress;
 
                                 var shard = _shardInfo[shardIndex];
                                 if (shard != null && shard.AverageTick.HasValue)
@@ -206,34 +206,34 @@ namespace Assets.Scripts.Screeps3D
                         });
 
 
-                    /* Example
-                     *  {
-                            "ok": 1,
-                            "nukes": {
-                                "shard0": [],
-                                "shard1": [],
-                                "shard2": [{
-                                        "_id": "5d26127173fcd27b55a7ef39",
-                                        "type": "nuke",
-                                        "room": "W23S15",
-                                        "x": 12,
-                                        "y": 37,
-                                        "landTime": 17300541,
-                                        "launchRoomName": "W31S18"
-                                    }, {
-                                        "_id": "5d26aa11385277180e5c2187",
-                                        "type": "nuke",
-                                        "room": "W22S22",
-                                        "x": 23,
-                                        "y": 22,
-                                        "landTime": 17311981,
-                                        "launchRoomName": "W17S28"
-                                    }
-                                ],
-                                "shard3": []
-                            }
-                        }
-                     */
+                //     /* Example
+                //      *  {
+                //             "ok": 1,
+                //             "nukes": {
+                //                 "shard0": [],
+                //                 "shard1": [],
+                //                 "shard2": [{
+                //                         "_id": "5d26127173fcd27b55a7ef39",
+                //                         "type": "nuke",
+                //                         "room": "W23S15",
+                //                         "x": 12,
+                //                         "y": 37,
+                //                         "landTime": 17300541,
+                //                         "launchRoomName": "W31S18"
+                //                     }, {
+                //                         "_id": "5d26aa11385277180e5c2187",
+                //                         "type": "nuke",
+                //                         "room": "W22S22",
+                //                         "x": 23,
+                //                         "y": 22,
+                //                         "landTime": 17311981,
+                //                         "launchRoomName": "W17S28"
+                //                     }
+                //                 ],
+                //                 "shard3": []
+                //             }
+                //         }
+                //      */
 
                 });
 
