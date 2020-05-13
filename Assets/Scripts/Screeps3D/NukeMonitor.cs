@@ -145,23 +145,23 @@ namespace Assets.Scripts.Screeps3D
                                         NotifyText.Message($"{nukesShardName} => Nuclear Launch Detected", Color.red);
                                     }
 
-                                    // overlay = new NukeMissileOverlay(id);
+                                    overlay = new NukeMissileOverlay(id);
                                     _nukes.Add(key, overlay);
                                 }
 
                                 // // TODO: overlay.Unpack?
 
-                                // if (overlay.LaunchRoom == null)
-                                // {
-                                //     overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
+                                if (overlay.LaunchRoom == null)
+                                {
+                                    overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
 
-                                // }
+                                }
 
-                                // if (overlay.ImpactRoom == null)
-                                // {
-                                //     overlay.ImpactRoom = RoomManager.Instance.Get(nuke["room"].str, shardName);
-                                //     overlay.ImpactPosition = PosUtility.Convert(nuke, overlay.ImpactRoom);
-                                // }
+                                if (overlay.ImpactRoom == null)
+                                {
+                                    overlay.ImpactRoom = RoomManager.Instance.Get(nuke["room"].str, shardName);
+                                    overlay.ImpactPosition = PosUtility.Convert(nuke, overlay.ImpactRoom);
+                                }
 
                                 var nukeLandTime = nuke["landTime"];
 
@@ -170,9 +170,9 @@ namespace Assets.Scripts.Screeps3D
                                 var initialLaunchTick = Math.Max(landingTime - Constants.NUKE_TRAVEL_TICKS, 0);
                                 var progress = (float)(time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
 
-                                // overlay.LandingTime = landingTime;
-                                // overlay.InitialLaunchTick = initialLaunchTick;
-                                // overlay.Progress = progress;
+                                overlay.LandingTime = landingTime;
+                                overlay.InitialLaunchTick = initialLaunchTick;
+                                overlay.Progress = progress;
 
                                 var shard = _shardInfo[shardIndex];
                                 if (shard != null && shard.AverageTick.HasValue)

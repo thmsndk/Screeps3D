@@ -8,6 +8,7 @@ namespace Screeps3D.World.Views
     public class NukeMissileView : MonoBehaviour, IWorldOverlayViewComponent
     {
         public NukeMissileOverlay Overlay { get; private set; }
+        [SerializeField] private Renderer _nuke;        
 
         private NukeMissileArchRenderer arcRenderer;
 
