@@ -61,6 +61,27 @@ namespace Screeps3D
             }
         }
 
+        public void ScanRooms(List<string> rooms, Action<string> onSuccess = null)
+        {
+            var distinctRooms = rooms.Distinct().ToList();
+            Debug.Log($"Getting mapstats {distinctRooms.Count}"); // 10 seconds
+            var shardName = PlayerPosition.Instance.ShardName;
+            ScreepsAPI.Http.GetMapStats(distinctRooms, shardName, "owner0", (jsonString) => {
+                var result = new JSONObject(jsonString);
+                while (UnpackUsers(result, false).MoveNext())
+                {
+
+                }
+
+                while (UnpackRooms(result, false).MoveNext())
+                {
+
+                }
+
+                onSuccess?.Invoke(jsonString);
+            });
+        }
+
         private void GetMapStatsCallback(string jsonString)
         {
             StartCoroutine(UnpackMapStatsData(jsonString));
@@ -74,6 +95,11 @@ namespace Screeps3D
             yield return StartCoroutine(UnpackUsers(result)); // 14 seconds
             Debug.Log("Unpacking users done");
 
+            yield return UnpackRooms(result);
+        }
+
+        private IEnumerator UnpackRooms(JSONObject result, bool wait = true)
+        {
             var stats = result["stats"];
             Debug.Log($"Unpacking rooms {stats?.keys?.Count}"); // 14 seconds
             var index = 0;
@@ -88,7 +114,7 @@ namespace Screeps3D
             {
                 index++;
 
-                if (index % 100 == 0)
+                if (wait && index % 100 == 0)
                 {
                     //Debug.Log(index);
                     yield return new WaitForSeconds(0.1f);
@@ -110,7 +136,7 @@ namespace Screeps3D
             Debug.Log("Unpacking rooms done");
         }
 
-        private IEnumerator UnpackUsers(JSONObject data)
+        private IEnumerator UnpackUsers(JSONObject data, bool wait = true)
         {
             var usersData = data["users"];
             if (usersData == null)
@@ -129,7 +155,7 @@ namespace Screeps3D
             {
                 index++;
 
-                if (index % 10 == 0)
+                if (wait && index % 10 == 0)
                 {
                     //Debug.Log(index);
                     yield return new WaitForSeconds(0.1f);

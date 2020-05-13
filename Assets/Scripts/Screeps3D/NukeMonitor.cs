@@ -138,6 +138,8 @@ namespace Assets.Scripts.Screeps3D
                                 ScreepsAPI.Time = time = (long)timeData.n;
                             }
 
+                            var roomsToGetMapStatsFrom = new List<string>();
+
                             foreach (var nuke in shardNukes)
                             {
                                 var id = nuke["_id"].str; // should probably switch to UnPackUtility later.
@@ -158,13 +160,17 @@ namespace Assets.Scripts.Screeps3D
 
                                 if (overlay.LaunchRoom == null)
                                 {
-                                    overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
+                                    var launchRoomName = nuke["launchRoomName"].str;
+                                    roomsToGetMapStatsFrom.Add(launchRoomName);
+                                    overlay.LaunchRoom = RoomManager.Instance.Get(launchRoomName, shardName);
 
                                 }
 
                                 if (overlay.ImpactRoom == null)
                                 {
-                                    overlay.ImpactRoom = RoomManager.Instance.Get(nuke["room"].str, shardName);
+                                    var impactRoomName = nuke["room"].str;
+                                    roomsToGetMapStatsFrom.Add(impactRoomName);
+                                    overlay.ImpactRoom = RoomManager.Instance.Get(impactRoomName, shardName);
                                     overlay.ImpactPosition = PosUtility.Convert(nuke, overlay.ImpactRoom);
                                 }
 
@@ -211,6 +217,14 @@ namespace Assets.Scripts.Screeps3D
                             // TODO: detect removed nukes and clean up the arc / missile / view
 
                             if (!this.nukesInitialized) { this.nukesInitialized = true; }
+
+                            if (roomsToGetMapStatsFrom.Count > 0)
+                            {
+                                Debug.Log($"Nuke monitor requested {roomsToGetMapStatsFrom.Count} rooms to be scanned");
+                                MapStatsUpdater.Instance.ScanRooms(roomsToGetMapStatsFrom, (json) => {
+                                    OnNukesRefreshed?.Invoke();
+                                });
+                            }
 
                             OnNukesRefreshed?.Invoke();
                         });

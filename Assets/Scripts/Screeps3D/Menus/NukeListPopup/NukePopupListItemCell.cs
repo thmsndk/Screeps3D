@@ -61,7 +61,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             LaunchTime.text = nuke.InitialLaunchTick.ToString();
 
             // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
-            var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.Name);
+            var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.RoomName);
             if (launchRoomInfo != null)
             {
                 LaunchRoomOwnerName.enabled = true;
@@ -79,7 +79,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             ImpactRoom.text = nuke.ImpactRoom?.RoomName;
             ImpactTime.text = nuke.LandingTime.ToString();
 
-            var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.Name);
+            var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.ImpactRoom?.RoomName);
             if (impactRoomInfo != null)
             {
                 ImpactRoomOwnerName.enabled = true;
@@ -100,7 +100,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             ETAEarly.text = nuke.EtaEarly.ToString();
             ETALate.text = nuke.EtaLate.ToString();
 
-            Progress.fillAmount = nuke.Progress / 100f;
+            Progress.fillAmount = nuke.Progress;// / 100f;
 
 
 
