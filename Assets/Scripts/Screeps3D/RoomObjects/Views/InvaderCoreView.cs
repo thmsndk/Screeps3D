@@ -61,9 +61,7 @@ namespace Screeps3D.RoomObjects.Views
                 if(action.Key == "reserveController") {
                     var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
                     EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 1.8f, 0.8f));
-                } else {
                 }
-                _decayDisplay.materials[0].SetColor("EmissionColor", _actionColor);
             }
         }
 
@@ -91,14 +89,5 @@ namespace Screeps3D.RoomObjects.Views
             pulseEmission();
             return;
         }
-
-        // private IEnumerator Pulse() {
-        //     var targetEmission = 150;
-        //     _pulsing = true;
-        //     // while(true) {                
-        //     // }
-        //     _pulsing = false;
-        //     Debug.Log("Finished Pulse(), setting _pulsing to " + _pulsing.ToString());
-        // }
     }
 }
