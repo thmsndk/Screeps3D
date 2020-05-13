@@ -6,6 +6,8 @@ using Screeps_API;
 using System;
 using UnityEngine.Events;
 using Screeps3D.World.Views;
+using Screeps3D;
+using TMPro;
 
 namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 {
@@ -16,10 +18,18 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
     //containing this component as a cell in a TableView
     public class NukePopupListItemCell : TableViewCell
     {
+        public Image Progress;
+
         public Text LaunchRoom;
         public Text LaunchTime;
+        public TextMeshProUGUI LaunchRoomOwnerName; // badge and label should be a prefab?
+        public Image LaunchRoomOwnerBadge;
+
         public Text ImpactRoom;
         public Text ImpactTime;
+        public TextMeshProUGUI ImpactRoomOwnerName;
+        public Image ImpactRoomOwnerBadge;
+
         public Text TicksLeft;
         public Text ETAEarly;
         public Text ETALate;
@@ -50,13 +60,49 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             LaunchRoom.text = nuke.LaunchRoom?.RoomName;
             LaunchTime.text = nuke.InitialLaunchTick.ToString();
 
+            // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
+            var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.Name);
+            if (launchRoomInfo != null)
+            {
+                LaunchRoomOwnerName.enabled = true;
+                LaunchRoomOwnerBadge.enabled = true;
+                LaunchRoomOwnerName.text = string.Format("{0}", launchRoomInfo.User.Username);
+                LaunchRoomOwnerBadge.sprite = Sprite.Create(launchRoomInfo.User.Badge,
+                    new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
+            }
+            else
+            {
+                LaunchRoomOwnerName.enabled = false;
+                LaunchRoomOwnerBadge.enabled = false;
+            }
+
             ImpactRoom.text = nuke.ImpactRoom?.RoomName;
             ImpactTime.text = nuke.LandingTime.ToString();
+
+            var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.Name);
+            if (impactRoomInfo != null)
+            {
+                ImpactRoomOwnerName.enabled = true;
+                ImpactRoomOwnerBadge.enabled = true;
+                ImpactRoomOwnerName.text = string.Format("{0}", impactRoomInfo.User.Username);
+                ImpactRoomOwnerBadge.sprite = Sprite.Create(impactRoomInfo.User.Badge,
+                    new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
+            }
+            else
+            {
+                ImpactRoomOwnerName.enabled = false;
+                ImpactRoomOwnerBadge.enabled = false;
+            }
+
 
             TicksLeft.text = (nuke.LandingTime - ScreepsAPI.Time).ToString();
 
             ETAEarly.text = nuke.EtaEarly.ToString();
             ETALate.text = nuke.EtaLate.ToString();
+
+            Progress.fillAmount = nuke.Progress / 100f;
+
+
 
 
             //if (buttonImage != null)
