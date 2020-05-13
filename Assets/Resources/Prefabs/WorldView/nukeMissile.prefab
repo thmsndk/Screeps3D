@@ -470,6 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cffd3fb6f91845144b957ef40f08ee56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _nuke: {fileID: 0}
 --- !u!1 &4309254421898853469
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,8 +699,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6232590813085153962}
-  m_LocalRotation: {x: 0.37031332, y: 0.6267481, z: -0.5215843, w: 0.44497725}
-  m_LocalPosition: {x: 16.768, y: 31.999998, z: -5.855999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2868464639143501690}
@@ -1891,7 +1892,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8742759023790123165}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7364682993167043854}
@@ -6720,6 +6721,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356823715124673820, guid: 84f63af2f3da9b348bf0bc4f727d9f30,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356823715124673820, guid: 84f63af2f3da9b348bf0bc4f727d9f30,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356823715124673820, guid: 84f63af2f3da9b348bf0bc4f727d9f30,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356823715124673820, guid: 84f63af2f3da9b348bf0bc4f727d9f30,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6440483499111689883, guid: 84f63af2f3da9b348bf0bc4f727d9f30,
         type: 3}
