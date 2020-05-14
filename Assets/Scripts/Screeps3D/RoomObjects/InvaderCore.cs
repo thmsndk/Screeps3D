@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.Screeps3D.RoomObjects;
 
 namespace Screeps3D.RoomObjects
 {
@@ -87,16 +88,17 @@ namespace Screeps3D.RoomObjects
      */
 
     // TODO: Add ILevel, IDecay, add support for "nextExpandTime,depositType,strongholdBehavior,templateName, spawning (check out spawn / sk lair)"
-    public class InvaderCore : OwnedStructure, ICooldownObject, IActionObject , IEffectObject
+    public class InvaderCore : OwnedStructure, ICooldownObject, IActionObject, IEffectObject
     {
         // TODO: Effects
         public float Cooldown { get; set; }
-        public JSONObject[] Effects { get; set; }
+        public List<EffectDto> Effects { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
 
         internal InvaderCore()
         {
             Actions = new Dictionary<string, JSONObject>();
+            Effects = new List<EffectDto>();
         }
 
         internal override void Unpack(JSONObject data, bool initial)

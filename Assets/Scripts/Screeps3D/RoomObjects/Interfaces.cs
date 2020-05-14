@@ -3,6 +3,7 @@ using Screeps3D.Rooms;
 using Screeps_API;
 using UnityEngine;
 using System;
+using Assets.Scripts.Screeps3D.RoomObjects;
 
 namespace Screeps3D.RoomObjects
 {
@@ -81,7 +82,7 @@ namespace Screeps3D.RoomObjects
         long duration {get; set;}
     }
     internal interface IEffectObject {
-        JSONObject[] Effects {get; set;}
+        List<EffectDto> Effects { get; set; }
     }
 
     internal interface IHitpointsObject
