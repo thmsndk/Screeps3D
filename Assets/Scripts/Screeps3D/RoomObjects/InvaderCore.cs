@@ -85,7 +85,9 @@ namespace Screeps3D.RoomObjects
 }
 
      */
-    public class InvaderCore : OwnedStoreStructure, ICooldownObject, IActionObject , IEffectObject
+
+    // TODO: Add ILevel, IDecay, add support for "nextExpandTime,depositType,strongholdBehavior,templateName, spawning (check out spawn / sk lair)"
+    public class InvaderCore : OwnedStructure, ICooldownObject, IActionObject , IEffectObject
     {
         // TODO: Effects
         public float Cooldown { get; set; }
@@ -100,7 +102,7 @@ namespace Screeps3D.RoomObjects
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
-            Debug.Log(data.ToString());
+
             UnpackUtility.Cooldown(this, data);
             UnpackUtility.ActionLog(this, data);
             UnpackUtility.Effects(this, data);
