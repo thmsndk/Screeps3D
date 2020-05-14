@@ -17,22 +17,19 @@ namespace Screeps3D.RoomObjects
 	"templateName": "bunker5",
 	"hits": 100000,
 	"hitsMax": 100000,
-	"nextExpandTime": 1,
-	821286E+07,
+	"nextExpandTime": 1.821286E+07,
 	"depositType": "silicon",
 	"deployTime": null,
 	"strongholdId": "W24N16_18165263",
 	"effects": [{
 			"effect": 1001,
 			"power": 1001,
-			"endTime": 1,
-			817026E+07,
+			"endTime": 1.817026E+07,
 			"duration": 5000
 		}, {
 			"effect": 1002,
 			"power": 1002,
-			"endTime": 1,
-			824889E+07,
+			"endTime": 1.824889E+07,
 			"duration": 78629
 		}
 	],
@@ -42,8 +39,7 @@ namespace Screeps3D.RoomObjects
 		"attackController": null,
 		"upgradeController": null
 	},
-	"decayTime": 1,
-	824889E+07,
+	"decayTime": 1.824889E+07,
 	"population": {
 		"0": {
 			"body": "fortifier",
@@ -88,10 +84,12 @@ namespace Screeps3D.RoomObjects
      */
 
     // TODO: Add ILevel, IDecay, add support for "nextExpandTime,depositType,strongholdBehavior,templateName, spawning (check out spawn / sk lair)"
-    public class InvaderCore : OwnedStructure, ICooldownObject, IActionObject, IEffectObject
+    public class InvaderCore : OwnedStructure, ICooldownObject, IActionObject, IEffectObject, ILevel
     {
         // TODO: Effects
         public float Cooldown { get; set; }
+		public int Level { get; set; }
+		public int LevelMax { get; set; }
         public List<EffectDto> Effects { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
 
@@ -108,6 +106,7 @@ namespace Screeps3D.RoomObjects
             UnpackUtility.Cooldown(this, data);
             UnpackUtility.ActionLog(this, data);
             UnpackUtility.Effects(this, data);
+			UnpackUtility.Level(this, data);
         }
     }
 }

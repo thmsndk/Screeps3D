@@ -20,6 +20,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Power
     second: {fileID: 2100000, guid: 97d9dbea3ebdf0c4bb45477c25fdc742, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Resource
+    second: {fileID: 2100000, guid: 3d6370f4bd5c11a45b92faf0c2641dd2, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
