@@ -23,15 +23,19 @@ namespace Screeps3D.RoomObjects.Views
         private InvaderCore _invadeCore;
         private Color _actionColor = Color.red;
         private LineRenderer _lineRenderer;
+        private Animation _animation;
         private IEnumerator _pulse;
         private bool _pulsing;
         private bool _idle;
+        private bool _invunerable;
 
         private long _lastTickUpdate = 0;
 
         public void Init()
         {
             _lineRenderer = gameObject.GetComponent<LineRenderer>();
+            _animation = gameObject.GetComponent<Animation>();
+            _animation.enabled = true;
         }
 
         private void pulseEmission() {
@@ -120,12 +124,19 @@ namespace Screeps3D.RoomObjects.Views
             }
             long now = ScreepsAPI.Time;
             if(_lastTickUpdate < now) {
+                _invunerable = false;
                 _lastTickUpdate = now;
                 foreach(var e in _invadeCore.Effects) {
                     if(e.Effect.ToString() == "EFFECT_COLLAPSE_TIMER") {
                         long leftToTick = e.EndTime - now;
                         float progressLeft = Mathf.Round((float)leftToTick / (float)e.Duration * 100f) / 100f;
                         scaleDecayBall(progressLeft);
+                    }
+
+                    if(e.Effect.ToString() == "EFFECT_INVULNERABILITY") {
+                    //     float leftToTick = Mathf.Max(0, e.EndTime - now);
+                    //     _invunerable = leftToTick > 0;
+                    //     float progress = Mathf.Round((float)leftToTick / (float)e.Duration * 100f) / 100f;
                     }
                 }
             }

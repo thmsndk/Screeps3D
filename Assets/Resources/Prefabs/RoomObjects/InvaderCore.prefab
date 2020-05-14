@@ -39,7 +39,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38158685b84dd241ad2497086cdb738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _energyDisplay: {fileID: 8356699045835001320}
   _decayDisplay: {fileID: 4993320221753949332}
   _core: {fileID: 3649482537414655127}
   _walls: {fileID: 2549783158829916644}
@@ -104,6 +103,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5716681864270162303, guid: 8c9340eb322efbe469c43cdca81c38e6,
+        type: 3}
+      propertyPath: m_CullingType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5716681864270162303, guid: 8c9340eb322efbe469c43cdca81c38e6,
+        type: 3}
+      propertyPath: m_WrapMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8c9340eb322efbe469c43cdca81c38e6,
         type: 3}
