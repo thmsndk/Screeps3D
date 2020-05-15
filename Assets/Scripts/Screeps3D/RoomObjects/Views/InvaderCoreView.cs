@@ -19,23 +19,23 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _topL4;
         [SerializeField] private Renderer _topL5;
         [SerializeField] private Transform _rotationRoot;
+
         private Quaternion _targetRot;
         private InvaderCore _invadeCore;
         private Color _actionColor = Color.red;
         private LineRenderer _lineRenderer;
-        private Animation _animation;
         private IEnumerator _pulse;
         private bool _pulsing;
         private bool _idle;
         private bool _invunerable;
+        private float _invProgress;
 
         private long _lastTickUpdate = 0;
 
         public void Init()
         {
             _lineRenderer = gameObject.GetComponent<LineRenderer>();
-            _animation = gameObject.GetComponent<Animation>();
-            _animation.enabled = true;
+            _invProgress = 0;
         }
 
         private void pulseEmission() {
@@ -134,11 +134,15 @@ namespace Screeps3D.RoomObjects.Views
                     }
 
                     if(e.Effect.ToString() == "EFFECT_INVULNERABILITY") {
-                    //     float leftToTick = Mathf.Max(0, e.EndTime - now);
-                    //     _invunerable = leftToTick > 0;
-                    //     float progress = Mathf.Round((float)leftToTick / (float)e.Duration * 100f) / 100f;
+                        float leftToTick = Mathf.Max(0, e.EndTime - now);
+                        _invunerable = leftToTick > 0;
+                        _invProgress = Mathf.Round((float)leftToTick / (float)e.Duration * 100f) / 100f;
                     }
                 }
+            }
+            if(_invProgress > 0) {
+                var speed = 100f * _invProgress;
+                _walls.transform.Rotate(Vector3.forward * speed * Time.deltaTime);
             }
             pulseEmission();
             return;
