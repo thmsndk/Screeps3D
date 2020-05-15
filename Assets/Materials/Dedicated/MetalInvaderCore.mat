@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: 896073101cb9ad14886a95f18bb2a531, type: 3}
+        m_Texture: {fileID: 2800000, guid: eae90842b5a11234eaae2b2fe58b8e52, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - MetallicTexture:

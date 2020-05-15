@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Assets.Scripts.Screeps3D.RoomObjects;
 using Screeps_API;
 using UnityEngine;
 
@@ -130,17 +132,33 @@ namespace Screeps3D.RoomObjects
             //     {"effect":1002,"power":1002,"endTime":2,649596E+07,"duration":82074}
             // ],
 
-            // var effects = data["effects"];
+            var effectsData = data["effects"];
 
-            // if (effectsArray != null)
-            // {
-            //     effectsArray.Clear();
-            //     foreach (var effect in effects)
-            //     {
-            //         var actionData = actionLog[key];
-            //         actionObject.Actions[key] = actionData;
-            //     }
-            // }
+            if (effectsData != null)
+            {
+                obj.Effects.Clear();
+                foreach (var effect in effectsData.list)
+                {
+                    var effectType = (int)effect["effect"].n;
+                    var powerType = (int)effect["power"].n;
+                    var endTime = (int)effect["endTime"].n;
+                    var duration = (int)effect["duration"].n;
+
+                    obj.Effects.Add(new EffectDto(effectType, powerType, endTime, duration));
+                }
+
+                ////var sb = new StringBuilder();
+                ////sb.AppendLine($"{obj.Effects.Count} effects parsed");
+                ////foreach (var effect in obj.Effects)
+                ////{
+                ////    sb.AppendLine($"    Effect: {effect.Effect}");
+                ////    sb.AppendLine($"    Power: {effect.Power}");
+                ////    sb.AppendLine($"    EndTime: {effect.EndTime}");
+                ////    sb.AppendLine($"    Duration: {effect.Duration}");
+                ////}
+
+                ////Debug.Log(sb.ToString());
+            }
         }
 
         internal static void Progress(IProgress progressObj, JSONObject data)

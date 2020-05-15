@@ -10,16 +10,18 @@ namespace Screeps3D.Rooms.Views
         [SerializeField] private ScaleVisibility _vis = default;
         [SerializeField] private MeshRenderer _rend = default;
         private MapView _mapView;
+        private Color _color;
+
 
         public int X { get; private set; }
         public int Y { get; private set; }
 
         public Color Color
         {
-            get { return _rend.material.color; }
+            get { return _color; }
             set {
                 _rend.material.SetColor("_BaseColor", value);
-                //_rend.material.color = value;
+                _color = value;
             }
         }
 
