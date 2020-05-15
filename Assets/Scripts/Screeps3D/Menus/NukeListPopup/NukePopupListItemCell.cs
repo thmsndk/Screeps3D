@@ -20,15 +20,18 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
     {
         public Image Progress;
 
+        public Text ImpactRealTime;
+
         public Text LaunchRoom;
         public Text LaunchTime;
-        public TextMeshProUGUI LaunchRoomOwnerName; // badge and label should be a prefab?
-        public Image LaunchRoomOwnerBadge;
+
+        public BadgeAndLabel LaunchRoomOwner;
+        
 
         public Text ImpactRoom;
         public Text ImpactTime;
-        public TextMeshProUGUI ImpactRoomOwnerName;
-        public Image ImpactRoomOwnerBadge;
+
+        public BadgeAndLabel ImpactRoomOwner;
 
         public Text TicksLeft;
         public Text ETAEarly;
@@ -62,38 +65,15 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
             var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.RoomName);
-            if (launchRoomInfo != null)
-            {
-                LaunchRoomOwnerName.enabled = true;
-                LaunchRoomOwnerBadge.enabled = true;
-                LaunchRoomOwnerName.text = string.Format("{0}", launchRoomInfo.User.Username);
-                LaunchRoomOwnerBadge.sprite = Sprite.Create(launchRoomInfo.User.Badge,
-                    new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
-            }
-            else
-            {
-                LaunchRoomOwnerName.enabled = false;
-                LaunchRoomOwnerBadge.enabled = false;
-            }
+
+            LaunchRoomOwner.SetOwner(launchRoomInfo?.User);
 
             ImpactRoom.text = nuke.ImpactRoom?.RoomName;
             ImpactTime.text = nuke.LandingTime.ToString();
 
             var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.ImpactRoom?.RoomName);
-            if (impactRoomInfo != null)
-            {
-                ImpactRoomOwnerName.enabled = true;
-                ImpactRoomOwnerBadge.enabled = true;
-                ImpactRoomOwnerName.text = string.Format("{0}", impactRoomInfo.User.Username);
-                ImpactRoomOwnerBadge.sprite = Sprite.Create(impactRoomInfo.User.Badge,
-                    new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
-            }
-            else
-            {
-                ImpactRoomOwnerName.enabled = false;
-                ImpactRoomOwnerBadge.enabled = false;
-            }
 
+            ImpactRoomOwner.SetOwner(impactRoomInfo?.User);
 
             TicksLeft.text = (nuke.LandingTime - ScreepsAPI.Time).ToString();
 
@@ -101,9 +81,6 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             ETALate.text = nuke.EtaLate.ToString();
 
             Progress.fillAmount = nuke.Progress;// / 100f;
-
-
-
 
             //if (buttonImage != null)
             //{
@@ -139,6 +116,12 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
 
             //PackageVersionLabel.text = server.Version;
+        }
+
+        private void Update()
+        {
+            var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
+            ImpactRealTime.text = string.Format("{0:D2}:{1:D2}:{2:D2}", impactTimeSpan.Hours, impactTimeSpan.Minutes, impactTimeSpan.Seconds);
         }
     }
 }
