@@ -61,7 +61,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             this.nuke = nuke;
 
             LaunchRoom.text = nuke.LaunchRoom?.RoomName;
-            LaunchTime.text = nuke.InitialLaunchTick.ToString();
+            LaunchTime.text = $"Tick {nuke.InitialLaunchTick.ToString()}"; 
 
             // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
             var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.RoomName);
@@ -69,18 +69,15 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             LaunchRoomOwner.SetOwner(launchRoomInfo?.User);
 
             ImpactRoom.text = nuke.ImpactRoom?.RoomName;
-            ImpactTime.text = nuke.LandingTime.ToString();
+
+            ImpactTime.text = $"Tick {nuke.LandingTime.ToString()}";
 
             var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.ImpactRoom?.RoomName);
 
             ImpactRoomOwner.SetOwner(impactRoomInfo?.User);
 
-            TicksLeft.text = (nuke.LandingTime - ScreepsAPI.Time).ToString();
-
             ETAEarly.text = nuke.EtaEarly.ToString();
             ETALate.text = nuke.EtaLate.ToString();
-
-            Progress.fillAmount = nuke.Progress;// / 100f;
 
             //if (buttonImage != null)
             //{
@@ -120,8 +117,15 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         private void Update()
         {
+            var initialLaunchTick = Math.Max(nuke.LandingTime - Constants.NUKE_TRAVEL_TICKS, 0);
+            var progress = (float)(ScreepsAPI.Time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
+            Progress.fillAmount = progress;// / 100f;
+
+            var ticksLeft = (nuke.LandingTime - ScreepsAPI.Time);
+            TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
+
             var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
-            ImpactRealTime.text = string.Format("{0:D2}:{1:D2}:{2:D2}", impactTimeSpan.Hours, impactTimeSpan.Minutes, impactTimeSpan.Seconds);
+            ImpactRealTime.text = $"Impact in {Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s";
         }
     }
 }
