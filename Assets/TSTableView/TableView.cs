@@ -60,7 +60,7 @@ namespace Tacticsoft
         /// (number of rows changed, etc)
         /// </summary>
         public void ReloadData() {
-            m_rowHeights = new float[m_dataSource.GetNumberOfRowsForTableView(this)];
+            m_rowHeights = new float[m_dataSource?.GetNumberOfRowsForTableView(this) ?? 0];
             this.isEmpty = m_rowHeights.Length == 0;
             if (this.isEmpty) {
                 ClearAllRows();
@@ -204,7 +204,7 @@ namespace Tacticsoft
         }
 
         private void ClearAllRows() {
-            while (m_visibleCells.Count > 0) {
+            while ((m_visibleCells?.Count ?? 0) > 0) {
                 HideRow(false);
             }
             m_visibleRowRange = new Range(0, 0);

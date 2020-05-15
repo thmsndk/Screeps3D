@@ -13,12 +13,24 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         private void Awake()
         {
-            var nukes = NukeMonitor.Instance.Nukes;
+            
 
-            // TODO: wire up so we listen on updates, e.g. when nukemonitor refreshes the nuke list
-            Debug.Log(nukes.Count + " nukes!!!!!!");
+        }
 
+        private void Start()
+        {
             NukeMonitor.Instance.OnNukesRefreshed += NukesRefreshed;
+        }
+
+        private void OnEnable()
+        {
+            NukesRefreshed();
+            NukeMonitor.Instance.OnNukesRefreshed += NukesRefreshed;
+        }
+
+        private void OnDisable()
+        {
+            NukeMonitor.Instance.OnNukesRefreshed -= NukesRefreshed;
         }
 
         private void OnDestroy()
