@@ -108,7 +108,6 @@ namespace Assets.Scripts.Screeps3D
 
                 // We might have an issue if people use custom shard names, so we can't use shardName, because playerposition shardname is shardX
                 var shardIndex = PlayerPosition.Instance.ShardLevel;
-                Debug.LogError("shardIndex " + shardIndex.ToString());
                 // Should probably cache this, and refresh it at an interval to detect new nukes.
                 ScreepsAPI.Http.GetExperimentalNukes((jsonString) =>
                 {
@@ -154,7 +153,6 @@ namespace Assets.Scripts.Screeps3D
                                 if (overlay.LaunchRoom == null)
                                 {
                                     overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
-
                                 }
 
                                 if (overlay.ImpactRoom == null)

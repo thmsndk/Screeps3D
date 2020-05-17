@@ -20,9 +20,9 @@ namespace Screeps3D.RoomObjects.Views
         private float _emissionDecayFactor;
         private float _nextBlink;
         private bool _blinking;
-        private long _maxEmission = 8;
-        private long _minEmission = 2;
-        private float _currentEmission;
+        private float _minBadgeEmission = 2f;
+        private float _maxAddedEmission = 8f;
+        private float _currentAddedEmission = 6f;
         private long _lastTickUpdate;
         private long _loadTick;
 
@@ -31,18 +31,10 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Load(roomObject);            
             _tombstone = roomObject as Tombstone;
-            long now = ScreepsAPI.Time;
-
-            long deathNowDiff = now - _tombstone.DeathTime;
-
-            _emissionDecayFactor = (float) (_maxEmission - _minEmission) / (deathNowDiff + (long)_tombstone.NextDecayTime - now);
-            _currentEmission = _maxEmission - deathNowDiff * _emissionDecayFactor;
-            _lastTickUpdate = now;
-
             // Base setup
             _body.materials[1].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
             _body.materials[1].SetTexture("EmissionTexture", _tombstone?.Owner?.Badge);
-            _body.materials[1].SetFloat("EmissionStrength", _currentEmission);
+            _body.materials[1].SetFloat("EmissionStrength", 2);
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
@@ -57,8 +49,6 @@ namespace Screeps3D.RoomObjects.Views
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
-
-
             //var posDelta = _posTarget - RoomObject.Position;
 
             //if (posDelta.sqrMagnitude > .01)
@@ -70,38 +60,17 @@ namespace Screeps3D.RoomObjects.Views
         private void Update()
         {
             if (_tombstone == null) {
-                if(_blinking) {
-                    StopCoroutine(_blink);
-                }
                 return;
             }
-            // if tick changed
+            // if tick changed, degrade currentAddedEmission
             if(_lastTickUpdate != ScreepsAPI.Time) {
-                _currentEmission = _body.materials[1].GetFloat("EmissionStrength") - _emissionDecayFactor;
-                _lastTickUpdate = ScreepsAPI.Time;
+                long now = ScreepsAPI.Time;
+                _lastTickUpdate = now;
+                float decayFactor = (float)now / ((float)_tombstone.DeathTime + (float)_tombstone.NextDecayTime);
+                _currentAddedEmission =  _maxAddedEmission * decayFactor;
             }
-
-            if(!_blinking ) {
-                _blink = Blink();
-                StartCoroutine(_blink);
-            } 
+            float decayEmission = _minBadgeEmission + Mathf.Abs(Mathf.Sin(Time.time)) * _currentAddedEmission;
+            _body.materials[1].SetFloat("EmissionStrength", decayEmission);
         }
-
-        private IEnumerator Blink()
-        {
-            _blinking = true;
-            while (_body.materials[1].GetFloat("EmissionStrength") < _currentEmission)
-            {
-                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") + 0.1f);
-                yield return null;
-            }
-            while (_body.materials[1].GetFloat("EmissionStrength") > _minEmission)
-            {
-                _body.materials[1].SetFloat("EmissionStrength", _body.materials[1].GetFloat("EmissionStrength") - 0.1f);
-                yield return null;
-            }
-            _nextBlink = Time.time + Random.value + 1;
-            _blinking = false;
-        }        
     }
 }
