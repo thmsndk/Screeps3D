@@ -108,7 +108,6 @@ namespace Assets.Scripts.Screeps3D
 
                 // We might have an issue if people use custom shard names, so we can't use shardName, because playerposition shardname is shardX
                 var shardIndex = PlayerPosition.Instance.ShardLevel;
-
                 // Should probably cache this, and refresh it at an interval to detect new nukes.
                 ScreepsAPI.Http.GetExperimentalNukes((jsonString) =>
                 {
@@ -149,12 +148,11 @@ namespace Assets.Scripts.Screeps3D
                                     _nukes.Add(key, overlay);
                                 }
 
-                                // TODO: overlay.Unpack?
+                                // // TODO: overlay.Unpack?
 
                                 if (overlay.LaunchRoom == null)
                                 {
                                     overlay.LaunchRoom = RoomManager.Instance.Get(nuke["launchRoomName"].str, shardName);
-
                                 }
 
                                 if (overlay.ImpactRoom == null)
@@ -206,34 +204,34 @@ namespace Assets.Scripts.Screeps3D
                         });
 
 
-                    /* Example
-                     *  {
-                            "ok": 1,
-                            "nukes": {
-                                "shard0": [],
-                                "shard1": [],
-                                "shard2": [{
-                                        "_id": "5d26127173fcd27b55a7ef39",
-                                        "type": "nuke",
-                                        "room": "W23S15",
-                                        "x": 12,
-                                        "y": 37,
-                                        "landTime": 17300541,
-                                        "launchRoomName": "W31S18"
-                                    }, {
-                                        "_id": "5d26aa11385277180e5c2187",
-                                        "type": "nuke",
-                                        "room": "W22S22",
-                                        "x": 23,
-                                        "y": 22,
-                                        "landTime": 17311981,
-                                        "launchRoomName": "W17S28"
-                                    }
-                                ],
-                                "shard3": []
-                            }
-                        }
-                     */
+                //     /* Example
+                //      *  {
+                //             "ok": 1,
+                //             "nukes": {
+                //                 "shard0": [],
+                //                 "shard1": [],
+                //                 "shard2": [{
+                //                         "_id": "5d26127173fcd27b55a7ef39",
+                //                         "type": "nuke",
+                //                         "room": "W23S15",
+                //                         "x": 12,
+                //                         "y": 37,
+                //                         "landTime": 17300541,
+                //                         "launchRoomName": "W31S18"
+                //                     }, {
+                //                         "_id": "5d26aa11385277180e5c2187",
+                //                         "type": "nuke",
+                //                         "room": "W22S22",
+                //                         "x": 23,
+                //                         "y": 22,
+                //                         "landTime": 17311981,
+                //                         "launchRoomName": "W17S28"
+                //                     }
+                //                 ],
+                //                 "shard3": []
+                //             }
+                //         }
+                //      */
 
                 });
 

@@ -8,6 +8,7 @@ namespace Screeps3D.World.Views
     public class NukeMissileView : MonoBehaviour, IWorldOverlayViewComponent
     {
         public NukeMissileOverlay Overlay { get; private set; }
+        [SerializeField] private Renderer _nuke;        
 
         private NukeMissileArchRenderer arcRenderer;
 
@@ -41,7 +42,6 @@ namespace Screeps3D.World.Views
             //arcRenderer.Progress(Overlay.Progress); // TODO: render progress on selection panel when you select the missile.
 
             initialized = true;
-
             // spawn nuke explosion for testing purposes, not sure it belongs on the missile view? :shrugh: belongs in an "onTick" event or something
             //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);
         }
