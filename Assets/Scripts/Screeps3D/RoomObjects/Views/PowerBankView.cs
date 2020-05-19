@@ -60,24 +60,17 @@ namespace Screeps3D.RoomObjects.Views
 
         private void Update() {
             
-            if (_powerBank == null)
+            if (_powerBank == null || !_powerBank.Shown)
             {
                 if (_ps != null)
                 {
-                    Debug.LogError("stopping emission because _powerBank == null");
                     _ps.Stop();
                 }
                 return;
             }
 
-            if (_ps != null)
-            {
-                Debug.LogError("checking on emission because _powerBank != null, _ps.isPlaying: " + _ps.isPlaying.ToString());
-                if(!_ps.isPlaying) {
-                    Debug.LogError("starting emission because !_ps.isPlaying");
-                    _ps.Stop();
-                }
-
+            if (_ps != null && !_ps.isPlaying) {
+                    _ps.Play();
             }
 
             long now = ScreepsAPI.Time;
