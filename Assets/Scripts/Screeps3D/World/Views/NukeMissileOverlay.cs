@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Screeps3D;
 using Screeps3D.Rooms;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Screeps3D.World.Views
     // This is not the "overlay" but the actual rendering of the missile and arc prefab ... hmmmm
     public class NukeMissileOverlay : WorldOverlay
     {
+        private NukeMonitor.NukeData nuke;
+
         public string Id { get; set; }
 
         public NukeMissileOverlay(string id)
@@ -14,18 +17,28 @@ namespace Screeps3D.World.Views
             this.Id = id;
         }
 
+        public NukeMissileOverlay(NukeMonitor.NukeData nuke)
+        {
+            this.nuke = nuke;
+        }
+
         public override string Type { get; set; } = "nukeMissile";
-        public Room LaunchRoom { get; internal set; }
-        public Room ImpactRoom { get; internal set; }
-        public Vector3 ImpactPosition { get; internal set; }
+
+        public string Shard { get { return nuke.Shard; } }
+
+        public Room LaunchRoom { get { return nuke.LaunchRoom; } }
+        public string LaunchRoomName { get { return nuke.LaunchRoomName; } }
+        public Room ImpactRoom { get { return nuke.ImpactRoom; } }
+        public string ImpactRoomName { get { return nuke.ImpactRoomName; } }
+        public Vector3 ImpactPosition { get { return nuke.ImpactPosition; } }
 
         /// <summary>
         /// The ingame Tick when the nuke is supposed to land.
         /// </summary>
-        public long LandingTime { get; internal set; }
-        public long InitialLaunchTick { get; internal set; }
-        public float Progress { get; internal set; }
-        public DateTime EtaEarly { get; internal set; }
-        public DateTime EtaLate { get; internal set; }
+        public long LandingTime { get { return nuke.LandingTime; } }
+        public long InitialLaunchTick { get { return nuke.InitialLaunchTick; } }
+        public float Progress { get { return nuke.Progress; } }
+        public DateTime EtaEarly { get { return nuke.EtaEarly; } }
+        public DateTime EtaLate { get { return nuke.EtaLate; } }
     }
 }

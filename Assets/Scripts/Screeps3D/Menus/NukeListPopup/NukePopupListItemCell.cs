@@ -8,27 +8,30 @@ using UnityEngine.Events;
 using Screeps3D.World.Views;
 using Screeps3D;
 using TMPro;
+using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 
 namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 {
     [Serializable]
-    public class OnNukeSelected : UnityEvent<NukeMissileOverlay> { }
+    public class OnNukeSelected : UnityEvent<NukeMonitor.NukeData> { }
 
     //Inherit from TableViewCell instead of MonoBehavior to use the GameObject
     //containing this component as a cell in a TableView
     public class NukePopupListItemCell : TableViewCell
     {
+        public TextMeshProUGUI Shard;
+
         public Image Progress;
 
         public Text ImpactRealTime;
 
-        public Text LaunchRoom;
+        public TextMeshProUGUI LaunchRoom;
         public Text LaunchTime;
 
         public BadgeAndLabel LaunchRoomOwner;
         
 
-        public Text ImpactRoom;
+        public TextMeshProUGUI ImpactRoom;
         public Text ImpactTime;
 
         public BadgeAndLabel ImpactRoomOwner;
@@ -40,7 +43,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         public OnNukeSelected onSelected;
 
-        private NukeMissileOverlay nuke;
+        private NukeMonitor.NukeData nuke;
         private Image buttonImage;
 
         void Start()
@@ -56,11 +59,21 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             }
         }
 
-        internal void SetCellItem(NukeMissileOverlay nuke)
+        internal void SetCellItem(NukeMonitor.NukeData nuke)
         {
+            /*
+             room images:
+              var urlString = "https://d3os7yery2usni.cloudfront.net/map/\(shard)/\(name).png"
+                if shard == "privSrv" {
+                    urlString = "\(serverUrl)/assets/map/\(name).png"
+                }
+             */
+
             this.nuke = nuke;
 
-            LaunchRoom.text = nuke.LaunchRoom?.RoomName;
+            Shard.text = nuke.Shard;
+
+            LaunchRoom.text = RoomLink.FormatTMPLink(nuke.Shard, nuke.LaunchRoom?.RoomName, nuke.LaunchRoom?.RoomName);
             LaunchTime.text = $"Tick {nuke.InitialLaunchTick.ToString()}"; 
 
             // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
@@ -68,7 +81,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             LaunchRoomOwner.SetOwner(launchRoomInfo?.User);
 
-            ImpactRoom.text = nuke.ImpactRoom?.RoomName;
+            ImpactRoom.text = RoomLink.FormatTMPLink(nuke.Shard, nuke.ImpactRoom?.RoomName, nuke.ImpactRoom?.RoomName);
 
             ImpactTime.text = $"Tick {nuke.LandingTime.ToString()}";
 
@@ -117,15 +130,18 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         private void Update()
         {
-            var initialLaunchTick = Math.Max(nuke.LandingTime - Constants.NUKE_TRAVEL_TICKS, 0);
-            var progress = (float)(ScreepsAPI.Time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
-            Progress.fillAmount = progress;// / 100f;
+            if (nuke != null)
+            {
+                var initialLaunchTick = Math.Max(nuke.LandingTime - Constants.NUKE_TRAVEL_TICKS, 0);
+                var progress = (float)(ScreepsAPI.Time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
+                Progress.fillAmount = progress;// / 100f;
 
-            var ticksLeft = (nuke.LandingTime - ScreepsAPI.Time);
-            TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
+                var ticksLeft = (nuke.LandingTime - ScreepsAPI.Time); // TODO: this does not work for other shards
+                TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
 
-            var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
-            ImpactRealTime.text = $"Impact in {Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s";
+                var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
+                ImpactRealTime.text = $"Impact in {Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s"; 
+            }
         }
     }
 }

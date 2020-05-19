@@ -21,7 +21,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
         private int m_numInstancesCreated = 0;
 
         public OnNukeSelected onNukeSelected;
-        private List<NukeMissileOverlay> _nukes;
+        private List<NukeMonitor.NukeData> _nukes;
 
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
@@ -68,16 +68,16 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         #region Table View event handlers
 
-        internal void UpdateList(Dictionary<string, NukeMissileOverlay> nukes)
+        internal void UpdateList(Dictionary<string, List<NukeMonitor.NukeData>> nukes)
         {
-            _nukes = nukes.Values.ToList();
+            _nukes = nukes.SelectMany(n => n.Value).ToList();
             m_tableView.ReloadData();
         }
 
 
         #endregion
 
-        private void OnSelected(NukeMissileOverlay nuke)
+        private void OnSelected(NukeMonitor.NukeData nuke)
         {
             onNukeSelected?.Invoke(nuke);
         }
