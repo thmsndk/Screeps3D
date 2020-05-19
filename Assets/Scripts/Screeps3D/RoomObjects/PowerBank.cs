@@ -1,33 +1,28 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects
 {
     /*
        {
-	        "_id": "5d1944d618769d42ddabaaf2",
-	        "type": "powerBank",
-	        "x": 25,
-	        "y": 35,
-	        "room": "E0S25",
-	        "power": 1962,
-	        "hits": 2000000,
-	        "hitsMax": 2000000,
-	        "decayTime": 8206678
-        }
-
-        // https://docs.screeps.com/api/#StructurePowerBank
-        Hits	2,000,000
-        Return damage	50%
-        Capacity	500 — 10,000
-        Decay	5,000 ticks
+           "_id":"5ec2b6b1bdd9e5f1ebcb7467",
+           "type":"powerBank",
+           "x":6,
+           "y":13,
+           "room":"E30N54",
+           "store":{"power":1208},
+           "hits":2000000,
+           "hitsMax":2000000,
+           "decayTime":1,834327E+07
+       }
     */
 
-    public class PowerBank : Structure, IDecay, IPowerObject
+    public class PowerBank : StoreStructure, IDecay, IPowerObject
     {
         public float NextDecayTime { get; set; }
 
         public float Power { get; set; }
+        public float maxTTL = 5000;
 
         /// <summary>
         /// The maximum power a bank can spawn with
@@ -41,15 +36,9 @@ namespace Screeps3D.RoomObjects
 
         internal override void Unpack(JSONObject data, bool initial)
         {
-            var powerData = data["power"];
-            if (powerData != null)
-            {
-                this.Power = powerData.n;
-            }
-
-            UnpackUtility.Decay(this, data);
-
             base.Unpack(data, initial);
+            UnpackUtility.Decay(this, data);
+            UnpackUtility.Store(this, data);
         }
     }
 }
