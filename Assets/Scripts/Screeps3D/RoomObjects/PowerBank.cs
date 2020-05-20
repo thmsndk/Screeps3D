@@ -17,11 +17,10 @@ namespace Screeps3D.RoomObjects
        }
     */
 
-    public class PowerBank : StoreStructure, IDecay, IPowerObject
+    public class PowerBank : StoreStructure, IDecay
     {
         public float NextDecayTime { get; set; }
 
-        public float Power { get; set; }
         public float maxTTL = 5000;
 
         /// <summary>
@@ -31,7 +30,6 @@ namespace Screeps3D.RoomObjects
 
         internal PowerBank()
         {
-            PowerCapacity = 10000; // Q: move to constants?
         }
 
         internal override void Unpack(JSONObject data, bool initial)

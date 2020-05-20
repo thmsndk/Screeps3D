@@ -93,7 +93,7 @@ namespace Screeps3D.Rooms.Views
                 }
                 else if (key.Equals("pb"))
                 {
-                    // SpawnRoomObjects<PowerBankView>(data[key].list, PowerBankView.Path);
+                    SpawnRoomObjects<PowerBankView>(data[key].list, PowerBankView.Path);
                 }
                 else if (key.Equals("p"))
                 {

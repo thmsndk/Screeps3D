@@ -11,7 +11,8 @@ namespace Screeps3D.RoomObjects.Views
         public const string Path = "Prefabs/RoomObjects/powerBankMV";
 
         [SerializeField] private GameObject destroyed = default;
-        
+        [SerializeField] private ScaleVisibility _pbMapView = default;
+        [SerializeField] private Collider _collider = default;
         [SerializeField] private MeshRenderer _base;
         [SerializeField] private MeshRenderer _p1;
         [SerializeField] private MeshRenderer _p2;
@@ -23,13 +24,12 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private MeshRenderer _p8;
         [SerializeField] private MeshRenderer _p9;
         [SerializeField] private MeshRenderer _p10;
-        [SerializeField] private Animation _spinner;
         [SerializeField] private ParticleSystem _ps;
         private PowerBank _powerBank;
         private GameObject spawnedDebris;
         private IEnumerator _despawnDebris;
         private long _lastTickUpdate;
-        private float _decayProgress = 0;
+        private float _decayLeft = 0;
 
         public void Init()
         {
@@ -37,7 +37,6 @@ namespace Screeps3D.RoomObjects.Views
 
 
         private void setPowerDisplay() {
-
             float power = _powerBank.Store["power"];
             _p1.materials[0].SetFloat("EmissionStrength", (power > 0) ? 6 : 0);
             _p2.materials[0].SetFloat("EmissionStrength", (power > 1000) ? 6 : 0);
@@ -73,20 +72,25 @@ namespace Screeps3D.RoomObjects.Views
                     _ps.Play();
             }
 
+            
+            var percentage = _powerBank.Store["power"] / _powerBank.PowerCapacity;
+            var minVisibility = 0.001f; /*to keep it visible and selectable, also allows the resource to render again when regen hits*/
+            float visibility = percentage == 0 ? minVisibility : percentage;
+            _pbMapView.SetVisibility(visibility);
+
+
             long now = ScreepsAPI.Time;
             if(_lastTickUpdate < now) {
                 _lastTickUpdate = now;
 
                 float leftToTick = Mathf.Max(0, _powerBank.NextDecayTime - now);
-                _decayProgress = Mathf.Round((float)leftToTick / _powerBank.maxTTL * 100f) / 100f;
-                Debug.LogError("new decay progress " + _decayProgress.ToString());
+                _decayLeft = Mathf.Round((float)leftToTick / _powerBank.maxTTL * 100f) / 100f;
                 if (_ps != null)
                 {
-                    Debug.LogError("update m.maxParticles to 1000 * " + _decayProgress.ToString());
                     var m = _ps.main;
-                    m.maxParticles = Mathf.RoundToInt(1000 * _decayProgress);
+                    m.maxParticles = Mathf.RoundToInt(1000 * _decayLeft);
                     var e = _ps.emission;
-                    e.rateOverTime = Mathf.RoundToInt(250 * _decayProgress);
+                    e.rateOverTime = Mathf.RoundToInt(250 * _decayLeft);
                 }
             }
         }
@@ -132,12 +136,12 @@ namespace Screeps3D.RoomObjects.Views
         public int roomPosY { get; set; }
         public void Show()
         {
-            // _powerScaleVisibility.Show();
+            _pbMapView.Show();
             // _collider.enabled = false;
         }
         public void Hide()
         {
-            // _powerScaleVisibility.Hide();
+            _pbMapView.Hide();
             // _collider.enabled = true;
         }
     }

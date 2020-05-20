@@ -40,6 +40,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyed: {fileID: 0}
+  _pbMapView: {fileID: 6296380342894257714}
+  _collider: {fileID: 6228776617933477796}
   _base: {fileID: 238299805013535251}
   _p1: {fileID: 2535282274770472487}
   _p2: {fileID: 5841616434283577880}
@@ -53,6 +55,34 @@ MonoBehaviour:
   _p10: {fileID: 1185290656633956721}
   _spinner: {fileID: 1887791508466453769}
   _ps: {fileID: 8286409461812026392}
+--- !u!65 &6228776617933477796
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6465305768847032961}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6296380342894257714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6465305768847032961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animateOnStart: 1
+  _visibleOnStart: 1
+  _speed: 0.2
 --- !u!1 &8490771812354493722
 GameObject:
   m_ObjectHideFlags: 0
