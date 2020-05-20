@@ -50,6 +50,19 @@ namespace Screeps3D.RoomObjects.Views
             _p10.materials[0].SetFloat("EmissionStrength", (power > 9000) ? 6 : 0);
         }
 
+        private void startStopEmission(string startStop) {
+            if(_ps != null) {
+                if(startStop == "start" && !_ps.isPlaying) {
+                    _ps.Play();
+                    return;
+                }
+                if(startStop == "stop" && _ps.isPlaying) {
+                    _ps.Stop();
+                    return;
+                }
+            }
+        }
+
         public void Load(RoomObject roomObject)
         {
             _powerBank = roomObject as PowerBank;
@@ -58,15 +71,13 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void Update() {
-            
-            if (_powerBank == null || !_powerBank.Shown)
+
+            startStopEmission((_powerBank != null && _powerBank.Shown) ? "start" : "stop");            
+            if (_powerBank == null )
             {
-                if (_ps != null)
-                {
-                    _ps.Stop();
-                }
                 return;
             }
+
 
             if (_ps != null && !_ps.isPlaying) {
                     _ps.Play();
@@ -137,12 +148,12 @@ namespace Screeps3D.RoomObjects.Views
         public void Show()
         {
             _pbMapView.Show();
-            // _collider.enabled = false;
+            _collider.enabled = false;
         }
         public void Hide()
         {
             _pbMapView.Hide();
-            // _collider.enabled = true;
+            _collider.enabled = true;
         }
     }
 }
