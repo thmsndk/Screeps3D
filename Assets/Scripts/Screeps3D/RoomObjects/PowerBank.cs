@@ -22,6 +22,7 @@ namespace Screeps3D.RoomObjects
         public float NextDecayTime { get; set; }
 
         public float maxTTL = 5000;
+        public float maxCapacity = 10000;
 
         /// <summary>
         /// The maximum power a bank can spawn with
@@ -37,6 +38,7 @@ namespace Screeps3D.RoomObjects
             base.Unpack(data, initial);
             UnpackUtility.Decay(this, data);
             UnpackUtility.Store(this, data);
+            this.TotalCapacity = maxCapacity;
         }
     }
 }
