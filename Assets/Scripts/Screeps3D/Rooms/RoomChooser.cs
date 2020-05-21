@@ -134,21 +134,24 @@ namespace Screeps3D.Rooms
         {
             while (true)
             {
-                var ownedRooms = MapStatsUpdater.Instance.RoomInfo.Values.Where(r => r.User != null
-                                                                                     && r.User.UserId == ScreepsAPI.Me.UserId);
-                if (ownedRooms.Any())
+                if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
                 {
-                    var random = new System.Random();
-                    var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                    var roomName = room?.RoomName;
+                    var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.User.UserId == ScreepsAPI.Me.UserId);
 
-                    Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-                    _roomInput.text = roomName;
-                    this.GetAndChooseRoom(roomName);
-                }
-                else
-                {
-                    Debug.Log($"Could not find any of your owned rooms :/");
+                    if (ownedRooms.Any())
+                    {
+                        var random = new System.Random();
+                        var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                        var roomName = room?.RoomName;
+
+                        Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                        _roomInput.text = roomName;
+                        this.GetAndChooseRoom(roomName);
+                    }
+                    else
+                    {
+                        Debug.Log($"Could not find any of your owned rooms :/");
+                    }
                 }
 
                 yield return new WaitForSeconds(30);
@@ -216,21 +219,24 @@ namespace Screeps3D.Rooms
 
         private void ChooseRandomOwnedRoom()
         {
-            var ownedRooms = MapStatsUpdater.Instance.RoomInfo.Values.Where(r => r.User != null && r.Level.HasValue && r.Level > 0);
-
-            if (ownedRooms.Any())
+            if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
             {
-                var random = new System.Random();
-                var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                var roomName = room?.RoomName;
+                var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.Level.HasValue && r.Level > 0);
 
-                Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-                _roomInput.text = roomName;
-                this.GetAndChooseRoom(roomName);
-            }
-            else
-            {
-                Debug.Log($"Could not find any owned rooms :/");
+                if (ownedRooms.Any())
+                {
+                    var random = new System.Random();
+                    var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                    var roomName = room?.RoomName;
+
+                    Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                    _roomInput.text = roomName;
+                    this.GetAndChooseRoom(roomName);
+                }
+                else
+                {
+                    Debug.Log($"Could not find any owned rooms :/");
+                }
             }
         }
 

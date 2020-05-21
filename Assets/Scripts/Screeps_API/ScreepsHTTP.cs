@@ -200,7 +200,7 @@ namespace Screeps_API
             return Request("GET", "/api/version", onSuccess: onSuccess, onError: onError, timeout: 2, skipAuth: true, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetMapStats(List<string> rooms, string shard, string statName, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetMapStats(List<string> rooms, string shard, string statName, Action<string, string> onSuccess, bool noNotification = false)
         {
             /*
              https://github.com/screepers/node-screeps-api/blob/HEAD/docs/Endpoints.md
@@ -220,7 +220,11 @@ namespace Screeps_API
             body.AddField("statName", statName);
             body.AddField("shard", shard);
 
-            return Request("POST", "/api/game/map-stats", body, onSuccess: onSuccess, noNotification: noNotification);
+            Action<string> onRequestSuccess = (json) => {
+                onSuccess(shard, json);
+            };
+
+            return Request("POST", "/api/game/map-stats", body, onSuccess: onRequestSuccess, noNotification: noNotification);
         }
 
         public IEnumerator<UnityWebRequestAsyncOperation> GenerateUniqueFlagName(string shard, Action<string> onSuccess, bool noNotification = false)

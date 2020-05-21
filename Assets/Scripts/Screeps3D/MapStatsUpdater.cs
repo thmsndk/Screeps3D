@@ -19,10 +19,17 @@ namespace Screeps3D
             StartCoroutine(Scan());
         }
 
-        public Dictionary<string, RoomInfo> RoomInfo { get; } = new Dictionary<string, RoomInfo>();
+        public Dictionary<string, List<RoomInfo>> RoomInfo { get; } = new Dictionary<string, List<RoomInfo>>();
 
-        // TODO
-        public RoomInfo GetRoomInfo(string roomName) => RoomInfo.ContainsKey(roomName) ? RoomInfo[roomName] : null; // Do we need shardname support?
+        public RoomInfo GetRoomInfo(string shardName, string roomName)
+        {
+            if (RoomInfo.TryGetValue(shardName, out var shardRoomInfo))
+            {
+                return shardRoomInfo.SingleOrDefault(room => room.RoomName == roomName);
+            }
+
+            return null;
+        }
 
         public IEnumerator Scan()
         {
@@ -61,19 +68,19 @@ namespace Screeps3D
             }
         }
 
-        public void ScanRooms(List<string> rooms, Action<string> onSuccess = null)
+        public void ScanRooms(string shardName, List<string> rooms, Action<string> onSuccess = null)
         {
             var distinctRooms = rooms.Distinct().ToList();
-            Debug.Log($"Getting mapstats {distinctRooms.Count}"); // 10 seconds
-            var shardName = PlayerPosition.Instance.ShardName;
-            ScreepsAPI.Http.GetMapStats(distinctRooms, shardName, "owner0", (jsonString) => {
+            Debug.Log($"[{shardName}] Getting mapstats {distinctRooms.Count}"); // 10 seconds
+            
+            ScreepsAPI.Http.GetMapStats(distinctRooms, shardName, "owner0", (shard, jsonString) => {
                 var result = new JSONObject(jsonString);
                 while (UnpackUsers(result, false).MoveNext())
                 {
 
                 }
 
-                while (UnpackRooms(result, false).MoveNext())
+                while (UnpackRooms(shard, result, false).MoveNext())
                 {
 
                 }
@@ -82,12 +89,12 @@ namespace Screeps3D
             });
         }
 
-        private void GetMapStatsCallback(string jsonString)
+        private void GetMapStatsCallback(string shard, string jsonString)
         {
-            StartCoroutine(UnpackMapStatsData(jsonString));
+            StartCoroutine(UnpackMapStatsData(shard, jsonString));
         }
 
-        private IEnumerator UnpackMapStatsData(string jsonString)
+        private IEnumerator UnpackMapStatsData(string shard, string jsonString)
         {
             Debug.Log($"Converting to jsonObject");
             var result = new JSONObject(jsonString); // 1 second
@@ -95,10 +102,10 @@ namespace Screeps3D
             yield return StartCoroutine(UnpackUsers(result)); // 14 seconds
             Debug.Log("Unpacking users done");
 
-            yield return UnpackRooms(result);
+            yield return UnpackRooms(shard, result);
         }
 
-        private IEnumerator UnpackRooms(JSONObject result, bool wait = true)
+        private IEnumerator UnpackRooms(string shard, JSONObject result, bool wait = true)
         {
             var stats = result["stats"];
             Debug.Log($"Unpacking rooms {stats?.keys?.Count}"); // 14 seconds
@@ -108,6 +115,12 @@ namespace Screeps3D
                 Debug.Log("stats null, no rooms");
 
                 yield break;
+            }
+
+            if (!RoomInfo.TryGetValue(shard, out var shardRoomInfo))
+            {
+                shardRoomInfo = new List<RoomInfo>();
+                RoomInfo.Add(shard, shardRoomInfo);
             }
 
             foreach (var roomName in stats.keys)
@@ -122,11 +135,13 @@ namespace Screeps3D
 
 
                 // should we store this info on the room so it is available for others?
-                var roomInfo = RoomInfo.ContainsKey(roomName) ? RoomInfo[roomName] : null;
+
+
+                var roomInfo = shardRoomInfo.SingleOrDefault(info => info.RoomName == roomName);
                 if (roomInfo == null)
                 {
                     roomInfo = new RoomInfo(roomName);
-                    RoomInfo[roomName] = roomInfo;
+                    shardRoomInfo.Add(roomInfo);
                 }
 
                 roomInfo.Unpack(stats[roomName]);

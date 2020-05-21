@@ -77,7 +77,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             LaunchTime.text = $"Tick {nuke.InitialLaunchTick.ToString()}"; 
 
             // TODO: we need to queue a map-stats lookup if we can't find it. but what about rate limits?
-            var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.LaunchRoom?.RoomName);
+            var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.Shard, nuke.LaunchRoom?.RoomName);
 
             LaunchRoomOwner.SetOwner(launchRoomInfo?.User);
 
@@ -85,7 +85,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             ImpactTime.text = $"Tick {nuke.LandingTime.ToString()}";
 
-            var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.ImpactRoom?.RoomName);
+            var impactRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(nuke.Shard, nuke.ImpactRoom?.RoomName);
 
             ImpactRoomOwner.SetOwner(impactRoomInfo?.User);
 

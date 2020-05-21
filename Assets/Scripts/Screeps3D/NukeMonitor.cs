@@ -250,7 +250,7 @@ namespace Assets.Scripts.Screeps3D
                             if (roomsToGetMapStatsFrom.Count > 0)
                             {
                                 Debug.Log($"[{nukesShardName}] Nuke monitor requested {roomsToGetMapStatsFrom.Count} rooms to be scanned");
-                                MapStatsUpdater.Instance.ScanRooms(roomsToGetMapStatsFrom, (json) =>
+                                MapStatsUpdater.Instance.ScanRooms(nukesShardName, roomsToGetMapStatsFrom, (json) =>
                                 {
                                     OnNukesRefreshed?.Invoke();
                                 });

@@ -23,7 +23,7 @@ namespace Screeps3D.Rooms.Views
             this.room = room;
             showSafeMode = false;
 
-            _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.RoomName);
+            _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.ShardName, room.RoomName);
         }
 
 
@@ -34,7 +34,7 @@ namespace Screeps3D.Rooms.Views
 
                 if (room != null)
                 {
-                    _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.RoomName);
+                    _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.ShardName, room.RoomName);
                 }
 
                 return;
