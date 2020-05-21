@@ -64,7 +64,7 @@ namespace Screeps3D
                 Debug.Log($"Waiting 60 seconds");
                 // https://docs.screeps.com/auth-tokens.html#Rate-Limiting
                 // POST /api/game/map-stats	60 / hour
-                yield return new WaitForSecondsRealtime(60);
+                yield return new WaitForSecondsRealtime(90); // wait a little longer to allow for cross shards lookups, untill we get a proper queue in place that respects rate limits
             }
         }
 
