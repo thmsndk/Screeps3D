@@ -9,6 +9,7 @@ using Screeps3D.World.Views;
 using Screeps3D;
 using TMPro;
 using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+using Screeps3D.Rooms;
 
 namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 {
@@ -47,18 +48,26 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
         private NukeMonitor.NukeData nuke;
         private Image buttonImage;
 
+        private RoomChooser _chooser;
+
+        private void Awake()
+        {
+            var roomChooserGameObject = GameObject.FindGameObjectWithTag("RoomChooser");
+            _chooser = roomChooserGameObject.GetComponent<RoomChooser>();
+        }
+
         void Start()
         {
             buttonImage = GetComponent<Image>();
         }
 
-        public void Selected()
-        {
-            if (onSelected != null)
-            {
-                onSelected.Invoke(nuke);
-            }
-        }
+        //public void Selected()
+        //{
+        //    if (onSelected != null)
+        //    {
+        //        onSelected.Invoke(nuke);
+        //    }
+        //}
 
         internal void SetCellItem(NukeMonitor.NukeData nuke)
         {
@@ -153,6 +162,18 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
                 var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
                 ImpactRealTime.text = $"Impact in {Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s"; 
             }
+        }
+
+        public void GoToLaunchRoom()
+        {
+            _chooser.OnSelectedShardChanged(nuke.Shard);
+            _chooser.GetAndChooseRoom(nuke.LaunchRoomName);
+        }
+
+        public void GoToImpactRoom()
+        {
+            _chooser.OnSelectedShardChanged(nuke.Shard);
+            _chooser.GetAndChooseRoom(nuke.ImpactRoomName);
         }
     }
 }

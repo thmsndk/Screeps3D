@@ -188,7 +188,12 @@ namespace Assets.Scripts.Screeps3D
                                     roomsToGetMapStatsFrom.Add(launchRoomName);
                                     nuke.LaunchRoom = RoomManager.Instance.Get(launchRoomName, shardXName/*nukesShardName*/);
                                     nuke.LaunchRoomName = launchRoomName;
-                                    StartCoroutine(GetRoomTexture(nuke.Shard, launchRoomName, (roomTexture) => nuke.LaunchRoomTexture = roomTexture));
+                                    StartCoroutine(GetRoomTexture(nuke.Shard, launchRoomName, (roomTexture) =>
+                                    {
+                                        nuke.LaunchRoomTexture = roomTexture;
+
+                                        OnNukesRefreshed?.Invoke();
+                                    }));
                                 }
 
                                 if (nuke.ImpactRoom == null)
@@ -198,7 +203,13 @@ namespace Assets.Scripts.Screeps3D
                                     nuke.ImpactRoom = RoomManager.Instance.Get(impactRoomName, shardXName/*nukesShardName*/);
                                     nuke.ImpactRoomName = impactRoomName;
                                     nuke.ImpactPosition = PosUtility.Convert(shardNuke, nuke.ImpactRoom);
-                                    StartCoroutine(GetRoomTexture(nuke.Shard, impactRoomName, (roomTexture) => nuke.ImpactRoomTexture = roomTexture));
+                                    StartCoroutine(GetRoomTexture(nuke.Shard, impactRoomName, (roomTexture) =>
+                                    {
+                                        nuke.ImpactRoomTexture = roomTexture;
+
+                                        OnNukesRefreshed?.Invoke();
+
+                                    }));
                                 }
 
                                 var nukeLandTime = shardNuke["landTime"];
@@ -247,7 +258,7 @@ namespace Assets.Scripts.Screeps3D
                             if (roomsToGetMapStatsFrom.Count > 0)
                             {
                                 Debug.Log($"[{nukesShardName}] Nuke monitor requested {roomsToGetMapStatsFrom.Count} rooms to be scanned");
-                                MapStatsUpdater.Instance.ScanRooms(nukesShardName, roomsToGetMapStatsFrom, (json) =>
+                                MapStatsUpdater.Instance.ScanRooms(shardXName/*nukesShardName*/, roomsToGetMapStatsFrom, (json) =>
                                 {
                                     OnNukesRefreshed?.Invoke();
                                 });

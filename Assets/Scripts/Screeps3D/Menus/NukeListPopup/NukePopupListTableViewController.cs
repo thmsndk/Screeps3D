@@ -8,6 +8,7 @@ using Screeps3D.Menus.ServerList;
 using Screeps3D.World.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Screeps3D.Rooms;
 
 namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 {
@@ -25,6 +26,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
+
         private void Start()
         {
             m_tableView.dataSource = this;
@@ -55,7 +57,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
             {
                 cell = Instantiate(m_cellPrefab) as NukePopupListItemCell;
                 cell.name = "NukePopupListItemCell_" + (++m_numInstancesCreated).ToString();
-                cell.onSelected.AddListener(OnSelected);
+                //cell.onSelected.AddListener(OnSelected);
             }
 
             var nuke = _nukes[row];
