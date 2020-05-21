@@ -192,6 +192,7 @@ namespace Assets.Scripts.Screeps3D
                                     roomsToGetMapStatsFrom.Add(launchRoomName);
                                     nuke.LaunchRoom = RoomManager.Instance.Get(launchRoomName, nukesShardName);
                                     nuke.LaunchRoomName = launchRoomName;
+                                    StartCoroutine(GetRoomTexture(nuke.Shard, launchRoomName,(roomTexture) => nuke.LaunchRoomTexture = roomTexture));
                                 }
 
                                 if (nuke.ImpactRoom == null)
@@ -201,6 +202,7 @@ namespace Assets.Scripts.Screeps3D
                                     nuke.ImpactRoom = RoomManager.Instance.Get(impactRoomName, nukesShardName);
                                     nuke.ImpactRoomName = impactRoomName;
                                     nuke.ImpactPosition = PosUtility.Convert(shardNuke, nuke.ImpactRoom);
+                                    StartCoroutine(GetRoomTexture(nuke.Shard, impactRoomName, (roomTexture) => nuke.ImpactRoomTexture = roomTexture));
                                 }
 
                                 var nukeLandTime = shardNuke["landTime"];
@@ -295,6 +297,32 @@ namespace Assets.Scripts.Screeps3D
             }
         }
 
+        private IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
+        {
+            var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
+
+            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
+            {
+                // Private servers runs with a different url.
+                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
+            }
+
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                //Texture myTexture = DownloadHandlerTexture.GetContent(www);
+                response(myTexture);
+            }
+
+        }
+
         public class ShardInfoDto
         {
             public ShardInfoDto(JSONObject info)
@@ -340,6 +368,8 @@ namespace Assets.Scripts.Screeps3D
             public string ImpactRoomName { get; internal set; }
             public string Shard { get; internal set; }
             public ShardInfoDto ShardInfo { get; }
+            public Texture LaunchRoomTexture { get; internal set; }
+            public Texture ImpactRoomTexture { get; internal set; }
         }
         //private ObjectView NewInstance(string type)
         //{

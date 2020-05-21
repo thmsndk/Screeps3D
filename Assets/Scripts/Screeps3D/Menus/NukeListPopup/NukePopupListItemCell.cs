@@ -25,12 +25,13 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         public Text ImpactRealTime;
 
+        public Image LaunchRoomTexture;
         public TextMeshProUGUI LaunchRoom;
         public Text LaunchTime;
 
         public BadgeAndLabel LaunchRoomOwner;
-        
 
+        public Image ImpactRoomTexture;
         public TextMeshProUGUI ImpactRoom;
         public Text ImpactTime;
 
@@ -73,6 +74,8 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             Shard.text = nuke.Shard;
 
+            LaunchRoomTexture.material.mainTexture = nuke.LaunchRoomTexture;
+
             LaunchRoom.text = RoomLink.FormatTMPLink(nuke.Shard, nuke.LaunchRoom?.RoomName, nuke.LaunchRoom?.RoomName);
             LaunchTime.text = $"Tick {nuke.InitialLaunchTick.ToString()}"; 
 
@@ -81,6 +84,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             LaunchRoomOwner.SetOwner(launchRoomInfo?.User);
 
+            ImpactRoomTexture.material.mainTexture = nuke.ImpactRoomTexture;
             ImpactRoom.text = RoomLink.FormatTMPLink(nuke.Shard, nuke.ImpactRoom?.RoomName, nuke.ImpactRoom?.RoomName);
 
             ImpactTime.text = $"Tick {nuke.LandingTime.ToString()}";
