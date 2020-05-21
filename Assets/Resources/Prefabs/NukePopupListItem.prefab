@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7600929186680766704}
   - component: {fileID: 1180690133224538737}
   - component: {fileID: 5108002085217763262}
+  - component: {fileID: 3337333037063682615}
   m_Layer: 5
   m_Name: LaunchRoom
   m_TagString: Untagged
@@ -156,6 +157,18 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3337333037063682615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247292623868311831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a48d4e37c450554d9243852bdc6d60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1593036878012033693
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +694,7 @@ GameObject:
   - component: {fileID: 3108644101488115581}
   - component: {fileID: 3661911118053314625}
   - component: {fileID: 4966992365644780337}
+  - component: {fileID: 8782003483741333919}
   m_Layer: 5
   m_Name: ImpactRoom
   m_TagString: Untagged
@@ -826,6 +840,18 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8782003483741333919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3360477615638115333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a48d4e37c450554d9243852bdc6d60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4801416096543306655
 GameObject:
   m_ObjectHideFlags: 0

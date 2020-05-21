@@ -132,11 +132,18 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
         {
             if (nuke != null)
             {
+                // calculate estimated time based on average tickrate.
+                var timeSinceLastUpdate = DateTime.Now - nuke.ShardInfo.TimeUpdated;
+                var ticksSinceLastUpdate = (long)Math.Floor(timeSinceLastUpdate.TotalMilliseconds / (double)nuke.ShardInfo.AverageTick);
+
+                var time = nuke.ShardInfo.Time + ticksSinceLastUpdate;
+
+
                 var initialLaunchTick = Math.Max(nuke.LandingTime - Constants.NUKE_TRAVEL_TICKS, 0);
-                var progress = (float)(ScreepsAPI.Time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
+                var progress = (float)(time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
                 Progress.fillAmount = progress;// / 100f;
 
-                var ticksLeft = (nuke.LandingTime - ScreepsAPI.Time); // TODO: this does not work for other shards
+                var ticksLeft = (nuke.LandingTime - time); // TODO: this does not work for other shards
                 TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
 
                 var impactTimeSpan = nuke.EtaEarly - DateTime.Now;

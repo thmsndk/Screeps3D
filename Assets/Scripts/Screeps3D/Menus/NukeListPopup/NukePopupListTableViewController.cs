@@ -70,7 +70,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         internal void UpdateList(Dictionary<string, List<NukeMonitor.NukeData>> nukes)
         {
-            _nukes = nukes.SelectMany(n => n.Value).ToList();
+            _nukes = nukes.SelectMany(n => n.Value).OrderBy(n => n.EtaEarly).ToList();
             m_tableView.ReloadData();
         }
 

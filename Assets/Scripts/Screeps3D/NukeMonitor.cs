@@ -31,7 +31,7 @@ namespace Assets.Scripts.Screeps3D
 
     public class NukeMonitor : BaseSingleton<NukeMonitor>
     {
-        private List<ShardInfoDto> ShardInfo { get; set; } = new List<ShardInfoDto>();
+        private Dictionary<string, ShardInfoDto> ShardInfo { get; set; } = new Dictionary<string, ShardInfoDto>();
 
         private IEnumerator getNukes;
 
@@ -76,7 +76,7 @@ namespace Assets.Scripts.Screeps3D
                     foreach (var shard in shards)
                     {
                         var tickRateString = shard["tick"].n;
-                        ShardInfo.Add(new ShardInfoDto(shard));
+                        ShardInfo.Add(shard["name"].str, new ShardInfoDto(shard));
                     }
                 });
             }
@@ -89,8 +89,8 @@ namespace Assets.Scripts.Screeps3D
 
                     var shard = new JSONObject();
                     shard.AddField("tick", info["tick"].n);
-
-                    ShardInfo.Add(new ShardInfoDto(shard));
+                    // TODO: how to recieve shardname?
+                    ShardInfo.Add("shard0",new ShardInfoDto(shard));
                 });
             }
 
@@ -115,7 +115,6 @@ namespace Assets.Scripts.Screeps3D
                 // Should probably cache this, and refresh it at an interval to detect new nukes.
                 ScreepsAPI.Http.GetExperimentalNukes((jsonString) =>
                 {
-
                     var obj = new JSONObject(jsonString);
                     var status = obj["ok"];
                     var nukesObject = obj["nukes"];
@@ -146,7 +145,13 @@ namespace Assets.Scripts.Screeps3D
                                     Nukes.Add(nukesShardName, nukes);
                                 }
 
-                                var shardInfo = ShardInfo[PlayerPosition.Instance.ShardLevel];
+                                var shardInfo = ShardInfo[nukesShardName];
+
+                                if(shardInfo != null)
+                                {
+                                    shardInfo.TimeUpdated = DateTime.Now;
+                                    shardInfo.Time = time;
+                                }
 
                                 foreach (var shardNuke in shardNukes)
                                 {
@@ -163,15 +168,13 @@ namespace Assets.Scripts.Screeps3D
                                             NotifyText.Message($"{nukesShardName} => Nuclear Launch Detected", Color.red);
                                         }
 
-                                        nuke = new NukeData();
+                                        nuke = new NukeData(shardInfo);
                                         nuke.Id = id;
                                         nuke.Shard = nukesShardName;
                                         nukes.Add(nuke);
 
-                                        CurrentShardNukes.Add(key, new NukeMissileOverlay(nuke));
-
                                         // TODO: initialize overlays for current shard
-
+                                        CurrentShardNukes.Add(key, new NukeMissileOverlay(nuke));
                                     }
 
                                     // TODO: overlay.Unpack?
@@ -182,7 +185,6 @@ namespace Assets.Scripts.Screeps3D
                                         roomsToGetMapStatsFrom.Add(launchRoomName);
                                         nuke.LaunchRoom = RoomManager.Instance.Get(launchRoomName, nukesShardName);
                                         nuke.LaunchRoomName = launchRoomName;
-
                                     }
 
                                     if (nuke.ImpactRoom == null)
@@ -240,6 +242,7 @@ namespace Assets.Scripts.Screeps3D
 
                             });
 
+                        // TODO: needs to be done per shard.
                         if (!this.nukesInitialized) { this.nukesInitialized = true; }
 
                         if (roomsToGetMapStatsFrom.Count > 0)
@@ -289,7 +292,7 @@ namespace Assets.Scripts.Screeps3D
             }
         }
 
-        private class ShardInfoDto
+        public class ShardInfoDto
         {
             public ShardInfoDto(JSONObject info)
             {
@@ -305,6 +308,8 @@ namespace Assets.Scripts.Screeps3D
             /// Average length of a tick (in milliseconds)
             /// </summary>
             public float? AverageTick { get; internal set; }
+            public long Time { get; internal set; }
+            public DateTime TimeUpdated { get; internal set; }
         }
 
         // How do we instantiate the object, it's kinda like RoomObjects that has a view attached, we should probably do something like that
@@ -314,9 +319,9 @@ namespace Assets.Scripts.Screeps3D
 
         public class NukeData
         {
-            public NukeData()
+            public NukeData(ShardInfoDto shardInfo)
             {
-
+                ShardInfo = shardInfo;
             }
 
             public string Id { get; internal set; }
@@ -331,6 +336,7 @@ namespace Assets.Scripts.Screeps3D
             public DateTime EtaLate { get; internal set; }
             public string ImpactRoomName { get; internal set; }
             public string Shard { get; internal set; }
+            public ShardInfoDto ShardInfo { get; }
         }
         //private ObjectView NewInstance(string type)
         //{
