@@ -173,17 +173,79 @@ namespace Screeps3D.Rooms.Views
             _wallMesh.mesh.vertices = vertices;
             _wallMesh.mesh.RecalculateNormals();
         }
+        private float getRandom(int x, int z)
+        {
+            var seed = ((int)_room.Position.x + x) * 1000 + ((int)_room.Position.z + z);
+            UnityEngine.Random.InitState(seed);
+            return UnityEngine.Random.value;
+        }
+        private float getY(int x, int z, int depth)
+        {
+            const float wallDepth = 0.5f;
+            const float wallRandom = 1.0f;
+            const float wallStep = 0.1f;
+            const float wallConstant = 0.5f;
+            const float edgeConstant = 0.5f;
+
+            int xMod = x % 50;
+            int zMod = z % 50;
+            bool isEdge = (xMod == 0 || zMod == 0 || xMod == 49 || zMod == 49);
+
+            float Y = isEdge ? edgeConstant : wallConstant;
+            Y += (float)Math.Round(getRandom(x, z) * wallRandom / wallStep) * wallStep;
+            Y += depth * wallDepth;
+            return Y;
+        }
 
         private void generateWalls2()
         {
-            const float wallConstant = 0.5f;
-            const float wallRandom = 0.5f;
-
             var wallCount = 0;
             for (int x = 0; x < 50; ++x)
                 for (int y = 0; y < 50; ++y)
                     if (_wallPositions[x, y])
                         ++wallCount;
+
+            var wallDepth = new int[50, 50];
+            const int someHighNumber = 50;
+            for (int y = 1; y < 50; ++y)
+                for (int x = 1; x < 50; ++x)
+                    wallDepth[x, y] = someHighNumber;
+            for (int i = 0; i < 50; ++i)
+            {
+                wallDepth[0, i] = 1;
+                wallDepth[49, i] = 1;
+                wallDepth[i, 0] = 1;
+                wallDepth[i, 49] = 1;
+            }
+
+            for (int y = 1; y < 50; ++y)
+                for (int x = 1; x < 50; ++x)
+                {
+                    var z = 49 - y;
+                    if (!_wallPositions[x, y])
+                        wallDepth[x, z] = 0;
+                    else
+                    {
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z + 1] + 1);
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z] + 1);
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z + 1] + 1);
+                        if (x < 49)
+                            wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z + 1] + 1);
+                    }
+                }
+            for (int y = 49; y >= 0; --y)
+                for (int x = 49; x >= 0; --x)
+                {
+                    var z = 49 - y;
+                    if (z > 0)
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z - 1] + 1);
+                    if (x < 49)
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z] + 1);
+                    if (x < 49 && z > 0)
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z - 1] + 1);
+                    if (x > 0 && z > 0)
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z - 1] + 1);
+                }
 
             const int quadsPerWall = 5;
             int vertCount = wallCount * 4 * quadsPerWall;
@@ -201,14 +263,10 @@ namespace Screeps3D.Rooms.Views
                     if (_wallPositions[x, y])
                     {
                         var z = 49 - y;
-                        UnityEngine.Random.InitState(((int)_room.Position.x + x) * 1000 + (int)_room.Position.z + z);
-                        var wallY1 = wallConstant + UnityEngine.Random.value * wallRandom + (x==0 || z==0 ? 1 : 0);
-                        UnityEngine.Random.InitState(((int)_room.Position.x + x) * 1000 + (int)_room.Position.z + z+1);
-                        var wallY2 = wallConstant + UnityEngine.Random.value * wallRandom + (x == 0 || z == 49 ? 1 : 0);
-                        UnityEngine.Random.InitState(((int)_room.Position.x + x+1) * 1000 + (int)_room.Position.z + z);
-                        var wallY3 = wallConstant + UnityEngine.Random.value * wallRandom + (x == 49 || z == 0 ? 1 : 0);
-                        UnityEngine.Random.InitState(((int)_room.Position.x + x+1) * 1000 + (int)_room.Position.z + z+1);
-                        var wallY4 = wallConstant + UnityEngine.Random.value * wallRandom + (x == 49 || z == 49 ? 1 : 0);
+                        var wallY1 = getY((int)_room.Position.x + x, (int)_room.Position.z + z, wallDepth[x, z]);
+                        var wallY2 = wallY1;
+                        var wallY3 = wallY1;
+                        var wallY4 = wallY1;
 
                         vertices[index] = new Vector3(x, wallY1, z);
                         vertices[index + 1] = new Vector3(x, wallY2, z + 1);
@@ -219,11 +277,11 @@ namespace Screeps3D.Rooms.Views
                         uv[index + 2] = new Vector2(x + 1, z);
                         uv[index + 3] = new Vector2(x + 1, z + 1);
                         triangles[tIndex] = index;
-                        triangles[tIndex+1] = index + 1;
-                        triangles[tIndex+2] = index + 2;
-                        triangles[tIndex+3] = index + 3;
-                        triangles[tIndex+4] = index + 2;
-                        triangles[tIndex+5] = index + 1;
+                        triangles[tIndex + 1] = index + 1;
+                        triangles[tIndex + 2] = index + 2;
+                        triangles[tIndex + 3] = index + 3;
+                        triangles[tIndex + 4] = index + 2;
+                        triangles[tIndex + 5] = index + 1;
                         index += 4;
                         tIndex += 6;
 
@@ -310,6 +368,7 @@ namespace Screeps3D.Rooms.Views
 
         private void Deform()
         {
+            // change to generateWalls2();
             generateWalls1();
 
             const float swampConstant = 0.3f;
