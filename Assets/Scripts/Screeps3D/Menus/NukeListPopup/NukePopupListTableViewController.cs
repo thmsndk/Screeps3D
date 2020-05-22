@@ -77,7 +77,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
         internal void UpdateList(Dictionary<string, List<NukeMonitor.NukeData>> nukes)
         {
             var sb = new StringBuilder();
-            foreach (var shardNukes in nukes)
+            foreach (var shardNukes in nukes.OrderBy(n => n.Key))
             {
                 sb.Append($"<b>{shardNukes.Key}:</b> {shardNukes.Value.Count}  ");
             }
