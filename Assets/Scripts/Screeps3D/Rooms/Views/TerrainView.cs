@@ -182,18 +182,13 @@ namespace Screeps3D.Rooms.Views
         private float getY(int x, int z, int depth)
         {
             const float wallDepth = 0.5f;
-            const float wallRandom = 1.0f;
+            const float wallRandom = 0.5f;
             const float wallStep = 0.1f;
             const float wallConstant = 0.5f;
-            const float edgeConstant = 0.5f;
 
-            int xMod = x % 50;
-            int zMod = z % 50;
-            bool isEdge = (xMod == 0 || zMod == 0 || xMod == 49 || zMod == 49);
-
-            float Y = isEdge ? edgeConstant : wallConstant;
-            Y += (float)Math.Round(getRandom(x, z) * wallRandom / wallStep) * wallStep;
-            Y += depth * wallDepth;
+            float Y = wallConstant
+                + (float)Math.Round(getRandom(x, z) * wallRandom / wallStep) * wallStep
+                + depth * wallDepth;
             return Y;
         }
 
@@ -218,8 +213,8 @@ namespace Screeps3D.Rooms.Views
                 wallDepth[i, 49] = 1;
             }
 
-            for (int y = 1; y < 50; ++y)
-                for (int x = 1; x < 50; ++x)
+            for (int y = 1; y < 49; ++y)
+                for (int x = 1; x < 49; ++x)
                 {
                     var z = 49 - y;
                     if (!_wallPositions[x, y])
@@ -229,22 +224,17 @@ namespace Screeps3D.Rooms.Views
                         wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z + 1] + 1);
                         wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z] + 1);
                         wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z + 1] + 1);
-                        if (x < 49)
-                            wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z + 1] + 1);
+                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z + 1] + 1);
                     }
                 }
-            for (int y = 49; y >= 0; --y)
-                for (int x = 49; x >= 0; --x)
+            for (int y = 48; y > 0; --y)
+                for (int x = 48; x > 0; --x)
                 {
                     var z = 49 - y;
-                    if (z > 0)
-                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z - 1] + 1);
-                    if (x < 49)
-                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z] + 1);
-                    if (x < 49 && z > 0)
-                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z - 1] + 1);
-                    if (x > 0 && z > 0)
-                        wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z - 1] + 1);
+                    wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z - 1] + 1);
+                    wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z] + 1);
+                    wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z - 1] + 1);
+                    wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z - 1] + 1);
                 }
 
             const int quadsPerWall = 5;
