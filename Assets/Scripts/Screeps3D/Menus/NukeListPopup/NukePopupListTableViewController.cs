@@ -9,12 +9,15 @@ using Screeps3D.World.Views;
 using System.Collections.Generic;
 using System.Linq;
 using Screeps3D.Rooms;
+using UnityEngine.UI;
+using System.Text;
 
 namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 {
     //An example implementation of a class that communicates with a TableView
     public class NukePopupListTableViewController : MonoBehaviour, ITableViewDataSource
     {
+        public Text HeaderLabel;
         public NukePopupListItemCell m_cellPrefab;
         public TableView m_tableView;
 
@@ -72,6 +75,14 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
         internal void UpdateList(Dictionary<string, List<NukeMonitor.NukeData>> nukes)
         {
+            var sb = new StringBuilder();
+            foreach (var shardNukes in nukes)
+            {
+                sb.Append($"{shardNukes.Key}:{shardNukes.Value.Count} ");
+            }
+
+            HeaderLabel.text = sb.ToString();
+
             _nukes = nukes.SelectMany(n => n.Value).OrderBy(n => n.EtaEarly).ToList();
             m_tableView.ReloadData();
         }
