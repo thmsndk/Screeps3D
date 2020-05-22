@@ -71,13 +71,6 @@ namespace Screeps3D.World.Views
                     _nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                     _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
                     _nuke.materials[3].SetFloat("EmissionStrength", 4);
-
-                    // _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
-                    //_nuke.materials[3].SetTexture("ColorTexture", launchRoomInfo.User?.Badge);
-                    //_nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
-                    //_nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo?.User?.Badge);
-                    //_nuke.materials[3].SetFloat("EmissionStrength", 2);
-                    // _nuke.materials[3].SetTexture("_BaseColorMap", launchRoomInfo.User?.Badge);
                     badgeSet = true;
                 }
             }
