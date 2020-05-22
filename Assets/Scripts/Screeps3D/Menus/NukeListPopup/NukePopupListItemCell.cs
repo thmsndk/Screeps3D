@@ -81,7 +81,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             this.nuke = nuke;
 
-            Shard.text = nuke.Shard;
+            Shard.text = nuke.Shard.StartsWith("shard") ? nuke.Shard.Replace("shard", "shard ") : nuke.Shard;
 
             LaunchRoomTexture.material.mainTexture = nuke.LaunchRoomTexture;
 
@@ -160,7 +160,7 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
                 TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
 
                 var impactTimeSpan = nuke.EtaEarly - DateTime.Now;
-                ImpactRealTime.text = $"Impact in {Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s"; 
+                ImpactRealTime.text = $"{Environment.NewLine}{impactTimeSpan.Days:D2}d {impactTimeSpan.Hours:D2}h {impactTimeSpan.Minutes:D2}m {impactTimeSpan.Seconds:D2}s"; 
             }
         }
 
