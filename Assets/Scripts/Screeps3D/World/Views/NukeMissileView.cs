@@ -68,15 +68,21 @@ namespace Screeps3D.World.Views
                 var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(Overlay.Shard, Overlay.LaunchRoomName);
                 if (launchRoomInfo != null)
                 {
-                    //_nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
+                    _nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+                    _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
+                    _nuke.materials[3].SetFloat("EmissionStrength", 4);
+
+                    // _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
                     //_nuke.materials[3].SetTexture("ColorTexture", launchRoomInfo.User?.Badge);
                     //_nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                     //_nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo?.User?.Badge);
                     //_nuke.materials[3].SetFloat("EmissionStrength", 2);
-                    _nuke.materials[3].SetTexture("_BaseColorMap", launchRoomInfo.User?.Badge);
+                    // _nuke.materials[3].SetTexture("_BaseColorMap", launchRoomInfo.User?.Badge);
                     badgeSet = true;
                 }
             }
+            float decayEmission = 2f + Mathf.Abs(Mathf.Sin(Time.time)) * 3;
+            _nuke.materials[3].SetFloat("EmissionStrength", decayEmission);
 
             // TODO: should we simulate movement / progress in between nukemonitor updates so the misile moves "smoothly"? this neeeds to be in update then. and not sure calling arcRenderer.Progress works, we then need a "targetProgress" or something like that, could let us inspire by creep movement between ticks
             // TODO: should perhaps move this calculation so progress is updated on each tick? and not each rendering?
