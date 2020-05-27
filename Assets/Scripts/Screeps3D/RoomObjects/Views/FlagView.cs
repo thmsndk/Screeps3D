@@ -34,14 +34,14 @@ namespace Screeps3D.RoomObjects.Views
             var primary = Constants.FlagColors[_flag.PrimaryColor];
             var secondary = Constants.FlagColors[_flag.SecondaryColor];
 
-            var currentPrimaryColor = rend.materials[0].GetColor(ShaderKeys.HDRPLit.Color);
-            var currentSecondaryColor = rend.materials[1].GetColor(ShaderKeys.HDRPLit.Color);
+            var currentPrimaryColor = rend.material.GetColor(ShaderKeys.FlagShader.PrimaryColor);
+            var currentSecondaryColor = rend.material.GetColor(ShaderKeys.FlagShader.SecondaryColor);
 
             // TODO: compare if we need to update the color
             // https://docs.unity3d.com/ScriptReference/Mathf.Approximately.html
 
-            rend.materials[0].SetColor(ShaderKeys.HDRPLit.Color, Color.Lerp(currentPrimaryColor, primary, Time.deltaTime));
-            rend.materials[1].SetColor(ShaderKeys.HDRPLit.Color, Color.Lerp(currentSecondaryColor, secondary, Time.deltaTime));
+            rend.material.SetColor(ShaderKeys.FlagShader.PrimaryColor, Color.Lerp(currentPrimaryColor, primary, Time.deltaTime));
+            rend.material.SetColor(ShaderKeys.FlagShader.SecondaryColor, Color.Lerp(currentSecondaryColor, secondary, Time.deltaTime));
         }
     }
 }

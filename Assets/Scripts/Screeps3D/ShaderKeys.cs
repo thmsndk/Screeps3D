@@ -14,5 +14,12 @@ namespace Assets.Scripts.Screeps3D
             public const string Texture = "_BaseColorMap";
         }
 
+        public class FlagShader
+        {
+            public const string PrimaryColor = "PrimaryColor";
+            public const string SecondaryColor = "SecondaryColor";
+
+        }
+
     }
 }

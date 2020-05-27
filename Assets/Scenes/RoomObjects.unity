@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 307.41403, g: 380.90115, b: 504.12537, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1227,6 +1227,16 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 41
       objectReference: {fileID: 0}
+    - target: {fileID: 23911937511294364, guid: 7b1bb7a09e34d2e41862c183e57dc3ff,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23911937511294364, guid: 7b1bb7a09e34d2e41862c183e57dc3ff,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70d594150bf97d84a8903a648e4edc4f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b1bb7a09e34d2e41862c183e57dc3ff, type: 3}
 --- !u!1001 &1080885689
@@ -4658,22 +4668,22 @@ PrefabInstance:
     - target: {fileID: 277934125348194839, guid: b160c84bf34bac4438bd206d7bcfb48f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.32844788
+      value: 0.02857818
       objectReference: {fileID: 0}
     - target: {fileID: 277934125348194839, guid: b160c84bf34bac4438bd206d7bcfb48f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.027481327
+      value: 0.9495945
       objectReference: {fileID: 0}
     - target: {fileID: 277934125348194839, guid: b160c84bf34bac4438bd206d7bcfb48f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.009520536
+      value: -0.29874498
       objectReference: {fileID: 0}
     - target: {fileID: 277934125348194839, guid: b160c84bf34bac4438bd206d7bcfb48f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9440742
+      value: 0.09058187
       objectReference: {fileID: 0}
     - target: {fileID: 1196175813828030555, guid: b160c84bf34bac4438bd206d7bcfb48f,
         type: 3}
