@@ -21,7 +21,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
             {
                 Type = SourceProviderType.Official,
                 Name = "Screeps.com",
-                Address = {HostName = "Screeps.com", Path = "/", Port = "", Ssl = true}
+                Address = {HostName = "screeps.com", Path = "/", Port = "443", Ssl = true}
             };
             serverList.Add(publicServer);
 
@@ -29,7 +29,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
             {
                 Type = SourceProviderType.Official,
                 Name = "PTR Screeps.com",
-                Address = {HostName = "screeps.com", Path = "/ptr", Port = "", Ssl = true}
+                Address = {HostName = "screeps.com", Path = "/ptr", Port = "443", Ssl = true}
             };
 
             serverList.Add(ptr);

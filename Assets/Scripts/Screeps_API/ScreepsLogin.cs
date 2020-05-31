@@ -116,7 +116,7 @@ namespace Screeps_API
             }
 
             var server = new ServerCache
-                {Type = SourceProviderType.Custom, Address = {HostName = input, Port = "21025"}};
+            { Type = SourceProviderType.Custom, Address = { HostName = input, Port = "21025" } };
 
             // split/parse http url and port and assign properly e.g. http://screeps.reggaemuffin.me:21025
             var urlPattern =
@@ -306,12 +306,28 @@ namespace Screeps_API
                             }
                             else
                             {
-                                
+
                                 cachedServer.Name = server.Name;
                                 cachedServer.LikeCount = server.LikeCount;
 
                                 //Backwards compatibility
                                 cachedServer.Type = server.Type;
+
+                                // Update credentials once
+                                if (string.IsNullOrEmpty(cachedServer.Credentials.Token) && !string.IsNullOrEmpty(server.Credentials.Token))
+                                {
+                                    cachedServer.Credentials.Token = server.Credentials.Token;
+                                }
+
+                                if (string.IsNullOrEmpty(cachedServer.Credentials.Email) && !string.IsNullOrEmpty(server.Credentials.Email))
+                                {
+                                    cachedServer.Credentials.Email = server.Credentials.Email;
+                                }
+
+                                if (string.IsNullOrEmpty(cachedServer.Credentials.Password) && !string.IsNullOrEmpty(server.Credentials.Password))
+                                {
+                                    cachedServer.Credentials.Password = server.Credentials.Password;
+                                }
                             }
                         }
                         else

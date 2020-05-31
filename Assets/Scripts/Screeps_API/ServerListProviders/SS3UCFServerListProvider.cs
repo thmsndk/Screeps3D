@@ -100,6 +100,21 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                         cachedServer.Address.Path = "/ptr";
                     }
 
+                    // Assist with merging
+                    if (host.EndsWith("screeps.com"))
+                    {
+                        cachedServer.Type = SourceProviderType.Official;
+                        cachedServer.Name = $"Screeps.com";
+                        if (ptr)
+                        {
+                            cachedServer.Name = $"PTR " + cachedServer.Name;
+                        }
+                    }
+
+                    cachedServer.Credentials.Token = token;
+                    cachedServer.Credentials.Email = username;
+                    cachedServer.Credentials.Password = password;
+
                     serverList.Add(cachedServer);
                 }
 
