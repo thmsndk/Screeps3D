@@ -45,6 +45,7 @@ namespace Screeps_API
         NONE,
         Official,
         Community,
-        Custom
+        Custom,
+        SS3_UCF_YAML
     }
 }

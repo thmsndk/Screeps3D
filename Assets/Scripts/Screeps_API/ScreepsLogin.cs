@@ -44,7 +44,7 @@ namespace Screeps_API
             GameManager.OnModeChange += OnModeChange;
             serverListProviders.Add(new OfficialServerListProvider());
             serverListProviders.Add(new OfficialCommunityServerListProvider());
-            // TODO: SS3 Unified Credentials File .yml
+            serverListProviders.Add(new SS3UCFServerListProvider());
             // TODO: SS3 Unified Credentials File .ini
             // https://screeps.online/ ?
 
