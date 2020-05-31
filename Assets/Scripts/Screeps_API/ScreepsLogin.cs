@@ -295,7 +295,8 @@ namespace Screeps_API
                         if (provider.MergeWithCache)
                         {
                             var cachedServer = _servers.SingleOrDefault(cache =>
-                                cache.Address.HostName == server.Address.HostName
+                                cache.Name == server.Name
+                                && cache.Address.HostName == server.Address.HostName
                                 && cache.Address.Path == server.Address.Path
                                 && cache.Address.Port == server.Address.Port);
 

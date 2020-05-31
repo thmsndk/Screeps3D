@@ -74,24 +74,43 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                     var serverName = ((YamlScalarNode)item.Key).Value;
                     var server = (YamlMappingNode)item.Value;
 
-                    var host = server.Children[new YamlScalarNode("host")];
-                    var port = GetValueOrdefault(server, new YamlScalarNode("port"));
-                    var secure = GetValueOrdefault(server, new YamlScalarNode("secure")); // TODO: if secure and port is null, set to 443
-                    var ptr = GetValueOrdefault(server, new YamlScalarNode("ptr"));
-                    var sim = GetValueOrdefault(server, new YamlScalarNode("sim")); // if true, skip
+                    var host = GetValueOrdefault(server, "host");
+                    var secure = bool.Parse(GetValueOrdefault(server, "secure") ?? "false");
+                    var port = GetValueOrdefault(server, "port") ?? (secure ? "443" : "21025"); // TODO: this default logic belongs in the connection handler.
+                    var ptr = bool.Parse(GetValueOrdefault(server, "ptr") ?? "false");
+                    var sim = bool.Parse(GetValueOrdefault(server, "sim") ?? "false"); // if true, skip
 
-                    var token = GetValueOrdefault(server, new YamlScalarNode("token"));
-                    var username = GetValueOrdefault(server, new YamlScalarNode("username"));
-                    var password = GetValueOrdefault(server, new YamlScalarNode("password"));
+                    var token = GetValueOrdefault(server, "token");
+                    var username = GetValueOrdefault(server, "username");
+                    var password = GetValueOrdefault(server, "password");
 
                     Debug.Log($"{serverName} {host} {port} {secure} {ptr} {sim} {token} {username} {password}");
+
+                    var cachedServer = new ServerCache
+                    {
+                        Address = { HostName = host, Port = port, Ssl = secure }, 
+                        Type = SourceProviderType.SS3_UCF_YAML,
+                        Name = serverName,
+
+                    };
+
+                    // TODO: PTR PATH shenanigans belongs another place bool should be enough?
+                    if (ptr)
+                    {
+                        cachedServer.Address.Path = "/ptr";
+                    }
+
+                    serverList.Add(cachedServer);
                 }
+
+                callback(serverList);
             }
         }
 
-        private static string GetValueOrdefault(YamlMappingNode server, YamlScalarNode yamlScalarNode)
+        private static string GetValueOrdefault(YamlMappingNode server, string property)
         {
-            return server.Children.ContainsKey(yamlScalarNode) ? ((YamlScalarNode)server.Children[yamlScalarNode]).Value : null;
+            var node = new YamlScalarNode(property);
+            return server.Children.ContainsKey(node) ? ((YamlScalarNode)server.Children[node]).Value : null;
         }
 
         private string GetScreepsConfigFilePath()
