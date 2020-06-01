@@ -247,6 +247,7 @@ namespace Screeps_API
 
             _servers = SaveManager.Load<CacheList>(_savePath) ?? new CacheList();
 
+            Debug.Log($"Loaded {_servers.Count} servers from servers.dat");
 
             // Get status of servers, should probably be async for each server and a coroutine.
             // Need to double wrap it to keep a reference to the server
@@ -306,25 +307,25 @@ namespace Screeps_API
                             }
                             else
                             {
-
+                                cachedServer.Persist = server.Persist;
                                 cachedServer.Name = server.Name;
                                 cachedServer.LikeCount = server.LikeCount;
 
                                 //Backwards compatibility
                                 cachedServer.Type = server.Type;
 
-                                // Update credentials once
-                                if (string.IsNullOrEmpty(cachedServer.Credentials.Token) && !string.IsNullOrEmpty(server.Credentials.Token))
+                                // Update credentials
+                                if (!string.IsNullOrEmpty(server.Credentials.Token))
                                 {
                                     cachedServer.Credentials.Token = server.Credentials.Token;
                                 }
 
-                                if (string.IsNullOrEmpty(cachedServer.Credentials.Email) && !string.IsNullOrEmpty(server.Credentials.Email))
+                                if (!string.IsNullOrEmpty(server.Credentials.Email))
                                 {
                                     cachedServer.Credentials.Email = server.Credentials.Email;
                                 }
 
-                                if (string.IsNullOrEmpty(cachedServer.Credentials.Password) && !string.IsNullOrEmpty(server.Credentials.Password))
+                                if (!string.IsNullOrEmpty(server.Credentials.Password))
                                 {
                                     cachedServer.Credentials.Password = server.Credentials.Password;
                                 }
@@ -389,8 +390,7 @@ namespace Screeps_API
             // TODO: look into SSL
 
             var filteredServers = new CacheList();
-            filteredServers.AddRange(_servers.Where(s => s.HasCredentials));
-
+            filteredServers.AddRange(_servers.Where(s => s.HasCredentials && s.Persist));
 
             SaveManager.Save(_savePath, filteredServers);
             NotifyText.Message("Connecting...");

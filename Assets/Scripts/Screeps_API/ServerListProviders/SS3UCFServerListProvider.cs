@@ -21,104 +21,81 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
         {
             var serverList = new List<ServerCache>();
 
-            Action<string> serverCallback = str =>
+            try
             {
-                var obj = new JSONObject(str);
-                var servers = obj["servers"].list;
+                var configPath = GetScreepsConfigFilePath();
+                Debug.Log($"Found config at {configPath}");
+                var yaml = new YamlStream();
 
-                foreach (var server in servers)
+                using (var reader = File.OpenText(configPath))
                 {
-                    var name = server["name"].str;
-                    //TODO implement status
-                    var status = server["status"].str;
-                    var likeCount = Convert.ToInt32(server["likeCount"].n);
+                    yaml.Load(reader);
 
-                    var settings = server["settings"];
-                    var host = settings["host"].str;
-                    var port = settings["port"].str;
+                    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
 
-                    var cachedServer = new ServerCache
+                    var servers = (YamlMappingNode)mapping.Children[new YamlScalarNode("servers")];
+
+                    foreach (var item in servers.Children)
                     {
-                        Address = { HostName = host, Port = port },
-                        Type = SourceProviderType.SS3_UCF_YAML,
-                        Name = name,
-                        LikeCount = likeCount
-                    };
+                        var serverName = ((YamlScalarNode)item.Key).Value;
+                        var server = (YamlMappingNode)item.Value;
 
-                    serverList.Add(cachedServer);
+                        var host = GetValueOrdefault(server, "host");
+                        var secure = bool.Parse(GetValueOrdefault(server, "secure") ?? "false");
+                        var port = GetValueOrdefault(server, "port") ?? (secure ? "443" : "21025"); // TODO: this default logic belongs in the connection handler.
+                        var ptr = bool.Parse(GetValueOrdefault(server, "ptr") ?? "false");
+                        var sim = bool.Parse(GetValueOrdefault(server, "sim") ?? "false"); // if true, skip
 
-                    if (cachedServer.Address.HostName.EndsWith(".screepspl.us"))
-                    {
-                        cachedServer.Address.Ssl = true;
-                        cachedServer.Address.Port = "443";
-                    }
-                }
+                        var token = GetValueOrdefault(server, "token");
+                        var username = GetValueOrdefault(server, "username");
+                        var password = GetValueOrdefault(server, "password");
 
-                callback(serverList);
-            };
+                        //Debug.Log($"{serverName} {host} {port} {secure} {ptr} {sim} {token} {username} {password}");
 
-            var configPath = GetScreepsConfigFilePath();
-            Debug.Log($"Found config at {configPath}");
-            var yaml = new YamlStream();
+                        var cachedServer = new ServerCache
+                        {
+                            Address = { HostName = host, Port = port, Ssl = secure },
+                            Type = SourceProviderType.SS3_UCF_YAML,
+                            Name = serverName,
+                            Persist = false
 
-            using (var reader = File.OpenText(configPath))
-            {
-                yaml.Load(reader);
+                        };
 
-                var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-
-                var servers = (YamlMappingNode)mapping.Children[new YamlScalarNode("servers")];
-
-                foreach (var item in servers.Children)
-                {
-                    var serverName = ((YamlScalarNode)item.Key).Value;
-                    var server = (YamlMappingNode)item.Value;
-
-                    var host = GetValueOrdefault(server, "host");
-                    var secure = bool.Parse(GetValueOrdefault(server, "secure") ?? "false");
-                    var port = GetValueOrdefault(server, "port") ?? (secure ? "443" : "21025"); // TODO: this default logic belongs in the connection handler.
-                    var ptr = bool.Parse(GetValueOrdefault(server, "ptr") ?? "false");
-                    var sim = bool.Parse(GetValueOrdefault(server, "sim") ?? "false"); // if true, skip
-
-                    var token = GetValueOrdefault(server, "token");
-                    var username = GetValueOrdefault(server, "username");
-                    var password = GetValueOrdefault(server, "password");
-
-                    Debug.Log($"{serverName} {host} {port} {secure} {ptr} {sim} {token} {username} {password}");
-
-                    var cachedServer = new ServerCache
-                    {
-                        Address = { HostName = host, Port = port, Ssl = secure }, 
-                        Type = SourceProviderType.SS3_UCF_YAML,
-                        Name = serverName,
-
-                    };
-
-                    // TODO: PTR PATH shenanigans belongs another place bool should be enough?
-                    if (ptr)
-                    {
-                        cachedServer.Address.Path = "/ptr";
-                    }
-
-                    // Assist with merging
-                    if (host.EndsWith("screeps.com"))
-                    {
-                        cachedServer.Type = SourceProviderType.Official;
-                        cachedServer.Name = $"Screeps.com";
+                        // TODO: PTR PATH shenanigans belongs another place bool should be enough?
                         if (ptr)
                         {
-                            cachedServer.Name = $"PTR " + cachedServer.Name;
+                            cachedServer.Address.Path = "/ptr";
                         }
+
+                        // Assist with merging
+                        if (host.EndsWith("screeps.com"))
+                        {
+                            cachedServer.Persist = true;
+                            cachedServer.Type = SourceProviderType.Official;
+                            cachedServer.Name = $"Screeps.com";
+                            if (ptr)
+                            {
+                                cachedServer.Name = $"PTR " + cachedServer.Name;
+                            }
+                        }
+
+                        cachedServer.Credentials.Token = token;
+                        cachedServer.Credentials.Email = username;
+                        cachedServer.Credentials.Password = password;
+
+                        serverList.Add(cachedServer);
                     }
 
-                    cachedServer.Credentials.Token = token;
-                    cachedServer.Credentials.Email = username;
-                    cachedServer.Credentials.Password = password;
-
-                    serverList.Add(cachedServer);
+                    callback(serverList);
                 }
-
-                callback(serverList);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Debug.Log($"No SS3 Unified Credentials File found.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
             }
         }
 
@@ -166,7 +143,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
 
             foreach (var file in configPaths)
             {
-                Debug.Log(file);
                 if (File.Exists(file))
                 {
                     return file;

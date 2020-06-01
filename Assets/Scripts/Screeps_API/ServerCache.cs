@@ -38,6 +38,14 @@ namespace Screeps_API
         }
 
         public bool Selected { get; internal set; }
+
+        [field: NonSerialized]
+        public bool Persist { get; internal set; }
+
+        public ServerCache()
+        {
+            Persist = true;
+        }
     }
 
     public enum SourceProviderType
