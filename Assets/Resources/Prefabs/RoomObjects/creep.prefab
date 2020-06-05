@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 135750404668478662}
   - component: {fileID: 114952524386664258}
   - component: {fileID: 114690188006486146}
-  - component: {fileID: 2503008069890213961}
+  - component: {fileID: 8297456676753024772}
   m_Layer: 9
   m_Name: creep
   m_TagString: Untagged
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1558d39b4154667a6f0bfcbeef18a9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!111 &2503008069890213961
+--- !u!111 &8297456676753024772
 Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,12 +144,12 @@ Animation:
   m_GameObject: {fileID: 1011801902582586}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: -623603649343465320, guid: 50879aa7dee3b4f4c8ee781f55f94936,
+  m_Animation: {fileID: -2858877168719741818, guid: 50879aa7dee3b4f4c8ee781f55f94936,
     type: 3}
   m_Animations:
+  - {fileID: -2858877168719741818, guid: 50879aa7dee3b4f4c8ee781f55f94936, type: 3}
   - {fileID: -623603649343465320, guid: 50879aa7dee3b4f4c8ee781f55f94936, type: 3}
-  - {fileID: -623603649343465320, guid: 50879aa7dee3b4f4c8ee781f55f94936, type: 3}
-  m_WrapMode: 2
+  m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
@@ -1109,6 +1109,7 @@ GameObject:
   - component: {fileID: 3189897722278905652}
   - component: {fileID: 6456160354050466310}
   - component: {fileID: 5635469616207229335}
+  - component: {fileID: 4519231665930310726}
   m_Layer: 9
   m_Name: wingLeft
   m_TagString: Untagged
@@ -1177,6 +1178,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!111 &4519231665930310726
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4145505719858455723}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &4187489564594489552
 GameObject:
   m_ObjectHideFlags: 0
