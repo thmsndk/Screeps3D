@@ -6,11 +6,24 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private Renderer _body = default;
         [SerializeField] private Transform _rotationRoot = default;
+        [SerializeField] private Renderer _wingLeft;
+        [SerializeField] private Renderer _wingRight;
+        [SerializeField] private Renderer _horse;
 
         private Quaternion _rotTarget;
         private Vector3 _posTarget;
         private Vector3 _posRef;
         private Creep _creep;
+
+        private void setWings(bool setWings) {
+            float v = setWings ? 0.2f : 15f;
+                _wingRight.material.SetFloat("Magic", v);
+                _wingLeft.material.SetFloat("Magic", v);
+        }
+        private void setHorse(bool setHorse) {
+            float v = setHorse ? 0.2f : 15f;
+                _horse.material.SetFloat("Magic", v);
+        }
 
         internal override void Load(RoomObject roomObject)
         {
@@ -23,6 +36,16 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
+            }
+            // setWings(false);
+            // setHorse(false);
+
+            if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
+                setWings(true);
+                setHorse(false);
+            } else {
+                setWings(false);
+                setHorse(true);
             }
 
             _rotTarget = transform.rotation;
