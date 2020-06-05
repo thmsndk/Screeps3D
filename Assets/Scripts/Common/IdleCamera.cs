@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Common
 {
-    public class IdleCamera : BaseSingleton<CameraRig>
+    public class IdleCamera : BaseSingleton<IdleCamera>
     {
         [SerializeField] private CameraRig _cameraRig = default;
         private Vector3 lastRotation;

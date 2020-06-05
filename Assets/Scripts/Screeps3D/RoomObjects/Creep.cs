@@ -167,7 +167,8 @@ namespace Screeps3D.RoomObjects
             Vector3 newForward = Vector3.zero;
             if (BumpPosition != default(Vector3))
                 newForward = Position - BumpPosition;
-            if (PrevPosition != Position)
+            // checking for 0,0,0 so creeps won't look away from world center when initially placed
+            if (PrevPosition != Position && PrevPosition != Vector3.zero)
                 newForward = PrevPosition - Position;
 
             if (newForward != Vector3.zero)
