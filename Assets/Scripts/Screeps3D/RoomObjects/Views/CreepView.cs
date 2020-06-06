@@ -38,9 +38,13 @@ namespace Screeps3D.RoomObjects.Views
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", 3f);
             }
+
+            // HORSE
+            // do not forget to do reposition in .blend files ! 
+            // to uncomment:
             // setWings(false);
             // setHorse(false);
-
+            // to comment:
             if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
                 setWings(true);
                 setHorse(false);
