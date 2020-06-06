@@ -10,12 +10,13 @@ namespace Screeps3D.RoomObjects.Views
     {
         private static readonly Dictionary<string, BeamConfig> BeamConfigs = new Dictionary<string, BeamConfig>
         {   
-            {"rangedAttack", new BeamConfig(Color.blue, 0.3f, 0.3f)},
-            {"rangedMassAttack", new BeamConfig(Color.blue, 0.3f, 0.3f)}, // RMA is an AOE effect, not a beam. should really be in another view
-            {"rangedHeal", new BeamConfig(Color.green, 0.3f, 0.3f)},
-            {"repair", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
-            {"build", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
-            {"upgradeController", new BeamConfig(Color.yellow, 0.3f, 1f)}
+            // HORSE 0.3f -> 0.7f
+            {"rangedAttack", new BeamConfig(Color.blue, 0.7f, 0.3f)},
+            {"rangedMassAttack", new BeamConfig(Color.blue, 0.7f, 0.3f)}, // RMA is an AOE effect, not a beam. should really be in another view
+            {"rangedHeal", new BeamConfig(Color.green, 0.7f, 0.3f)},
+            {"repair", new BeamConfig(Color.yellow, 0.7f, 0.3f)},
+            {"build", new BeamConfig(Color.yellow, 0.7f, 0.3f)},    
+            {"upgradeController", new BeamConfig(Color.yellow, 0.7f, 1f)}
         };
 
         private IActionObject _creep;
