@@ -1,14 +1,29 @@
 fileFormatVersion: 2
 guid: b0b885bdb469ce748bc9d90dbce48892
 ModelImporter:
-  serializedVersion: 25
+  serializedVersion: 19300
   internalIDToNameTable:
   - first:
       74: 1989289236423521904
-    second: Default Take
-  externalObjects: {}
+    second: StoreAnimation
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Badge
+    second: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalUV
+    second: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PowerEmission
+    second: {fileID: 2100000, guid: 148b0d3bb825fca4d91c127521e3ec6a, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -35,12 +50,12 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Default Take
+      name: StoreAnimation
       takeName: Default Take
       internalID: 1989289236423521904
       firstFrame: 0
       lastFrame: 249
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -70,6 +85,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -99,8 +115,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
-  copyAvatar: 0
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -115,11 +130,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 1
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
