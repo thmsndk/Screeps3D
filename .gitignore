@@ -6,7 +6,6 @@
 [Bb]uilds/
 [Ll]ibrary/
 [Ll]ocal[Cc]ache/
-[Oo]bj/
 [Tt]emp/
 [Uu]nityGenerated/
 # file on crash reports
@@ -20,7 +19,6 @@ sysinfo.txt
 [Ee]xportedObj/
 *.booproj
 *.csproj
-*.sln
 *.suo
 *.svd
 *.unityproj
