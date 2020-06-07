@@ -111,12 +111,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1ACD3247: 1.5
-    - Vector1_4989F133: 4
+    - Vector1_1ACD3247: 1
+    - Vector1_4989F133: 2
     - Vector1_52EEAD33: 0.8
-    - Vector1_66B4774B: 0.8
+    - Vector1_66B4774B: 225
     - Vector1_D1BCA184: 2
-    - Vector1_F08BA77B: 5
+    - Vector1_F08BA77B: 0.05
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -241,7 +241,7 @@ Material:
     - Color_2FFD5645: {r: 1, g: 0, b: 0, a: 0}
     - Color_E2896619: {r: 0.066497535, g: 1, b: 0, a: 0}
     - PrimaryColor: {r: 1, g: 0, b: 0, a: 0}
-    - SecondaryColor: {r: 0.066497535, g: 1, b: 0, a: 0}
+    - SecondaryColor: {r: 0, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
