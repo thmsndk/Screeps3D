@@ -85,7 +85,7 @@ namespace Screeps_API
                         MaxTanAngleDeviation = 0.1f
                     });
 
-                    var sprite = VectorUtils.BuildSprite(geometry, 1, VectorUtils.Alignment.Center, Vector2.zero, 0);
+                    var sprite = VectorUtils.BuildSprite(geometry, 1, VectorUtils.Alignment.Center, Vector2.zero, 0, true);
 
                     // var mat = new Material(Shader.Find("Unlit/VectorGradient"));
                     var mat = new Material(Shader.Find("Unlit/Vector"));
