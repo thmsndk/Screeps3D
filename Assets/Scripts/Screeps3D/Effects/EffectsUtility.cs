@@ -13,6 +13,12 @@ namespace Screeps3D.Effects
             Beam(startPos, endPos, config.Color);
         }
         
+        public static void Aura(RoomObject origin) {
+            var go = PoolLoader.Load(AuraEffect.PATH);
+            var effect = go.GetComponent<AuraEffect>();
+            effect.Load(origin);
+        }
+
         public static void Beam(Vector3 startPos, Vector3 endPos, Color color)
         {
             var go = PoolLoader.Load(BeamEffect.PATH);
