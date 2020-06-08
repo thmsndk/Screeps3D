@@ -1,4 +1,5 @@
 ﻿using Common;
+using Screeps_API;
 using Screeps3D;
 using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
@@ -38,9 +39,8 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 {
                     if (roomPosition.x != _roomObject.X || roomPosition.y != _roomObject.Y)
                     {
-                        // TODO: could probably just set X,Y Room and call SetPosition
-                        Debug.Log(roomPosition);
-                        Debug.Log($"flag: {_roomObject.X}, {_roomObject.Y} => {_roomObject.Position} == {PosUtility.Convert(_roomObject.X, _roomObject.Y, room)}");
+                        //Debug.Log(roomPosition);
+                        Debug.Log($"{_roomObject.Type}: {_roomObject.X}, {_roomObject.Y} => {_roomObject.Position} == {PosUtility.Convert(roomPosition.x, roomPosition.y, room)}");
                         ////Debug.Log("placeflag delta");
                         _roomObject.Delta(new JSONObject($"{{\"x\":{roomPosition.x},\"y\":{roomPosition.y}}}"), room);
 
@@ -53,6 +53,15 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                     }
                 }
 
+            }
+
+            if (/*!_showEditDialog && */Input.GetMouseButtonUp(0) && !InputMonitor.OverUI)
+            {
+                // TODO: Place constructionsite
+                //ScreepsAPI.Http.CreateFlag
+
+                //_showEditDialog = true;
+                //ToggleEditFlagPopup(true);
             }
         }
 
