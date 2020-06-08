@@ -100,7 +100,7 @@ namespace Screeps3D.RoomObjects.Views
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 
             if(_creep.actionTarget.HasValue) {               
-                // creep does something, keep it rotated towards target 
+                // creep does something, keep it rotated towards target
                 Vector3 relativePos = _rotationRoot.position - (Vector3)_creep.actionTarget;
                 Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
                 _rotationRoot.rotation = tRotation;

@@ -43,25 +43,24 @@ namespace Screeps3D.RoomObjects.Views
             
             var action = _creep.Actions[beam.Key];
             var _cRO = _creep as Creep;
-            var endPos = PosUtility.Convert(action, _cRO.Room);
+            (_creep as Creep).actionTarget = PosUtility.Convert(action, _cRO.Room);
 
             Debug.Log(beam.Key);
             Debug.Log(data.ToString());
             switch (beam.Key)
             {
                 case "attack":
-                    // EffectsUtility.Aura(_creep as RoomObject);
+                    EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget);
                     break;
                 case "rangedMassAttack":
                     EffectsUtility.ElectricExplosion(_creep as RoomObject);
                     break;
                 default:
                     EffectsUtility.Beam(_creep as RoomObject, action, beam.Value);
-                    // EffectsUtility.Aura(_creep as RoomObject); // For debug
+                    EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget); // For debug
                     break;
             }
 
-            (_creep as Creep).actionTarget = endPos;
             // StartCoroutine(Beam.Draw(_creep, _creep.Actions[beam.Key], _lineRenderer, beam.Value));
             
         }

@@ -12,6 +12,12 @@ namespace Screeps3D.Effects
             var endPos = PosUtility.Convert(target, origin.Room) + new Vector3(0, config.EndHeight, 0);
             Beam(startPos, endPos, config.Color);
         }
+        
+        public static void Attack(RoomObject origin, Vector3 targetPos) {
+            var go = PoolLoader.Load(AttackEffect.PATH);
+            var effect = go.GetComponent<AttackEffect>();
+            effect.Load(origin, targetPos);
+        }
 
         public static void Beam(Vector3 startPos, Vector3 endPos, Color color)
         {
