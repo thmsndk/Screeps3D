@@ -56,6 +56,14 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             }
         }
 
+        private void OnDisable()
+        {
+            if (_roomObject.View != null)
+            {
+                _roomObject.HideObject(_roomObject.Room);
+            }
+        }
+
         public bool GetCursorPositionInRoom(out Room room, out Vector2Int position)
         {
             room = null;
