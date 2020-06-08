@@ -7,7 +7,7 @@ namespace Screeps3D.RoomObjects.Views
 
         [SerializeField] private Transform _bumpRoot = default;
         private IBump _creep;
-        private Vector3 _bumpTarget;
+        private Vector3 _localTargetPos;
         private Vector3 _bumpRef;
         private bool _bumping;
         private bool _animating;
@@ -26,7 +26,8 @@ namespace Screeps3D.RoomObjects.Views
             if (_creep.BumpPosition == default(Vector3))
                 return;
 
-            _bumpTarget = (_creep.BumpPosition - _creep.PrevPosition) * .2f;
+            _localTargetPos= (_creep.BumpPosition - (_creep as RoomObject).Position);
+            // _bumpTarget = (_creep.BumpPosition - (_creep as RoomObjects).Position) * .2f;
             _bumping = true;
             _animating = true;
         }
@@ -41,18 +42,22 @@ namespace Screeps3D.RoomObjects.Views
             if (_creep == null || !_animating)
                 return;
 
-            var target = Vector3.zero;
+            var localBase = Vector3.zero;
+            var targetLocalPos = localBase;
             var speed = .2f;
             if (_bumping)
             {
-                target = _bumpTarget;
+                targetLocalPos = _localTargetPos;
                 speed = .1f;
             }
+            // creep IS rotated towards source/action so we just need to go forward via Z, and do not care about X axis
+            targetLocalPos.x = 0f;
+            targetLocalPos.y = 0f;
 
             _bumpRoot.transform.localPosition =
-                Vector3.SmoothDamp(_bumpRoot.transform.localPosition, target, ref _bumpRef, speed);
+                Vector3.SmoothDamp(_bumpRoot.transform.localPosition, targetLocalPos, ref _bumpRef, speed);
 
-            var sqrMag = (_bumpRoot.transform.localPosition - target).sqrMagnitude;
+            var sqrMag = (_bumpRoot.transform.localPosition - targetLocalPos).sqrMagnitude;
             if (sqrMag < .0001f)
             {
                 if (_bumping)
