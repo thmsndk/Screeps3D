@@ -13,7 +13,7 @@ namespace Screeps3D.RoomObjects.Views
         private static readonly Dictionary<string, BeamConfig> BeamConfigs = new Dictionary<string, BeamConfig>
         {   
             // HORSE 0.3f -> 0.7f
-            {"attack", new BeamConfig(Color.red, 0.7f, 0.3f)},
+            // {"attack", new BeamConfig(Color.red, 0.7f, 0.3f)},
             {"rangedAttack", new BeamConfig(Color.blue, 0.7f, 0.3f)},
             {"rangedMassAttack", new BeamConfig(Color.blue, 0.7f, 0.3f)}, // RMA is an AOE effect, not a beam. should really be in another view
             {"rangedHeal", new BeamConfig(Color.green, 0.7f, 0.3f)},
@@ -49,15 +49,15 @@ namespace Screeps3D.RoomObjects.Views
             Debug.Log(data.ToString());
             switch (beam.Key)
             {
-                case "attack":
-                    EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget);
-                    break;
+                // In BumpView for now
+                // case "attack":
+                //     EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget);
+                //     break;
                 case "rangedMassAttack":
                     EffectsUtility.ElectricExplosion(_creep as RoomObject);
                     break;
                 default:
                     EffectsUtility.Beam(_creep as RoomObject, action, beam.Value);
-                    EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget); // For debug
                     break;
             }
 

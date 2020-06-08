@@ -35,9 +35,12 @@ namespace Screeps3D.Effects
 
         private IEnumerator Fire()
         {
-            Vector3 relativePos = _position - _target;
-            Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
-            gameObject.transform.SetPositionAndRotation(_position, tRotation);
+            // Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
+            // gameObject.transform.SetPositionAndRotation(_position, tRotation);
+
+            // at target pos
+            Quaternion tRotation = Quaternion.LookRotation(_target, Vector3.up);
+            gameObject.transform.SetPositionAndRotation(_target, tRotation);
 
             _attackParticles.Play();
             while (_time < _attackDuration)
