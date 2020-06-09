@@ -76,6 +76,8 @@ namespace Screeps3D.RoomObjects
         public Vector3 BumpPosition { get; private set; }
         public Quaternion Rotation { get; private set; }
 
+        public Vector3? actionTarget { get; set; }
+
         internal Creep()
         {
             Body = new CreepBody();

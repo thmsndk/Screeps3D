@@ -98,8 +98,18 @@ namespace Screeps3D.RoomObjects.Views
             if (_creep == null)
                 return;
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
-            _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _creep.Rotation, 
-                Time.deltaTime * 5);
+
+            if(_creep.actionTarget.HasValue) {               
+                // creep does something, keep it rotated towards target
+                Vector3 relativePos = _rotationRoot.position - (Vector3)_creep.actionTarget;
+                Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                _rotationRoot.rotation = tRotation;
+            } else {
+                // keep rotation towards move direction
+                _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _creep.Rotation, 
+                    Time.deltaTime * 5);
+            }
+
         }
     }
 }

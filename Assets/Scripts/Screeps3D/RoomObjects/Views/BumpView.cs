@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Screeps3D.Effects;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -7,9 +8,9 @@ namespace Screeps3D.RoomObjects.Views
 
         [SerializeField] private Transform _bumpRoot = default;
         private IBump _creep;
-        private Vector3 _bumpTarget;
         private Vector3 _bumpRef;
         private bool _bumping;
+        private bool _sparkling;
         private bool _animating;
 
         public void Init()
@@ -26,9 +27,9 @@ namespace Screeps3D.RoomObjects.Views
             if (_creep.BumpPosition == default(Vector3))
                 return;
 
-            _bumpTarget = (_creep.BumpPosition - _creep.PrevPosition) * .2f;
             _bumping = true;
             _animating = true;
+            _sparkling = false;
         }
 
         public void Unload(RoomObject roomObject)
@@ -41,24 +42,36 @@ namespace Screeps3D.RoomObjects.Views
             if (_creep == null || !_animating)
                 return;
 
-            var target = Vector3.zero;
+            var localBase = Vector3.zero;
+            var targetLocalPos = localBase;
             var speed = .2f;
             if (_bumping)
             {
-                target = _bumpTarget;
+                // either half forward (creep is having -z as forward - reasons...)
+                targetLocalPos = Vector3.back * .5f;
                 speed = .1f;
             }
-
+            // creep IS rotated towards source/action so we just need to go forward via Z, and do not care about X axis
+            targetLocalPos.x = 0f;
+            targetLocalPos.y = 0f;
             _bumpRoot.transform.localPosition =
-                Vector3.SmoothDamp(_bumpRoot.transform.localPosition, target, ref _bumpRef, speed);
+                Vector3.SmoothDamp(_bumpRoot.transform.localPosition, targetLocalPos, ref _bumpRef, speed);
 
-            var sqrMag = (_bumpRoot.transform.localPosition - target).sqrMagnitude;
+            var sqrMag = (_bumpRoot.transform.localPosition - targetLocalPos).sqrMagnitude;
+            if(_bumping && sqrMag < .005f && !_sparkling) {
+                EffectsUtility.Attack(_creep as RoomObject, _creep.BumpPosition); // For debug
+                _sparkling = true;
+            }
+
             if (sqrMag < .0001f)
             {
-                if (_bumping)
+                if (_bumping) {
                     _bumping = false;
-                else
+                    _sparkling = false;
+                }
+                else {
                     _animating = false;
+                }
             }
         }
     }
