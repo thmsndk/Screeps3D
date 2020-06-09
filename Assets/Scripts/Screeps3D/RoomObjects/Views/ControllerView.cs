@@ -119,11 +119,11 @@ namespace Screeps3D.RoomObjects.Views
             if (_controller == null)
                 return;
             
-            float floor = 0.6f;
-            float ceiling = 1.0f;
-            float emission = floor + Mathf.PingPong (Time.time * .2f, ceiling - floor);
-            Color finalColor = Color.white * emission;
-            _rend.materials[1].SetColor ("_EmissionColor", finalColor);
+            // float floor = 0.6f;
+            // float ceiling = 1.0f;
+            // float emission = floor + Mathf.PingPong (Time.time * .2f, ceiling - floor);
+            // Color finalColor = Color.white * emission;
+            _rend.materials[1].SetColor ("_EmissionColor", Color.white);
 
             checkReservation();
 

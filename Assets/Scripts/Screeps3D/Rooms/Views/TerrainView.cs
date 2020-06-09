@@ -359,8 +359,8 @@ namespace Screeps3D.Rooms.Views
         private void Deform()
         {
             // change to generateWalls2();
-            generateWalls1();
-
+            // generateWalls1();
+            generateWalls2();
             const float swampConstant = 0.3f;
             const float swampRandom = 0.0f;
 

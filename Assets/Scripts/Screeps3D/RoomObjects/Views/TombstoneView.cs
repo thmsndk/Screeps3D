@@ -21,7 +21,7 @@ namespace Screeps3D.RoomObjects.Views
         private float _nextBlink;
         private bool _blinking;
         private float _minBadgeEmission = 2f;
-        private float _maxAddedEmission = 8f;
+        private float _maxAddedEmission = 4f;
         private float _currentAddedEmission = 6f;
         private long _lastTickUpdate;
         private long _loadTick;
@@ -34,7 +34,7 @@ namespace Screeps3D.RoomObjects.Views
             // Base setup
             _body.materials[1].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
             _body.materials[1].SetTexture("EmissionTexture", _tombstone?.Owner?.Badge);
-            _body.materials[1].SetFloat("EmissionStrength", 2);
+            _body.materials[1].SetFloat("EmissionStrength", .2f);
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;

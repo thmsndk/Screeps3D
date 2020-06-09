@@ -36,7 +36,7 @@ namespace Screeps3D.RoomObjects.Views
             } else {                
                 _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 3f);
+                _badge.materials[0].SetFloat("EmissionStrength", 1f);
             }
 
             // HORSE
