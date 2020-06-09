@@ -29,13 +29,13 @@ namespace Screeps3D.RoomObjects.Views
             bool ownedByMe = owner?.UserId != ScreepsAPI.Me.UserId; // TODO: isNPC?;
 
             var color = new Color(0.000f, 1.000f, 0.297f, 0.053f); // enemy
-            var emissionColor = new Color(0.000f, 0.400f, 0.119f, 0.278f); // enemy;
+            var emissionColor = Color.red; // enemy;
 
 
             if (ownedByMe)
             {
                 color = new Color(1.000f, 0f, 0f, 0.053f);
-                emissionColor = new Color(0.400f, 0f, 0f, 0.278f);
+                emissionColor = Color.green;
             }
 
             if (_rampart == null)
@@ -45,9 +45,9 @@ namespace Screeps3D.RoomObjects.Views
                 //renderer.material.SetColor("_EmissionColor", Color.grey);
             }
 
-            rend.material.SetColor("_BaseColor", color);
+            // rend.material.SetColor("_BaseColor", color);
             
-            rend.material.SetColor("_EmissiveColor", emissionColor);
+            rend.materials[0].SetColor("EmissionColor", emissionColor);
             //renderer.material.SetColor("_EmissionColor", emissionColor);
         }
 
