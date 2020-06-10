@@ -44,10 +44,10 @@ namespace Screeps3D.RoomObjects.Views
 
             // Texture
             _core.materials[0].SetColor("EmissionColor", _actionColor);
-            _core.materials[0].SetFloat("EmissionStrength", 6 + Mathf.Abs(tSin) * 8);
+            _core.materials[0].SetFloat("EmissionStrength", .1f + Mathf.Abs(tSin) * .4f);
 
             // decay on top
-            float decayEmission = 2 + Mathf.Abs(tSin) * 4;
+            float decayEmission = .1f + Mathf.Abs(tSin) * .4f;
             _decayDisplay.materials[0].SetFloat("EmissionStrength", decayEmission);
             iterateOverLevelsAndSetEmission(decayEmission);
         }
@@ -80,14 +80,11 @@ namespace Screeps3D.RoomObjects.Views
             _invadeCore = roomObject as InvaderCore;
             _actionColor = Color.red;
             _pulsing = false;
-            AdjustScale();
             dimNotUsedLevels();
         }
 
         public void Delta(JSONObject data)
         {
-            AdjustScale();
-
             if (_invadeCore != null)
             {
                 var action = _invadeCore.Actions.FirstOrDefault(c => !c.Value.IsNull);
@@ -99,18 +96,6 @@ namespace Screeps3D.RoomObjects.Views
                     var endPos = PosUtility.Convert(action.Value, _invadeCore.Room);
                     EffectsUtility.Beam(_invadeCore, action.Value, new BeamConfig(_actionColor, 1.8f, 0.8f));
                 }
-            }
-        }
-
-        public void Unload(RoomObject roomObject)
-        {
-        }
-
-        private void AdjustScale()
-        {
-            if (_invadeCore != null)
-            {
-                // _energyDisplay.SetVisibility(_invadeCore.TotalResources / _invadeCore.TotalCapacity);
             }
         }
 
@@ -146,6 +131,10 @@ namespace Screeps3D.RoomObjects.Views
             }
             pulseEmission();
             return;
+        }
+    
+        public void Unload(RoomObject roomObject)
+        {
         }
     }
 }

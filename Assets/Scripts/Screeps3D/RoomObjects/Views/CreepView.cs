@@ -33,10 +33,9 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
-            } else {                
-                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+            } else {
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 1f);
+                _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
 
             // HORSE

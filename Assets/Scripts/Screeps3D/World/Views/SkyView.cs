@@ -10,11 +10,11 @@ namespace Screeps3D.World.Views
         SkySettings _skySettings;
         bool sunRise;
         bool sunSet;
-        float dayEmission = -2f;
+        float dayEmission = -4f;
         bool night;
-        float nightEmission = -10f;
+        float nightEmission = -6f;
         float nightLength = 40f;
-        float progress = 0.01f;
+        float progress = 0.001f;
         void Start()
         {            
             Volume volume = GetComponent<Volume>();
@@ -35,10 +35,6 @@ namespace Screeps3D.World.Views
                 _skySettings.rotation.value = 0;
             }
 
-            Debug.LogError("_skySettings.exposure.value:" + _skySettings.exposure.value);
-            Debug.LogError("night:" + night);
-            Debug.LogError("sunRise:" + sunRise);
-            Debug.LogError("sunSet:" + sunSet);
             if(night) {
                 nightLength -= progress;
                 if(nightLength > 0) {

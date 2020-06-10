@@ -66,8 +66,8 @@ namespace Screeps3D.RoomObjects.Views
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
                 EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
                 
-                _powerUp = PowerUp();
-                StartCoroutine(_powerUp);
+                // _powerUp = PowerUp();
+                // StartCoroutine(_powerUp);
             }
             // StartCoroutine(Beam.Draw(_tower, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
@@ -120,18 +120,18 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private IEnumerator PowerUp() {
-            var targetEmission = 150;
+            var targetEmission = 1f;
             setEmission(_actionColor, 0f);
             // powerUp - brightness up
             while (_base.material.GetFloat("EmissionStrength") < targetEmission)
             {    
-                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") +15f);
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") + .025f);
                 yield return null;
             }
             // powerUp - wind down
             while (_base.material.GetFloat("EmissionStrength") > 0)
             {    
-                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") -5f);
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") - .05f);
                 yield return null;
             }
         }

@@ -38,16 +38,16 @@ namespace Screeps3D.RoomObjects.Views
 
         private void setPowerDisplay() {
             float power = _powerBank.Store["power"];
-            _p1.materials[0].SetFloat("EmissionStrength", (power > 0) ? 6 : 0);
-            _p2.materials[0].SetFloat("EmissionStrength", (power > 1000) ? 6 : 0);
-            _p3.materials[0].SetFloat("EmissionStrength", (power > 2000) ? 6 : 0);
-            _p4.materials[0].SetFloat("EmissionStrength", (power > 3000) ? 6 : 0);
-            _p5.materials[0].SetFloat("EmissionStrength", (power > 4000) ? 6 : 0);
-            _p6.materials[0].SetFloat("EmissionStrength", (power > 5000) ? 6 : 0);
-            _p7.materials[0].SetFloat("EmissionStrength", (power > 6000) ? 6 : 0);
-            _p8.materials[0].SetFloat("EmissionStrength", (power > 7000) ? 6 : 0);
-            _p9.materials[0].SetFloat("EmissionStrength", (power > 8000) ? 6 : 0);
-            _p10.materials[0].SetFloat("EmissionStrength", (power > 9000) ? 6 : 0);
+            _p1.materials[0].SetFloat("EmissionStrength", (power > 0) ? .6f : 0);
+            _p2.materials[0].SetFloat("EmissionStrength", (power > 1000) ? .6f : 0);
+            _p3.materials[0].SetFloat("EmissionStrength", (power > 2000) ? .6f : 0);
+            _p4.materials[0].SetFloat("EmissionStrength", (power > 3000) ? .6f : 0);
+            _p5.materials[0].SetFloat("EmissionStrength", (power > 4000) ? .6f : 0);
+            _p6.materials[0].SetFloat("EmissionStrength", (power > 5000) ? .6f : 0);
+            _p7.materials[0].SetFloat("EmissionStrength", (power > 6000) ? .6f : 0);
+            _p8.materials[0].SetFloat("EmissionStrength", (power > 7000) ? .6f : 0);
+            _p9.materials[0].SetFloat("EmissionStrength", (power > 8000) ? .6f : 0);
+            _p10.materials[0].SetFloat("EmissionStrength", (power > 9000) ? .6f : 0);
         }
 
         private void startStopEmission(string startStop) {
