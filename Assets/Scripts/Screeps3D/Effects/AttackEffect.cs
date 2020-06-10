@@ -13,7 +13,7 @@ namespace Screeps3D.Effects
         
         public void Load(RoomObject origin, Vector3 target)
         {
-            Debug.LogError("public");
+            //Debug.LogError("public");
             _position = origin.View.transform.position;
             _target = target;
             _time = 0f;
@@ -26,7 +26,7 @@ namespace Screeps3D.Effects
 
         internal void Load(Vector3 position, Vector3 target)
         {
-            Debug.LogError("Internal");
+            //Debug.LogError("Internal");
             _position = position;
             _target = target;
             _time = 0f;
