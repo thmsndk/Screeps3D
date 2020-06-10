@@ -49,10 +49,6 @@ namespace Screeps3D.RoomObjects.Views
             Debug.Log(data.ToString());
             switch (beam.Key)
             {
-                // In BumpView for now
-                // case "attack":
-                //     EffectsUtility.Attack(_creep as RoomObject, (Vector3)(_creep as Creep).actionTarget);
-                //     break;
                 case "rangedMassAttack":
                     EffectsUtility.ElectricExplosion(_creep as RoomObject);
                     break;
@@ -60,9 +56,6 @@ namespace Screeps3D.RoomObjects.Views
                     EffectsUtility.Beam(_creep as RoomObject, action, beam.Value);
                     break;
             }
-
-            // StartCoroutine(Beam.Draw(_creep, _creep.Actions[beam.Key], _lineRenderer, beam.Value));
-            
         }
 
         public void Unload(RoomObject roomObject)
