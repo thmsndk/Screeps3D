@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 {
     /// <summary>
     /// Responsible for showing available construction sites for placement
     /// </summary>
-    class ChooseConstructionSite
+    public class ChooseConstructionSite : BaseSingleton<PlaceConstructionSite>
     {
+        [SerializeField] private ConstructionSiteItem prefab = default;
+        [SerializeField] private GameObject popup = default;
+        [SerializeField] private GameObject constructionSites = default;
+
         // TODO: list all buildable roomobject types, do we use reflection on all roomobjects? no reason, we can just iterate the "constants" we need to define amount of structures anyway.
         // TODO: calculate how many structures of the type is currently in the room, how many are yours, and how many are someone elses?
         // TODO: how do we mark the amount we can have based on RCL, do we just define a constant lookup table? can perhaps use LastOrDefault based on current RCL https://docs.screeps.com/api/#Constants
@@ -37,10 +43,20 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 { "factory",            new List<int>{0, 0, 0, 0, 0, 0, 0, 1, 1 } },
             };
 
-        public ChooseConstructionSite()
+        private void Start()
         {
+            constructionSites.transform.DetachChildren();
 
+            foreach (var site in CONTROLLER_STRUCTURES)
+            {
+                var newSite = Instantiate(prefab, constructionSites.transform);
+
+                newSite.SetType(site.Key);
+            }
         }
+        
+        // TODO: update number of available csites depending on what room the cursor currently is in?
+        // TODO: we need to check available in current room atleast.
     }
 
 
