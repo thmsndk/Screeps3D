@@ -9,21 +9,23 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/HarvestEffect";
         [SerializeField] private ParticleSystem _harvestParticles = default;
+        private Vector3 _position;
         private Vector3 _target;
         private float _time;
         private const float _reserveDuration = 2;
         
+
         public void Load(Vector3 position)
         {
-            _target = position;
+            _position = position;
             _time = 0f;
             StartCoroutine(Fire());
         }
 
         private IEnumerator Fire()
         {
-            Quaternion tRotation = Quaternion.LookRotation(_target, Vector3.up);
-            gameObject.transform.SetPositionAndRotation(_target, tRotation);
+            Quaternion tRotation = Quaternion.LookRotation(_position, Vector3.up);
+            gameObject.transform.SetPositionAndRotation(_position, tRotation);
 
             _harvestParticles.Play();
             while (_time < _reserveDuration)
