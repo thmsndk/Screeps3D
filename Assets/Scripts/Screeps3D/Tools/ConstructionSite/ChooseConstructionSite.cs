@@ -50,6 +50,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             foreach (var site in CONTROLLER_STRUCTURES)
             {
                 var newSite = Instantiate(prefab, constructionSites.transform);
+                newSite.name = site.Key;
 
                 newSite.SetType(site.Key);
             }
