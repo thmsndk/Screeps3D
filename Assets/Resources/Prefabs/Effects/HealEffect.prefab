@@ -91,7 +91,7 @@ ParticleSystem:
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -779,7 +779,7 @@ ParticleSystem:
     m_SpriteRenderer: {fileID: 0}
     m_UseMeshMaterialIndex: 0
     m_UseMeshColors: 1
-    alignToDirection: 0
+    alignToDirection: 1
     m_Texture: {fileID: 0}
     m_TextureClipChannel: 3
     m_TextureClipThreshold: 0
@@ -3493,7 +3493,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.7853982
+      scalar: 6.283185
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
