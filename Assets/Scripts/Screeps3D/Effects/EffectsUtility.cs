@@ -23,6 +23,11 @@ namespace Screeps3D.Effects
             var effect = go.GetComponent<HealEffect>();
             effect.Load(origin);
         }
+        public static void Harvest(Vector3 targetPos) {
+            var go = PoolLoader.Load(HarvestEffect.PATH);
+            var effect = go.GetComponent<HarvestEffect>();
+            effect.Load(targetPos);
+        }
 
         public static void Reserve(Vector3 targetPos) {
             var go = PoolLoader.Load(ReserveEffect.PATH);

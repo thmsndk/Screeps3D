@@ -18,17 +18,14 @@ namespace Screeps3D.Effects
         public void Load(RoomObject origin)
         {
             attachToCreepOrigin(origin);
-            _position = origin.View.transform.position;
             _time = 0f;
             StartCoroutine(Fire());
         }
         private float _time;
         private const float _healDuration = 2;
-        private Vector3 _position;
 
         internal void Load(Vector3 position)
         {
-            _position = position;
             _time = 0f;
             StartCoroutine(Fire());
         }

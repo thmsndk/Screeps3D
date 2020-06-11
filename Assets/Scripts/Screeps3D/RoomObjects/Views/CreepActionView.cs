@@ -168,7 +168,7 @@ namespace Screeps3D.RoomObjects.Views
                     break;
                 case "harvest":
                     _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
+                    EffectsUtility.Harvest((_creep as IBump).BumpPosition);
                     break;
             }
         }
