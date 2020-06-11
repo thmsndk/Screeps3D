@@ -16,11 +16,20 @@ namespace Screeps3D.RoomObjects.Views
         private bool _actionEffect;
         private bool _animating;
 
-        // possible actions : 
-        // attack, attacked, 
-        // heal, rangedHeal, healed, 
-        // rangedAttack, rangedMassAttack, 
-        // harvest, repair, build, upgradeController, reserveController, say
+        // possible actions from Delta JSONdata: 
+        // attack               bump + sparks
+        // attacked             n/a
+        // heal                 n/a
+        // rangedHeal           beam 
+        // healed               aura (green)
+        // rangedAttack         beam
+        // rangedMassAttack     aura
+        // harvest              bump + sparks
+        // repair               beam
+        // build                beam
+        // upgradeController    beam
+        // reserveController    bump + aura(violet)
+        // say                  text
         private static readonly Dictionary<string, bool> BumpConfig = new Dictionary<string, bool>
         {
             {"rangedAttack", false},
@@ -49,7 +58,7 @@ namespace Screeps3D.RoomObjects.Views
             {"attack", new Color32(255, 111, 111, 0)},
             {"healed", new Color32(65, 140, 65, 0)},
             {"harvest", new Color32(255, 111, 111, 0)},
-            {"upgradeController", new Color32(255, 111, 111, 0)}
+            {"reserveController", new Color32(255, 111, 111, 0)}
         };
 
         public void Init()
@@ -144,7 +153,7 @@ namespace Screeps3D.RoomObjects.Views
                     break;
                 case "attack":
                     _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack(_creep as RoomObject, (_creep as IBump).BumpPosition);
+                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
                     break;
                 case "heal":
                     _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
@@ -153,9 +162,13 @@ namespace Screeps3D.RoomObjects.Views
                 case "healed":
                     EffectsUtility.Heal(_creep as RoomObject);
                     break;
+                case "reserveController":
+                    _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
+                    EffectsUtility.Reserve((Vector3)_creep.actionTarget);
+                    break;
                 case "harvest":
                     _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack(_creep as RoomObject, (_creep as IBump).BumpPosition);
+                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
                     break;
             }
         }
