@@ -10,11 +10,25 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 {
     public class ConstructionSiteItem : MonoBehaviour
     {
-        [SerializeField] private TMP_Text typeLabel = default;
+        [SerializeField] private TMP_Text name = default;
+        [SerializeField] private TMP_Text available = default;
+        [SerializeField] private TMP_Text description = default;
 
-        public void SetType(string type)
+        public void SetName(string value)
         {
-            typeLabel.text = type;
+            this.name.text = value;
+        }
+
+        public void SetDescription(string value)
+        {
+            this.description.text = value;
+        }
+
+        public void SetAvailable(int used, int max, bool unlimited = false)
+        {
+            var available = max - used;
+            var color = used < max ? "green" : "#BEBEBE";
+            this.available.text = $"<color={color}>Available: {available}</color>";
         }
     }
 }
