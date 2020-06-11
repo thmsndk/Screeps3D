@@ -57,7 +57,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                     if (roomPosition.x != _roomObject.X || roomPosition.y != _roomObject.Y)
                     {
                         //Debug.Log(roomPosition);
-                        Debug.Log($"{_roomObject.Type}: {_roomObject.X}, {_roomObject.Y} => {_roomObject.Position} == {PosUtility.Convert(roomPosition.x, roomPosition.y, room)}");
+                        //Debug.Log($"{_roomObject.Type}: {_roomObject.X}, {_roomObject.Y} => {_roomObject.Position} == {PosUtility.Convert(roomPosition.x, roomPosition.y, room)} {roomPosition.x},{roomPosition.y}");
                         ////Debug.Log("placeflag delta");
                         _roomObject.Delta(new JSONObject($"{{\"x\":{roomPosition.x},\"y\":{roomPosition.y}}}"), room);
 

@@ -18,11 +18,11 @@ namespace Screeps3D
             var y = 0;
             if (posData["x"])
             {
-                x = (int) posData["x"].n;
+                x = (int)posData["x"].n;
             }
             if (posData["y"])
             {
-                y = (int) posData["y"].n;
+                y = (int)posData["y"].n;
             }
             return Convert(x, y, room);
         }
@@ -41,9 +41,9 @@ namespace Screeps3D
 
         internal static Vector2Int ConvertToXY(Vector3 point, Room room)
         {
-            var basePosition = room.Position - point;
-            var x = Mathf.FloorToInt(Math.Abs(basePosition.x));
-            var y = 49 - Mathf.FloorToInt(Math.Abs(basePosition.z));
+            var basePosition = point - room.Position;
+            var x = Mathf.FloorToInt(Math.Abs(basePosition.x + 0.5f));
+            var y = 49 - Mathf.FloorToInt(Math.Abs(basePosition.z + 0.5f));
             return new Vector2Int(x, y);
         }
     }
