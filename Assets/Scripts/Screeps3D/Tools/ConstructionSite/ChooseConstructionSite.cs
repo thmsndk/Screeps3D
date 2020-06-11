@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 {
@@ -17,7 +18,9 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
     {
         [SerializeField] private ConstructionSiteItem prefab = default;
         [SerializeField] private GameObject popup = default;
-        [SerializeField] private GameObject constructionSites = default;
+        [SerializeField] private ToggleGroup constructionSites = default;
+
+        public Action<string> OnConstructionSiteChange;
 
         // TODO: list all buildable roomobject types, do we use reflection on all roomobjects? no reason, we can just iterate the "constants" we need to define amount of structures anyway.
         // TODO: calculate how many structures of the type is currently in the room, how many are yours, and how many are someone elses?
@@ -65,8 +68,24 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 newSite.SetName(site.Value.Name);
                 newSite.SetDescription(site.Value.Description);
                 newSite.SetAvailable(UnityEngine.Random.Range(0, 2500), UnityEngine.Random.Range(0, 2500)); // TODO: set unlimited if AVAILABLE in requirements
+
+                var toggle = newSite.GetComponent<Toggle>();
+                toggle.group = constructionSites;
+                toggle.onValueChanged.AddListener(isOn => ToggleInput(toggle, isOn, site.Key));
+
             }
             // register for ticks/delta or room updates?
+        }
+
+        private void ToggleInput(Toggle toggle, bool isOn, string type)
+        {
+            if (isOn)
+            {
+                Debug.Log($"{type} clicked");
+                //SelectedColor = flagColor;
+                OnConstructionSiteChange?.Invoke(type);
+            }
+
         }
 
         // TODO: update number of available csites depending on what room the cursor currently is in?
