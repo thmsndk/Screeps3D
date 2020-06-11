@@ -4,7 +4,6 @@ using Screeps3D;
 using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using Screeps3D.Rooms.Views;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +17,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
     /// </summary>
     public class PlaceConstructionSite : BaseSingleton<PlaceConstructionSite>
     {
-
+        private ObjectFactory _factory = new ObjectFactory();
         private RoomObject _roomObject;
         // TODO: render structure
         //  TODO: handle when another structure is selected, disponse old prefab. initialize new.
@@ -27,12 +26,30 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private void Start()
         {
+            ChooseConstructionSite.Instance.OnConstructionSiteChange += ConstructionSiteChanged;
             Debug.Log("Place Constructionsite startet");
-            _roomObject = new Spawn() { Type = "spawn" }; // TODO: utilize type and the factory to get object.
+            //_roomObject = new Spawn() { Type = "spawn" }; // TODO: utilize type and the factory to get object.
+        }
+
+        private void ConstructionSiteChanged(string type)
+        {
+            if (this._roomObject != null)
+            {
+                this._roomObject.HideObject(this._roomObject.Room);
+            }
+
+            this._roomObject = _factory.Get(type);
+            this._roomObject.Type = type;
+
         }
 
         private void Update()
         {
+            if (_roomObject == null)
+            {
+                return;
+            }
+
             if (!InputMonitor.OverUI /*&& !_showEditDialog*/)
             {
                 if (GetCursorPositionInRoom(out var room, out var roomPosition))
@@ -67,7 +84,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private void OnDisable()
         {
-            if (_roomObject.View != null)
+            if (_roomObject?.View != null)
             {
                 _roomObject.HideObject(_roomObject.Room);
             }

@@ -14,7 +14,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
     /// Responsible for showing available construction sites for placement
     /// </summary>
     //[ExecuteInEditMode]
-    public class ChooseConstructionSite : BaseSingleton<PlaceConstructionSite>
+    public class ChooseConstructionSite : BaseSingleton<ChooseConstructionSite>
     {
         [SerializeField] private ConstructionSiteItem prefab = default;
         [SerializeField] private GameObject popup = default;
