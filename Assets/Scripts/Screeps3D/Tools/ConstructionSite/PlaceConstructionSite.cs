@@ -4,12 +4,24 @@ using Screeps3D;
 using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using Screeps3D.Rooms.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
+/*
+ TODO: Call HTTP endpoint to issue placement
+ TODO: detect if spawn and pop up name textbox
+ TODO: perhaps generate unique name
+ TODO: Figure out how to render road, cause it is special.
+ TODO: Toggle UI on/off when swapping tool.
+ TODO: Calculate availability
+ TODO: Indicate where you can place the structure / csite, some places are valid, others are not depending on type
+
+*/
 namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 {
     /// <summary>
@@ -19,10 +31,10 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
     {
         private ObjectFactory _factory = new ObjectFactory();
         private RoomObject _roomObject;
-        // TODO: render structure
-        //  TODO: handle when another structure is selected, disponse old prefab. initialize new.
         // TODO: place structure and call HTTP endpoint.
         // TODO: cancel placement
+
+        public Action OnConstructionSiteCreated;
 
         private void Start()
         {
@@ -67,6 +79,11 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                             ////Debug.Log($"{_flag?.Room?.ShardName}/{_flag?.Room?.RoomName}");
                             _roomObject.View.transform.localPosition = _roomObject.Position;
                         }
+
+                        // TODO: validate if the specific constructionsite can be placed
+                        // extractor can only be placed on minerals
+                        // only roads and extractors(if mineral) can be placed on normal walls
+                        // you can't place the same csite ontop of the same csite.
                     }
                 }
 
@@ -74,11 +91,40 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
             if (/*!_showEditDialog && */Input.GetMouseButtonUp(0) && !InputMonitor.OverUI)
             {
-                // TODO: Place constructionsite
-                //ScreepsAPI.Http.CreateFlag
+                Action<string> onSuccess = (jsonString) =>
+                {
+                    var result = new JSONObject(jsonString);
 
-                //_showEditDialog = true;
-                //ToggleEditFlagPopup(true);
+                    var ok = result["ok"];
+
+                    if (ok != null && ok.n == 1)
+                    {
+                        OnConstructionSiteCreated?.Invoke();
+                    }
+                    else
+                    {
+                        // CreateConstructionsite failed {"error":"RCL not enough"}
+                        // CreateConstructionsite failed {"error":"invalid location"}
+                        // error
+                        Debug.LogError($"CreateConstructionsite failed {result.ToString()}");
+                    }
+                };
+
+                switch (_roomObject.Type)
+                {
+                    case Constants.TypeSpawn:
+                        // TODO: ask for name and then spawn.
+                        break;
+                    default:
+                        ScreepsAPI.Http.CreateConstructionsite(
+                            _roomObject.Room.ShardName,
+                            _roomObject.Room.RoomName,
+                            _roomObject.X,
+                            _roomObject.Y,
+                            _roomObject.Type,
+                            onSuccess: onSuccess);
+                        break;
+                }
             }
         }
 
@@ -96,7 +142,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             position = Vector2Int.zero;
 
             var rayTarget = Rayprobe();
-            // move flage location, flag should be alphablended 
+
             if (rayTarget.HasValue)
             {
                 var roomView = rayTarget.Value.collider.GetComponent<RoomView>();
