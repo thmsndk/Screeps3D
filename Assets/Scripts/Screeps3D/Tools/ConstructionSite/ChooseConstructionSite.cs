@@ -1,4 +1,4 @@
-﻿using Common;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +75,11 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
             }
             // register for ticks/delta or room updates?
+
+            // Set height of content
+            var constructionSitesRect = constructionSites.GetComponent<RectTransform>();
+            var contentRect = constructionSites.transform.parent.GetComponent<RectTransform>();
+            contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, constructionSitesRect.sizeDelta.y);
         }
 
         private void ToggleInput(Toggle toggle, bool isOn, string type)
