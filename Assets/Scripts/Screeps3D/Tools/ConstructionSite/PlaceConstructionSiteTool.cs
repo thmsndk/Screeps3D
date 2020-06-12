@@ -13,7 +13,8 @@ namespace Screeps3D.Tools.Selection
         private void OnToolChange(ToolType toolType)
         {
             var activated = toolType == ToolType.Construction;
-            // TODO: should probably initialize the Choose constructionsite dialog
+            
+            ChooseConstructionSite.Instance.enabled = activated;
             PlaceConstructionSite.Instance.enabled = activated;
         }
     }

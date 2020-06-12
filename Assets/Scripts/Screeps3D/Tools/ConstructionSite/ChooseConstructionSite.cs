@@ -1,4 +1,4 @@
-using Common;
+﻿using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,9 +48,23 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 { "factory",            new ConstructionSiteSpecification("Factory","Produces trade commodities",new List<int>{0, 0, 0, 0, 0, 0, 0, 1, 1 } )},
             };
 
-        private void Start()
+        public override void Awake()
         {
+            Debug.Log("choose Constructionsite Awake");
+            base.Awake();
+
             InitializeSpecificationItems();
+        }
+
+        private void OnEnable()
+        {
+            popup?.gameObject?.SetActive(true);
+            
+        }
+
+        private void OnDisable()
+        {
+            popup?.gameObject?.SetActive(false);
         }
 
         private void InitializeSpecificationItems()
