@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7599180556940681001}
   - component: {fileID: 1783998833962994941}
   - component: {fileID: 3829585301541741342}
+  - component: {fileID: -9018392290478333320}
   m_Layer: 0
   m_Name: extractor
   m_TagString: Untagged
@@ -159,3 +160,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: 6950bd0489ea7c44a97130d50f27cb07, type: 3}
+--- !u!135 &-9018392290478333320
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364217078524985366}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.0000064
+  m_Center: {x: -0.017037094, y: -0.0013640821, z: -0.00000005962051}

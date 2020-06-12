@@ -8,30 +8,18 @@ namespace Screeps3D.Effects
     public class AttackEffect : MonoBehaviour
     {
         public const string PATH = "Prefabs/Effects/AttackEffect";
-        [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private ParticleSystem _attackParticles = default;
-        
-        public void Load(RoomObject origin, Vector3 target)
-        {
-            //Debug.LogError("public");
-            _position = origin.View.transform.position;
-            _target = target;
-            _time = 0f;
-            StartCoroutine(Fire());
-        }
         private float _time;
         private const float _attackDuration = 2;
-        private Vector3 _position;
         private Vector3 _target;
-
-        internal void Load(Vector3 position, Vector3 target)
+        
+        public void Load(Vector3 target)
         {
-            //Debug.LogError("Internal");
-            _position = position;
             _target = target;
             _time = 0f;
             StartCoroutine(Fire());
         }
+
 
         private IEnumerator Fire()
         {
