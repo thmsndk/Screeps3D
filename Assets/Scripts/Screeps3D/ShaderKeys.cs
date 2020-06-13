@@ -14,6 +14,12 @@ namespace Assets.Scripts.Screeps3D
             public const string Texture = "_BaseColorMap";
         }
 
+        public class HDRPDecal
+        {
+            public const string Color = "_BaseColor";
+            public const string Texture = "_BaseColorMap";
+        }
+
         public class FlagShader
         {
             public const string PrimaryColor = "PrimaryColor";
