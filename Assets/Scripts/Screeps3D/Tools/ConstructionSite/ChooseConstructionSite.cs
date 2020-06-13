@@ -1,4 +1,7 @@
 ﻿using Common;
+using Screeps3D;
+using Screeps3D.Player;
+using Screeps3D.RoomObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using RoomObjectConstructionSite = Screeps3D.RoomObjects.ConstructionSite;
 
 namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 {
@@ -22,9 +26,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         public Action<string> OnConstructionSiteChange;
 
-        // TODO: list all buildable roomobject types, do we use reflection on all roomobjects? no reason, we can just iterate the "constants" we need to define amount of structures anyway.
-        // TODO: calculate how many structures of the type is currently in the room, how many are yours, and how many are someone elses?
-        // TODO: how do we mark the amount we can have based on RCL, do we just define a constant lookup table? can perhaps use LastOrDefault based on current RCL https://docs.screeps.com/api/#Constants
+        // TODO: How many are yours, and how many are someone elses?
         private const int AVAILABLE = 2500; // 2500 seems to be an indicator of not showing available amount.
 
         private readonly Dictionary<string, ConstructionSiteSpecification> CONTROLLER_STRUCTURES = new Dictionary<string, ConstructionSiteSpecification>
@@ -59,18 +61,55 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
         private void OnEnable()
         {
             popup?.gameObject?.SetActive(true);
-            
+
+            // register for ticks/delta or room updates
+            PlayerPosition.Instance.Room.ObjectStream.OnData += OnRoomData;
+
+            UpdateAvailable();
+
+        }
+
+        private void OnRoomData(JSONObject obj)
+        {
+            UpdateAvailable();
+        }
+
+        private void UpdateAvailable()
+        {
+            foreach (var item in CONTROLLER_STRUCTURES)
+            {
+                UpdateAvailable(item.Key);
+            }
+        }
+
+        private void UpdateAvailable(string type)
+        {
+            var controller = PlayerPosition.Instance.Room.Objects.SingleOrDefault(o => o.Value.Type == Constants.TypeController);
+            var rcl = (controller.Value as Controller)?.Level ?? 0;
+
+            var currentAmount = PlayerPosition.Instance.Room.Objects.Count(o => o.Value.Type == type);
+            var currentConstructionSites = PlayerPosition.Instance.Room.Objects.Where(o => o.Value.Type == Constants.TypeConstruction).Count(o => (o.Value as RoomObjectConstructionSite).StructureType == type);
+
+            var specification = CONTROLLER_STRUCTURES[type];
+            var maxAmount = specification.CONTROLLER_STRUCTURES[rcl];
+
+            specification.ConstructionSiteItem.SetAvailable(currentAmount + currentConstructionSites, maxAmount, maxAmount == AVAILABLE);
+
         }
 
         private void OnDisable()
         {
             popup?.gameObject?.SetActive(false);
+            PlayerPosition.Instance.Room.ObjectStream.OnData -= OnRoomData;
         }
 
         private void InitializeSpecificationItems()
         {
             foreach (Transform child in constructionSites.transform)
             {
+                var toggle = child.GetComponent<Toggle>();
+                toggle?.onValueChanged.RemoveAllListeners();
+
                 Destroy(child.gameObject);
             }
 
@@ -87,9 +126,10 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 toggle.group = constructionSites;
                 toggle.onValueChanged.AddListener(isOn => ToggleInput(toggle, isOn, site.Key));
 
-            }
-            // register for ticks/delta or room updates?
+                site.Value.ConstructionSiteItem = newSite;
 
+            }
+            
             // Set height of content
             var constructionSitesRect = constructionSites.GetComponent<RectTransform>();
             var contentRect = constructionSites.transform.parent.GetComponent<RectTransform>();
@@ -107,14 +147,14 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         }
 
-        // TODO: update number of available csites depending on what room the cursor currently is in?
-        // TODO: we need to check available in current room atleast.
         private class ConstructionSiteSpecification
         {
             public string Name { get; set; }
             public string Description { get; set; }
 
             public List<int> CONTROLLER_STRUCTURES { get; set; }
+            public ConstructionSiteItem ConstructionSiteItem { get; internal set; }
+
             public ConstructionSiteSpecification(string name, string description, List<int> rclRequirements)
             {
                 this.Name = name;
@@ -123,6 +163,4 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             }
         }
     }
-
-
 }

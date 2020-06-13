@@ -13,12 +13,9 @@ using UnityEngine;
 
 
 /*
- TODO: Call HTTP endpoint to issue placement
  TODO: detect if spawn and pop up name textbox
  TODO: perhaps generate unique name
  TODO: Figure out how to render road, cause it is special.
- TODO: Toggle UI on/off when swapping tool.
- TODO: Calculate availability
  TODO: Indicate where you can place the structure / csite, some places are valid, others are not depending on type
 
 */
