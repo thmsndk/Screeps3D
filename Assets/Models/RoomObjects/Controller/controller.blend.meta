@@ -1,67 +1,14 @@
 fileFormatVersion: 2
-guid: fcbf8ee94b49ba645a6f3eaa95651068
+guid: 976b6393e37f2fa40863275f0f43bee1
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: body
-    100004: dish
-    100006: pole
-    100008: topPol
-    400000: //RootNode
-    400002: body
-    400004: dish
-    400006: pole
-    400008: topPol
-    2300000: //RootNode
-    2300002: body
-    2300004: dish
-    2300006: pole
-    2300008: topPol
-    3300000: //RootNode
-    3300002: body
-    3300004: dish
-    3300006: pole
-    3300008: topPol
-    4300000: Cylinder
-    4300002: dish
-    4300004: topPol
-    4300006: pole
-    4300008: body
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: controllerDish
-    second: {fileID: 2100000, guid: 86a8c53ef8a787344b88edabe21492b3, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: controllerLevels__controllerTex_png
-    second: {fileID: 2100000, guid: e5e9e52d6bbb60e47b23358cd6895529, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: controllerLines
-    second: {fileID: 2100000, guid: d49651d191682834ebb3cbc080419109, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: controllerLines__controllerTex_png
-    second: {fileID: 2100000, guid: 58b26d0212d492b49a50087b8ce316be, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: unnamed
-    second: {fileID: 2100000, guid: 4a5883e6cf239e447b768b575b14491d, type: 2}
+  serializedVersion: 19300
+  internalIDToNameTable: []
+  externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -84,13 +31,14 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -98,18 +46,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -118,10 +67,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -131,13 +80,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
