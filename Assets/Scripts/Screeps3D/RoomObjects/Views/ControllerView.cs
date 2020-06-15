@@ -23,34 +23,51 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private ParticleSystem _ps = default;
         private Controller _controller;
         private Ownership _ownership;
+        private string _owner;
+        private Color32 _defaultEmissionColor = new Color(0.7f, 0.7f, 0.7f, 0f);
+        private int level = 0;
         enum Ownership {
             Me,
             Enemy,
             None
         }
-        
+        private bool ownerHasChanged() {
+            // check for reservation change/expiry
+            if(_controller?.ReservedBy?.Badge != null) {
+                return _owner != _controller.ReservedBy.UserId;
+            }
+            // check for owner change
+            if(_controller?.Owner?.Badge != null) {
+                return _owner != _controller.Owner.UserId;
+            }
+            // no owner, no reservation -> check if we had owner
+            return _owner != "None";
+                                   
+        }
         private void setReservation() {
             if(_controller?.ReservedBy?.Badge != null) {
-                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
-                _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
+                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+                _badge.materials[0].SetTexture("EmissionTexture", _controller.ReservedBy.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", 5);
                 _ownership = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
+                _owner = _controller.ReservedBy.UserId;
             }
         }
 
         private void setOwnership() {
             if (_controller?.Owner?.Badge != null) {
-                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", 5f);
                 _ownership = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
+                _owner = _controller.Owner.UserId;
             }
         }
 
         private void setParticleSystemColor() {
             var isMy = false;
             var psMain = _ps.main;
-            Color color = new Color(0.6f, 0.6f, 0.6f, 0.0f);
+            Color color = _defaultEmissionColor;
             if(_ownership != Ownership.None) {
                 color = _ownership == Ownership.Me ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
             }            
@@ -60,8 +77,7 @@ namespace Screeps3D.RoomObjects.Views
         }
         
         private void customizeController() {
-            _ownership = Ownership.None;
-            _badge.materials[0].SetFloat("EmissionStrength", 0);
+            _owner = "None";
             setReservation();
             setOwnership();
             setParticleSystemColor();
@@ -77,34 +93,31 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void updateLevel() {
-            _l1.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l2.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l3.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l4.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l5.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l6.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l7.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-            _l8.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
-
-            _l1.materials[0].SetFloat("EmissionStrength", _controller.Level >= 1 ? 3 : 0);
-            _l2.materials[0].SetFloat("EmissionStrength", _controller.Level >= 2 ? 3 : 0);
-            _l3.materials[0].SetFloat("EmissionStrength", _controller.Level >= 3 ? 3 : 0);
-            _l4.materials[0].SetFloat("EmissionStrength", _controller.Level >= 4 ? 3 : 0);
-            _l5.materials[0].SetFloat("EmissionStrength", _controller.Level >= 5 ? 3 : 0);
-            _l6.materials[0].SetFloat("EmissionStrength", _controller.Level >= 6 ? 3 : 0);
-            _l7.materials[0].SetFloat("EmissionStrength", _controller.Level >= 7 ? 3 : 0);
-            _l8.materials[0].SetFloat("EmissionStrength", _controller.Level >= 8 ? 3 : 0);
+            Renderer[] levels = { _l1, _l2, _l3, _l4, _l5, _l6, _l7, _l8 };
+            float ePower = _controller?.Owner?.Badge == null ? 0 : 3;
+            for(int i = 0; i < levels.Length; i++) {
+                levels[i].materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+                levels[i].materials[0].SetFloat("EmissionStrength", _controller.Level >= i ? ePower : 0);
+            }
         }
 
        
         public void Init()
-        {
+        {            
+            _ownership = Ownership.None;
+            _owner = "None";
+            _badge.materials[0].SetFloat("EmissionStrength", 0);
+
             customizeController();
         }
 
         public void Load(RoomObject roomObject)
         {
-            _controller = roomObject as Controller;
+            _controller = roomObject as Controller;            
+            _ownership = Ownership.None;
+            _owner = "None";
+            _badge.materials[0].SetFloat("EmissionStrength", 0);
+
             customizeController();
         }
 
@@ -112,6 +125,9 @@ namespace Screeps3D.RoomObjects.Views
         {
             updateProgress();
             updateLevel();
+            if(!ownerHasChanged()) {
+                return;
+            }
             customizeController();
         }
 
