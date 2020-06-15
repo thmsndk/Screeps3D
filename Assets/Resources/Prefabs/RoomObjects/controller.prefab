@@ -4777,6 +4777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _badge: {fileID: 6797660507624107277}
   _core: {fileID: 245362670754958893}
+  _progressRenderer: {fileID: 8020029351647779068}
   _l1: {fileID: 7832005261265537811}
   _l2: {fileID: 3616363013876207011}
   _l3: {fileID: 689080214521210585}
@@ -4785,7 +4786,7 @@ MonoBehaviour:
   _l6: {fileID: 6094227353972462793}
   _l7: {fileID: 4171065980419620617}
   _l8: {fileID: 929735555525782546}
-  _progress: {fileID: 3945447703545314640}
+  _progressScale: {fileID: 3945447703545314640}
   _vis: {fileID: -5245099788385814661}
   _collider: {fileID: -2667584982741272938}
   _ps: {fileID: 7879332906243372389}
@@ -4955,7 +4956,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3d6370f4bd5c11a45b92faf0c2641dd2, type: 2}
+      objectReference: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
     - target: {fileID: 3913933433982805929, guid: 976b6393e37f2fa40863275f0f43bee1,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5047,6 +5048,12 @@ MeshRenderer:
 --- !u!1 &5190629489928786638 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6913056717246015382, guid: 976b6393e37f2fa40863275f0f43bee1,
+    type: 3}
+  m_PrefabInstance: {fileID: 7496014599120161444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8020029351647779068 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 525777371758793304, guid: 976b6393e37f2fa40863275f0f43bee1,
     type: 3}
   m_PrefabInstance: {fileID: 7496014599120161444}
   m_PrefabAsset: {fileID: 0}

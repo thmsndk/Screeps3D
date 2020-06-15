@@ -9,6 +9,7 @@ namespace Screeps3D.RoomObjects.Views
 
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _core = default;
+        [SerializeField] private Renderer _progressRenderer = default;
         [SerializeField] private Renderer _l1 = default;
         [SerializeField] private Renderer _l2 = default;
         [SerializeField] private Renderer _l3 = default;
@@ -17,14 +18,17 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _l6 = default;
         [SerializeField] private Renderer _l7 = default;
         [SerializeField] private Renderer _l8 = default;
-        [SerializeField] private ScaleVisibility _progress = default;
+        [SerializeField] private ScaleVisibility _progressScale = default;
         [SerializeField] private ScaleVisibility _vis = default;
         [SerializeField] private Collider _collider = default;
         [SerializeField] private ParticleSystem _ps = default;
         private Controller _controller;
         private Ownership _ownership;
         private string _owner;
-        private Color32 _defaultEmissionColor = new Color(0.7f, 0.7f, 0.7f, 0f);
+        private float _levelDecayTick = 0;
+        private Color _defaultEmissionColor = new Color(0.8f, 0.8f, 0.8f, 0);
+        private float _eStr = 3f;
+        private Color _decayColor = new Color(1.000f, 0.33f, 0.33f, 0.0f);
         private int level = 0;
         enum Ownership {
             Me,
@@ -48,7 +52,7 @@ namespace Screeps3D.RoomObjects.Views
             if(_controller?.ReservedBy?.Badge != null) {
                 _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.ReservedBy.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 5);
+                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
                 _ownership = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
                 _owner = _controller.ReservedBy.UserId;
             }
@@ -58,7 +62,7 @@ namespace Screeps3D.RoomObjects.Views
             if (_controller?.Owner?.Badge != null) {
                 _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 5f);
+                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
                 _ownership = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
                 _owner = _controller.Owner.UserId;
             }
@@ -73,7 +77,7 @@ namespace Screeps3D.RoomObjects.Views
             }            
             psMain.startColor = color;
             _core.materials[1].SetColor("EmissionColor", color);
-            _core.materials[1].SetFloat("EmissionStrength", 5f);
+            _core.materials[1].SetFloat("EmissionStrength", _eStr);
         }
         
         private void customizeController() {
@@ -82,22 +86,31 @@ namespace Screeps3D.RoomObjects.Views
             setOwnership();
             setParticleSystemColor();
         }
-        private void updateProgress() {
+        private void updateProgress(bool isDecaying) {
             float scale = 1f;
             if(_controller.Level == 8) {
-                _progress.SetVisibility(scale);
+                _progressScale.SetVisibility(scale);
                 return;
             }
             scale = _controller.Progress / _controller.ProgressMax;
-            _progress.SetVisibility(scale);
+            _progressScale.SetVisibility(scale);
+            _progressRenderer.materials[0].SetColor("EmissionColor", isDecaying ? _decayColor : _defaultEmissionColor);
         }
 
-        private void updateLevel() {
-            Renderer[] levels = { _l1, _l2, _l3, _l4, _l5, _l6, _l7, _l8 };
-            float ePower = _controller?.Owner?.Badge == null ? 0 : 3;
-            for(int i = 0; i < levels.Length; i++) {
-                levels[i].materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+        private void updateLevel(bool isDecaying) {
+            // so it matches the levels properly, without playing +1/-1 on indexing
+            // i know it's ugly
+            Renderer[] levels = { null, _l1, _l2, _l3, _l4, _l5, _l6, _l7, _l8 };
+            float ePower = _controller?.Owner?.Badge == null ? 0 : _eStr;
+            for(int i = 1; i < levels.Length; i++) {
+                var eColor = _defaultEmissionColor;
+
+                if(i == _controller.Level && isDecaying) {
+                    eColor = _decayColor;
+                }
+
                 levels[i].materials[0].SetFloat("EmissionStrength", _controller.Level >= i ? ePower : 0);
+                levels[i].materials[0].SetColor("EmissionColor", eColor);                 
             }
         }
 
@@ -116,19 +129,23 @@ namespace Screeps3D.RoomObjects.Views
             _controller = roomObject as Controller;            
             _ownership = Ownership.None;
             _owner = "None";
+            _levelDecayTick = _controller.DowngradeTime;
             _badge.materials[0].SetFloat("EmissionStrength", 0);
+            _progressRenderer.materials[0].SetFloat("EmissionStrength", _eStr);
 
             customizeController();
         }
 
         public void Delta(JSONObject data)
         {
-            updateProgress();
-            updateLevel();
+            bool _isDecaying = _controller.DowngradeTime == _levelDecayTick;
+            updateProgress(_isDecaying);
+            updateLevel(_isDecaying);
             if(!ownerHasChanged()) {
                 return;
             }
             customizeController();
+            _levelDecayTick = _controller.DowngradeTime;
         }
 
         public void Unload(RoomObject roomObject)
