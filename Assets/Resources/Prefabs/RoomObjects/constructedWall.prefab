@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 95829879026686248}
   - component: {fileID: 6220015741976913424}
   m_Layer: 9
-  m_Name: model
+  m_Name: WallMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
+  - {fileID: 2100000, guid: 8e790d4d822f93e4e8ff4f2a5e2ac316, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

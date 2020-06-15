@@ -23,7 +23,6 @@ namespace Screeps3D.RoomObjects.Views
         public void Load(RoomObject roomObject)
         {
             _wall = roomObject as IHitpointsObject;
-            Debug.LogError("_wall.Hits: " + _wall.Hits);
             SetScale();
         }
 
@@ -38,9 +37,10 @@ namespace Screeps3D.RoomObjects.Views
         {
             float height = 0;
             if(_wall.Hits != null && _wall.Hits > 0) {
-                height = Mathf.Ceil(Mathf.Log(Mathf.Ceil(_wall.Hits / 10000))) * 0.3f + 0.1f;
+                height = Mathf.Floor(Mathf.Log(Mathf.Ceil(_wall.Hits / (10 * 1000)))) * 0.2f + 0.3f;
             }
             var ls = transform.localScale;
+            Debug.LogError("_wall.Hits: " + _wall.Hits + " -> " + height);
             transform.localScale = new Vector3(ls.x, height, ls.z);
         }
 

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rampart2_2
+  m_Name: Rampart
   m_Shader: {fileID: -6465566751694194690, guid: 1432de596c53a214e9ffa735ef3e2231,
     type: 3}
   m_ShaderKeywords: 
@@ -37,5 +37,6 @@ Material:
     - OffsetFactor: 0.4
     - PatterTextureSize: 3
     - Speed: 0.1
+    - TextureSize: 2
     m_Colors:
     - EmissionColor: {r: 1, g: 1, b: 1, a: 0}
