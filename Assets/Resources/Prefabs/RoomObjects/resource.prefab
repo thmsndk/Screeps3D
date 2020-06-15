@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4580319934611090}
   - component: {fileID: 114678943343481032}
   - component: {fileID: 4389799549465220874}
+  - component: {fileID: -4629841733828211044}
   m_Layer: 0
   m_Name: resource
   m_TagString: Untagged
@@ -62,6 +63,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 3123870964962462267}
   _scale: {fileID: 7709550432767092835}
+--- !u!65 &-4629841733828211044
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198475642829558}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7709550432767092835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +104,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
       propertyPath: m_Name
       value: resource
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -133,10 +151,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
-      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

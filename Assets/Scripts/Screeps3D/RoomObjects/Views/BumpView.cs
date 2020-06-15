@@ -59,7 +59,7 @@ namespace Screeps3D.RoomObjects.Views
 
             var sqrMag = (_bumpRoot.transform.localPosition - targetLocalPos).sqrMagnitude;
             if(_bumping && sqrMag < .005f && !_sparkling) {
-                EffectsUtility.Attack(_creep as RoomObject, _creep.BumpPosition); // For debug
+                EffectsUtility.Attack(_creep.BumpPosition); // For debug
                 _sparkling = true;
             }
 
