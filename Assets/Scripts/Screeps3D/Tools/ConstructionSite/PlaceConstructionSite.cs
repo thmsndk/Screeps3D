@@ -100,10 +100,12 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                     }
                     else
                     {
+                        var error = result["error"];
                         // CreateConstructionsite failed {"error":"RCL not enough"}
                         // CreateConstructionsite failed {"error":"invalid location"}
                         // error
-                        Debug.LogError($"CreateConstructionsite failed {result.ToString()}");
+                        NotifyText.Message($"{error.str}", Color.red);
+                        //Debug.LogError($"CreateConstructionsite failed {result.ToString()}");
                     }
                 };
 
