@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
         public const string Path = "Prefabs/RoomObjects/controller";
 
         [SerializeField] private Renderer _badge = default;
+        [SerializeField] private Renderer _core = default;
         [SerializeField] private Renderer _l1 = default;
         [SerializeField] private Renderer _l2 = default;
         [SerializeField] private Renderer _l3 = default;
@@ -41,7 +42,7 @@ namespace Screeps3D.RoomObjects.Views
             if (_controller?.Owner?.Badge != null) {
                 _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 5);
+                _badge.materials[0].SetFloat("EmissionStrength", 5f);
                 _ownership = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
             }
         }
@@ -49,11 +50,13 @@ namespace Screeps3D.RoomObjects.Views
         private void setParticleSystemColor() {
             var isMy = false;
             var psMain = _ps.main;
-            psMain.startColor = new Color(0.6f, 0.6f, 0.6f, 0.0f);
-            if(_ownership == Ownership.None) {
-                return;
+            Color color = new Color(0.6f, 0.6f, 0.6f, 0.0f);
+            if(_ownership != Ownership.None) {
+                color = _ownership == Ownership.Me ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
             }            
-            psMain.startColor = _ownership == Ownership.Me ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
+            psMain.startColor = color;
+            _core.materials[1].SetColor("EmissionColor", color);
+            _core.materials[1].SetFloat("EmissionStrength", 5f);
         }
         
         private void customizeController() {
@@ -63,6 +66,36 @@ namespace Screeps3D.RoomObjects.Views
             setOwnership();
             setParticleSystemColor();
         }
+        private void updateProgress() {
+            float scale = 1f;
+            if(_controller.Level == 8) {
+                _progress.SetVisibility(scale);
+                return;
+            }
+            scale = _controller.Progress / _controller.ProgressMax;
+            _progress.SetVisibility(scale);
+        }
+
+        private void updateLevel() {
+            _l1.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l2.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l3.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l4.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l5.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l6.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l7.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+            _l8.materials[0].SetColor("EmissionColor", new Color(0.7f,0.7f,0.7f,0f));
+
+            _l1.materials[0].SetFloat("EmissionStrength", _controller.Level >= 1 ? 3 : 0);
+            _l2.materials[0].SetFloat("EmissionStrength", _controller.Level >= 2 ? 3 : 0);
+            _l3.materials[0].SetFloat("EmissionStrength", _controller.Level >= 3 ? 3 : 0);
+            _l4.materials[0].SetFloat("EmissionStrength", _controller.Level >= 4 ? 3 : 0);
+            _l5.materials[0].SetFloat("EmissionStrength", _controller.Level >= 5 ? 3 : 0);
+            _l6.materials[0].SetFloat("EmissionStrength", _controller.Level >= 6 ? 3 : 0);
+            _l7.materials[0].SetFloat("EmissionStrength", _controller.Level >= 7 ? 3 : 0);
+            _l8.materials[0].SetFloat("EmissionStrength", _controller.Level >= 8 ? 3 : 0);
+        }
+
        
         public void Init()
         {
@@ -85,36 +118,6 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Unload(RoomObject roomObject)
         {
-        }
-
-        private void updateProgress() {
-            float scale = 1f;
-            if(_controller.Level == 8) {
-                _progress.SetVisibility(scale);
-                return;
-            }
-            scale = _controller.Progress / _controller.ProgressMax;
-            _progress.SetVisibility(scale);
-        }
-
-        private void updateLevel() {
-            _l1.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l2.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l3.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l4.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l5.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l6.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l7.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-            _l8.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
-
-            _l1.materials[0].SetFloat("EmissionStrength", _controller.Level >= 1 ? 3 : 0);
-            _l2.materials[0].SetFloat("EmissionStrength", _controller.Level >= 2 ? 3 : 0);
-            _l3.materials[0].SetFloat("EmissionStrength", _controller.Level >= 3 ? 3 : 0);
-            _l4.materials[0].SetFloat("EmissionStrength", _controller.Level >= 4 ? 3 : 0);
-            _l5.materials[0].SetFloat("EmissionStrength", _controller.Level >= 5 ? 3 : 0);
-            _l6.materials[0].SetFloat("EmissionStrength", _controller.Level >= 6 ? 3 : 0);
-            _l7.materials[0].SetFloat("EmissionStrength", _controller.Level >= 7 ? 3 : 0);
-            _l8.materials[0].SetFloat("EmissionStrength", _controller.Level >= 8 ? 3 : 0);
         }
 
         private void Update()

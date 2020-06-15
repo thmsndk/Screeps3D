@@ -4776,6 +4776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _badge: {fileID: 6797660507624107277}
+  _core: {fileID: 245362670754958893}
   _l1: {fileID: 7832005261265537811}
   _l2: {fileID: 3616363013876207011}
   _l3: {fileID: 689080214521210585}
@@ -4934,7 +4935,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 3d6370f4bd5c11a45b92faf0c2641dd2, type: 2}
+      objectReference: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
     - target: {fileID: -1486041077251144567, guid: 976b6393e37f2fa40863275f0f43bee1,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
@@ -4986,6 +4987,12 @@ GameObject:
 --- !u!23 &6797660507624107277 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3913933433982805929, guid: 976b6393e37f2fa40863275f0f43bee1,
+    type: 3}
+  m_PrefabInstance: {fileID: 7496014599120161444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &245362670754958893 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1486041077251144567, guid: 976b6393e37f2fa40863275f0f43bee1,
     type: 3}
   m_PrefabInstance: {fileID: 7496014599120161444}
   m_PrefabAsset: {fileID: 0}
