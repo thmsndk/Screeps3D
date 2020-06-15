@@ -7,137 +7,130 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/controller";
 
-        [SerializeField] private Renderer _rend = default;
-        [SerializeField] private Renderer _playerRend = default;
+        [SerializeField] private Renderer _badge = default;
+        [SerializeField] private Renderer _l1 = default;
+        [SerializeField] private Renderer _l2 = default;
+        [SerializeField] private Renderer _l3 = default;
+        [SerializeField] private Renderer _l4 = default;
+        [SerializeField] private Renderer _l5 = default;
+        [SerializeField] private Renderer _l6 = default;
+        [SerializeField] private Renderer _l7 = default;
+        [SerializeField] private Renderer _l8 = default;
+        [SerializeField] private ScaleVisibility _progress = default;
         [SerializeField] private ScaleVisibility _vis = default;
         [SerializeField] private Collider _collider = default;
         [SerializeField] private ParticleSystem _ps = default;
-
-        private Texture2D _texture;
-        private Color _controllerWhite;
         private Controller _controller;
-        private Material _psMaterial;
-        private bool _isMyReservation;
+        
 
-        private Color _myColor;
-        private Color _enemyColor;
-        public void Init()
-        {
-            InitTexture();
+        private void loadOwnerTexture() {
 
-            _psMaterial = _ps.GetComponent<Renderer>().material;//
-            _enemyColor = new Color(1.0f, 0.0f, 0.0f, 0.3f);
-            _myColor = new Color(0.0f, 1.0f, 0.0f, 0.3f);
-            changeReservationColor(false);
+            if (_controller?.Owner?.Badge == null) { 
+                
+            } else {
+                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+                _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
+                _badge.materials[0].SetFloat("EmissionStrength", 5);
+            }
         }
 
-        private void changeReservationColor(bool isMy)
-        {
-            _isMyReservation = isMy;
-            _psMaterial.SetColor("_TintColor", isMy ? _myColor : _enemyColor);
-        }
-
-        private void checkReservation()
-        {
-            var isMyResrvation = false;
+        private void setParticleSystemColor() {
+            var isMy = false;
+            var psMain = _ps.main;
+            psMain.startColor = new Color(0.6f, 0.6f, 0.6f, 0.0f);
             if (_controller.ReservedBy != null)
             {
-                isMyResrvation = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId);
+                isMy = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId);
+                psMain.startColor = isMy ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
+                return;
             }
-            if(isMyResrvation != _isMyReservation)
-            {
-                changeReservationColor(isMyResrvation);
+            if(_controller.Owner != null) {
+                Debug.LogError("_controller.Owner.UserId" + _controller.Owner.UserId);
+                Debug.LogError("Screeps_API.ScreepsAPI.Me.UserId" + Screeps_API.ScreepsAPI.Me.UserId);
+                isMy = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId);
+                psMain.startColor = isMy ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
             }
+        }
+        public void Init()
+        {
+            loadOwnerTexture();
         }
 
         public void Load(RoomObject roomObject)
         {
             _controller = roomObject as Controller;
 
-            checkReservation();
-            UpdateTexture();
-        }
-
-        
-
-        private void InitTexture()
-        {
-            _texture = new Texture2D(8, 1);
-            _texture.filterMode = FilterMode.Point;
-            //_rend.materials[1].mainTexture = _texture;
-            _rend.materials[1].SetTexture("_BaseColorMap", _texture); // main texture
-            _rend.materials[1].SetTexture("_EmissionMap", _texture);
-            ColorUtility.TryParseHtmlString("#FDF5E6", out _controllerWhite);
-
-
+            loadOwnerTexture();
+            setParticleSystemColor();
         }
 
         public void Delta(JSONObject data)
         {
-            if (data["level"] == null && data["owner"] == null)
-                return;
-            UpdateTexture();
+            // if (data["level"] == null && data["owner"] == null && data["downgradeTime"] == null) {
+            //     turnOffLevelDisplay();
+            //     disableProgress();
+            //     return;
+            // }
+
+            updateProgress();
+            updateLevel();
+            loadOwnerTexture();
         }
 
         public void Unload(RoomObject roomObject)
         {
         }
 
-        private void UpdateTexture()
-        {
+        private void updateProgress() {
+            float scale = 1f;
+            if(_controller.Level == 8) {
+                _progress.SetVisibility(scale);
+                return;
+            }
+            scale = _controller.Progress / _controller.ProgressMax;
+            _progress.SetVisibility(scale);
+            Debug.LogError("scale" + scale);
+        }
+
+        private void disableProgress() {
+            _progress.SetVisibility(0);
+        }
+
+        private void updateLevel() {
+            _l1.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l2.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l3.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l4.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l5.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l6.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l7.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+            _l8.materials[0].SetColor("EmissionColor", new Color(1f,1f,1f,0f));
+
+            _l1.materials[0].SetFloat("EmissionStrength", _controller.Level >= 1 ? 3 : 0);
+            _l2.materials[0].SetFloat("EmissionStrength", _controller.Level >= 2 ? 3 : 0);
+            _l3.materials[0].SetFloat("EmissionStrength", _controller.Level >= 3 ? 3 : 0);
+            _l4.materials[0].SetFloat("EmissionStrength", _controller.Level >= 4 ? 3 : 0);
+            _l5.materials[0].SetFloat("EmissionStrength", _controller.Level >= 5 ? 3 : 0);
+            _l6.materials[0].SetFloat("EmissionStrength", _controller.Level >= 6 ? 3 : 0);
+            _l7.materials[0].SetFloat("EmissionStrength", _controller.Level >= 7 ? 3 : 0);
+            _l8.materials[0].SetFloat("EmissionStrength", _controller.Level >= 8 ? 3 : 0);
+        }
+
+        private void turnOffLevelDisplay() {
+            Renderer[] levels = {_l1, _l2, _l3, _l4, _l5, _l6, _l7, _l8};
             var level = 0;
             for (var i = 0; i < 8; i++)
             {
-                if (level < _controller.Level)
-                {
-                    _texture.SetPixel(i, 1, _controllerWhite);
-                } else
-                {
-                    _texture.SetPixel(i, 1, Color.black);
-                }
+                levels[i].materials[0].SetColor("EmissionColor", new Color(0f, 0f, 0f, 0f));
+                levels[i].materials[0].SetFloat("EmissionStrength", 0);
                 level++;
             }
-            _texture.Apply();
-
-
-            Texture2D texture = null;
-            var color = Color.grey;
-            if (_controller.Owner != null)
-            {
-                texture = _controller.Owner.Badge;
-                color = Color.white;
-            }
-
-            // TODO: what about using the badge if it is reserved? :thinking:
-
-            _playerRend.materials[0].SetTexture("_BaseColorMap", texture); // main texture
-            _playerRend.materials[0].SetColor("_BaseColor", color);
         }
 
         private void Update()
         {
             if (_controller == null)
                 return;
-            
-            float floor = 0.6f;
-            float ceiling = 1.0f;
-            float emission = floor + Mathf.PingPong (Time.time * .2f, ceiling - floor);
-            Color finalColor = Color.white * emission;
-            _rend.materials[1].SetColor ("_EmissionColor", finalColor);
-
-            checkReservation();
-
-            if (_controller.ReservedBy != null && _ps.isStopped)
-            {
-                _ps.Play();
-            }
-            else if (_controller.ReservedBy == null && _ps.isPlaying)
-            {
-                _ps.Stop();
-            }
-            
-       
-            /**/
         }
         
         // IMapViewComponent *****************
