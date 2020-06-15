@@ -112,7 +112,24 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
                 switch (_roomObject.Type)
                 {
                     case Constants.TypeSpawn:
-                        // TODO: ask for name and then spawn.
+                        // ask for name and then spawn.
+                        PlayerInput.Get("Name your spawn", spawnName =>
+                        {
+                            if (string.IsNullOrWhiteSpace(spawnName))
+                            {
+                                NotifyText.Message($"Invalid spawnname", Color.red);
+                                return;
+                            }
+
+                            ScreepsAPI.Http.CreateConstructionsite(
+                            _roomObject.Room.ShardName,
+                            _roomObject.Room.RoomName,
+                            _roomObject.X,
+                            _roomObject.Y,
+                            _roomObject.Type,
+                            spawnName,
+                            onSuccess: onSuccess);
+                        });
                         break;
                     default:
                         ScreepsAPI.Http.CreateConstructionsite(
