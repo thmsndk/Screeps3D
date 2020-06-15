@@ -31,7 +31,7 @@ namespace Screeps3D.RoomObjects.Views
 
             if (ownedByMe)
             {
-                emissionColor = new Color(0f, 1.000f, 0.297f, 0.053f); // enemy
+                emissionColor = new Color(0f, 1.000f, 0.297f, 0.053f);
             }
 
             if (_rampart == null)

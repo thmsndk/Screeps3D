@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Screeps_API;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Screeps3D.RoomObjects.Views
@@ -21,6 +22,27 @@ namespace Screeps3D.RoomObjects.Views
         {
             _site = roomObject as ConstructionSite;
             _circleFill.fillAmount = 0;
+
+            var owner = _site?.Owner;
+
+            if (_site == null)
+            {
+                var ownedObject = roomObject as IOwnedObject;
+                owner = ownedObject?.Owner;
+            }
+
+            bool ownedByMe = owner.Username == ScreepsAPI.Me.Username; // TODO: isNPC?;
+
+            var color = new Color(1.000f, 0f, 0.297f, 0.053f); // enemy
+
+            if (ownedByMe)
+            {
+                color = new Color(0f, 1.000f, 0.297f, 0.053f);
+            }
+
+            _circleOutline.color = color;
+            _circleFill.color = color;
+
             UpdateFill();
         }
 
