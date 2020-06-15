@@ -7,137 +7,155 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/controller";
 
-        [SerializeField] private Renderer _rend = default;
-        [SerializeField] private Renderer _playerRend = default;
+        [SerializeField] private Renderer _badge = default;
+        [SerializeField] private Renderer _core = default;
+        [SerializeField] private Renderer _progressRenderer = default;
+        [SerializeField] private Renderer _l1 = default;
+        [SerializeField] private Renderer _l2 = default;
+        [SerializeField] private Renderer _l3 = default;
+        [SerializeField] private Renderer _l4 = default;
+        [SerializeField] private Renderer _l5 = default;
+        [SerializeField] private Renderer _l6 = default;
+        [SerializeField] private Renderer _l7 = default;
+        [SerializeField] private Renderer _l8 = default;
+        [SerializeField] private ScaleVisibility _progressScale = default;
         [SerializeField] private ScaleVisibility _vis = default;
         [SerializeField] private Collider _collider = default;
         [SerializeField] private ParticleSystem _ps = default;
-
-        private Texture2D _texture;
-        private Color _controllerWhite;
         private Controller _controller;
-        private Material _psMaterial;
-        private bool _isMyReservation;
+        private Ownership _ownership;
+        private string _owner;
+        private float _levelDecayTick = 0;
+        private Color _defaultEmissionColor = new Color(0.8f, 0.8f, 0.8f, 0);
+        private float _eStr = 3f;
+        private Color _decayColor = new Color(1.000f, 0.33f, 0.33f, 0.0f);
+        private int level = 0;
+        enum Ownership {
+            Me,
+            Enemy,
+            None
+        }
+        private bool ownerHasChanged() {
+            // check for reservation change/expiry
+            if(_controller?.ReservedBy?.Badge != null) {
+                return _owner != _controller.ReservedBy.UserId;
+            }
+            // check for owner change
+            if(_controller?.Owner?.Badge != null) {
+                return _owner != _controller.Owner.UserId;
+            }
+            // no owner, no reservation -> check if we had owner
+            return _owner != "None";
+                                   
+        }
+        private void setReservation() {
+            if(_controller?.ReservedBy?.Badge != null) {
+                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+                _badge.materials[0].SetTexture("EmissionTexture", _controller.ReservedBy.Badge);
+                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
+                _ownership = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
+                _owner = _controller.ReservedBy.UserId;
+            }
+        }
 
-        private Color _myColor;
-        private Color _enemyColor;
+        private void setOwnership() {
+            if (_controller?.Owner?.Badge != null) {
+                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+                _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
+                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
+                _ownership = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
+                _owner = _controller.Owner.UserId;
+            }
+        }
+
+        private void setParticleSystemColor() {
+            var isMy = false;
+            var psMain = _ps.main;
+            Color color = _defaultEmissionColor;
+            if(_ownership != Ownership.None) {
+                color = _ownership == Ownership.Me ? new Color(0.5f, 1.000f, 0.5f, 0.0f) : new Color(1.000f, 0.33f, 0.33f, 0.0f);
+            }            
+            psMain.startColor = color;
+            _core.materials[1].SetColor("EmissionColor", color);
+            _core.materials[1].SetFloat("EmissionStrength", _eStr);
+        }
+        
+        private void customizeController() {
+            _owner = "None";
+            setReservation();
+            setOwnership();
+            setParticleSystemColor();
+        }
+        private void updateProgress(bool isDecaying) {
+            float scale = 1f;
+            if(_controller.Level == 8) {
+                _progressScale.SetVisibility(scale);
+                return;
+            }
+            scale = _controller.Progress / _controller.ProgressMax;
+            _progressScale.SetVisibility(scale);
+            _progressRenderer.materials[0].SetColor("EmissionColor", isDecaying ? _decayColor : _defaultEmissionColor);
+        }
+
+        private void updateLevel(bool isDecaying) {
+            // so it matches the levels properly, without playing +1/-1 on indexing
+            // i know it's ugly
+            Renderer[] levels = { null, _l1, _l2, _l3, _l4, _l5, _l6, _l7, _l8 };
+            float ePower = _controller?.Owner?.Badge == null ? 0 : _eStr;
+            for(int i = 1; i < levels.Length; i++) {
+                var eColor = _defaultEmissionColor;
+
+                if(i == _controller.Level && isDecaying) {
+                    eColor = _decayColor;
+                }
+
+                levels[i].materials[0].SetFloat("EmissionStrength", _controller.Level >= i ? ePower : 0);
+                levels[i].materials[0].SetColor("EmissionColor", eColor);                 
+            }
+        }
+
+       
         public void Init()
-        {
-            InitTexture();
+        {            
+            _ownership = Ownership.None;
+            _owner = "None";
+            _badge.materials[0].SetFloat("EmissionStrength", 0);
 
-            _psMaterial = _ps.GetComponent<Renderer>().material;//
-            _enemyColor = new Color(1.0f, 0.0f, 0.0f, 0.3f);
-            _myColor = new Color(0.0f, 1.0f, 0.0f, 0.3f);
-            changeReservationColor(false);
-        }
-
-        private void changeReservationColor(bool isMy)
-        {
-            _isMyReservation = isMy;
-            _psMaterial.SetColor("_TintColor", isMy ? _myColor : _enemyColor);
-        }
-
-        private void checkReservation()
-        {
-            var isMyResrvation = false;
-            if (_controller.ReservedBy != null)
-            {
-                isMyResrvation = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId);
-            }
-            if(isMyResrvation != _isMyReservation)
-            {
-                changeReservationColor(isMyResrvation);
-            }
+            customizeController();
         }
 
         public void Load(RoomObject roomObject)
         {
-            _controller = roomObject as Controller;
+            _controller = roomObject as Controller;            
+            _ownership = Ownership.None;
+            _owner = "None";
+            _levelDecayTick = _controller.DowngradeTime;
+            _badge.materials[0].SetFloat("EmissionStrength", 0);
+            _progressRenderer.materials[0].SetFloat("EmissionStrength", _eStr);
 
-            checkReservation();
-            UpdateTexture();
-        }
-
-        
-
-        private void InitTexture()
-        {
-            _texture = new Texture2D(8, 1);
-            _texture.filterMode = FilterMode.Point;
-            //_rend.materials[1].mainTexture = _texture;
-            _rend.materials[1].SetTexture("_BaseColorMap", _texture); // main texture
-            _rend.materials[1].SetTexture("_EmissionMap", _texture);
-            ColorUtility.TryParseHtmlString("#FDF5E6", out _controllerWhite);
-
-
+            customizeController();
         }
 
         public void Delta(JSONObject data)
         {
-            if (data["level"] == null && data["owner"] == null)
+            bool _isDecaying = _controller.DowngradeTime == _levelDecayTick;
+            updateProgress(_isDecaying);
+            updateLevel(_isDecaying);
+            if(!ownerHasChanged()) {
                 return;
-            UpdateTexture();
+            }
+            customizeController();
+            _levelDecayTick = _controller.DowngradeTime;
         }
 
         public void Unload(RoomObject roomObject)
         {
         }
 
-        private void UpdateTexture()
-        {
-            var level = 0;
-            for (var i = 0; i < 8; i++)
-            {
-                if (level < _controller.Level)
-                {
-                    _texture.SetPixel(i, 1, _controllerWhite);
-                } else
-                {
-                    _texture.SetPixel(i, 1, Color.black);
-                }
-                level++;
-            }
-            _texture.Apply();
-
-
-            Texture2D texture = null;
-            var color = Color.grey;
-            if (_controller.Owner != null)
-            {
-                texture = _controller.Owner.Badge;
-                color = Color.white;
-            }
-
-            // TODO: what about using the badge if it is reserved? :thinking:
-
-            _playerRend.materials[0].SetTexture("_BaseColorMap", texture); // main texture
-            _playerRend.materials[0].SetColor("_BaseColor", color);
-        }
-
         private void Update()
         {
             if (_controller == null)
                 return;
-            
-            float floor = 0.6f;
-            float ceiling = 1.0f;
-            float emission = floor + Mathf.PingPong (Time.time * .2f, ceiling - floor);
-            Color finalColor = Color.white * emission;
-            _rend.materials[1].SetColor ("_EmissionColor", finalColor);
-
-            checkReservation();
-
-            if (_controller.ReservedBy != null && _ps.isStopped)
-            {
-                _ps.Play();
-            }
-            else if (_controller.ReservedBy == null && _ps.isPlaying)
-            {
-                _ps.Stop();
-            }
-            
-       
-            /**/
         }
         
         // IMapViewComponent *****************
@@ -153,7 +171,6 @@ namespace Screeps3D.RoomObjects.Views
         {
             _vis.Hide();
             _collider.enabled = true;
-
         }
     }
 }
