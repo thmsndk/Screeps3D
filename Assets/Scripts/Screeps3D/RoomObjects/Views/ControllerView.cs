@@ -99,7 +99,6 @@ namespace Screeps3D.RoomObjects.Views
        
         public void Init()
         {
-            // loadOwnerTexture();
             customizeController();
         }
 
@@ -139,7 +138,6 @@ namespace Screeps3D.RoomObjects.Views
         {
             _vis.Hide();
             _collider.enabled = true;
-
         }
     }
 }
