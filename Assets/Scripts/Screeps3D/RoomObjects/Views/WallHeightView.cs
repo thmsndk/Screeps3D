@@ -40,7 +40,6 @@ namespace Screeps3D.RoomObjects.Views
                 height = Mathf.Floor(Mathf.Log(Mathf.Ceil(_wall.Hits / (10 * 1000)))) * 0.2f + 0.3f;
             }
             var ls = transform.localScale;
-            Debug.LogError("_wall.Hits: " + _wall.Hits + " -> " + height);
             transform.localScale = new Vector3(ls.x, height, ls.z);
         }
 
