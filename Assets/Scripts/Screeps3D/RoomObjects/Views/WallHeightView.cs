@@ -6,14 +6,6 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class WallHeightView: MonoBehaviour, IObjectViewComponent
     {
-        private static readonly Dictionary<int, float> Scales = new Dictionary<int, float>
-        {
-            {1, 0.3f},
-            {1000000, 0.5f},
-            {10000000, 1f},
-            {100000000, 1.5f},
-            {300000000, 2f}
-        };
 
         private IHitpointsObject _wall;
         public void Init()
