@@ -88,11 +88,9 @@ namespace Screeps3D.RoomObjects.Views
         }
         private void updateProgress(bool isDecaying) {
             float scale = 1f;
-            if(_controller.Level == 8) {
-                _progressScale.SetVisibility(scale);
-                return;
+            if(_controller.Level < 8) {
+                scale = _controller.Progress / _controller.ProgressMax;
             }
-            scale = _controller.Progress / _controller.ProgressMax;
             _progressScale.SetVisibility(scale);
             _progressRenderer.materials[0].SetColor("EmissionColor", isDecaying ? _decayColor : _defaultEmissionColor);
         }
