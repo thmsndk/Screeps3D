@@ -76,6 +76,7 @@ namespace Screeps3D.RoomObjects
         //public CreepBody Body { get; private set; }
         public string Name { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
+        public Vector3? actionTarget { get; set; }
         public float Hits { get; set; }
         public float HitsMax { get; set; }
         public float Fatigue { get; set; }

@@ -49,6 +49,19 @@ MonoBehaviour:
   _topL4: {fileID: 3083446485803690137}
   _topL5: {fileID: 3242418009620478741}
   _rotationRoot: {fileID: 8989574074092822236}
+--- !u!65 &7899637743648373591
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658751873887218836}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8356699045835001320
 MonoBehaviour:
   m_ObjectHideFlags: 0

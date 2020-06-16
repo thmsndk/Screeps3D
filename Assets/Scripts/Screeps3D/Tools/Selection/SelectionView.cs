@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Screeps3D;
 using Screeps3D.RoomObjects;
 using Screeps3D.RoomObjects.Views;
 using TMPro;
@@ -85,13 +86,13 @@ namespace Screeps3D.Tools.Selection
 
         private void FadeInCircle()
         {
-            var color = _decalProjector.material.color;
+            var color = _decalProjector.material.GetColor(ShaderKeys.HDRPDecal.Color);
             if (color.a >= 1)
             {
                 return;
             }
             color.a += Time.deltaTime / .2f;
-            _decalProjector.material.color = color;
+            _decalProjector.material.SetColor(ShaderKeys.HDRPDecal.Color, color);
         }
 
         private GameObject CreateCircle()
@@ -107,9 +108,9 @@ namespace Screeps3D.Tools.Selection
                 go = Instantiate(Tools.Selection.Selection.CircleTemplate);
             }
             _decalProjector = go.GetComponent<DecalProjector>();
-            var color = _decalProjector.material.color;
+            var color = _decalProjector.material.GetColor(ShaderKeys.HDRPDecal.Color);
             color.a = 0;
-            _decalProjector.material.color = color;
+            _decalProjector.material.SetColor(ShaderKeys.HDRPDecal.Color, color);
             go.transform.SetParent(Selected.gameObject.transform, false);
             if (CircleSizes.ContainsKey(_type))
             {

@@ -677,8 +677,7 @@ GameObject:
   - component: {fileID: -6007905696904912852}
   - component: {fileID: -1981475767877070329}
   - component: {fileID: -296322938788407102}
-  - component: {fileID: 2275011860974122437}
-  - component: {fileID: -396091554822576029}
+  - component: {fileID: 9031987205251728300}
   m_Layer: 0
   m_Name: creep
   m_TagString: Untagged
@@ -791,7 +790,7 @@ MonoBehaviour:
   _animateOnStart: 1
   _visibleOnStart: 1
   _speed: 0.2
---- !u!114 &2275011860974122437
+--- !u!114 &9031987205251728300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -800,23 +799,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8180200459206781263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1558d39b4154667a6f0bfcbeef18a9c, type: 3}
+  m_Script: {fileID: 11500000, guid: 248b9c46081c1684c83df53c1a8f437f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationRoot: {fileID: 1890823942103009106}
---- !u!114 &-396091554822576029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8180200459206781263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d18998ec063485698c8ccfe59e37caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bumpRoot: {fileID: 1890823942103009106}
+  _creepRoot: {fileID: 1890823942103009106}
 --- !u!1 &9095237282635000428
 GameObject:
   m_ObjectHideFlags: 0
