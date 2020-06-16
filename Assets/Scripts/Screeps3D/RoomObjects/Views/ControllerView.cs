@@ -27,7 +27,7 @@ namespace Screeps3D.RoomObjects.Views
         private string _owner;
         private float _levelDecayTick = 0;
         private Color _defaultEmissionColor = new Color(0.8f, 0.8f, 0.8f, 0);
-        private float _eStr = 3f;
+        private float _eStr = 0.7f;
         private Color _decayColor = new Color(1.000f, 0.33f, 0.33f, 0.0f);
         private int level = 0;
         enum Ownership {

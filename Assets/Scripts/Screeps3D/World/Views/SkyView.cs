@@ -10,7 +10,7 @@ namespace Screeps3D.World.Views
         SkySettings _skySettings;
         bool sunRise;
         bool sunSet;
-        float dayEmission = -4f;
+        float dayEmission = 1f;
         bool night;
         float nightEmission = -6f;
         float nightLength = 40f;
@@ -30,6 +30,8 @@ namespace Screeps3D.World.Views
         }
         void Update()
         {
+            // return;
+
             _skySettings.rotation.value += 0.005f;
             if(_skySettings.rotation.value == 360) {
                 _skySettings.rotation.value = 0;

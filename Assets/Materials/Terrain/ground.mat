@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ground
-  m_Shader: {fileID: -6465566751694194690, guid: 334444d14a3a02b459c6bbdfbaea4b17,
+  m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -32,10 +32,10 @@ Material:
     MotionVector: User
   disabledShaderPasses:
   - DistortionVectors
-  - MOTIONVECTORS
+  - TransparentBackface
   - TransparentDepthPrepass
   - TransparentDepthPostpass
-  - TransparentBackface
+  - MOTIONVECTORS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -48,11 +48,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - ColorTexture:
-        m_Texture: {fileID: 2800000, guid: 4a92b4f558dadf04a9b660dd46c77a80, type: 3}
+        m_Texture: {fileID: 2800000, guid: a9c76b1b7ab2c9b478d7a66610566c49, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: fe4b46d5e6121d64db07a8f49d38a30a, type: 3}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MetallicTexture:
+        m_Texture: {fileID: 2800000, guid: 4e8b23dcf7ffa9849b59a38b6baac7a1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SmoothTexture:
+        m_Texture: {fileID: 2800000, guid: 4e8b23dcf7ffa9849b59a38b6baac7a1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
@@ -60,7 +68,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_3E866369:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 21baca494b92698429826a2a35d097ea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_712D8098:
@@ -68,7 +76,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_8BFCE1C6:
-        m_Texture: {fileID: 2800000, guid: 50a3bb6e33b7ad54fa6f1ddffb42fe77, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4e71a0e60df2dda4ebfed5c03cffa79a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_96045E16:
@@ -76,7 +84,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_F9979DE5:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -200,14 +208,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - BaseNormalStr: 0.4
-    - BaseSize: 3.7
+    - BaseNormalStr: 0.26
+    - BaseSize: 6.5
     - ColorMix: 1
     - EmissionStrength: 0
-    - MetallicStrength: 0.29
+    - MetallicStrength: 0.61
     - NormalStrenght: 0.5
-    - SmoothStrength: 0.248
-    - UVScale: 12.5
+    - Scaling: 0.3
+    - SmoothStrength: 0.473
+    - UVScale: 5
     - Vector1_8128E921: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
