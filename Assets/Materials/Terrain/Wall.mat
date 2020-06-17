@@ -51,7 +51,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - SmoothTexture:
-        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
+        m_Texture: {fileID: 2800000, guid: 488b56990b2aa864fa6d7dad47d319f0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
@@ -200,7 +200,7 @@ Material:
     - NormalStrenght: 0.5
     - NormalTextureSize: 1
     - SmoothStrength: 0.658
-    - SmoothTextureSize: 1
+    - SmoothTextureSize: 0.2
     - UVScale: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
