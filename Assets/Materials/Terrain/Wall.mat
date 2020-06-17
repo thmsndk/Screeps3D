@@ -31,7 +31,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - BaseTexture:
-        m_Texture: {fileID: 2800000, guid: d9e5198fd52f1ba448d21fee0887fbf2, type: 3}
+        m_Texture: {fileID: 2800000, guid: a9c76b1b7ab2c9b478d7a66610566c49, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - ColorTexture:
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - DetailTexture:
-        m_Texture: {fileID: 2800000, guid: 1b6ec553c4dab2c4ca3b33340dd556ba, type: 3}
+        m_Texture: {fileID: 2800000, guid: d4d8b8e02c2ad4746a78cb784a2052d0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - EmissionTexture:
@@ -47,11 +47,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - MetallicTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - SmoothTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
@@ -187,13 +187,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - BaseNormalStr: 0.6
+    - BaseNormalStr: 1
+    - BaseScale: 0.2
     - BaseSize: 1
     - ColorMix: 0.512
+    - DetailScale: 0.2
     - DetailTextureSize: 2
     - EmissionStrength: 0
     - MetallicStrength: 0.7
     - MetallicTextureSize: 1
+    - NormalScale: 0.2
     - NormalStrenght: 0.5
     - NormalTextureSize: 1
     - SmoothStrength: 0.658
