@@ -147,9 +147,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - EmissionEV: 5
+    - MetallicVal: 1
+    - SmoothVal: 0
     - Vector1_6D6E0534: 0.5
-    - Vector1_75B8D4BF: 0.132
-    - Vector1_E9000F23: 0.737
+    - Vector1_75B8D4BF: 0
+    - Vector1_E9000F23: 0
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1

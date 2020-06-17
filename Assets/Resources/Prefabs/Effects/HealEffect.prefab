@@ -3826,11 +3826,11 @@ ParticleSystem:
     randomDistribution: 0
     color: 1
     range: 0
-    intensity: 1
+    intensity: 0
     rangeCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2

@@ -8,13 +8,22 @@ namespace Screeps3D.World.Views
     {
         [SerializeField] public Volume _volume;
         SkySettings _skySettings;
-        bool sunRise;
-        bool sunSet;
-        float dayEmission = 1f;
-        bool night;
-        float nightEmission = -6f;
-        float nightLength = 40f;
-        float progress = 0.001f;
+        bool _sunRise;
+        bool _sunSet;
+        bool _night;
+        float _dayExposition = 1f;
+        float _nightExposition = -6f;
+        float _expositionChange = 0.001f;
+
+        float _dayLux = 0.5f;
+        float _nightLux = 0.000001f;
+        float _luxChange = 0.0005f;
+
+        float _nightLength = 10f;
+        float _currentNightProgress = 0f;
+        float _nightProgress = 0.005f;
+        float _skyRotation = 0.005f;
+
         void Start()
         {            
             Volume volume = GetComponent<Volume>();
@@ -24,46 +33,92 @@ namespace Screeps3D.World.Views
             {
                 _skySettings = tempSkySett;
             }
-            sunRise = true;
-            sunSet = false;
-            night = false;
+            _sunRise = false;
+            _sunSet = true;
+            _night = false;
         }
-        void Update()
-        {
-            // return;
 
-            _skySettings.rotation.value += 0.005f;
+        private void rotateSky() {
+            _skySettings.rotation.value += _skyRotation;
             if(_skySettings.rotation.value == 360) {
                 _skySettings.rotation.value = 0;
             }
+        }
 
-            if(night) {
-                nightLength -= progress;
-                if(nightLength > 0) {
+        private void expositionSkySet() {
+            if(_night) {
+                _nightLength -= _expositionChange;
+                if(_nightLength > 0) {
                     return;
                 }
-                sunRise = true;
-                night = false;
+                _sunRise = true;
+                _night = false;
             }
             
-            if(sunRise) {
-                _skySettings.exposure.value += progress;
-                if(_skySettings.exposure.value <= dayEmission) {
+            if(_sunRise) {
+                _skySettings.exposure.value += _expositionChange;
+                if(_skySettings.exposure.value <= _dayExposition) {
                     return;
                 }
-                sunRise = false;
-                sunSet = true;
+                _sunRise = false;
+                _sunSet = true;
             }
 
-            if(sunSet) {
-                _skySettings.exposure.value -= progress;
-                if(_skySettings.exposure.value >= nightEmission) {
+            if(_sunSet) {
+                _skySettings.exposure.value -= _expositionChange;
+                if(_skySettings.exposure.value >= _nightExposition) {
                     return;
                 }
-                sunSet = false;
-                night = true;
-                nightLength = 2f;
+                _sunSet = false;
+                _night = true;
+                _nightLength = 2f;
             }
+        }
+
+        private void changeLux(float val) {
+            if(_skySettings.desiredLuxValue.value < 0.03) {
+                val = 0.1f * val;
+            }
+            if(_skySettings.desiredLuxValue.value < 0.001) {
+                val = 0.1f * val;
+            }
+            _skySettings.desiredLuxValue.value = Mathf.Max(_nightLux, _skySettings.desiredLuxValue.value + val);
+        }
+        private void luxSkySet() {
+            if(_night) {
+                _currentNightProgress += _nightProgress;
+                if(_currentNightProgress < _nightLength) {
+                    return;
+                }
+                _sunRise = true;
+                _night = false;
+                _currentNightProgress = 0;
+            }
+            
+            if(_sunRise) {
+                if(_skySettings.desiredLuxValue.value <= _dayLux) {
+                    changeLux(_luxChange);
+                    return;
+                }
+                _sunRise = false;
+                _sunSet = true;
+            }
+
+            if(_sunSet) {
+                if(_skySettings.desiredLuxValue.value > _nightLux) {
+                    changeLux(_luxChange * -1f);
+                    return;
+                }
+                _sunSet = false;
+                _night = true;
+            }
+        }
+
+        void Update()
+        {
+            // return;
+            rotateSky();
+            luxSkySet();
         }
     }
 }
