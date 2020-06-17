@@ -84,17 +84,17 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private void UpdateAvailable(string type)
         {
-            var controller = PlayerPosition.Instance.Room.Objects.SingleOrDefault(o => o.Value.Type == Constants.TypeController);
-            var rcl = (controller.Value as Controller)?.Level ?? 0;
+            var controller = PlayerPosition.Instance.Room.Objects.SingleOrDefault(o => o.Value.Type == Constants.TypeController).Value as Controller;
+            var rcl = controller?.Level ?? 0;
 
             var currentAmount = PlayerPosition.Instance.Room.Objects.Count(o => o.Value.Type == type);
             var currentConstructionSites = PlayerPosition.Instance.Room.Objects.Where(o => o.Value.Type == Constants.TypeConstruction).Count(o => (o.Value as RoomObjectConstructionSite).StructureType == type);
 
             var specification = CONTROLLER_STRUCTURES[type];
             var maxAmount = specification.CONTROLLER_STRUCTURES[rcl];
+            var nextRclUpgrade = specification.CONTROLLER_STRUCTURES.FindIndex(rcl, x => x > maxAmount);
 
-            specification.ConstructionSiteItem.SetAvailable(currentAmount + currentConstructionSites, maxAmount, maxAmount == AVAILABLE);
-
+            specification.ConstructionSiteItem.SetAvailable(currentAmount + currentConstructionSites, maxAmount, maxAmount == AVAILABLE, controller, nextRclUpgrade);
         }
 
         private void OnDisable()

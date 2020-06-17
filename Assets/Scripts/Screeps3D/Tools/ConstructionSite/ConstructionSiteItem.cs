@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Screeps3D.RoomObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,14 +33,24 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             this.description.text = value;
         }
 
-        public void SetAvailable(int used, int max, bool unlimited = false)
+        public void SetAvailable(int used, int max, bool unlimited = false, Controller controller = null, int nextRclUpgrade = 0)
         {
             var available = max - used;
             var canConstruct = available > 0;
             var color = canConstruct ? "green" : "#BEBEBE";
             var text = unlimited ? "Available" : $"Available: {available} / {max}";
+
+            if (controller == null || controller.Level == 0 && max == 0)
+            {
+                color = "#BEBEBE";
+                text = "No controller";
+            }
+            else if (max == 0)
+            {
+                text = $"RCL {nextRclUpgrade} required";
+            }
+
             this.available.text = $"<color={color}>{text}</color>";
-            // TODO: sneak peak next rcl?
 
             if (toggle != null)
             {
