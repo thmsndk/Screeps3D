@@ -2,6 +2,7 @@
 using Screeps3D;
 using Screeps3D.Player;
 using Screeps3D.RoomObjects;
+using Screeps3D.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
         [SerializeField] private ToggleGroup constructionSites = default;
 
         public Action<string> OnConstructionSiteChange;
+
+        private Room playerPositionRoom;
 
         // TODO: How many are yours, and how many are someone elses?
         private const int AVAILABLE = 2500; // 2500 seems to be an indicator of not showing available amount.
@@ -62,11 +65,25 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
         {
             popup?.gameObject?.SetActive(true);
 
+            PlayerPosition.Instance.OnRoomChange += OnRoomChange;
+            
             // register for ticks/delta or room updates
-            PlayerPosition.Instance.Room.ObjectStream.OnData += OnRoomData;
+            playerPositionRoom = PlayerPosition.Instance.Room;
+            playerPositionRoom.ObjectStream.OnData += OnRoomData;
 
             UpdateAvailable();
 
+        }
+
+        private void OnRoomChange()
+        {
+            playerPositionRoom.ObjectStream.OnData -= OnRoomData;
+
+            playerPositionRoom = PlayerPosition.Instance.Room;
+
+            playerPositionRoom.ObjectStream.OnData += OnRoomData;
+
+            UpdateAvailable();
         }
 
         private void OnRoomData(JSONObject obj)
@@ -100,7 +117,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
         private void OnDisable()
         {
             popup?.gameObject?.SetActive(false);
-            PlayerPosition.Instance.Room.ObjectStream.OnData -= OnRoomData;
+            playerPositionRoom.ObjectStream.OnData -= OnRoomData;
         }
 
         private void InitializeSpecificationItems()
