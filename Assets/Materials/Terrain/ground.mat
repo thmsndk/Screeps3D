@@ -32,15 +32,15 @@ Material:
     MotionVector: User
   disabledShaderPasses:
   - DistortionVectors
-  - TransparentBackface
+  - MOTIONVECTORS
   - TransparentDepthPrepass
   - TransparentDepthPostpass
-  - MOTIONVECTORS
+  - TransparentBackface
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - BaseNormal:
-        m_Texture: {fileID: 2800000, guid: 4e71a0e60df2dda4ebfed5c03cffa79a, type: 3}
+        m_Texture: {fileID: 2800000, guid: e8b6f351f5e7c4b4e9e454f41f8dc3e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - BaseTexture:
@@ -52,6 +52,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - DetailTexture:
+        m_Texture: {fileID: 2800000, guid: d4d8b8e02c2ad4746a78cb784a2052d0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - DisplacementTexture:
         m_Texture: {fileID: 2800000, guid: 2dc13ac1d287adb4eafa6aaf8f53d588, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -60,11 +64,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - MetallicTexture:
-        m_Texture: {fileID: 2800000, guid: 2cf64fc6dacbab24ab3749e72170ab9e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - SmoothTexture:
-        m_Texture: {fileID: 2800000, guid: 2dc13ac1d287adb4eafa6aaf8f53d588, type: 3}
+        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
@@ -96,7 +100,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: deb7ea3bd8fbfa346b4f705f991314a4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 499249bdbff1caf43960eecca86e5832, type: 3}
         m_Scale: {x: 5, y: 5}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -144,7 +148,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 2dc13ac1d287adb4eafa6aaf8f53d588, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IridescenceMaskMap:
@@ -156,7 +160,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: deb7ea3bd8fbfa346b4f705f991314a4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 499249bdbff1caf43960eecca86e5832, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -168,7 +172,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 6f25cdf438e04ef4aba709a17ce60fc2, type: 3}
+        m_Texture: {fileID: 2800000, guid: e8b6f351f5e7c4b4e9e454f41f8dc3e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -213,17 +217,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BaseNormalStr: 0.7
-    - BaseSize: 6
+    - BaseSize: 9
     - ColorMix: 1
     - DetailTextureSize: 4
+    - DisplacementStr: 0.05
+    - DisplacementTextureSize: 1
     - EmissionStrength: 0
     - MetallicStrength: 0.61
-    - MetallicTextureSize: 1
+    - MetallicTextureSize: 6
     - NormalStrenght: 0.5
     - NormalTextureSize: 6
     - Scaling: 0.3
     - SmoothStrength: 0.473
-    - SmoothTextureSize: 0.05
+    - SmoothTextureSize: 6
     - UVScale: 5
     - Vector1_8128E921: 1
     - _AORemapMax: 1
@@ -254,7 +260,7 @@ Material:
     - _DiffusionProfileHash: 0
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
-    - _DisplacementMode: 0
+    - _DisplacementMode: 1
     - _DistortionBlendMode: 0
     - _DistortionBlurBlendMode: 0
     - _DistortionBlurDstBlend: 1
@@ -283,10 +289,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HeightAmplitude: 0.02
-    - _HeightCenter: 0.5
+    - _HeightAmplitude: 0.06
+    - _HeightCenter: 0.16666667
     - _HeightMapParametrization: 0
-    - _HeightMax: 1
+    - _HeightMax: 5
     - _HeightMin: -1
     - _HeightOffset: 0
     - _HeightPoMAmplitude: 2
@@ -314,7 +320,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _SSRefractionProjectionModel: 0
-    - _Smoothness: 0.489
+    - _Smoothness: 0.832
     - _SmoothnessRemapMax: 0.5
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
