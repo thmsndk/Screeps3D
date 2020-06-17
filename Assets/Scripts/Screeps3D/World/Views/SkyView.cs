@@ -11,16 +11,19 @@ namespace Screeps3D.World.Views
         bool _sunRise;
         bool _sunSet;
         bool _night;
+        bool _day;
         float _dayExposition = 1f;
         float _nightExposition = -6f;
         float _expositionChange = 0.001f;
 
-        float _dayLux = 0.5f;
+        float _dayLux = 0.1f;
         float _nightLux = 0.000001f;
         float _luxChange = 0.0005f;
 
         float _nightLength = 10f;
         float _currentNightProgress = 0f;
+        float _dayLength = 5f;
+        float _currentDayProgress = 0f;
         float _nightProgress = 0.005f;
         float _skyRotation = 0.005f;
 
@@ -34,7 +37,8 @@ namespace Screeps3D.World.Views
                 _skySettings = tempSkySett;
             }
             _sunRise = false;
-            _sunSet = true;
+            _day = true;
+            _sunSet = false;
             _night = false;
         }
 
@@ -101,7 +105,17 @@ namespace Screeps3D.World.Views
                     return;
                 }
                 _sunRise = false;
+                _day = true;
+            }
+            
+            if(_day) {
+                _currentDayProgress += _nightProgress;
+                if(_currentDayProgress < _dayLength) {
+                    return;
+                }
+                _day = false;
                 _sunSet = true;
+                _currentDayProgress = 0;
             }
 
             if(_sunSet) {
@@ -116,8 +130,8 @@ namespace Screeps3D.World.Views
 
         void Update()
         {
-            // return;
             rotateSky();
+            // return;
             luxSkySet();
         }
     }
