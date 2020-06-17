@@ -189,7 +189,8 @@ namespace Screeps3D.Rooms.Views
             float Y = wallConstant
                 + (float)Math.Round(getRandom(x, z) * wallRandom / wallStep) * wallStep
                 + depth * wallDepth;
-            return Y;
+            // return Y;
+            return UnityEngine.Random.Range(3f, 4f) + Y;
         }
 
         private void generateWalls2()

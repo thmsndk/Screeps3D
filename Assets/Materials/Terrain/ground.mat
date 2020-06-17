@@ -223,6 +223,7 @@ Material:
     - DisplacementStr: 0.05
     - DisplacementTextureSize: 1
     - EmissionStrength: 0
+    - EmissionValue: 0
     - MetallicStrength: 0.61
     - MetallicTextureSize: 1
     - NormalStrenght: 0.5

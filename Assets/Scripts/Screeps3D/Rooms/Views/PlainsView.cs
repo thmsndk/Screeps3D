@@ -33,8 +33,9 @@ namespace Screeps3D.Rooms.Views
             if (!_rend)
             {
                 _rend = GetComponent<Renderer>();
-                var baseColor = _rend.material.GetColor(BaseColor);
-                _original = baseColor.r;
+                _rend.materials[1].SetFloat("EmissionValue", 0.1f);
+                // var baseColor = _rend.material.GetColor(BaseColor);
+                // _original = baseColor.r;
             }
             _target = _original + .1f;
             enabled = true;
@@ -42,6 +43,7 @@ namespace Screeps3D.Rooms.Views
 
         public void Dim()
         {
+            _rend.materials[1].SetFloat("EmissionValue", 0f);
             _target = _original;
             enabled = true;
         }
@@ -53,10 +55,10 @@ namespace Screeps3D.Rooms.Views
                 enabled = false;
                 return;
             }
-            var baseColor = _rend.material.GetColor(BaseColor);
+            // var baseColor = _rend.material.GetColor(BaseColor);
 
-            _current = Mathf.SmoothDamp(baseColor.r, _target, ref _targetRef, 1);
-            _rend.material.SetColor(BaseColor, new Color(_current, _current, _current));
+            // _current = Mathf.SmoothDamp(baseColor.r, _target, ref _targetRef, 1);
+            // _rend.material.SetColor(BaseColor, new Color(_current, _current, _current));
         }
     }
 }
