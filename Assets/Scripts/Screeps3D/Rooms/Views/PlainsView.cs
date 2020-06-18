@@ -33,32 +33,30 @@ namespace Screeps3D.Rooms.Views
             if (!_rend)
             {
                 _rend = GetComponent<Renderer>();
-                _rend.materials[1].SetFloat("EmissionValue", 0.1f);
+                _original = _rend.materials[1].GetFloat("EmissionValue");
                 // var baseColor = _rend.material.GetColor(BaseColor);
                 // _original = baseColor.r;
             }
-            _target = _original + .1f;
+            _target = _original + .05f;
             enabled = true;
         }
 
         public void Dim()
         {
-            _rend.materials[1].SetFloat("EmissionValue", 0f);
             _target = _original;
             enabled = true;
         }
 
         public void Update()
         {
-            if (!_rend || Mathf.Abs(_current - _target) < .001f)
+            if (!_rend || Mathf.Abs(_current - _target) < 0f)
             {
                 enabled = false;
                 return;
             }
-            // var baseColor = _rend.material.GetColor(BaseColor);
-
-            // _current = Mathf.SmoothDamp(baseColor.r, _target, ref _targetRef, 1);
-            // _rend.material.SetColor(BaseColor, new Color(_current, _current, _current));
+            var baseVal = _rend.materials[1].GetFloat("EmissionValue");
+            _current = Mathf.SmoothDamp(baseVal, _target, ref _targetRef, 1);
+            _rend.materials[1].SetFloat("EmissionValue", _current);
         }
     }
 }
