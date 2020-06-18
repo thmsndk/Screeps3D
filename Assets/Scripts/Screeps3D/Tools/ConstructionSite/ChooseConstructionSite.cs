@@ -29,7 +29,6 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private Room playerPositionRoom;
 
-        // TODO: How many are yours, and how many are someone elses?
         private const int AVAILABLE = 2500; // 2500 seems to be an indicator of not showing available amount.
 
         private readonly Dictionary<string, ConstructionSiteSpecification> CONTROLLER_STRUCTURES = new Dictionary<string, ConstructionSiteSpecification>
@@ -101,6 +100,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private void UpdateAvailable(string type)
         {
+            // TODO: Do we want to indicate that some of the constructed objects are not yours?
             var controller = PlayerPosition.Instance.Room.Objects.SingleOrDefault(o => o.Value.Type == Constants.TypeController).Value as Controller;
             var rcl = controller?.Level ?? 0;
 
@@ -137,14 +137,13 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
                 newSite.SetName(site.Value.Name);
                 newSite.SetDescription(site.Value.Description);
-                newSite.SetAvailable(UnityEngine.Random.Range(0, 2500), UnityEngine.Random.Range(0, 2500)); // TODO: set unlimited if AVAILABLE in requirements
+                newSite.SetAvailable(UnityEngine.Random.Range(0, 2500), UnityEngine.Random.Range(0, 2500));
 
                 var toggle = newSite.GetComponent<Toggle>();
                 toggle.group = constructionSites;
                 toggle.onValueChanged.AddListener(isOn => ToggleInput(toggle, isOn, site.Key));
 
                 site.Value.ConstructionSiteItem = newSite;
-
             }
             
             // Set height of content
@@ -157,11 +156,8 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
         {
             if (isOn)
             {
-                Debug.Log($"{type} clicked");
-                //SelectedColor = flagColor;
                 OnConstructionSiteChange?.Invoke(type);
             }
-
         }
 
         private class ConstructionSiteSpecification

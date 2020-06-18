@@ -13,9 +13,6 @@ using UnityEngine;
 
 
 /*
- TODO: detect if spawn and pop up name textbox
- TODO: perhaps generate unique name
- TODO: Figure out how to render road, cause it is special.
  TODO: Indicate where you can place the structure / csite, some places are valid, others are not depending on type
 
 */
@@ -28,16 +25,12 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
     {
         private ObjectFactory _factory = new ObjectFactory();
         private RoomObject _roomObject;
-        // TODO: place structure and call HTTP endpoint.
-        // TODO: cancel placement
 
         public Action OnConstructionSiteCreated;
 
         private void Start()
         {
             ChooseConstructionSite.Instance.OnConstructionSiteChange += ConstructionSiteChanged;
-            Debug.Log("Place Constructionsite startet");
-            //_roomObject = new Spawn() { Type = "spawn" }; // TODO: utilize type and the factory to get object.
         }
 
         private void ConstructionSiteChanged(string type)
