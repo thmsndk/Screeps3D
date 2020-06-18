@@ -14,8 +14,12 @@ namespace Screeps3D.Rooms.Views
         private bool _hasTerrainData;
         private string _terrain;
         private bool _hasMapData;
-        private List<Vector2> _lairPositions;
-        private List<Vector2> _roadPositions;
+        private List<Vector2Int> _lairPositions;
+        private List<Vector2Int> _roadPositions;
+        private List<Vector2Int> _sourcePositions;
+        private List<Vector2Int> _controllerPositions;
+        private List<Vector2Int> _mineralPositions;
+        private List<Vector2Int> _powerBankPositions;
 
         private int _x;
         private int _y;
@@ -31,31 +35,50 @@ namespace Screeps3D.Rooms.Views
 
             TerrainFinder.Instance.Find(room, OnTerrainData);
             room.MapStream.OnData += OnMapData;
-            _lairPositions = new List<Vector2>();
-            _roadPositions = new List<Vector2>();
+            _lairPositions = new List<Vector2Int>();
+            _roadPositions = new List<Vector2Int>();
+            _sourcePositions = new List<Vector2Int>();
+            _controllerPositions = new List<Vector2Int>();
+            _mineralPositions = new List<Vector2Int>();
+            _powerBankPositions = new List<Vector2Int>();
             enabled = true;
             isInitialized = false;
         }
         private void OnMapData(JSONObject data)
         {
             _hasMapData = true;
-            if (data["k"] != null)
+            Action<JSONObject, List<Vector2Int>> addPositions = (JSONObject jsonPositions, List<Vector2Int> positions) =>
             {
-                foreach (var numArray in data["k"].list)
+                foreach (var numArray in jsonPositions.list)
                 {
                     var x = (int)numArray.list[0].n;
                     var y = (int)numArray.list[1].n;
-                    _lairPositions.Add(new Vector2((float)x, (float)y));
+                    positions.Add(new Vector2Int(x, y));
                 }
+            };
+            if (data["k"] != null)
+            {
+                addPositions(data["k"], _lairPositions);
             }
             if (data["r"] != null)
             {
-                foreach (var numArray in data["r"].list)
-                {
-                    var x = (int)numArray.list[0].n;
-                    var y = (int)numArray.list[1].n;
-                    _roadPositions.Add(new Vector2((float)x, (float)y));
-                }
+                addPositions(data["r"], _roadPositions);
+            }
+            if (data["c"] != null)
+            {
+                addPositions(data["c"], _controllerPositions);
+            }
+            if (data["s"] != null)
+            {
+                addPositions(data["s"], _sourcePositions);
+            }
+            if (data["m"] != null)
+            {
+                addPositions(data["m"], _mineralPositions);
+            }
+            if (data["pb"] != null)
+            {
+                addPositions(data["pb"], _powerBankPositions);
             }
         }
         private void OnTerrainData(string terrain)
@@ -181,37 +204,26 @@ namespace Screeps3D.Rooms.Views
         }
         private float getY(int x, int z, int depth)
         {
-            const float wallDepth = 0.5f;
-            const float wallRandom = 0.5f;
-            const float wallStep = 0.1f;
-            const float wallConstant = 0.5f;
+            const int maxDepth = 3;
+            const float wallDepth = 2.0f;
+            const float wallRandom = 1.0f;
+            const float wallStep = 0.25f;
+            const float wallConstant = 0.0f;
 
             float Y = wallConstant
                 + (float)Math.Round(getRandom(x, z) * wallRandom / wallStep) * wallStep
-                + depth * wallDepth;
+                + Math.Min(maxDepth, depth) * wallDepth;
             return Y;
         }
 
         private void generateWalls2()
         {
-            var wallCount = 0;
-            for (int x = 0; x < 50; ++x)
-                for (int y = 0; y < 50; ++y)
-                    if (_wallPositions[x, y])
-                        ++wallCount;
-
+            // calculate wall depth
             var wallDepth = new int[50, 50];
             const int someHighNumber = 50;
-            for (int y = 1; y < 50; ++y)
-                for (int x = 1; x < 50; ++x)
+            for (int y = 0; y < 50; ++y)
+                for (int x = 0; x < 50; ++x)
                     wallDepth[x, y] = someHighNumber;
-            for (int i = 0; i < 50; ++i)
-            {
-                wallDepth[0, i] = 1;
-                wallDepth[49, i] = 1;
-                wallDepth[i, 0] = 1;
-                wallDepth[i, 49] = 1;
-            }
 
             for (int y = 1; y < 49; ++y)
                 for (int x = 1; x < 49; ++x)
@@ -237,6 +249,67 @@ namespace Screeps3D.Rooms.Views
                     wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z - 1] + 1);
                 }
 
+            for (int y = 1; y < 49; ++y)
+                for (int x = 1; x < 49; ++x)
+                {
+                    if (wallDepth[x, y] != wallDepth[x + 1, y]
+                        && wallDepth[x, y] != wallDepth[x - 1, y]
+                        && wallDepth[x, y] != wallDepth[x, y + 1]
+                        && wallDepth[x, y] != wallDepth[x, y - 1])
+                        --wallDepth[x, y];
+                }
+
+            // calculate wall heights
+            var wallHeight = new float[50, 50];
+            for (int x = 0; x < 50; ++x)
+                for (int y = 0; y < 50; ++y)
+                {
+                    if (_wallPositions[x, y])
+                    {
+                        var z = 49 - y;
+                        wallHeight[x, y] = getY((int)_room.Position.x + x, (int)_room.Position.z + z, wallDepth[x, z]);
+                    }
+                    else
+                    {
+                        wallHeight[x, y] = 0.0f;
+                    }
+                }
+            foreach (var pos in _sourcePositions)
+            {
+                wallHeight[pos.x, pos.y] = Math.Min(wallHeight[pos.x, pos.y], 0.75f);
+            }
+            foreach (var pos in _lairPositions)
+            {
+                for (int x = -1; x <= 1; ++x)
+                    for (int y = -1; y <= 1; ++y)
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.05f);
+            }
+            foreach (var pos in _mineralPositions)
+            {
+                for (int x = -1; x <= 1; ++x)
+                    for (int y = -1; y <= 1; ++y)
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.75f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+            }
+            foreach (var pos in _controllerPositions)
+            {
+                for (int x = -1; x <= 1; ++x)
+                    for (int y = -1; y <= 1; ++y)
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 1.0f + getRandom(pos.x + x, pos.y + y) * 0.5f);
+            }
+            foreach (var pos in _powerBankPositions)
+            {
+                for (int x = -1; x <= 1; ++x)
+                    for (int y = -1; y <= 1; ++y)
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.75f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+            }
+
+
+            // make mesh
+            var wallCount = 0;
+            for (int x = 0; x < 50; ++x)
+                for (int y = 0; y < 50; ++y)
+                    if (_wallPositions[x, y])
+                        ++wallCount;
             const int quadsPerWall = 5;
             int vertCount = wallCount * 4 * quadsPerWall;
             int triangleCount = wallCount * 6 * quadsPerWall;
@@ -247,102 +320,67 @@ namespace Screeps3D.Rooms.Views
 
             var index = 0;
             var tIndex = 0;
+
+            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (Vector3 A, Vector3 B, Vector3 C, Vector3 D) =>
+            {
+                vertices[index] = A;
+                vertices[index + 1] = B;
+                vertices[index + 2] = C;
+                vertices[index + 3] = D;
+                uv[index] = new Vector2(0, 0);
+                uv[index + 1] = new Vector2(0, 1);
+                uv[index + 2] = new Vector2(1, 0);
+                uv[index + 3] = new Vector2(1, 1);
+                triangles[tIndex] = index;
+                triangles[tIndex + 1] = index + 1;
+                triangles[tIndex + 2] = index + 2;
+                triangles[tIndex + 3] = index + 3;
+                triangles[tIndex + 4] = index + 2;
+                triangles[tIndex + 5] = index + 1;
+                index += 4;
+                tIndex += 6;
+            };
+
             for (int x = 0; x < 50; ++x)
                 for (int y = 0; y < 50; ++y)
                 {
                     if (_wallPositions[x, y])
                     {
+                        float h = wallHeight[x, y];
+                        float h2;
                         var z = 49 - y;
-                        var wallY1 = getY((int)_room.Position.x + x, (int)_room.Position.z + z, wallDepth[x, z]);
-                        var wallY2 = wallY1;
-                        var wallY3 = wallY1;
-                        var wallY4 = wallY1;
 
-                        vertices[index] = new Vector3(x, wallY1, z);
-                        vertices[index + 1] = new Vector3(x, wallY2, z + 1);
-                        vertices[index + 2] = new Vector3(x + 1, wallY3, z);
-                        vertices[index + 3] = new Vector3(x + 1, wallY4, z + 1);
-                        uv[index] = new Vector2(x, z);
-                        uv[index + 1] = new Vector2(x, z + 1);
-                        uv[index + 2] = new Vector2(x + 1, z);
-                        uv[index + 3] = new Vector2(x + 1, z + 1);
-                        triangles[tIndex] = index;
-                        triangles[tIndex + 1] = index + 1;
-                        triangles[tIndex + 2] = index + 2;
-                        triangles[tIndex + 3] = index + 3;
-                        triangles[tIndex + 4] = index + 2;
-                        triangles[tIndex + 5] = index + 1;
-                        index += 4;
-                        tIndex += 6;
+                        addQuad(
+                            new Vector3(x, h, z),
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x + 1, h, z + 1));
 
-                        // sideTriangles
-                        vertices[index] = new Vector3(x, wallY2, z + 1);
-                        vertices[index + 1] = new Vector3(x, wallY1, z);
-                        vertices[index + 2] = new Vector3(x, 0, z + 1);
-                        vertices[index + 3] = new Vector3(x, 0, z);
-                        uv[index] = new Vector2(x, z);
-                        uv[index + 1] = new Vector2(x, z + 1);
-                        uv[index + 2] = new Vector2(x + 1, z);
-                        uv[index + 3] = new Vector2(x + 1, z + 1);
-                        triangles[tIndex] = index;
-                        triangles[tIndex + 1] = index + 1;
-                        triangles[tIndex + 2] = index + 2;
-                        triangles[tIndex + 3] = index + 3;
-                        triangles[tIndex + 4] = index + 2;
-                        triangles[tIndex + 5] = index + 1;
-                        index += 4;
-                        tIndex += 6;
+                        h2 = x > 0 ? wallHeight[x - 1, y] : 0.0f;
+                        addQuad(
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x, h, z),
+                            new Vector3(x, h2, z + 1),
+                            new Vector3(x, h2, z));
+                        h2 = x < 49 ? wallHeight[x + 1, y] : 0.0f;
+                        addQuad(
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x + 1, h, z + 1),
+                            new Vector3(x + 1, h2, z),
+                            new Vector3(x + 1, h2, z + 1));
 
-                        vertices[index] = new Vector3(x, wallY2, z + 1);
-                        vertices[index + 1] = new Vector3(x, 0, z + 1);
-                        vertices[index + 2] = new Vector3(x + 1, wallY4, z + 1);
-                        vertices[index + 3] = new Vector3(x + 1, 0, z + 1);
-                        uv[index] = new Vector2(x, z);
-                        uv[index + 1] = new Vector2(x, z + 1);
-                        uv[index + 2] = new Vector2(x + 1, z);
-                        uv[index + 3] = new Vector2(x + 1, z + 1);
-                        triangles[tIndex] = index;
-                        triangles[tIndex + 1] = index + 1;
-                        triangles[tIndex + 2] = index + 2;
-                        triangles[tIndex + 3] = index + 3;
-                        triangles[tIndex + 4] = index + 2;
-                        triangles[tIndex + 5] = index + 1;
-                        index += 4;
-                        tIndex += 6;
-                        //
-                        vertices[index] = new Vector3(x + 1, wallY3, z);
-                        vertices[index + 1] = new Vector3(x + 1, wallY4, z + 1);
-                        vertices[index + 2] = new Vector3(x + 1, 0, z);
-                        vertices[index + 3] = new Vector3(x + 1, 0, z + 1);
-                        uv[index] = new Vector2(x, z);
-                        uv[index + 1] = new Vector2(x, z + 1);
-                        uv[index + 2] = new Vector2(x + 1, z);
-                        uv[index + 3] = new Vector2(x + 1, z + 1);
-                        triangles[tIndex] = index;
-                        triangles[tIndex + 1] = index + 1;
-                        triangles[tIndex + 2] = index + 2;
-                        triangles[tIndex + 3] = index + 3;
-                        triangles[tIndex + 4] = index + 2;
-                        triangles[tIndex + 5] = index + 1;
-                        index += 4;
-                        tIndex += 6;
-                        //
-                        vertices[index] = new Vector3(x + 1, wallY3, z);
-                        vertices[index + 1] = new Vector3(x + 1, 0, z);
-                        vertices[index + 2] = new Vector3(x, wallY1, z);
-                        vertices[index + 3] = new Vector3(x, 0, z);
-                        uv[index] = new Vector2(x, z);
-                        uv[index + 1] = new Vector2(x, z + 1);
-                        uv[index + 2] = new Vector2(x + 1, z);
-                        uv[index + 3] = new Vector2(x + 1, z + 1);
-                        triangles[tIndex] = index;
-                        triangles[tIndex + 1] = index + 1;
-                        triangles[tIndex + 2] = index + 2;
-                        triangles[tIndex + 3] = index + 3;
-                        triangles[tIndex + 4] = index + 2;
-                        triangles[tIndex + 5] = index + 1;
-                        index += 4;
-                        tIndex += 6;
+                        h2 = y > 0 ? wallHeight[x, y - 1] : 0.0f;
+                        addQuad(
+                            new Vector3(x + 1, h, z + 1),
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x + 1, h2, z + 1),
+                            new Vector3(x, h2, z + 1));
+                        h2 = y < 49 ? wallHeight[x, y + 1] : 0.0f;
+                        addQuad(
+                            new Vector3(x, h, z),
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x, h2, z),
+                            new Vector3(x + 1, h2, z));
                     }
                 }
 
