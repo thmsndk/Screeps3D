@@ -276,7 +276,7 @@ namespace Screeps3D.Rooms.Views
                 }
             foreach (var pos in _sourcePositions)
             {
-                wallHeight[pos.x, pos.y] = Math.Min(wallHeight[pos.x, pos.y], 0.75f);
+                wallHeight[pos.x, pos.y] = 3.5f;//Math.Min(wallHeight[pos.x, pos.y], 3f);
             }
             foreach (var pos in _lairPositions)
             {
@@ -294,13 +294,13 @@ namespace Screeps3D.Rooms.Views
             {
                 for (int x = -1; x <= 1; ++x)
                     for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 1.0f + getRandom(pos.x + x, pos.y + y) * 0.5f);
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.5f);
             }
             foreach (var pos in _powerBankPositions)
             {
                 for (int x = -1; x <= 1; ++x)
                     for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.75f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.25f);
             }
 
 
@@ -397,7 +397,8 @@ namespace Screeps3D.Rooms.Views
         private void Deform()
         {
             // change to generateWalls2();
-            generateWalls1();
+            // generateWalls1();
+            generateWalls2();
 
             const float swampConstant = 0.3f;
             const float swampRandom = 0.0f;
