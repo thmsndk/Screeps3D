@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wall
+  m_Name: ConstructedWall
   m_Shader: {fileID: -6465566751694194690, guid: c2d307355f0be6e4a8dac8514766a4a0,
     type: 3}
   m_ShaderKeywords: 
