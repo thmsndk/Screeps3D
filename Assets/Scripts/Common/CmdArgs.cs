@@ -50,26 +50,34 @@ namespace Assets.Scripts.Common
                 {
                     // Parse the argument to get the key value paris, if there is only a key value, then the value is true
                     var kvp = arg.Contains('=') ? new KeyValuePair<string, string>(arg.Split('=')[0], arg.Split('=')[1]) : new KeyValuePair<string, string>(arg, "true");
+                    
+                    var key = kvp.Key.ToLowerInvariant().Replace("-", string.Empty);
 
-                    switch (nameof(kvp.Key).ToLowerInvariant())
+                    // Switch over the commands and assign any required values
+                    switch (key)
                     {
                         case "disablecameraidle":
+                            UnityEngine.Debug.Log($"Handling: {kvp.Key} with value {kvp.Value}");
                             DisableCameraIdle = true;
                             break;
 
                         case "allowtwitchcontrol":
+                            UnityEngine.Debug.Log($"Handling: {kvp.Key} with value {kvp.Value}");
                             AllowTwitchControl = true;
                             break;
 
                         case "specatetimwerswitch":
+                            UnityEngine.Debug.Log($"Handling: {kvp.Key} with value {kvp.Value}");
                             SpectateTimerSwitch = GetInterval(kvp);
                             break;
 
                         case "pvptimerswitch":
+                            UnityEngine.Debug.Log($"Handling: {kvp.Key} with value {kvp.Value}");
                             PvPTimerSwitch = GetInterval(kvp);
                             break;
 
                         case "dragons":
+                            UnityEngine.Debug.Log($"Handling: {kvp.Key} with value(s) {kvp.Value}");
                             Dragons = kvp.Value.Split(';');
                             break;
                     }

@@ -22,6 +22,7 @@ namespace Common
             
             // Check if we're allowing the idle system
             _disableIdle = CmdArgs.DisableCameraIdle;
+            Debug.Log($"Camera Idle Disabled flag: {_disableIdle}");
 
             if (_disableIdle)
             {
