@@ -9,7 +9,7 @@ namespace Assets.Scripts.Common
         /// <summary>
         /// Flags the enabled/disabled state feature for idle camera
         /// </summary>
-        public static bool AllowCameraIdle { get; private set; } = false;
+        public static bool DisableCameraIdle { get; private set; } = false;
 
         /// <summary>
         /// Flags the enabled/disabled state for twitch controls
@@ -53,8 +53,8 @@ namespace Assets.Scripts.Common
 
                     switch (nameof(kvp.Key).ToLowerInvariant())
                     {
-                        case "allowcameraidle":
-                            AllowCameraIdle = true;
+                        case "disablecameraidle":
+                            DisableCameraIdle = true;
                             break;
 
                         case "allowtwitchcontrol":
