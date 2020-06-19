@@ -90,8 +90,8 @@ namespace Assets.Scripts.Common
 
             if (!int.TryParse(kvp.Value, out value))
             {
-                // TODO:// Log error with parsing argument to correct output
-                Console.WriteLine($"Detected arg for {kvp.Key} but could not parse the value {kvp.Value}");
+                // Log error with parsing argument to correct output
+                UnityEngine.Debug.LogWarning($"Detected arg for {kvp.Key} but could not parse the value {kvp.Value}");
 
                 // Set default of 60 seconds for switching
                 value = 60;
