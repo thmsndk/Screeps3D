@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PowerEmission
-  m_Shader: {fileID: -6465566751694194690, guid: 9c7411cd7d7cd2d46a055dc140a24ac8,
+  m_Name: Road
+  m_Shader: {fileID: -6465566751694194690, guid: c2d307355f0be6e4a8dac8514766a4a0,
     type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 1
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
@@ -26,8 +26,44 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - BaseNormal:
+        m_Texture: {fileID: 2800000, guid: 6dc5dabe326f74c4d81274dac896e50c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - BaseTexture:
+        m_Texture: {fileID: 2800000, guid: d9e5198fd52f1ba448d21fee0887fbf2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - ColorTexture:
+        m_Texture: {fileID: 2800000, guid: 104efd6736fc15743b16ec0b8b13d54d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - EmissionTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d94d93bd6fc28514787a8132296c1ad5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MetallicTexture:
+        m_Texture: {fileID: 2800000, guid: 4fdd7ba2940766a4ab1a93287662040e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SmoothTexture:
+        m_Texture: {fileID: 2800000, guid: 4fdd7ba2940766a4ab1a93287662040e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_11286322:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_3E866369:
+        m_Texture: {fileID: 2800000, guid: 21baca494b92698429826a2a35d097ea, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8BFCE1C6:
+        m_Texture: {fileID: 2800000, guid: 50a3bb6e33b7ad54fa6f1ddffb42fe77, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F9979DE5:
+        m_Texture: {fileID: 2800000, guid: c93dadc538828314996d8e6151f20f35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -122,6 +158,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecularColorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -147,7 +187,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionStrength: 1
+    - BaseNormalStr: 0.6
+    - BaseSize: 1
+    - ColorMix: 1
+    - EmissionStrength: 0
+    - MetallicStrength: 1
+    - NormalStrenght: 0.5
+    - Scaling: 1
+    - SmoothStrength: 0.6
+    - UVScale: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -195,16 +243,16 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 0.672
-    - _EmissiveIntensity: 512
-    - _EmissiveIntensityUnit: 1
+    - _EmissiveExposureWeight: 1
+    - _EmissiveIntensity: 1
+    - _EmissiveIntensityUnit: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _GlossMapScale: 1
-    - _Glossiness: 0
-    - _GlossyReflections: 1
+    - _GlossMapScale: 0.443
+    - _Glossiness: 0.482
+    - _GlossyReflections: 0
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -220,10 +268,10 @@ Material:
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 0
     - _MaterialID: 1
-    - _Metallic: 0
+    - _Metallic: 0.489
     - _Mode: 0
     - _NormalMapSpace: 0
-    - _NormalScale: 1
+    - _NormalScale: 0
     - _OcclusionStrength: 1
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -237,12 +285,12 @@ Material:
     - _RequireSplitLighting: 0
     - _SSRefractionProjectionModel: 0
     - _Smoothness: 0
-    - _SmoothnessRemapMax: 0
+    - _SmoothnessRemapMax: 0.482
     - _SmoothnessRemapMin: 0
-    - _SmoothnessTextureChannel: 0
+    - _SmoothnessTextureChannel: 1
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
-    - _SpecularHighlights: 1
+    - _SpecularHighlights: 0
     - _SpecularOcclusionMode: 1
     - _SrcBlend: 1
     - _StencilRef: 0
@@ -273,7 +321,7 @@ Material:
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UVSec: 0
-    - _UseEmissiveIntensity: 1
+    - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
@@ -281,15 +329,16 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - EmissionColor: {r: 1, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 1, g: 0.07070707, b: 0, a: 1}
+    - BaseColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0}
+    - EmissionColor: {r: 1, g: 0.9666667, b: 0, a: 1}
+    - _BaseColor: {r: 0.7169812, g: 0.2867925, b: 0, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 0.070707045, b: 0, a: 1}
+    - _Color: {r: 0.7169812, g: 0.28679246, b: 0, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 512, g: 0, b: 16.340576, a: 512}
-    - _EmissiveColorLDR: {r: 1, g: 0, b: 0.031915188, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
@@ -298,7 +347,7 @@ Material:
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
---- !u!114 &5480103492020645534
+--- !u!114 &6511446405437216173
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
