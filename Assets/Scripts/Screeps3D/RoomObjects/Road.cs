@@ -12,6 +12,9 @@
       "nextDecayTime": 8885
     }*/
 
+    /// <summary>
+    /// Roads render in a different way, see RoadNetworkView and RoadView, We do use this object for rendering roads when placing a constructionsite and when you select a road.
+    /// </summary>
     public class Road : Structure
     {
     }

@@ -24,6 +24,9 @@ namespace Screeps3D
 
         public override void Awake()
         {
+            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+            Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+
             if (_defaultMode != GameMode.Login && !ScreepsAPI.IsConnected)
                 SceneManager.LoadScene(0);
             else

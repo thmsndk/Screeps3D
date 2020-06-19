@@ -303,6 +303,30 @@ namespace Screeps_API
             return Request("POST", "/api/game/check-unique-flag-name", body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
+        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, Action<string> onSuccess, bool noNotification = false)
+        {
+            return CreateConstructionsite(shard, room, x, y, structureType, null, onSuccess, noNotification);
+        }
+        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, string name, Action<string> onSuccess, bool noNotification = false)
+        {
+            //  POST https://screeps.com/api/game/create-construction
+            // request: {"room":"E19S35","shard":"shard3","name":"spawnName","structureType":"container","x":23,"y":29}
+            // response: {"ok":1,"_id":"5ee3cde6b4b7d3fac1e6e2d8"}
+
+            var body = new RequestBody();
+            body.AddField("shard", shard);
+            body.AddField("room", room);
+            body.AddField("structureType", structureType);
+            if (!string.IsNullOrEmpty(name))
+            {
+                body.AddField("name", name); 
+            }
+            body.AddField("x", x);
+            body.AddField("y", y);
+
+            return Request("POST", "/api/game/create-construction", body, onSuccess: onSuccess, noNotification: noNotification);
+        }
+
         /* Experimental */
         public IEnumerator<UnityWebRequestAsyncOperation> GetExperimentalNukes(Action<string> onSuccess)
         {
