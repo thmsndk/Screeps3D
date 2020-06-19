@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+﻿using Assets.Scripts.Common;
+using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 using Common;
 using Screeps_API;
 using Screeps3D.Player;
@@ -126,7 +127,8 @@ namespace Screeps3D.Rooms
                     throw;
                 }
 
-                yield return new WaitForSeconds(30);
+                // Wait for either the default 60 seconds or whatever value was passed in on the command args
+                yield return new WaitForSeconds(CmdArgs.PvPTimerSwitch);
             }
         }
 
@@ -154,7 +156,8 @@ namespace Screeps3D.Rooms
                     }
                 }
 
-                yield return new WaitForSeconds(30);
+                // Wait for either the default 60 seconds or whatever value was passed in on the command args
+                yield return new WaitForSeconds(CmdArgs.SpectateTimerSwitch);
             }
         }
 
