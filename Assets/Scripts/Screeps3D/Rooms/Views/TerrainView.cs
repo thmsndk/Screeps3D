@@ -288,7 +288,7 @@ namespace Screeps3D.Rooms.Views
             {
                 for (int x = -1; x <= 1; ++x)
                     for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.75f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.25f);
             }
             foreach (var pos in _controllerPositions)
             {

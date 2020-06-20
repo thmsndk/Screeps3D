@@ -41,16 +41,16 @@ namespace Screeps3D.RoomObjects.Views
             // HORSE
             // do not forget to do reposition in .blend files ! 
             // to uncomment:
-            // setWings(false);
-            // setHorse(false);
+            setWings(false);
+            setHorse(false);
             // to comment:
-            if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
-                setWings(true);
-                setHorse(false);
-            } else {
-                setWings(false);
-                setHorse(true);
-            }
+            // if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
+            //     setWings(true);
+            //     setHorse(false);
+            // } else {
+            //     setWings(false);
+            //     setHorse(true);
+            // }
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;

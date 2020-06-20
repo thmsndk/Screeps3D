@@ -82,10 +82,10 @@ namespace Screeps3D.RoomObjects.Views
                         break;
                 }
 
-                _mineral.materials[0].SetColor("BaseColor", (Color)mineralcolor * 0.3f);
-                _mineral.materials[0].SetFloat("EmissionEV", 0.3f);
-                _light.color = mineralcolor;
-                _light.intensity = 0f;
+                // _mineral.materials[0].SetColor("BaseColor", (Color)mineralcolor * 0.3f);
+                // _mineral.materials[0].SetFloat("EmissionEV", 0.3f);
+                // _light.color = mineralcolor;
+                // _light.intensity = 3f;
                 // _mineral.GetComponentInChil
             }
 
