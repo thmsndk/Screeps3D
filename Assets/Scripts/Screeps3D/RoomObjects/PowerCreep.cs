@@ -69,14 +69,14 @@ namespace Screeps3D.RoomObjects
 
     // TODO: we need to map powers per class, I mean, what is power 1,8, 16?
 
-    internal class PowerCreep : StoreObject, INamedObject, IHitpointsObject, IOwnedObject, IActionObject, IBump
+    internal class PowerCreep : StoreObject, INamedObject, IHitpointsObject, IOwnedObject, ICreepAction, IBump
     {
         public string UserId { get; set; }
         public ScreepsUser Owner { get; set; }
         //public CreepBody Body { get; private set; }
         public string Name { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
-        public Vector3? actionTarget { get; set; }
+        public Vector3? ActionTarget { get; set; }
         public float Hits { get; set; }
         public float HitsMax { get; set; }
         public float Fatigue { get; set; }

@@ -5,6 +5,7 @@ using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using Screeps3D.Rooms.Views;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,23 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             this._roomObject = _factory.Get(type);
             this._roomObject.Type = type;
 
+            switch (type)
+            {
+                case Constants.TypeRoad:
+                    // TODO: special road handling, need to enable the base renderer, this can possibly be moved to the view at some point.
+                    StartCoroutine(RenderRoad());
+
+                    break;
+            }
+
+        }
+
+        private IEnumerator RenderRoad()
+        {
+            yield return new WaitUntil(() => this._roomObject.View != null);
+
+            var roadView = this._roomObject.View.GetComponent<RoadView>();
+            roadView.ShowBase(true);
         }
 
         private void Update()

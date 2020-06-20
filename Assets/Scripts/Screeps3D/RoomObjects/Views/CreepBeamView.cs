@@ -22,7 +22,7 @@ namespace Screeps3D.RoomObjects.Views
             {"upgradeController", new BeamConfig(Color.yellow, 0.7f, 1f)}
         };
 
-        private IActionObject _creep;
+        private ICreepAction _creep;
 
         public void Init()
         {
@@ -30,23 +30,33 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _creep = roomObject as IActionObject;
+            _creep = roomObject as ICreepAction;
+
+            if (_creep == null)
+            {
+                Debug.LogError($"{roomObject.GetType()} is not of type ICreepAction");
+            }
         }
 
         public void Delta(JSONObject data)
         {
+            if (_creep == null)
+            {
+                return;
+            }
+
             var beam = BeamConfigs.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
             if (beam.Value == null) {
-                (_creep as Creep).actionTarget = null;
+                _creep.ActionTarget = null;
                 return;
             }
             
             var action = _creep.Actions[beam.Key];
-            var _cRO = _creep as Creep;
-            (_creep as Creep).actionTarget = PosUtility.Convert(action, _cRO.Room);
+            
+            _creep.ActionTarget = PosUtility.Convert(action, _creep.Room);
 
-            Debug.Log(beam.Key);
-            Debug.Log(data.ToString());
+            //Debug.Log(beam.Key);
+            //Debug.Log(data.ToString());
             switch (beam.Key)
             {
                 case "rangedMassAttack":

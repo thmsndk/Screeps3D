@@ -127,9 +127,14 @@ namespace Screeps3D.RoomObjects
         ScreepsUser ReservedBy { get; set; }
     }
 
-    internal interface IActionObject
+    internal interface IActionObject : IRoomObject
     {
         Dictionary<string, JSONObject> Actions { get; }
+    }
+
+    internal interface ICreepAction : IActionObject
+    {
+        Vector3? ActionTarget { get; set; }
     }
 
     internal interface IBump

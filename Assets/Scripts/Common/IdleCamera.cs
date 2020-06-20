@@ -1,4 +1,5 @@
-﻿using Screeps3D.Menus.Options;
+﻿using Assets.Scripts.Common;
+using Screeps3D.Menus.Options;
 using System;
 using UnityEngine;
 
@@ -9,57 +10,71 @@ namespace Common
         [SerializeField] private CameraRig _cameraRig = default;
         private Vector3 lastRotation;
         private float lastZoom;
-        private bool wasIdle;
+        private bool wasIdle;        
         private float secondsToBeIdle;
+
+        private bool _disableIdle;
+
         private void Start()
         {
             lastRotation = CameraRig.Rotation;
             lastZoom = CameraRig.Zoom;
-            RandomizeIdleTime();
+            
+            // Check if we're allowing the idle system
+            _disableIdle = CmdArgs.DisableCameraIdle;
+            Debug.Log($"Camera Idle Disabled flag: {_disableIdle}");
+
+            if (_disableIdle)
+            {
+                RandomizeIdleTime();
+            }
         }
 
         private void Update()
         {
-            var idle = Time.time - InputMonitor.LastAction > secondsToBeIdle;
-
-            if (!idle)
+            if (_disableIdle)
             {
+                var idle = Time.time - InputMonitor.LastAction > secondsToBeIdle;
 
-                if (wasIdle)
+                if (!idle)
                 {
-                    RestoreRotationAndZoom();
 
-                    wasIdle = false;
+                    if (wasIdle)
+                    {
+                        RestoreRotationAndZoom();
 
-                    RandomizeIdleTime();
+                        wasIdle = false;
+
+                        RandomizeIdleTime();
+                    }
+
+                    // Update when not idle
+                    CacheRotationZoom();
+
+                    return;
                 }
 
-                // Update when not idle
-                CacheRotationZoom();
+                if (!wasIdle)
+                {
+                    wasIdle = true;
 
-                return;
+                    // Update lastRotation when going idle
+                    CacheRotationZoom();
+
+                    // Rotate to a 45 degree angle
+                    // Well I have no idea how to reset to "topdown" and then rotate it 45 degrees.
+                    //CameraRig.PivotRotation = initialRotation.Value;
+                    _cameraRig.SetTargetRotation(new Vector2(0, 35)); // This rotates the view based on where the camera is.... so you can end up in the bottom of the map
+
+                    _cameraRig.SetTargetZoom(30);
+                }
+
+                // should we enable / disable the script  based on idle?
+
+                float speed = 1;
+
+                _cameraRig.SetTargetRotation(new Vector2(5 * speed * Time.deltaTime, 0));
             }
-
-            if (!wasIdle)
-            {
-                wasIdle = true;
-
-                // Update lastRotation when going idle
-                CacheRotationZoom();
-
-                // Rotate to a 45 degree angle
-                // Well I have no idea how to reset to "topdown" and then rotate it 45 degrees.
-                //CameraRig.PivotRotation = initialRotation.Value;
-                _cameraRig.SetTargetRotation(new Vector2(0, 35)); // This rotates the view based on where the camera is.... so you can end up in the bottom of the map
-
-                _cameraRig.SetTargetZoom(30);
-            }
-
-            // should we enable / disable the script  based on idle?
-
-            float speed = 1;
-
-            _cameraRig.SetTargetRotation(new Vector2(5 * speed * Time.deltaTime, 0));
         }
 
         private void RandomizeIdleTime()

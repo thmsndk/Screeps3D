@@ -78,12 +78,12 @@ namespace Screeps3D.RoomObjects.Views
             _bumping = true;
             _animating = true;
             _actionEffect = false;
-            _creep.actionTarget = null;
+            _creep.ActionTarget = null;
 
             var beam = BeamConfigs.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
             if (beam.Value != null) {
                 var target = _creep.Actions[beam.Key];
-                _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
+                _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
                 doBeam(target, beam.Value);
             }
 
@@ -152,23 +152,23 @@ namespace Screeps3D.RoomObjects.Views
                     EffectsUtility.ElectricExplosion(_creep as RoomObject);
                     break;
                 case "attack":
-                    _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
+                    _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
                     EffectsUtility.Attack((_creep as IBump).BumpPosition);
                     break;
                 case "heal":
-                    _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
+                    _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
                     // no effect on healing crep, effect applied to healed creep
                     break;
                 case "healed":
                     EffectsUtility.Heal(_creep as RoomObject);
                     break;
                 case "reserveController":
-                    _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Reserve((Vector3)_creep.actionTarget);
+                    _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
+                    EffectsUtility.Reserve((Vector3)_creep.ActionTarget);
                     break;
                 case "harvest":
-                    _creep.actionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Harvest((Vector3)_creep.actionTarget);
+                    _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
+                    EffectsUtility.Harvest((Vector3)_creep.ActionTarget);
                     break;
             }
         }
