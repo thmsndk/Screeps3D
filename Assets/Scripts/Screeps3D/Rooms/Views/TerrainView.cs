@@ -428,7 +428,7 @@ namespace Screeps3D.Rooms.Views
             generateSwamps();
             // change to generateWalls2();
             // generateWalls1();
-            generateWalls2();
+            // generateWalls2();
 
             
 
