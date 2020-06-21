@@ -394,12 +394,7 @@ namespace Screeps3D.Rooms.Views
             _wallMesh.mesh = mesh;
         }
 
-        private void Deform()
-        {
-            // change to generateWalls2();
-            // generateWalls1();
-            generateWalls2();
-
+        private void generateSwamps() {
             const float swampConstant = 0.3f;
             const float swampRandom = 0.0f;
 
@@ -426,6 +421,16 @@ namespace Screeps3D.Rooms.Views
             }
             _swampMesh.mesh.vertices = vertices;
             _swampMesh.mesh.RecalculateNormals();
+        }
+
+        private void Deform()
+        {
+            generateSwamps();
+            // change to generateWalls2();
+            // generateWalls1();
+            generateWalls2();
+
+            
 
             _wallPositions = null;
             _swampPositions = null;
