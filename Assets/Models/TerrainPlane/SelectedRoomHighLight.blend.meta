@@ -3,7 +3,12 @@ guid: 7482e4f19ad747a4a82fc582e7e625d7
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Edge
+    second: {fileID: 2100000, guid: 328b6b2791fa63b41a7f4b6647ba2183, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

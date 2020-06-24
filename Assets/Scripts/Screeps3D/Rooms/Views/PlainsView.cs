@@ -33,7 +33,8 @@ namespace Screeps3D.Rooms.Views
             if (!_rend)
             {
                 _rend = GetComponent<Renderer>();
-                _original = _rend.materials[1].GetFloat("EmissionValue");
+                _rend.transform.localPosition = _rend.transform.localPosition + (Vector3.up * 0.1f);
+                _original = _rend.materials[0].GetFloat("EmissionStrength");
                 // var baseColor = _rend.material.GetColor(BaseColor);
                 // _original = baseColor.r;
             }
@@ -43,6 +44,7 @@ namespace Screeps3D.Rooms.Views
 
         public void Dim()
         {
+            _rend.transform.localPosition = _rend.transform.localPosition - (Vector3.up * 0.1f);
             _target = _original;
             enabled = true;
         }
@@ -54,9 +56,9 @@ namespace Screeps3D.Rooms.Views
                 enabled = false;
                 return;
             }
-            var baseVal = _rend.materials[1].GetFloat("EmissionValue");
+            var baseVal = _rend.materials[0].GetFloat("EmissionStrength");
             _current = Mathf.SmoothDamp(baseVal, _target, ref _targetRef, 1);
-            _rend.materials[1].SetFloat("EmissionValue", _current);
+            _rend.materials[0].SetFloat("EmissionStrength", _current);
         }
     }
 }
