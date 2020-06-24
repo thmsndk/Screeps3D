@@ -94,7 +94,23 @@ namespace Screeps_API
             // {"ok":1,"room":["shard3/E19S38"]}
 
             //Http.Request("GET", "/api/game/time", null, SetTime);
+            
+            // Initialize things related to shard....
+            // TOOD: world start room is called to figure out what room to load in case we never selected a room :thinking: but what if you had selected a shard already in roomchooser?
             Http.Request("GET", "/api/user/world-start-room", null, GetShardSetTime);
+            // GET /api/user/world-start-room?shard=shard0 is called when connecting to a private server after world-start-room is called
+
+            // call room-status, but why?
+            // call GET /api/user/respawn-prohibited-rooms but why? is it not only relevant if we have died?
+            // GET /api/user/world-status is called at an interval of 6 seconds to detect status {"ok":1,"status":"normal"}
+            // if we changed world status, or just connected with non normal status, we should pop up a dialog a bout respawning
+            // status empty is when we have called POST /api/user/respawn
+            // api/game/place-spawn is called when we place the initial first spawn.
+
+            // we need a world status updater, kinda like map status updater is this a thing that belongs in the 3D space though? should mapstats belong in the api as well?
+            // can't spawn in already owned rooms, can't spawn in rooms without a controller (SK rooms, highways) we check that from map stats data
+
+            // after calling respawn, we should probably call get respawn prohibited rooms. we should also call it if status is empty
         }
         private void GetShardSetTime(string obj)
         {
@@ -103,7 +119,7 @@ namespace Screeps_API
             if (worldStartRooms != null)
             {
                 var firstRoom = worldStartRooms.list.FirstOrDefault();
-                var firstRoomInfo = firstRoom.str.Split('/');
+                var firstRoomInfo = firstRoom.str.Split('/'); // on PS we don't recieve a shard, only the room name... so shard will be roomName...
                 var shard = firstRoomInfo[0];
 
                 Http.Request("GET", $"/api/game/time?shard={shard}", null, SetTime);
