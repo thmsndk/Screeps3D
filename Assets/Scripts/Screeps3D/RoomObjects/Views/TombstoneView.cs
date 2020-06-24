@@ -48,8 +48,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Delta(data);
             long now = ScreepsAPI.Time;
-            float decayFactor = 1 - (float) now / ((float)_tombstone.DeathTime + (float)_tombstone.NextDecayTime);
-            _currentEmission = _minBadgeEmission + 0.4f * decayFactor; 
+            float decayFactor = (float) now / ((float)_tombstone.DeathTime + (float)_tombstone.NextDecayTime);
+            _currentEmission = 1f - 0.4f * decayFactor; 
         }
 
         private void Update()
@@ -57,7 +57,7 @@ namespace Screeps3D.RoomObjects.Views
             if (_tombstone == null) {
                 return;
             }
-            _body.materials[1].SetFloat("EmissionStrength", Mathf.Max(0.3f, Mathf.PingPong(Time.time, _currentEmission)));
+            _body.materials[1].SetFloat("EmissionStrength", Mathf.Max(0.4f, Mathf.PingPong(Time.time, _currentEmission)));
         }
     }
 }
