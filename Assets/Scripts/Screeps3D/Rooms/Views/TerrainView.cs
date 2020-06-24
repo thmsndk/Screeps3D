@@ -10,6 +10,7 @@ namespace Screeps3D.Rooms.Views
         private Room _room;
         [SerializeField] private MeshFilter _swampMesh = default;
         [SerializeField] private MeshFilter _wallMesh = default;
+        [SerializeField] private MeshFilter _terrainMesh = default;
 
         private bool _hasTerrainData;
         private string _terrain;
@@ -398,16 +399,12 @@ namespace Screeps3D.Rooms.Views
             _wallMesh.mesh = mesh;
         }
 
-        private void Deform()
-        {
-            // change to generateWalls2();
-            generateWalls1();
-
-            const float swampConstant = 0.3f;
+        private void generateTerrain() {
+            const float terrainSwampHole = -0.3f;
             const float swampRandom = 0.0f;
 
             // swamps
-            var vertices = _swampMesh.mesh.vertices;
+            var vertices = _terrainMesh.mesh.vertices;
             for (var i = 0; i < vertices.Length; i++)
             {
                 var point = vertices[i];
@@ -425,10 +422,18 @@ namespace Screeps3D.Rooms.Views
                 if (!_swampPositions[x, y])
                     continue;
 
-                vertices[i] = new Vector3(point.x, swampConstant + UnityEngine.Random.value * swampRandom, point.z);
+                vertices[i] = new Vector3(point.x, terrainSwampHole + UnityEngine.Random.value * swampRandom, point.z);
             }
-            _swampMesh.mesh.vertices = vertices;
-            _swampMesh.mesh.RecalculateNormals();
+            _terrainMesh.mesh.vertices = vertices;
+            _terrainMesh.mesh.RecalculateNormals();
+        }
+
+        private void Deform()
+        {
+            // generateSwamps();
+            generateTerrain();
+            // generateWalls1();
+            generateWalls2();
 
             _wallPositions = null;
             _swampPositions = null;
