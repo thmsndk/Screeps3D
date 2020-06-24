@@ -7,19 +7,20 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/mineral";
 
-        [SerializeField] private Renderer _mineral = default;
+        [SerializeField] private Renderer _mineralMesh = default;
         [SerializeField] private Collider _collider = default;
         [SerializeField] private ScaleVisibility _vis = default;
-        //[SerializeField] private Transform _rotationRoot = default;
 
         private Quaternion _rotTarget;
         private Vector3 _posTarget;
         private Vector3 _posRef;
         private Mineral _mineralObject;
         private Light _light;
+        private float _currentEmission;
 
         public void Init()
         {
+            _currentEmission = 0f;
         }
 
         public void Load(RoomObject roomObject)
@@ -94,10 +95,17 @@ namespace Screeps3D.RoomObjects.Views
 
             // Move mineral up "above" the terrain
             transform.localPosition = roomObject.Position + (Vector3.up * 0.3f);
+            _currentEmission = 0f;
+            _mineralMesh.materials[0].SetFloat("EmissionEV", _currentEmission);
         }
 
         public void Delta(JSONObject data)
         {
+            if(_mineralObject.ResourceCapacity != 0) {
+                _currentEmission = _mineralObject.ResourceAmount / _mineralObject.ResourceCapacity;
+            } else {
+                _currentEmission = 0f;
+            }
         }
 
         public void Unload(RoomObject roomObject)

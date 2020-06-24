@@ -214,6 +214,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: keanium
       objectReference: {fileID: 0}
+    - target: {fileID: 4750979080775394, guid: 73337e8c70133be46886aad64643191b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 4939495687273752, guid: 73337e8c70133be46886aad64643191b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -260,20 +264,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23407070794174552, guid: 73337e8c70133be46886aad64643191b,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 23407070794174552, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: c5186a3082b7a794bb3872e055130fcd, type: 2}
+    - target: {fileID: 23407070794174552, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7f6702d17a6009241bd23b78baa1ce8d, type: 2}
     - target: {fileID: 33027947381926048, guid: 73337e8c70133be46886aad64643191b,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4452079835990210002, guid: bd05252839cd2614bb9364dc23e011b8,
         type: 3}
+    - target: {fileID: 1453467313594893630, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: _mineralMesh
+      value: 
+      objectReference: {fileID: 8246622871380538513}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73337e8c70133be46886aad64643191b, type: 3}
 --- !u!4 &8228687477274378795 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4750979080775394, guid: 73337e8c70133be46886aad64643191b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8224359432357995721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8246622871380538513 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23407070794174552, guid: 73337e8c70133be46886aad64643191b,
     type: 3}
   m_PrefabInstance: {fileID: 8224359432357995721}
   m_PrefabAsset: {fileID: 0}

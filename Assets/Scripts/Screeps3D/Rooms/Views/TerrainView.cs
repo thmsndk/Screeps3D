@@ -10,6 +10,7 @@ namespace Screeps3D.Rooms.Views
         private Room _room;
         [SerializeField] private MeshFilter _swampMesh = default;
         [SerializeField] private MeshFilter _wallMesh = default;
+        [SerializeField] private MeshFilter _terrainMesh = default;
 
         private bool _hasTerrainData;
         private string _terrain;
@@ -288,7 +289,7 @@ namespace Screeps3D.Rooms.Views
             {
                 for (int x = -1; x <= 1; ++x)
                     for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.5f + getRandom(pos.x + x, pos.y + y) * 0.25f);
             }
             foreach (var pos in _controllerPositions)
             {
@@ -423,14 +424,42 @@ namespace Screeps3D.Rooms.Views
             _swampMesh.mesh.RecalculateNormals();
         }
 
+
+        private void generateTerrain() {
+            const float terrainSwampHole = -0.3f;
+            const float swampRandom = 0.0f;
+
+            // swamps
+            var vertices = _terrainMesh.mesh.vertices;
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var point = vertices[i];
+                if (point.x < 0 || point.x > 50 || point.z < 0 || point.z > 50)
+                    continue;
+
+                var x = (int)point.x;
+                if (x < 0 || x >= _swampPositions.GetLength(0))
+                    continue;
+
+                var y = 49 - (int)point.z;
+                if (y < 0 || y >= _swampPositions.GetLength(1))
+                    continue;
+
+                if (!_swampPositions[x, y])
+                    continue;
+
+                vertices[i] = new Vector3(point.x, terrainSwampHole + UnityEngine.Random.value * swampRandom, point.z);
+            }
+            _terrainMesh.mesh.vertices = vertices;
+            _terrainMesh.mesh.RecalculateNormals();
+        }
+
         private void Deform()
         {
-            generateSwamps();
-            // change to generateWalls2();
+            // generateSwamps();
+            generateTerrain();
             // generateWalls1();
-            generateWalls2();
-
-            
+            generateWalls2();            
 
             _wallPositions = null;
             _swampPositions = null;
