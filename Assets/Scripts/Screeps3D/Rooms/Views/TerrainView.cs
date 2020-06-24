@@ -10,7 +10,6 @@ namespace Screeps3D.Rooms.Views
         private Room _room;
         [SerializeField] private MeshFilter _swampMesh = default;
         [SerializeField] private MeshFilter _wallMesh = default;
-        [SerializeField] private MeshFilter _terrainMesh = default;
 
         private bool _hasTerrainData;
         private string _terrain;
@@ -277,31 +276,35 @@ namespace Screeps3D.Rooms.Views
                 }
             foreach (var pos in _sourcePositions)
             {
-                wallHeight[pos.x, pos.y] = 3.5f;//Math.Min(wallHeight[pos.x, pos.y], 3f);
+                wallHeight[pos.x, pos.y] = 3.75f;
             }
             foreach (var pos in _lairPositions)
             {
-                for (int x = -1; x <= 1; ++x)
-                    for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.05f);
+                for (int x = pos.x - 1; x <= pos.x + 1; ++x)
+                    for (int y = pos.y - 1; y <= pos.y + 1; ++y)
+                        if (x >= 0 && x <= 49 && y >= 0 && y <= 49)
+                            wallHeight[x, y] = Math.Min(wallHeight[x, y], 0.35f + getRandom(x, y) * 0.05f);
             }
             foreach (var pos in _mineralPositions)
             {
-                for (int x = -1; x <= 1; ++x)
-                    for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.5f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+                for (int x = pos.x - 1; x <= pos.x + 1; ++x)
+                    for (int y = pos.y - 1; y <= pos.y + 1; ++y)
+                        if (x >= 0 && x <= 49 && y >= 0 && y <= 49)
+                            wallHeight[x, y] = Math.Min(wallHeight[x, y], 0.5f + getRandom(x, y) * 0.25f);
             }
             foreach (var pos in _controllerPositions)
             {
-                for (int x = -1; x <= 1; ++x)
-                    for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.5f);
+                for (int x = pos.x - 1; x <= pos.x + 1; ++x)
+                    for (int y = pos.y - 1; y <= pos.y + 1; ++y)
+                        if (x >= 0 && x <= 49 && y >= 0 && y <= 49)
+                            wallHeight[x, y] = Math.Min(wallHeight[x, y], .35f + getRandom(x, y) * 0.5f);
             }
             foreach (var pos in _powerBankPositions)
             {
-                for (int x = -1; x <= 1; ++x)
-                    for (int y = -1; y <= 1; ++y)
-                        wallHeight[pos.x + x, pos.y + y] = Math.Min(wallHeight[pos.x + x, pos.y + y], 0.35f + getRandom(pos.x + x, pos.y + y) * 0.25f);
+                for (int x = pos.x - 1; x <= pos.x + 1; ++x)
+                    for (int y = pos.y - 1; y <= pos.y + 1; ++y)
+                        if (x >= 0 && x <= 49 && y >= 0 && y <= 49)
+                            wallHeight[x, y] = Math.Min(wallHeight[x, y], 0.45f + getRandom(x, y) * 0.25f);
             }
 
 
@@ -395,7 +398,11 @@ namespace Screeps3D.Rooms.Views
             _wallMesh.mesh = mesh;
         }
 
-        private void generateSwamps() {
+        private void Deform()
+        {
+            // change to generateWalls2();
+            generateWalls1();
+
             const float swampConstant = 0.3f;
             const float swampRandom = 0.0f;
 
@@ -422,44 +429,6 @@ namespace Screeps3D.Rooms.Views
             }
             _swampMesh.mesh.vertices = vertices;
             _swampMesh.mesh.RecalculateNormals();
-        }
-
-
-        private void generateTerrain() {
-            const float terrainSwampHole = -0.3f;
-            const float swampRandom = 0.0f;
-
-            // swamps
-            var vertices = _terrainMesh.mesh.vertices;
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                var point = vertices[i];
-                if (point.x < 0 || point.x > 50 || point.z < 0 || point.z > 50)
-                    continue;
-
-                var x = (int)point.x;
-                if (x < 0 || x >= _swampPositions.GetLength(0))
-                    continue;
-
-                var y = 49 - (int)point.z;
-                if (y < 0 || y >= _swampPositions.GetLength(1))
-                    continue;
-
-                if (!_swampPositions[x, y])
-                    continue;
-
-                vertices[i] = new Vector3(point.x, terrainSwampHole + UnityEngine.Random.value * swampRandom, point.z);
-            }
-            _terrainMesh.mesh.vertices = vertices;
-            _terrainMesh.mesh.RecalculateNormals();
-        }
-
-        private void Deform()
-        {
-            // generateSwamps();
-            generateTerrain();
-            // generateWalls1();
-            generateWalls2();            
 
             _wallPositions = null;
             _swampPositions = null;
