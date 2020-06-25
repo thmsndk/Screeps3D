@@ -345,8 +345,8 @@ namespace Screeps_API
         public IEnumerator<UnityWebRequestAsyncOperation> Respawn(Action<string> onSuccess, bool noNotification = false)
         {
             //  POST https://screeps.com/api/user/respawn
-
             var body = new RequestBody();
+            body.Add(new JSONObject()); // an empty object is required in the request
 
             return Request("POST", "/api/user/respawn", body, onSuccess: onSuccess, noNotification: noNotification);
         }

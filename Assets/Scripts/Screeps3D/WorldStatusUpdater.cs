@@ -13,14 +13,14 @@ using Assets.Scripts.Screeps3D.Tools.ConstructionSite;
 
 namespace Screeps3D
 {
-    // This seems more like "room info" in regards to status of the room
     public class WorldStatusUpdater : BaseSingleton<WorldStatusUpdater>
     {
-        [SerializeField] private ToolChooser _toolChooser = default;
-        [SerializeField] private ChooseConstructionSite _chooseConstruction = default;
-        [SerializeField] private GameObject _lostSpawnPopup = default;
+        public delegate void OnWorldStatusChangedArgs(WorldStatus previous, WorldStatus current);
 
-        private WorldStatus _worldStatus = WorldStatus.None;
+        public event OnWorldStatusChangedArgs OnWorldStatusChanged;
+
+        public WorldStatus WorldStatus { get; set; } = WorldStatus.None;
+
         private void Start()
         {
             StartCoroutine(GetWorldStatus());
@@ -47,36 +47,15 @@ namespace Screeps3D
 
             if (Enum.TryParse<WorldStatus>(status.str, true, out var worldStatus))
             {
-                switch (worldStatus)
-                {
-                    case WorldStatus.None:
-                        break;
-                    case WorldStatus.Normal:
-                        if (this._worldStatus == WorldStatus.Empty)
-                        {
-                            _toolChooser?.Show(ToolType.Flag);
-                            _toolChooser?.Show(ToolType.Construction);
-                            _toolChooser?.Hide(ToolType.Spawn);
-                        }
-                        break;
-                    case WorldStatus.Lost:
-                        if (this._worldStatus != WorldStatus.Lost)
-                        {
-                            _lostSpawnPopup?.SetActive(true);
-                        }
-
-                        break;
-                    case WorldStatus.Empty:
-                        _toolChooser?.Hide(ToolType.Flag);
-                        _toolChooser?.Hide(ToolType.Construction);
-                        _toolChooser?.Show(ToolType.Spawn);
-                        break;
-                    default:
-                        break;
-                }
-                Debug.Log($"[WorldStatus] {this._worldStatus} => {worldStatus}");
-                this._worldStatus = worldStatus;
+                OnWorldStatusChanged?.Invoke(this.WorldStatus, worldStatus);
+                this.WorldStatus = worldStatus;
             }
+        }
+
+        internal void SetWorldStatus(WorldStatus worldStatus)
+        {
+            OnWorldStatusChanged?.Invoke(this.WorldStatus, worldStatus);
+            this.WorldStatus = worldStatus;
         }
     }
 
