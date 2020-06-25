@@ -42,12 +42,9 @@ namespace Screeps3D
             {
                 foreach (var roomInfo in shardRoomInfo)
                 {
-                    if (roomInfo.RoomName == "W14N3")
-                    {
-                        Debug.LogError($"W14N3 user {roomInfo.User != null} reserved {roomInfo.IsReserved}");
-                    }
+                    // TODO: why is W11N1 not marked ?
 
-                    // Can't spawn in owned or reserved rooms.
+                    // Can't spawn in owned rooms. should not spawn in reserved rooms.
                     if (roomInfo.User != null || roomInfo.IsReserved)
                     {
                         if (!_prohibitedRooms.TryGetValue(roomInfo.RoomName, out var room))
@@ -63,8 +60,9 @@ namespace Screeps3D
 
                             if (!room.InitializedView)
                             {
-                                room.OnShow += (show) =>
+                                room.OnView += () =>
                                 {
+                                    // TODO: look up prohibited list and find room.
                                     room.View.SpawnProhibited(true);
                                 };
                             }
@@ -73,7 +71,7 @@ namespace Screeps3D
                                 room.View.SpawnProhibited(true);
                             }
 
-                            Debug.LogError($"{roomInfo.RoomName} {PlayerPosition.Instance.ShardName} should be prohibited");
+                            //Debug.LogError($"{roomInfo.RoomName} {PlayerPosition.Instance.ShardName} should be prohibited");
 
                         }
 
@@ -82,6 +80,14 @@ namespace Screeps3D
 
                     // TODO: Can't spawn in SK rooms
                     // TODO: Can't spawn in highway rooms
+
+                    // TODO: do we want to "hide" the overlay, or alphablend it more if it is the selected room?
+
+                    // We can spawn here.
+                    if (!_prohibitedRooms.TryGetValue(roomInfo.RoomName, out var room2))
+                    {
+                        room2?.View?.SpawnProhibited(false);
+                    }
                 }
             };
         }
