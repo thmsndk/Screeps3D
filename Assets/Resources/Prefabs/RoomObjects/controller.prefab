@@ -4776,6 +4776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _badge: {fileID: 6797660507624107277}
+  _unownedBadge: {fileID: 2800000, guid: 39dbda199bcbc9c469149883cbbb33e9, type: 3}
   _core: {fileID: 245362670754958893}
   _progressRenderer: {fileID: 8020029351647779068}
   _l1: {fileID: 7832005261265537811}
@@ -4961,7 +4962,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
+      objectReference: {fileID: 2100000, guid: 97899efe73c49a24e96f6a7fa3f9c324, type: 2}
     - target: {fileID: 4365178752406937197, guid: 976b6393e37f2fa40863275f0f43bee1,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

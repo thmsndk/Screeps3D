@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
         public const string Path = "Prefabs/RoomObjects/controller";
 
         [SerializeField] private Renderer _badge = default;
+        [SerializeField] private Texture _unownedBadge = default;
         [SerializeField] private Renderer _core = default;
         [SerializeField] private Renderer _progressRenderer = default;
         [SerializeField] private Renderer _l1 = default;
@@ -27,7 +28,7 @@ namespace Screeps3D.RoomObjects.Views
         private string _owner;
         private float _levelDecayTick = 0;
         private Color _defaultEmissionColor = new Color(0.8f, 0.8f, 0.8f, 0);
-        private float _eStr = 3f;
+        private float _eStr = 0.7f;
         private Color _decayColor = new Color(1.000f, 0.33f, 0.33f, 0.0f);
         private int level = 0;
         enum Ownership {
@@ -37,11 +38,11 @@ namespace Screeps3D.RoomObjects.Views
         }
         private bool ownerHasChanged() {
             // check for reservation change/expiry
-            if(_controller?.ReservedBy?.Badge != null) {
+            if(_controller?.ReservedBy?.UserId != null) {
                 return _owner != _controller.ReservedBy.UserId;
             }
             // check for owner change
-            if(_controller?.Owner?.Badge != null) {
+            if(_controller?.Owner?.UserId != null) {
                 return _owner != _controller.Owner.UserId;
             }
             // no owner, no reservation -> check if we had owner
@@ -49,20 +50,18 @@ namespace Screeps3D.RoomObjects.Views
                                    
         }
         private void setReservation() {
-            if(_controller?.ReservedBy?.Badge != null) {
-                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+            if(_controller?.ReservedBy?.UserId != null) {
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.ReservedBy.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
+                _badge.materials[0].SetFloat("EmissionStrength", 0.1f);
                 _ownership = _controller.ReservedBy.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
                 _owner = _controller.ReservedBy.UserId;
             }
         }
 
         private void setOwnership() {
-            if (_controller?.Owner?.Badge != null) {
-                _badge.materials[0].SetColor("EmissionColor", _defaultEmissionColor);
+            if (_controller?.Owner?.UserId != null) {
                 _badge.materials[0].SetTexture("EmissionTexture", _controller.Owner.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", _eStr);
+                _badge.materials[0].SetFloat("EmissionStrength", 0.1f);
                 _ownership = _controller.Owner.UserId.Equals(Screeps_API.ScreepsAPI.Me.UserId) ? Ownership.Me : Ownership.Enemy;
                 _owner = _controller.Owner.UserId;
             }
@@ -85,6 +84,10 @@ namespace Screeps3D.RoomObjects.Views
             setReservation();
             setOwnership();
             setParticleSystemColor();
+            if(_owner == "None") {
+                _badge.materials[0].SetTexture("EmissionTexture", _unownedBadge);
+                _badge.materials[0].SetFloat("EmissionStrength", 0.01f);
+            } 
         }
         private void updateProgress(bool isDecaying) {
             float scale = 1f;
@@ -117,7 +120,7 @@ namespace Screeps3D.RoomObjects.Views
         {            
             _ownership = Ownership.None;
             _owner = "None";
-            _badge.materials[0].SetFloat("EmissionStrength", 0);
+            _badge.materials[0].SetFloat("EmissionStrength", 1);
 
             customizeController();
         }
@@ -128,7 +131,7 @@ namespace Screeps3D.RoomObjects.Views
             _ownership = Ownership.None;
             _owner = "None";
             _levelDecayTick = _controller.DowngradeTime;
-            _badge.materials[0].SetFloat("EmissionStrength", 0);
+            _badge.materials[0].SetFloat("EmissionStrength", 1);
             _progressRenderer.materials[0].SetFloat("EmissionStrength", _eStr);
 
             customizeController();

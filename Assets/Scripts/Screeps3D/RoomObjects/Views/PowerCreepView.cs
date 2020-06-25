@@ -28,9 +28,9 @@ namespace Screeps3D.RoomObjects.Views
             } else {                
                 _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                 _badge.materials[0].SetTexture("EmissionTexture", _PowerCreep?.Owner?.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 5f);
-                _body.materials[1].SetFloat("EmissionStrength", 3f);
-                _inventory.materials[0].SetFloat("EmissionStrength", 3f);
+                _badge.materials[0].SetFloat("EmissionStrength", 1f);
+                _body.materials[1].SetFloat("EmissionStrength", .3f);
+                _inventory.materials[0].SetFloat("EmissionStrength", .3f);
             }
 
             _rotTarget = transform.rotation;

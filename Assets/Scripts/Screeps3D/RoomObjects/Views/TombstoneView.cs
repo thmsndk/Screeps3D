@@ -20,9 +20,8 @@ namespace Screeps3D.RoomObjects.Views
         private float _emissionDecayFactor;
         private float _nextBlink;
         private bool _blinking;
-        private float _minBadgeEmission = 2f;
-        private float _maxAddedEmission = 8f;
-        private float _currentAddedEmission = 6f;
+        private float _minBadgeEmission = .4f;
+        private float _currentEmission = .8f;
         private long _lastTickUpdate;
         private long _loadTick;
 
@@ -32,9 +31,8 @@ namespace Screeps3D.RoomObjects.Views
             base.Load(roomObject);            
             _tombstone = roomObject as Tombstone;
             // Base setup
-            _body.materials[1].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
             _body.materials[1].SetTexture("EmissionTexture", _tombstone?.Owner?.Badge);
-            _body.materials[1].SetFloat("EmissionStrength", 2);
+            _body.materials[1].SetFloat("EmissionStrength", .8f);
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
@@ -49,12 +47,9 @@ namespace Screeps3D.RoomObjects.Views
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
-            //var posDelta = _posTarget - RoomObject.Position;
-
-            //if (posDelta.sqrMagnitude > .01)
-            //{
-            //    _posTarget = RoomObject.Position;
-            //} 
+            long now = ScreepsAPI.Time;
+            float decayFactor = (float) now / ((float)_tombstone.DeathTime + (float)_tombstone.NextDecayTime);
+            _currentEmission = 1f - 0.4f * decayFactor; 
         }
 
         private void Update()
@@ -62,15 +57,7 @@ namespace Screeps3D.RoomObjects.Views
             if (_tombstone == null) {
                 return;
             }
-            // if tick changed, degrade currentAddedEmission
-            if(_lastTickUpdate != ScreepsAPI.Time) {
-                long now = ScreepsAPI.Time;
-                _lastTickUpdate = now;
-                float decayFactor = (float)now / ((float)_tombstone.DeathTime + (float)_tombstone.NextDecayTime);
-                _currentAddedEmission =  _maxAddedEmission * decayFactor;
-            }
-            float decayEmission = _minBadgeEmission + Mathf.Abs(Mathf.Sin(Time.time)) * _currentAddedEmission;
-            _body.materials[1].SetFloat("EmissionStrength", decayEmission);
+            _body.materials[1].SetFloat("EmissionStrength", Mathf.Max(0.4f, Mathf.PingPong(Time.time, _currentEmission)));
         }
     }
 }

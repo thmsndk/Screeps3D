@@ -31,9 +31,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionStrength: 5
+    - EmissionStrength: 0
     - Fill: 0.05
-    - FresnelPower: 5
+    - FresnelPower: 3
     - OffsetFactor: 0.4
     - PatterTextureSize: 3
     - Speed: 0.1

@@ -9,6 +9,12 @@ namespace Screeps3D.RoomObjects.Views
 
         [SerializeField] private ScaleVisibility _vis = default;
         [SerializeField] private Collider _collider = default;
+        [SerializeField] private Light _light;
+
+
+        public void Update() {            
+            _light.intensity = 1f + Mathf.PingPong(Time.time, 3f);
+        }
         
         // IMapViewComponent *****************
         public int roomPosX { get; set; }

@@ -33,25 +33,24 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
-            } else {                
-                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+            } else {
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 3f);
+                _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
 
             // HORSE
             // do not forget to do reposition in .blend files ! 
             // to uncomment:
-            // setWings(false);
-            // setHorse(false);
+            setWings(false);
+            setHorse(false);
             // to comment:
-            if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
-                setWings(true);
-                setHorse(false);
-            } else {
-                setWings(false);
-                setHorse(true);
-            }
+            // if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
+            //     setWings(true);
+            //     setHorse(false);
+            // } else {
+            //     setWings(false);
+            //     setHorse(true);
+            // }
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;

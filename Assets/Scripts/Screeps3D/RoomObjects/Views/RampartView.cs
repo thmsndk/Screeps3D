@@ -27,11 +27,13 @@ namespace Screeps3D.RoomObjects.Views
 
             bool ownedByMe = owner.Username == ScreepsAPI.Me.Username; // TODO: isNPC?;
 
-            var emissionColor = new Color(1.000f, 0f, 0.297f, 0.053f); // enemy
+            // var emissionColor = new Color(1.000f, 0f, 0.297f, 0.053f);
+            var emissionColor = new Color32(255, 111, 111, 0); // enemy
 
             if (ownedByMe)
             {
-                emissionColor = new Color(0f, 1.000f, 0.297f, 0.053f);
+                // emissionColor = new Color(0f, 1.000f, 0.297f, 0.053f); // me
+                emissionColor = new Color32(65, 140, 65, 0); // me
             }
 
             if (_rampart == null)

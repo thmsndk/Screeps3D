@@ -9,6 +9,7 @@ namespace Screeps3D.Effects
     {
         public const string PATH = "Prefabs/Effects/ReserveEffect";
         [SerializeField] private ParticleSystem _reserveParticles = default;
+        [SerializeField] private Renderer _effectEmission = default;
         private Vector3 _target;
         private float _time;
         private const float _reserveDuration = 2;

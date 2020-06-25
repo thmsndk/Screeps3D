@@ -1,87 +1,228 @@
 fileFormatVersion: 2
 guid: 95d1a895d22b28942ae1eb83550f4bb2
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: diagonal
-    100004: rightAngle
-    100006: roadBase
-    100008: 1
-    100010: 2
-    100012: 3
-    100014: 4
-    100016: 5
-    100018: 6
-    100020: 7
-    100022: 8
-    100024: base
-    400000: //RootNode
-    400002: diagonal
-    400004: rightAngle
-    400006: roadBase
-    400008: 1
-    400010: 2
-    400012: 3
-    400014: 4
-    400016: 5
-    400018: 6
-    400020: 7
-    400022: 8
-    400024: base
-    2300000: //RootNode
-    2300002: diagonal
-    2300004: rightAngle
-    2300006: roadBase
-    2300008: 1
-    2300010: 2
-    2300012: 3
-    2300014: 4
-    2300016: 5
-    2300018: 6
-    2300020: 7
-    2300022: 8
-    2300024: base
-    3300000: //RootNode
-    3300002: diagonal
-    3300004: rightAngle
-    3300006: roadBase
-    3300008: 1
-    3300010: 2
-    3300012: 3
-    3300014: 4
-    3300016: 5
-    3300018: 6
-    3300020: 7
-    3300022: 8
-    3300024: base
-    4300000: Cylinder
-    4300002: diagonal
-    4300004: rightAngle
-    4300006: roadBase
-    4300008: 6
-    4300010: 4
-    4300012: 2
-    4300014: 7
-    4300016: 5
-    4300018: 3
-    4300020: base
-    4300022: 1
-    4300024: 8
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: diagonal
+  - first:
+      1: 100004
+    second: rightAngle
+  - first:
+      1: 100006
+    second: roadBase
+  - first:
+      1: 100008
+    second: 1
+  - first:
+      1: 100010
+    second: 2
+  - first:
+      1: 100012
+    second: 3
+  - first:
+      1: 100014
+    second: 4
+  - first:
+      1: 100016
+    second: 5
+  - first:
+      1: 100018
+    second: 6
+  - first:
+      1: 100020
+    second: 7
+  - first:
+      1: 100022
+    second: 8
+  - first:
+      1: 100024
+    second: base
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: diagonal
+  - first:
+      4: 400004
+    second: rightAngle
+  - first:
+      4: 400006
+    second: roadBase
+  - first:
+      4: 400008
+    second: 1
+  - first:
+      4: 400010
+    second: 2
+  - first:
+      4: 400012
+    second: 3
+  - first:
+      4: 400014
+    second: 4
+  - first:
+      4: 400016
+    second: 5
+  - first:
+      4: 400018
+    second: 6
+  - first:
+      4: 400020
+    second: 7
+  - first:
+      4: 400022
+    second: 8
+  - first:
+      4: 400024
+    second: base
+  - first:
+      23: 2300000
+    second: //RootNode
+  - first:
+      23: 2300002
+    second: diagonal
+  - first:
+      23: 2300004
+    second: rightAngle
+  - first:
+      23: 2300006
+    second: roadBase
+  - first:
+      23: 2300008
+    second: 1
+  - first:
+      23: 2300010
+    second: 2
+  - first:
+      23: 2300012
+    second: 3
+  - first:
+      23: 2300014
+    second: 4
+  - first:
+      23: 2300016
+    second: 5
+  - first:
+      23: 2300018
+    second: 6
+  - first:
+      23: 2300020
+    second: 7
+  - first:
+      23: 2300022
+    second: 8
+  - first:
+      23: 2300024
+    second: base
+  - first:
+      33: 3300000
+    second: //RootNode
+  - first:
+      33: 3300002
+    second: diagonal
+  - first:
+      33: 3300004
+    second: rightAngle
+  - first:
+      33: 3300006
+    second: roadBase
+  - first:
+      33: 3300008
+    second: 1
+  - first:
+      33: 3300010
+    second: 2
+  - first:
+      33: 3300012
+    second: 3
+  - first:
+      33: 3300014
+    second: 4
+  - first:
+      33: 3300016
+    second: 5
+  - first:
+      33: 3300018
+    second: 6
+  - first:
+      33: 3300020
+    second: 7
+  - first:
+      33: 3300022
+    second: 8
+  - first:
+      33: 3300024
+    second: base
+  - first:
+      43: 4300000
+    second: Cylinder
+  - first:
+      43: 4300002
+    second: diagonal
+  - first:
+      43: 4300004
+    second: rightAngle
+  - first:
+      43: 4300006
+    second: roadBase
+  - first:
+      43: 4300008
+    second: 6
+  - first:
+      43: 4300010
+    second: 4
+  - first:
+      43: 4300012
+    second: 2
+  - first:
+      43: 4300014
+    second: 7
+  - first:
+      43: 4300016
+    second: 5
+  - first:
+      43: 4300018
+    second: 3
+  - first:
+      43: 4300020
+    second: base
+  - first:
+      43: 4300022
+    second: 1
+  - first:
+      43: 4300024
+    second: 8
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: unnamed
-    second: {fileID: 2100000, guid: 4fc1a29bfb4c02645b7546e681e4543e, type: 2}
+      name: No Name
+    second: {fileID: 2100000, guid: 3d6370f4bd5c11a45b92faf0c2641dd2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Road
+    second: {fileID: 2100000, guid: 7b9380ffba4fb1c4a985c006acf59bdf, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -111,6 +252,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -118,18 +260,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -138,10 +281,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -151,13 +294,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

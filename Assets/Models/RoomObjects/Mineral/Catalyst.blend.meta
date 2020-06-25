@@ -15,8 +15,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Rock
-    second: {fileID: 2100000, guid: 09332f048f669a74f89db2e0d81173ac, type: 2}
+      name: mineral
+    second: {fileID: 2100000, guid: 66df22d6428846f4097db8179b557eab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rock
+    second: {fileID: 2100000, guid: 7f6702d17a6009241bd23b78baa1ce8d, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
