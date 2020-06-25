@@ -14,6 +14,8 @@ namespace Screeps3D
     // This seems more like "room info" in regards to status of the room
     public class MapStatsUpdater : BaseSingleton<MapStatsUpdater>
     {
+        public event Action OnMapStatsUpdated;
+
         private void Start()
         {
             StartCoroutine(Scan());
@@ -103,6 +105,8 @@ namespace Screeps3D
             Debug.Log("Unpacking users done");
 
             yield return UnpackRooms(shard, result);
+
+            OnMapStatsUpdated?.Invoke();
         }
 
         private IEnumerator UnpackRooms(string shard, JSONObject result, bool wait = true)
@@ -308,6 +312,16 @@ namespace Screeps3D
             }
             string x = room.Substring(0, split - 1).Substring(1);
             string y = room.Substring(split, room.Length - split - 1).Substring(1);
+
+            if (room.IndexOf('W') != -1)
+            {
+                x = "-" + x;
+            }
+
+            if (room.IndexOf('N') != -1)
+            {
+                y = "-" + y;
+            }
 
             return (int.Parse($"{x}5"), int.Parse($"{y}5"));
         }

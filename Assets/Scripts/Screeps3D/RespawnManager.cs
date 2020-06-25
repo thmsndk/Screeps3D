@@ -30,7 +30,60 @@ namespace Screeps3D
             // call api for respawn
             // trigger place-spawn tool
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
+            MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated;
 
+
+        }
+
+        private Dictionary<string, Room> _prohibitedRooms = new Dictionary<string, Room>();
+        private void OnMapStatsUpdated()
+        {
+            if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
+            {
+                foreach (var roomInfo in shardRoomInfo)
+                {
+                    if (roomInfo.RoomName == "W14N3")
+                    {
+                        Debug.LogError($"W14N3 user {roomInfo.User != null} reserved {roomInfo.IsReserved}");
+                    }
+
+                    // Can't spawn in owned or reserved rooms.
+                    if (roomInfo.User != null || roomInfo.IsReserved)
+                    {
+                        if (!_prohibitedRooms.TryGetValue(roomInfo.RoomName, out var room))
+                        {
+                            room = RoomManager.Instance.Get(roomInfo.RoomName, PlayerPosition.Instance.ShardName);
+                            if (room != null)
+                            {
+                                _prohibitedRooms.Add(roomInfo.RoomName, room);
+                            }
+
+                            // TODO: this is wrong to do... we can't unregister the event.
+                            // room aint initialized yet, wait for show. but we also need to remove the prohibed event....
+
+                            if (!room.InitializedView)
+                            {
+                                room.OnShow += (show) =>
+                                {
+                                    room.View.SpawnProhibited(true);
+                                };
+                            }
+                            else
+                            {
+                                room.View.SpawnProhibited(true);
+                            }
+
+                            Debug.LogError($"{roomInfo.RoomName} {PlayerPosition.Instance.ShardName} should be prohibited");
+
+                        }
+
+                        continue;
+                    }
+
+                    // TODO: Can't spawn in SK rooms
+                    // TODO: Can't spawn in highway rooms
+                }
+            };
         }
 
         private void Start()
@@ -55,7 +108,8 @@ namespace Screeps3D
         {
             _lostSpawnPopup?.gameObject?.SetActive(false);
             // TODO: call respawn, activate emmpty mode
-            ScreepsAPI.Http.Respawn((jsonResponse) => {
+            ScreepsAPI.Http.Respawn((jsonResponse) =>
+            {
                 var result = new JSONObject(jsonResponse);
                 var ok = result["ok"];
 
@@ -75,8 +129,6 @@ namespace Screeps3D
                 case WorldStatus.Normal:
                     if (previous == WorldStatus.Empty)
                     {
-                        // Get respawn prohibited rooms
-                        // Get mapstats to determine invalid rooms for spawning.
                         _toolChooser?.Show(ToolType.Flag);
                         _toolChooser?.Show(ToolType.Construction);
                         _toolChooser?.Hide(ToolType.Spawn);
@@ -93,6 +145,13 @@ namespace Screeps3D
                     _toolChooser?.Hide(ToolType.Flag);
                     _toolChooser?.Hide(ToolType.Construction);
                     _toolChooser?.Show(ToolType.Spawn);
+
+                    // Get respawn prohibited rooms
+                    // Get mapstats to determine invalid rooms for spawning. should probably trigger a coroutine that updates and calculates what rooms a prohibited.
+                    // Toggle spawn overlay on
+
+
+
                     break;
                 default:
                     break;
