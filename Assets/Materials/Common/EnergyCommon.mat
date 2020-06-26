@@ -40,7 +40,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: c6bbec71c67a6bc49b02fd82c93b7d10, type: 3}
+        m_Texture: {fileID: 2800000, guid: 39dbda199bcbc9c469149883cbbb33e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -164,10 +164,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionExposureWeight: 0.25
-    - EmissionStrength: 1.8
-    - TextureFloatSpeed: 0.05
-    - TextureSize: 1
+    - EmissionExposureWeight: 0.85
+    - EmissionStrength: 7.5
+    - TextureFloatSpeed: 0.025
+    - TextureSize: 2
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1

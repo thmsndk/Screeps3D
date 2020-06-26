@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2576b3e39925b6046b865e2e479f75f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotation: {x: 1, y: 90, z: 1}
+  _rotation: {x: 1, y: 3, z: 1}
   _mutateRandomly: 1
 --- !u!114 &114346166130023336
 MonoBehaviour:

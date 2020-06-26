@@ -147,7 +147,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionStrength: 0.7
+    - EmissionExposureWeight: 1
+    - EmissionStrength: 0.45
+    - TextureFloatSpeed: 0.1
+    - TextureSize: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
