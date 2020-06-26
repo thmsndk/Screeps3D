@@ -25,9 +25,6 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
             _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.ShardName, room.RoomName);
 
-            // TODO: subscribe to tool updates? and consider the state of it before running this
-            // TODO: just subscribe to worldstatus updates, and trigger on empty
-
             SpawnProhibited(false);
 
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
@@ -52,26 +49,18 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
             if (int.TryParse(_roomInfo.OpenTime, out var openTime) && DateTimeOffset.FromUnixTimeMilliseconds(openTime) > DateTimeOffset.UtcNow)
             {
-                Debug.LogError($"{DateTimeOffset.FromUnixTimeMilliseconds(openTime)} > {DateTimeOffset.UtcNow}");
                 return true;
             }
 
-            
             var prohibited = IsCenter(room.XCoord, room.YCoord)
                 || !(!IsBus(room.XCoord) && !IsBus(room.YCoord))
                 || (/* TODO: check respawn prohibited rooms endpoint result ||*/
                     _roomInfo.User != null
                     );
 
-            if (!prohibited)
-            {
-                Debug.LogError($"{room.RoomName} center {IsCenter(room.XCoord, room.YCoord)} bus {IsBus(room.XCoord) && IsBus(room.YCoord)} owned {IsBus(room.XCoord) && IsBus(room.YCoord)}");
-            }
-
             return prohibited;
-
-
         }
+
         private bool IsCenter(int x, int y)
         {
             return (x < 0 && Math.Abs(x + 1) % 10 >= 4 && Math.Abs(x + 1) % 10 <= 6 || x >= 0 && Math.Abs(x) % 10 >= 4 && Math.Abs(x) % 10 <= 6) 

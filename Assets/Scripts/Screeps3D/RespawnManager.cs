@@ -23,16 +23,17 @@ namespace Screeps3D
 
         private void Awake()
         {
-            // subscripe to world status updates
-            // render oops
             // render respawn warning
 
-            // call api for respawn
             // trigger place-spawn tool
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
+            PlaceFirstSpawn.Instance.OnFirstSpawnPlaced += FirstSpawnPlaced;
         }
 
-        
+        private void FirstSpawnPlaced()
+        {
+            WorldStatusUpdater.Instance.SetWorldStatus(WorldStatus.Normal);
+        }
 
         private void Start()
         {
@@ -45,6 +46,7 @@ namespace Screeps3D
             WorldStatusUpdater.Instance.OnWorldStatusChanged -= OnWorldStatusChanged;
             _lostSpawnPopup.OnCancel -= LostSpawnPopupCancelClicked;
             _lostSpawnPopup.OnRespawn -= LostSpawnPopupRespawnClicked;
+            PlaceFirstSpawn.Instance.OnFirstSpawnPlaced -= FirstSpawnPlaced;
         }
 
         private void LostSpawnPopupCancelClicked()
@@ -55,7 +57,6 @@ namespace Screeps3D
         private void LostSpawnPopupRespawnClicked()
         {
             _lostSpawnPopup?.gameObject?.SetActive(false);
-            // TODO: call respawn, activate emmpty mode
             ScreepsAPI.Http.Respawn((jsonResponse) =>
             {
                 var result = new JSONObject(jsonResponse);
@@ -94,11 +95,7 @@ namespace Screeps3D
                     _toolChooser?.Hide(ToolType.Construction);
                     _toolChooser?.Show(ToolType.Spawn);
 
-                    // Get respawn prohibited rooms
-                    // Get mapstats to determine invalid rooms for spawning. should probably trigger a coroutine that updates and calculates what rooms a prohibited.
-                    // Toggle spawn overlay on
-
-
+                    // Get respawn prohibited rooms and cache them
 
                     break;
                 default:
