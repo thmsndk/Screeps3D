@@ -17,8 +17,10 @@ namespace Screeps3D.Effects
         private Vector3 _tPos;
         private float _gravity = Mathf.Abs(Physics.gravity.y);
         private float _radianAngle;
-        private int _resolution = 250;
-        public float _velocity = 2f;
+        private int _resolution = 100;
+        private int _renderedArcLength = 35;
+        private int _renderArcSpeed = 3;
+        public float _velocity = 5f;
         public float _angle = 5f;
         private float _maxParabolaHeight = 1f;
 
@@ -30,9 +32,11 @@ namespace Screeps3D.Effects
 
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
-            lineRenderer.positionCount = _resolution;
+            lineRenderer.positionCount = _renderedArcLength;
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
+            lineRenderer.materials[0].SetColor("EmissionColor", color);
+            lineRenderer.materials[0].SetFloat("EmissionStrength", 1.5f);
 
             StartCoroutine(Fire());
             // if(lineRenderer.enabled)
@@ -57,6 +61,15 @@ namespace Screeps3D.Effects
             return MathParabola.Parabola(sPos, tPos, _maxParabolaHeight, t);
         }
 
+        private void setLineRendererPoints(int startIndex, int pointsToSetCount, Vector3[] allPoints) {
+            for(int i = 0; i < pointsToSetCount; i++) {
+                int index = startIndex + i;
+                if(index >= allPoints.Length) {
+                    return;
+                }
+                lineRenderer.SetPosition(i, allPoints[index]);
+            }
+        }
 
         private IEnumerator Fire()
         {
@@ -67,12 +80,9 @@ namespace Screeps3D.Effects
             // var maxDistance = (_velocity * _velocity * Mathf.Sin(2 * _radianAngle)) / _gravity;
             // lineRenderer.SetPosition(0, _sPos);
             
-            for (int i = 0; i < _resolution-1; i++)
+            for (int i = 0; i < _resolution; i += _renderArcSpeed)
             {
-                // Vector3 point = CalculateArcPoint((Vector3)_sPos, (Vector3)_tPos, t, maxDistance);
-                Debug.LogError("points pair " + points[i] + " " + points[i+1]);
-                lineRenderer.SetPosition(0, points[i]);
-                lineRenderer.SetPosition(1, points[i+1]);
+                setLineRendererPoints(i, _renderedArcLength, points);
                 yield return null;
             }
 

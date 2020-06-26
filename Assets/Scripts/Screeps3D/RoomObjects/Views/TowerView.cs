@@ -69,13 +69,11 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_tower != null)
             {
-                // DEBUG
-                
-                _idle = false;
-                var targetPos = _barrelEnd.position + new Vector3(0, 0, 15);
-                EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(Color.yellow, 0.6f, 0.3f));
-                return;
-
+                // DEBUG                
+                // _idle = false;
+                // var targetPos = _barrelEnd.position + new Vector3(0, -0.95f, 15);
+                // EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(Color.green, 0f, 0f));
+                // return;
                 // end DEBUG
 
                 var action = _tower.Actions.FirstOrDefault(c => !c.Value.IsNull);
@@ -87,11 +85,11 @@ namespace Screeps3D.RoomObjects.Views
                 _idle = false;
                 if (_rotator != null) StopCoroutine(_rotator);
 
-                // var targetPos = PosUtility.Convert(action.Value, _tower.Room);
-                targetPos = targetPos + new Vector3(0, _barrelEnd.position.y * -1 , 0);
-
+                var targetPos = PosUtility.Convert(action.Value, _tower.Room);
                 _rotationRoot.rotation = Quaternion.LookRotation(targetPos - _tower.Position);
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
+
+                EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(_actionColor, 0f, 0f));
                 // EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
 
                 
