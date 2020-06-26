@@ -244,7 +244,7 @@ namespace Screeps3D
             var rooms = new List<string>();
             ////var roomName = jsonRoom["id"].str;
 
-            (int x, int y) = XYFromRoom(roomName);
+            (int x, int y) = PosUtility.XYFromRoom(roomName);
             for (var xx = 0; xx < 12; xx++)
             {
                 for (var yy = 0; yy < 12; yy++)
@@ -275,21 +275,7 @@ namespace Screeps3D
             return $"{dx}{x}{dy}{y}";
         }
 
-        // TODO: maybe we should not regex?
-        private (int, int) XYFromRoom(string room)
-        {
-            var match = Regex.Match(room, @"^(?<dx>[WE])(?<x>\d+)(?<dy>[NS])(?<y>\d+)$");
-
-            var dx = match.Groups["dx"].Value;
-            var x = int.Parse(match.Groups["x"].Value);
-
-            var dy = match.Groups["dy"].Value;
-            var y = int.Parse(match.Groups["y"].Value);
-            if (dx == "W") x = -x - 1;
-            if (dy == "N") y = -y - 1;
-            return (x, y);
-        }
-
+        
         private string SectorCenterFromRoom(string room)
         {
             int split = room.IndexOf('N');
@@ -339,6 +325,9 @@ namespace Screeps3D
         /// </summary>
         public string Status { get; set; }
 
+        public const string STATUS_NORMAL = "normal";
+        public const string STATUS_OUT_OF_BORDERS = "out of borders";
+
         public bool IsNoviceZone { get; set; }
         public string NoviceTime { get; set; }
 
@@ -369,7 +358,7 @@ namespace Screeps3D
 
         internal void Unpack(JSONObject roomStats)
         {
-            var status = roomStats["status"];
+            var status = roomStats["status"]; // "out of borders"
             var own = roomStats["own"];
             if (own != null && !own.IsNull)
             {

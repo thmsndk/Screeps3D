@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 65763936914956256}
   - component: {fileID: 114091160785336574}
   - component: {fileID: 114981266070071942}
+  - component: {fileID: 445900835613851638}
   m_Layer: 10
   m_Name: RoomView
   m_TagString: Untagged
@@ -304,7 +305,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _vis: {fileID: 114091160785336574}
-  _ProhibitedRoomProjector: {fileID: 7460417820632569860}
 --- !u!65 &65763936914956256
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -345,6 +345,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39bd494dc8245338b570ab65c17ab81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &445900835613851638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467818047593562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5cd7edceb1554e81c3b496e8e248c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ProhibitedRoomProjector: {fileID: 7460417820632569860}
 --- !u!1 &994566491824931324
 GameObject:
   m_ObjectHideFlags: 0

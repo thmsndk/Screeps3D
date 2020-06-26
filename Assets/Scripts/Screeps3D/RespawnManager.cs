@@ -30,67 +30,9 @@ namespace Screeps3D
             // call api for respawn
             // trigger place-spawn tool
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
-            MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated;
-
-
         }
 
-        private Dictionary<string, Room> _prohibitedRooms = new Dictionary<string, Room>();
-        private void OnMapStatsUpdated()
-        {
-            if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
-            {
-                foreach (var roomInfo in shardRoomInfo)
-                {
-                    // TODO: why is W11N1 not marked ?
-
-                    // Can't spawn in owned rooms. should not spawn in reserved rooms.
-                    if (roomInfo.User != null || roomInfo.IsReserved)
-                    {
-                        if (!_prohibitedRooms.TryGetValue(roomInfo.RoomName, out var room))
-                        {
-                            room = RoomManager.Instance.Get(roomInfo.RoomName, PlayerPosition.Instance.ShardName);
-                            if (room != null)
-                            {
-                                _prohibitedRooms.Add(roomInfo.RoomName, room);
-                            }
-
-                            // TODO: this is wrong to do... we can't unregister the event.
-                            // room aint initialized yet, wait for show. but we also need to remove the prohibed event....
-
-                            if (!room.InitializedView)
-                            {
-                                room.OnView += () =>
-                                {
-                                    // TODO: look up prohibited list and find room.
-                                    room.View.SpawnProhibited(true);
-                                };
-                            }
-                            else
-                            {
-                                room.View.SpawnProhibited(true);
-                            }
-
-                            //Debug.LogError($"{roomInfo.RoomName} {PlayerPosition.Instance.ShardName} should be prohibited");
-
-                        }
-
-                        continue;
-                    }
-
-                    // TODO: Can't spawn in SK rooms
-                    // TODO: Can't spawn in highway rooms
-
-                    // TODO: do we want to "hide" the overlay, or alphablend it more if it is the selected room?
-
-                    // We can spawn here.
-                    if (!_prohibitedRooms.TryGetValue(roomInfo.RoomName, out var room2))
-                    {
-                        room2?.View?.SpawnProhibited(false);
-                    }
-                }
-            };
-        }
+        
 
         private void Start()
         {
