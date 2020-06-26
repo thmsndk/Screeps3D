@@ -136,7 +136,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: aede71d3be9551d4f9879ed1625cc958,
         type: 3}
       propertyPath: m_Name
-      value: storage_v4
+      value: storage
       objectReference: {fileID: 0}
     - target: {fileID: -633318190372518200, guid: aede71d3be9551d4f9879ed1625cc958,
         type: 3}
