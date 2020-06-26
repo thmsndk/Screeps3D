@@ -72,6 +72,8 @@ namespace Screeps3D.RoomObjects.Views
                 // DEBUG
                 
                 _idle = false;
+                var targetPos = _barrelEnd.position + new Vector3(0, 0, 15);
+                EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(Color.yellow, 0.6f, 0.3f));
                 return;
 
                 // end DEBUG
@@ -85,7 +87,7 @@ namespace Screeps3D.RoomObjects.Views
                 _idle = false;
                 if (_rotator != null) StopCoroutine(_rotator);
 
-                var targetPos = PosUtility.Convert(action.Value, _tower.Room);
+                // var targetPos = PosUtility.Convert(action.Value, _tower.Room);
                 targetPos = targetPos + new Vector3(0, _barrelEnd.position.y * -1 , 0);
 
                 _rotationRoot.rotation = Quaternion.LookRotation(targetPos - _tower.Position);
@@ -119,8 +121,7 @@ namespace Screeps3D.RoomObjects.Views
                 // TODO: perhaps we want it to point downwards towards the ground?
                 return;
             }
-            var targetPos = _barrelEnd.position + new Vector3(0, _barrelEnd.position.y * -1 , 15);
-            EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(Color.yellow, 0.6f, 0.3f));
+            var targetPos = _barrelEnd.position + new Vector3(15, _barrelEnd.position.y * -1 , 15);
 
             if(_idle) {
                 setEmission(Color.black, 0f);
