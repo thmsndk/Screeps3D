@@ -53,8 +53,10 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 1.125, z: 0.55}
+  - {x: 0, y: 1.125, z: 1}
+  - {x: 0, y: 0.95, z: 2}
+  - {x: 0, y: 0, z: 5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -154,6 +156,8 @@ MonoBehaviour:
   _stand: {fileID: 5598490833172523115}
   _body: {fileID: 7239521875871852088}
   _rotationRoot: {fileID: 3157756630992995421}
+  _lineRenderer: {fileID: 4607807067832983852}
+  _barrelEnd: {fileID: 4378526817214834523}
 --- !u!114 &8381180079561956397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +413,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7058749881753192643, guid: d4f6a68d418c4d948ac36fed22840bf3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7058749881753192643, guid: d4f6a68d418c4d948ac36fed22840bf3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.595
+      objectReference: {fileID: 0}
     - target: {fileID: 8567125788655004613, guid: d4f6a68d418c4d948ac36fed22840bf3,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -477,6 +491,12 @@ Transform:
 --- !u!23 &7239521875871852088 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -5097543003843294816, guid: d4f6a68d418c4d948ac36fed22840bf3,
+    type: 3}
+  m_PrefabInstance: {fileID: 6716575063910805400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4378526817214834523 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7058749881753192643, guid: d4f6a68d418c4d948ac36fed22840bf3,
     type: 3}
   m_PrefabInstance: {fileID: 6716575063910805400}
   m_PrefabAsset: {fileID: 0}
