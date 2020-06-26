@@ -20,8 +20,10 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         public void Delta(JSONObject data)
-        {
-            AdjustScale();
+        {            
+        if (data.HasField("store") && data.keys.Count > 0) {
+                AdjustScale();
+            }
         }
 
         public void Unload(RoomObject roomObject)
@@ -32,8 +34,12 @@ namespace Screeps3D.RoomObjects.Views
         {
             if (_powerSpawn != null)
             {
-                _energyDisplay.SetVisibility(_powerSpawn.Store["energy"] / 5000);
+                if(_powerSpawn.Store["energy"] != null) {
+                    _energyDisplay.SetVisibility(_powerSpawn.Store["energy"] / 5000);
+                }
+                if(_powerSpawn.Store["power"] != null) {
                 _powerDisplay.SetVisibility(_powerSpawn.Store["power"] / 100);
+                }
             }
         }
     }

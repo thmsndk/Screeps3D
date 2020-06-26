@@ -36,7 +36,6 @@ namespace Screeps3D.RoomObjects
         
         internal override void Unpack(JSONObject data, bool initial)
         {
-            Debug.LogError(data.ToString());
             var power = data["power"];
             var powerCap = data["powerCapacity"];
             // Convert pre-store update to post-store update
