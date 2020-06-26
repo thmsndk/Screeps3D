@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _size: {fileID: 7742996645516054710}
+  _energyBall: {fileID: 33170276741953630}
 --- !u!1 &1490067107078384
 GameObject:
   m_ObjectHideFlags: 0

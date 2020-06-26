@@ -6,6 +6,7 @@ namespace Screeps3D.RoomObjects.Views
     public class ExtensionView: MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _size = default;
+        [SerializeField] private MeshFilter _energyBall = default;
         private Extension _extension;
 
         public void Init()
@@ -14,7 +15,9 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _extension = roomObject as Extension;
+            _extension = roomObject as Extension;            
+            _energyBall.transform.rotation = Random.rotation;
+
         }
 
         public void Delta(JSONObject data)
