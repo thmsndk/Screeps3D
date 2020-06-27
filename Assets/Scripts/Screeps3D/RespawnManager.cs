@@ -14,18 +14,17 @@ using Assets.Scripts.Screeps3D.Menus.Respawn;
 
 namespace Screeps3D
 {
+    // TODO: make sure it does not toggle on "red" when mode is normal
     public class RespawnManager : BaseSingleton<RespawnManager>
     {
 
         [SerializeField] private ToolChooser _toolChooser = default;
         [SerializeField] private ChooseConstructionSite _chooseConstruction = default;
         [SerializeField] private LostSpawnPopup _lostSpawnPopup = default;
+        [SerializeField] private RespawnWarningPopup _respawnWarningPopup = default;
 
         private void Awake()
         {
-            // render respawn warning
-
-            // trigger place-spawn tool
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
             PlaceFirstSpawn.Instance.OnFirstSpawnPlaced += FirstSpawnPlaced;
         }
@@ -39,6 +38,9 @@ namespace Screeps3D
         {
             _lostSpawnPopup.OnCancel += LostSpawnPopupCancelClicked;
             _lostSpawnPopup.OnRespawn += LostSpawnPopupRespawnClicked;
+
+            _respawnWarningPopup.OnCancel += RespawnWarningPopupCancelClicked;
+            _respawnWarningPopup.OnRespawn += RespawnWarningPopupRespawnClicked;
         }
 
         private void OnDestroy()
@@ -47,6 +49,9 @@ namespace Screeps3D
             _lostSpawnPopup.OnCancel -= LostSpawnPopupCancelClicked;
             _lostSpawnPopup.OnRespawn -= LostSpawnPopupRespawnClicked;
             PlaceFirstSpawn.Instance.OnFirstSpawnPlaced -= FirstSpawnPlaced;
+
+            _respawnWarningPopup.OnCancel -= RespawnWarningPopupCancelClicked;
+            _respawnWarningPopup.OnRespawn -= RespawnWarningPopupRespawnClicked;
         }
 
         private void LostSpawnPopupCancelClicked()
@@ -57,6 +62,22 @@ namespace Screeps3D
         private void LostSpawnPopupRespawnClicked()
         {
             _lostSpawnPopup?.gameObject?.SetActive(false);
+            Respawn();
+        }
+
+        private void RespawnWarningPopupCancelClicked()
+        {
+            _respawnWarningPopup?.gameObject?.SetActive(false);
+        }
+
+        private void RespawnWarningPopupRespawnClicked()
+        {
+            _respawnWarningPopup?.gameObject?.SetActive(false);
+            Respawn();
+        }
+
+        private static void Respawn()
+        {
             ScreepsAPI.Http.Respawn((jsonResponse) =>
             {
                 var result = new JSONObject(jsonResponse);
