@@ -15,8 +15,11 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(RoomObject roomObject)
         {
-            _extension = roomObject as Extension;            
-            _energyBall.transform.rotation = Random.rotation;
+            _extension = roomObject as Extension;
+            // random rotation of energy display on load, so all extensions does not have floating texture in one direction
+            var euler = transform.eulerAngles;
+            euler.y = Random.Range(0.0f, 360.0f);
+            _energyBall.transform.eulerAngles = euler;
 
         }
 
