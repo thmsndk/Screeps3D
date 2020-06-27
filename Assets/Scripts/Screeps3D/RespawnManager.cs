@@ -15,6 +15,25 @@ using Assets.Scripts.Screeps3D.Menus.Respawn;
 namespace Screeps3D
 {
     // TODO: make sure it does not toggle on "red" when mode is normal
+    /* 
+     * TODO: room claim assistant https://github.com/Esryok/screeps-browser-ext/blob/master/room-claim-assistant.user.js 
+     *  this overlay should be enabled when in spawn mode. should it be mixed with prohibited spawn though or should it just enhance it? you can't claim prohibited rooms, so we probably just want to enhance it.
+     *  render mineral type, high in the air, this assistant onlky renders minerals for 2 source rooms, we might want to render a small scale mineral indicator for 1 source rooms, not sure how to indicate density then
+     *  render a floating status text to indicate a "status" or recommendation
+     *  recommend if it has two sources and a controller, nobody else owns it,
+     *  and user hasn't already claimed
+     *  could probably use a flags enum.
+     *  do we render the SVG icon for minerals, or do we render our model? both?
+     *  
+     *  colors
+     *  .claim-assist { pointer-events: none; }
+        .claim-assist.not-recommended { background: rgba(192, 192, 50, 0.3); } #AAAAAA
+        .claim-assist.recommended { background: rgba(25, 255, 25, 0.2); }
+        .claim-assist.owned { background: rgba(50, 50, 255, 0.2); }
+        .claim-assist.signed { background: rgba(255, 128, 0, 0.35); }
+        .claim-assist.prohibited { background: rgba(255, 50, 50, 0.2); }
+        .room-prohibited { display: none; }
+     */
     public class RespawnManager : BaseSingleton<RespawnManager>
     {
 
