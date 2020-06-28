@@ -1,59 +1,9 @@
 fileFormatVersion: 2
-guid: 505d166da6b05294ebdfcba433d45c4c
+guid: 3a6285556fe6e6e489ab7a738f5a1f12
 ModelImporter:
   serializedVersion: 19300
-  internalIDToNameTable:
-  - first:
-      1: 100000
-    second: //RootNode
-  - first:
-      1: 100002
-    second: dome
-  - first:
-      1: 100004
-    second: energy
-  - first:
-      4: 400000
-    second: //RootNode
-  - first:
-      4: 400002
-    second: dome
-  - first:
-      4: 400004
-    second: energy
-  - first:
-      23: 2300000
-    second: dome
-  - first:
-      23: 2300002
-    second: energy
-  - first:
-      33: 3300000
-    second: dome
-  - first:
-      33: 3300002
-    second: energy
-  - first:
-      43: 4300000
-    second: dome
-  - first:
-      43: 4300002
-    second: energy
-  - first:
-      74: 7400000
-    second: Default Take
-  - first:
-      95: 9500000
-    second: //RootNode
-  - first:
-      41386430: 2186277476908879412
-    second: ImportLogs
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: No Name
-    second: {fileID: 2100000, guid: 3b20545a6256bd447873d11902f6b316, type: 2}
+  internalIDToNameTable: []
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -81,7 +31,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -139,7 +89,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
