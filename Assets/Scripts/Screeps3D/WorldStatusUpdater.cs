@@ -47,8 +47,11 @@ namespace Screeps3D
 
             if (Enum.TryParse<WorldStatus>(status.str, true, out var worldStatus))
             {
-                OnWorldStatusChanged?.Invoke(this.WorldStatus, worldStatus);
-                this.WorldStatus = worldStatus;
+                if (this.WorldStatus != worldStatus)
+                {
+                    OnWorldStatusChanged?.Invoke(this.WorldStatus, worldStatus);
+                    this.WorldStatus = worldStatus; 
+                }
             }
         }
 

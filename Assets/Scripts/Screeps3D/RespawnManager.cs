@@ -14,7 +14,6 @@ using Assets.Scripts.Screeps3D.Menus.Respawn;
 
 namespace Screeps3D
 {
-    // TODO: make sure it does not toggle on "red" when mode is normal
     /* 
      * TODO: room claim assistant https://github.com/Esryok/screeps-browser-ext/blob/master/room-claim-assistant.user.js 
      *  this overlay should be enabled when in spawn mode. should it be mixed with prohibited spawn though or should it just enhance it? you can't claim prohibited rooms, so we probably just want to enhance it.
