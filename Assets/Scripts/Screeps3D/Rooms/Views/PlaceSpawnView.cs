@@ -102,7 +102,11 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
         private void UpdateRespawnProhibited()
         {
-            SpawnProhibited(ShouldRenderProhibitedRespawn());
+            if (WorldStatusUpdater.Instance.WorldStatus == WorldStatus.Empty)
+            {
+                MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                SpawnProhibited(ShouldRenderProhibitedRespawn());
+            }
         }
 
         private void OnShowObjects(bool show)
