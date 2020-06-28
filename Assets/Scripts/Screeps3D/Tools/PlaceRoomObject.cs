@@ -30,12 +30,16 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             
         }
 
-        internal void ChangeRoomObjectType(string type)
+        internal void HideRoomObject()
         {
             if (this._roomObject != null)
             {
                 this._roomObject.HideObject(this._roomObject.Room);
             }
+        }
+        internal void ChangeRoomObjectType(string type)
+        {
+            HideRoomObject();
 
             this._roomObject = _factory.Get(type);
             this._roomObject.Type = type;
