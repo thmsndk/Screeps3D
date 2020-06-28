@@ -57,8 +57,10 @@ namespace Screeps3D
 
         internal void SetWorldStatus(WorldStatus worldStatus)
         {
-            OnWorldStatusChanged?.Invoke(this.WorldStatus, worldStatus);
+            var previous = this.WorldStatus;
             this.WorldStatus = worldStatus;
+
+            OnWorldStatusChanged?.Invoke(previous, worldStatus);
         }
     }
 
