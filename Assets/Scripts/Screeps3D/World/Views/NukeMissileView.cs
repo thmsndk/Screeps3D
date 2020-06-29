@@ -9,7 +9,8 @@ namespace Screeps3D.World.Views
     {
         public NukeMissileOverlay Overlay { get; private set; }
         [SerializeField] private Renderer _nuke;        
-
+        [SerializeField] private ParticleSystem _bigBadaBoom;
+        [SerializeField] private Transform _target;
         private NukeMissileArchRenderer arcRenderer;
 
         private bool initialized = false;
@@ -20,15 +21,14 @@ namespace Screeps3D.World.Views
 
         public void Init(WorldOverlay overlay)
         {
+            _bigBadaBoom.Stop();
             Overlay = overlay as NukeMissileOverlay;
-
             this.arcRenderer = this.gameObject.GetComponentInChildren<NukeMissileArchRenderer>();
 
             // do we have a launchroom? what if we first acquire the launchroom later?, should this be in update?
             if (Overlay.LaunchRoom != null)
             {
                 arcRenderer.point1.transform.position = Overlay.LaunchRoom.Position + new Vector3(25, 0, 25); // Center of the room, because we do not know where the nuke is, could perhaps scan for it and correct it?
-                
             }
             var launchRoomText = arcRenderer.point1.GetComponentInChildren<TMP_Text>();
             launchRoomText.text = "";//launcRoom.Name;
@@ -45,10 +45,7 @@ namespace Screeps3D.World.Views
 
             initialized = true;
             // spawn nuke explosion for testing purposes, not sure it belongs on the missile view? :shrugh: belongs in an "onTick" event or something
-            //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);
-
-            
-            
+            //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);            
         }
 
         private void Update()
@@ -56,6 +53,13 @@ namespace Screeps3D.World.Views
             if (Overlay == null)
             {
                 return;
+            }
+
+            if(!nukeExploded) {                
+                Debug.LogError("_bigBadaBoom?");                
+                gameObject.transform.position = arcRenderer.point2.transform.position;
+                _bigBadaBoom.Play();
+                nukeExploded = true;
             }
 
             if (!initialized)
@@ -95,7 +99,7 @@ namespace Screeps3D.World.Views
             if (progress >= 1f && !nukeExploded)
             {
                 // TODO: nuke effect should be slower, and last longer, when you wait 50k ticks for an explosion, it should be GRAND!!!
-                EffectsUtility.NukeExplosion(Overlay.ImpactPosition);
+                // EffectsUtility.NukeExplosion(Overlay.ImpactPosition);
                 nukeExploded = true;
                 arcRenderer.enabled = false;
             }
