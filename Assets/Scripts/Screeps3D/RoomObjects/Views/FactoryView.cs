@@ -167,7 +167,7 @@ namespace Screeps3D.RoomObjects.Views
                 _rawProduct.enabled = false;
                 _packedProduct.enabled = false;
                 _commodityProduct.enabled = false;
-                _base.materials[0].SetFloat("EmissionStrength", 0f);
+                _base.materials[2].SetFloat("EmissionStrength", 0f);
                 return;
             }
             
@@ -202,7 +202,7 @@ namespace Screeps3D.RoomObjects.Views
                 return;
 
             if(_isOnCooldown) {
-                _base.materials[0].SetFloat("EmissionStrength", 0.3f + Mathf.PingPong(Time.time, 0.2f));
+                _base.materials[2].SetFloat("EmissionStrength", 0.3f + Mathf.PingPong(Time.time, 0.2f));
             }
 
             // TODO: actions, like creep
