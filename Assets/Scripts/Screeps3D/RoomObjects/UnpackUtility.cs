@@ -103,10 +103,14 @@ namespace Screeps3D.RoomObjects
                 obj.Cooldown = coolDownData.n;
                 return;
             }
-            coolDownData = data["cooldownTime"];
+        }
+
+        internal static void Cooldown(ICooldownTime obj, JSONObject data)
+        {
+            var coolDownData = data["cooldownTime"];
             if (coolDownData != null)
             {
-                obj.Cooldown = coolDownData.n;
+                obj.CooldownTime = (long)coolDownData.n;
                 return;
             }
         }

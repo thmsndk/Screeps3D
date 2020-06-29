@@ -29,12 +29,11 @@ namespace Screeps3D.RoomObjects
 		"level":1
 		}
      */
-    public class Factory : OwnedStoreStructure, ICooldownObject, ILevel
+    public class Factory : OwnedStoreStructure, ICooldownTime, ILevel
     {
-        public float Cooldown { get; set; }
+        public long CooldownTime { get; set; }
         public int Level { get; set; }
         public int LevelMax { get; set; }
-
 
         internal override void Unpack(JSONObject data, bool initial)
         {

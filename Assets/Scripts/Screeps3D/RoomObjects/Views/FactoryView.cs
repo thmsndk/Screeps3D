@@ -47,7 +47,7 @@ namespace Screeps3D.RoomObjects.Views
         {
             _factory = roomObject as Factory;
             _factory.LevelMax = 5;
-            _isOnCooldown = _factory.Cooldown > ScreepsAPI.Time;
+            _isOnCooldown = _factory.CooldownTime > ScreepsAPI.Time;
             _base.materials[0].SetFloat("EmissionStrength", 0f);
 
             _ps.Stop();
@@ -143,7 +143,7 @@ namespace Screeps3D.RoomObjects.Views
         { 
             // Delta data{"store":{"energy":2644,"battery":4449},"actionLog":{"produce":{"x":21,"y":19,"resourceType":"energy"}},"cooldownTime":1,940481E+07}
             AdjustScale();
-            _isOnCooldown = _factory.Cooldown > ScreepsAPI.Time;
+            _isOnCooldown = _factory.CooldownTime > ScreepsAPI.Time;
             _lightningRing.enabled = false;
 
             if(!data.HasField("actionLog") || !data["actionLog"].HasField("produce") || data["actionLog"]["produce"]["resourceType"] == null) {

@@ -80,6 +80,11 @@ namespace Screeps3D.RoomObjects
         float Cooldown { get; set; }
     }
 
+    internal interface ICooldownTime : IRoomObject
+    {
+        long CooldownTime { get; set; }
+    }
+
     internal interface IEffect {
         string effect {get; set;}
         string power {get; set;}
