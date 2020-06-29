@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private ScaleAxes _energyDisplay = default;
         [SerializeField] private Renderer _base = default;
+        [SerializeField] private Renderer _lightningRing = default;
         [SerializeField] private Renderer _rawProduct = default;
         [SerializeField] private Renderer _packedProduct = default;
         [SerializeField] private Renderer _commodityProduct = default;
@@ -47,9 +48,10 @@ namespace Screeps3D.RoomObjects.Views
             _base.materials[3].SetFloat("EmissionStrength", 0f);
 
             _ps.Stop();
-            // _rawProduct.enabled = false;
+            _rawProduct.enabled = false;
             _packedProduct.enabled = false;
             _commodityProduct.enabled = false;
+            _lightningRing.enabled = false;
 
             setLevelDisplay();
             AdjustScale();
@@ -59,7 +61,6 @@ namespace Screeps3D.RoomObjects.Views
         { 
             // Delta data{"store":{"energy":2644,"battery":4449},"actionLog":{"produce":{"x":21,"y":19,"resourceType":"energy"}},"cooldownTime":1,940481E+07}
             AdjustScale();
-            Debug.LogError("Delta data" + data);
             if(data.HasField("actionLog")) {
                 if( data["actionLog"].HasField("produce")) {
                     var product = data["actionLog"]["produce"]["resourceType"];
@@ -155,18 +156,19 @@ namespace Screeps3D.RoomObjects.Views
 
 
         private void showProduction(string product) {
-            Debug.LogError("product " + product);
             if (product == "none") {
                 _ps.Stop();
+                _lightningRing.enabled = false;
                 _rawProduct.enabled = false;
                 _packedProduct.enabled = false;
                 _commodityProduct.enabled = false;
                 _base.materials[3].SetFloat("EmissionStrength", 0f);
-                _base.materials[3].SetColor("EmissionColor", Color.green);
+                _base.materials[3].SetColor("EmissionColor", Color.white);
                 return;
             }
             
             Color32 c = resourceToColor(product);
+            _lightningRing.enabled = true;
 
             var psMain = _ps.main;
             psMain.startColor = (Color)c;
@@ -174,6 +176,7 @@ namespace Screeps3D.RoomObjects.Views
 
             _base.materials[3].SetFloat("EmissionStrength", .5f);
             _base.materials[3].SetColor("EmissionColor", c);
+            _lightningRing.materials[0].SetColor("EmissionColor", c);
 
             if(isRawResource(product)) {
                 _rawProduct.enabled = true;
