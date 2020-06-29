@@ -34,10 +34,10 @@ namespace Screeps3D.RoomObjects.Views
         {
             if (_powerSpawn != null)
             {
-                if(_powerSpawn.Store["energy"] != null) {
+                if(_powerSpawn.Store.ContainsKey("energy")) {
                     _energyDisplay.SetVisibility(_powerSpawn.Store["energy"] / 5000);
                 }
-                if(_powerSpawn.Store["power"] != null) {
+                if(_powerSpawn.Store.ContainsKey("power")) {
                 _powerDisplay.SetVisibility(_powerSpawn.Store["power"] / 100);
                 }
             }

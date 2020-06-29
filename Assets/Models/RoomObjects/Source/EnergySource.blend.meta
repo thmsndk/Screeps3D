@@ -32,7 +32,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: EnergySource
-    second: {fileID: 2100000, guid: 0eced91d68b15624abef7eab552a847b, type: 2}
+    second: {fileID: 2100000, guid: 10eb40990e55156438f9a90c048a3a31, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
