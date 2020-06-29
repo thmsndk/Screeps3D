@@ -101,6 +101,13 @@ namespace Screeps3D.RoomObjects
             if (coolDownData != null)
             {
                 obj.Cooldown = coolDownData.n;
+                return;
+            }
+            coolDownData = data["cooldownTime"];
+            if (coolDownData != null)
+            {
+                obj.Cooldown = coolDownData.n;
+                return;
             }
         }
 

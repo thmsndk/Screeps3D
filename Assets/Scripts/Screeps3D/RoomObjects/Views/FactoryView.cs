@@ -1,6 +1,7 @@
 ﻿using Common;
 using UnityEngine;
 using System.Linq;
+using Screeps_API;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -20,6 +21,7 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _l5 = default;
 
         private Factory _factory;
+        private bool _isOnCooldown;
         // TODO: we also need the mineral on the location to get regen time if we want to do something specific in regards to that
 
         private void setLevelDisplay() {
@@ -45,7 +47,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             _factory = roomObject as Factory;
             _factory.LevelMax = 5;
-            _base.materials[3].SetFloat("EmissionStrength", 0f);
+            _isOnCooldown = _factory.Cooldown > ScreepsAPI.Time;
+            _base.materials[0].SetFloat("EmissionStrength", 0f);
 
             _ps.Stop();
             _rawProduct.enabled = false;
@@ -55,25 +58,6 @@ namespace Screeps3D.RoomObjects.Views
 
             setLevelDisplay();
             AdjustScale();
-        }
-
-        public void Delta(JSONObject data)
-        { 
-            // Delta data{"store":{"energy":2644,"battery":4449},"actionLog":{"produce":{"x":21,"y":19,"resourceType":"energy"}},"cooldownTime":1,940481E+07}
-            AdjustScale();
-            if(data.HasField("actionLog")) {
-                if( data["actionLog"].HasField("produce")) {
-                    var product = data["actionLog"]["produce"]["resourceType"];
-                    showProduction( product != null ? product.str : "none");
-                    return;
-                }
-            }
-            showProduction("none");           
-        }
-
-        public void Unload(RoomObject roomObject)
-        {
-            _factory = null;
         }
 
         private bool isRawResource(string thing) {
@@ -155,27 +139,45 @@ namespace Screeps3D.RoomObjects.Views
         }
 
 
+        public void Delta(JSONObject data)
+        { 
+            // Delta data{"store":{"energy":2644,"battery":4449},"actionLog":{"produce":{"x":21,"y":19,"resourceType":"energy"}},"cooldownTime":1,940481E+07}
+            AdjustScale();
+            _isOnCooldown = _factory.Cooldown > ScreepsAPI.Time;
+            _lightningRing.enabled = false;
+
+            if(!data.HasField("actionLog") || !data["actionLog"].HasField("produce") || data["actionLog"]["produce"]["resourceType"] == null) {
+                showProduction("none");
+                return;
+            };
+            var product = data["actionLog"]["produce"]["resourceType"].str;  
+            _lightningRing.enabled = true;
+            showProduction(product);
+            return;           
+        }
+
+        public void Unload(RoomObject roomObject)
+        {
+            _factory = null;
+        }
+
         private void showProduction(string product) {
             if (product == "none") {
                 _ps.Stop();
-                _lightningRing.enabled = false;
                 _rawProduct.enabled = false;
                 _packedProduct.enabled = false;
                 _commodityProduct.enabled = false;
-                _base.materials[3].SetFloat("EmissionStrength", 0f);
-                _base.materials[3].SetColor("EmissionColor", Color.white);
+                _base.materials[0].SetFloat("EmissionStrength", 0f);
                 return;
             }
             
             Color32 c = resourceToColor(product);
-            _lightningRing.enabled = true;
 
             var psMain = _ps.main;
             psMain.startColor = (Color)c;
             _ps.Play();
 
-            _base.materials[3].SetFloat("EmissionStrength", .5f);
-            _base.materials[3].SetColor("EmissionColor", c);
+            _base.materials[2].SetColor("EmissionColor", c);
             _lightningRing.materials[0].SetColor("EmissionColor", c);
 
             if(isRawResource(product)) {
@@ -197,8 +199,11 @@ namespace Screeps3D.RoomObjects.Views
         private void Update()
         {
             if (_factory == null)
-                return;          
-            
+                return;
+
+            if(_isOnCooldown) {
+                _base.materials[0].SetFloat("EmissionStrength", 0.3f + Mathf.PingPong(Time.time, 0.2f));
+            }
 
             // TODO: actions, like creep
         }
