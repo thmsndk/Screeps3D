@@ -27,6 +27,7 @@ namespace Screeps_API
         [SerializeField] private Button _addServer = default;
         [SerializeField] private Button _removeServer = default;
         [SerializeField] private Button _editServer = default;
+        [SerializeField] private Button _exit = default;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
         private CacheList _servers;
@@ -62,6 +63,19 @@ namespace Screeps_API
             _serverListTableViewController = gameObject.GetComponent<ServerListTableViewController>();
 
             _serverListTableViewController.onServerSelected.AddListener(OnServerSelected);
+
+            _exit.onClick.AddListener(OnExit);
+        }
+
+        private void OnExit()
+        {
+#if UNITY_EDITOR
+            // Application.Quit() does not work in the editor so
+            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
         }
 
         private void OnModeChange(GameMode mode)
