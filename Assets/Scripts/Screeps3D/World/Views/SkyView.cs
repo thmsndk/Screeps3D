@@ -30,7 +30,6 @@ namespace Screeps3D.World.Views
         void Start()
         {            
             Volume volume = GetComponent<Volume>();
-            // SkySettings tempSkySett;    
     
             if (volume.profile.TryGet<HDRISky>(out HDRISky tempSkySett))
             {
@@ -87,7 +86,6 @@ namespace Screeps3D.World.Views
                 val = 0.1f * val;
             }
             _skySettings.desiredLuxValue.value = Mathf.Max(_nightLux, _skySettings.desiredLuxValue.value + val);
-            Debug.LogError("_skySettings.desiredLuxValue.value: " + _skySettings.desiredLuxValue.value);
         }
         private void luxSkySet() {
             if(_night) {
