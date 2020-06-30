@@ -179,6 +179,12 @@ namespace Screeps3D.RoomObjects
             {
                 progressObj.Progress = progressData.n;
             }
+
+            var progressTotalData = data["progressTotal"];
+            if (progressTotalData != null)
+            {
+                progressObj.ProgressMax = progressTotalData.n;
+            }
         }
 
         internal static void Level(ILevel obj, JSONObject data)
