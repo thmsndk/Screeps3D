@@ -119,7 +119,7 @@ namespace Screeps3D.RoomObjects.Views
             }
             // creep IS rotated towards source/action so we just need to go forward via Z, and do not care about X axis
             targetLocalPos.x = 0f;
-            targetLocalPos.y = 0f;
+            targetLocalPos.y = 0.3f;
             _creepRoot.transform.localPosition =
                 Vector3.SmoothDamp(_creepRoot.transform.localPosition, targetLocalPos, ref _bumpRef, speed);
             var sqrMag = (_creepRoot.transform.localPosition - targetLocalPos).sqrMagnitude;  
