@@ -17,6 +17,7 @@ namespace Screeps3D.RoomObjects.Views
         private Vector3 _posTarget;
         private Vector3 _posRef;
         private Creep _creep;
+        private bool _dead;
 
         private void setWings(bool setWings) {
             float v = setWings ? 0.2f : 15f;
@@ -63,6 +64,9 @@ namespace Screeps3D.RoomObjects.Views
         private void ScaleCreepSize()
         {
             var percentage = _creep.Body.Parts.Count / 50f;
+            if(percentage == 0) {
+                _dead = true;
+            }
 
             var minVisibility = 0.001f; /*to keep it visible and selectable*/
             var maxVisibility = 1f;
@@ -78,14 +82,12 @@ namespace Screeps3D.RoomObjects.Views
             var visibility = minVisibility + (maxVisibility - minVisibility) * ((current - minimum) / (maximum - minimum));
 
             _vis.SetVisibility(visibility, true);
-            if(percentage == 0) {
-                _underLight.enabled = false;
-            } 
         }
 
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
+            _underLight.intensity = _creep.Hits / _creep.HitsMax  * 0.1f;
 
             var posDelta = _posTarget - RoomObject.Position;
 
@@ -98,9 +100,10 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void Update()
-        {
+        {            
             if (_creep == null)
                 return;
+
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 
             if(_creep.ActionTarget.HasValue) {               

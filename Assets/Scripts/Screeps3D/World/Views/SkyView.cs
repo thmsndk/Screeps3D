@@ -16,7 +16,7 @@ namespace Screeps3D.World.Views
         float _nightExposition = -6f;
         float _expositionChange = 0.001f;
 
-        float _dayLux = 0.1f;
+        float _dayLux = 0.04f;
         float _nightLux = 0.01f;
         float _luxChange = 0.0001f;
 
