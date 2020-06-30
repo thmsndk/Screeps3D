@@ -7,6 +7,8 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _body = default;
         [SerializeField] private Transform _rotationRoot = default;
+        [SerializeField] private Light _underLight = default;
+
         [SerializeField] private Renderer _wingLeft;
         [SerializeField] private Renderer _wingRight;
         [SerializeField] private Renderer _horse;
@@ -76,6 +78,9 @@ namespace Screeps3D.RoomObjects.Views
             var visibility = minVisibility + (maxVisibility - minVisibility) * ((current - minimum) / (maximum - minimum));
 
             _vis.SetVisibility(visibility, true);
+            if(percentage == 0) {
+                _underLight.enabled = false;
+            } 
         }
 
         internal override void Delta(JSONObject data)

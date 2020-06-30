@@ -29,7 +29,8 @@ Transform:
   m_LocalRotation: {x: 0.0000018099951, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 5926778188266675446}
   m_Father: {fileID: 1890823942103009106}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -197,12 +198,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4107335955057814249}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.042, z: 0}
+  m_LocalRotation: {x: 0.7071056, y: -0, z: -0, w: 0.7071081}
+  m_LocalPosition: {x: 0, y: -0.20199999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1890823942103009106}
-  m_RootOrder: 8
+  m_Father: {fileID: 1433726904114601452}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!108 &7390957952053060928
 Light:
@@ -949,6 +950,7 @@ MonoBehaviour:
   _badge: {fileID: 4099124959884727395}
   _body: {fileID: 6962631114861333022}
   _rotationRoot: {fileID: 5178771384550497116}
+  _underLight: {fileID: 7390957952053060928}
   _wingLeft: {fileID: 8803472005155635480}
   _wingRight: {fileID: 6383300503220738902}
   _horse: {fileID: 1154445858026572484}
@@ -1041,7 +1043,6 @@ Transform:
   - {fileID: 4806394003675043912}
   - {fileID: 1980977109774933212}
   - {fileID: 128923328390487242}
-  - {fileID: 5926778188266675446}
   m_Father: {fileID: 5178771384550497116}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
