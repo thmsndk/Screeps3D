@@ -45,6 +45,7 @@ namespace Screeps3D.RoomObjects.Views
         private static readonly Dictionary<string, BeamConfig> BeamConfigs = new Dictionary<string, BeamConfig>
         {   
             // HORSE 0.3f -> 0.7f
+            {"rangedAttack", new BeamConfig(Color.blue, 0.3f, 0.3f)},
             {"rangedHeal", new BeamConfig(Color.green, 0.3f, 0.3f)},
             {"repair", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
             {"build", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
@@ -59,8 +60,8 @@ namespace Screeps3D.RoomObjects.Views
             {"reserveController", new Color32(255, 111, 111, 0)}
         };
 
-        private static readonly Dictionary<string, bool> RangedAttack = new Dictionary<string, bool> {
-            {"rangedAttack", true}            
+        private static readonly Dictionary<string, bool> RangedMassAttack = new Dictionary<string, bool> {
+            {"rangedMassAttack", true}
         };
 
         public void Init()
@@ -82,8 +83,8 @@ namespace Screeps3D.RoomObjects.Views
             _actionEffect = false;
             _creep.ActionTarget = null;
 
-            var rangedAttack = RangedAttack.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
-            if (rangedAttack.Value) {
+            var rma = RangedMassAttack.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
+            if (rma.Value) {
                 EffectsUtility.ElectricExplosion(_creep as RoomObject);
             }
 
