@@ -45,20 +45,23 @@ namespace Screeps3D.RoomObjects.Views
         private static readonly Dictionary<string, BeamConfig> BeamConfigs = new Dictionary<string, BeamConfig>
         {   
             // HORSE 0.3f -> 0.7f
-            {"rangedAttack", new BeamConfig(Color.blue, 0.7f, 0.3f)},
-            {"rangedHeal", new BeamConfig(Color.green, 0.7f, 0.3f)},
-            {"repair", new BeamConfig(Color.yellow, 0.7f, 0.3f)},
-            {"build", new BeamConfig(Color.yellow, 0.7f, 0.3f)},
-            {"upgradeController", new BeamConfig(Color.yellow, 0.7f, 1f)}
+            {"rangedAttack", new BeamConfig(Color.blue, 0.3f, 0.3f)},
+            {"rangedHeal", new BeamConfig(Color.green, 0.3f, 0.3f)},
+            {"repair", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
+            {"build", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
+            {"upgradeController", new BeamConfig(Color.yellow, 0.3f, 1f)}
         };
 
         private static readonly Dictionary<string, Color32> AuraConfigs = new Dictionary<string, Color32> 
         {
-            {"rangedMassAttack", new Color32(255, 255, 255, 0)},
             {"attack", new Color32(255, 111, 111, 0)},
             {"healed", new Color32(65, 140, 65, 0)},
             {"harvest", new Color32(255, 111, 111, 0)},
             {"reserveController", new Color32(255, 111, 111, 0)}
+        };
+
+        private static readonly Dictionary<string, bool> RangedMassAttack = new Dictionary<string, bool> {
+            {"rangedMassAttack", true}
         };
 
         public void Init()
@@ -79,6 +82,11 @@ namespace Screeps3D.RoomObjects.Views
             _animating = true;
             _actionEffect = false;
             _creep.ActionTarget = null;
+
+            var rma = RangedMassAttack.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
+            if (rma.Value) {
+                EffectsUtility.ElectricExplosion(_creep as RoomObject);
+            }
 
             var beam = BeamConfigs.FirstOrDefault(c => _creep.Actions.ContainsKey(c.Key) && !_creep.Actions[c.Key].IsNull);
             if (beam.Value != null) {
@@ -119,7 +127,7 @@ namespace Screeps3D.RoomObjects.Views
             }
             // creep IS rotated towards source/action so we just need to go forward via Z, and do not care about X axis
             targetLocalPos.x = 0f;
-            targetLocalPos.y = 0f;
+            targetLocalPos.y = 0.3f;
             _creepRoot.transform.localPosition =
                 Vector3.SmoothDamp(_creepRoot.transform.localPosition, targetLocalPos, ref _bumpRef, speed);
             var sqrMag = (_creepRoot.transform.localPosition - targetLocalPos).sqrMagnitude;  
@@ -148,9 +156,6 @@ namespace Screeps3D.RoomObjects.Views
         private void doAura(string auraType, Color32 auraColor) {
             var target = _creep.Actions[auraType];
             switch(auraType) {
-                case "rangedMassAttack":
-                    EffectsUtility.ElectricExplosion(_creep as RoomObject);
-                    break;
                 case "attack":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
                     EffectsUtility.Attack((_creep as IBump).BumpPosition);

@@ -4,6 +4,7 @@ using Screeps3D.Player;
 using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,6 +73,7 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
             UpdateAvailable();
 
+            StartCoroutine(SetDeferredContentHeight());
         }
 
         private void OnRoomChange()
@@ -145,11 +147,21 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
                 site.Value.ConstructionSiteItem = newSite;
             }
-            
-            // Set height of content
+        }
+
+        private IEnumerator SetDeferredContentHeight()
+        {
+            yield return new WaitForSeconds(0.1f); // gotta yield to let content size fitter run
+            SetContentHeight();
+        }
+
+        private void SetContentHeight()
+        {
             var constructionSitesRect = constructionSites.GetComponent<RectTransform>();
             var contentRect = constructionSites.transform.parent.GetComponent<RectTransform>();
             contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, constructionSitesRect.sizeDelta.y);
+
+            constructionSitesRect.anchoredPosition = new Vector3(constructionSitesRect.anchoredPosition.x, constructionSitesRect.sizeDelta.y / 2f);
         }
 
         private void ToggleInput(Toggle toggle, bool isOn, string type)

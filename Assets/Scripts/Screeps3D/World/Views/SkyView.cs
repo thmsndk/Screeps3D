@@ -16,9 +16,9 @@ namespace Screeps3D.World.Views
         float _nightExposition = -6f;
         float _expositionChange = 0.001f;
 
-        float _dayLux = 0.1f;
-        float _nightLux = 0.000001f;
-        float _luxChange = 0.0005f;
+        float _dayLux = 0.04f;
+        float _nightLux = 0.01f;
+        float _luxChange = 0.0001f;
 
         float _nightLength = 10f;
         float _currentNightProgress = 0f;
@@ -30,7 +30,6 @@ namespace Screeps3D.World.Views
         void Start()
         {            
             Volume volume = GetComponent<Volume>();
-            // SkySettings tempSkySett;    
     
             if (volume.profile.TryGet<HDRISky>(out HDRISky tempSkySett))
             {
@@ -130,6 +129,9 @@ namespace Screeps3D.World.Views
 
         void Update()
         {
+            if ((long)Time.time % 2 != 0) {
+                return;
+            }
             rotateSky();
             // return;
             luxSkySet();

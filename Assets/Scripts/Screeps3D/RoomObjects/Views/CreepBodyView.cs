@@ -28,7 +28,8 @@ namespace Screeps3D.RoomObjects.Views
             _texture.filterMode = FilterMode.Point;
             //_rend.material.mainTexture = _texture;
             //_rend.material.SetTexture("_MainTex", _texture);
-            _rend.material.SetTexture("_BaseColorMap", _texture);
+            // _rend.material.SetTexture("_BaseColorMap", _texture);
+            _rend.material.SetTexture("BodyMap", _texture);
             
         }
 

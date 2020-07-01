@@ -8,11 +8,6 @@ namespace Screeps_API
     public class ServerMessageMonitor : MonoBehaviour
     {
 
-        public Action<int> OnCpu;
-        
-        public int CPU { get; private set; }
-        public int Memory { get; private set; }
-        
         private Queue<JSONObject> queue = new Queue<JSONObject>();
 
         private void Start()

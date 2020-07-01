@@ -80,6 +80,7 @@ namespace Screeps3D.RoomObjects.Views
                 if (action.Value == null)
                 {
                     _idle = true;
+                    _stand.materials[1].SetColor("EmissionColor", Color.white);
                     return; // Early
                 }
                 _idle = false;
@@ -90,6 +91,7 @@ namespace Screeps3D.RoomObjects.Views
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
 
                 EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(_actionColor, 0f, 0f));
+                _stand.materials[1].SetColor("EmissionColor", _actionColor);
                 // EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
 
                 

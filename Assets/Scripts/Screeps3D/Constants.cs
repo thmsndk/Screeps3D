@@ -136,25 +136,6 @@ namespace Screeps3D
             }
         }
 
-        public static readonly Dictionary<string, float> ConstructionCost = new Dictionary<string, float>
-        {
-            {"spawn", 15000},
-            {"extension", 3000},
-            {"road", 300},
-            {"constructedWall", 1},
-            {"rampart", 1},
-            {"link", 5000},
-            {"storage", 30000},
-            {"tower", 5000},
-            {"observer", 8000},
-            {"powerSpawn", 100000},
-            {"extractor", 5000},
-            {"lab", 50000},
-            {"terminal", 100000},
-            {"container", 5000},
-            {"nuker", 100000},
-        };
-
         public static readonly Dictionary<float, float> MineralDensity = new Dictionary<float, float>
         {
             {1, 15000},
