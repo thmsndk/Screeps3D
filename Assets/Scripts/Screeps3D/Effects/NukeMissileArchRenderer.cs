@@ -107,13 +107,21 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// <returns></returns>
     private Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
     {
+        if(t < 0.015) {
+            return new Vector3(point1.transform.position.x, 1.6f + Mathf.Sin(100 * t) * 13 , point1.transform.position.z);
+        }
+        if ( t >= 0.015 && t <= 0.985 ) {
+            return MathParabola.Parabola(point1.transform.position, point2.transform.position, Constants.ShardHeight, t);
+        }
+        return new Vector3(point2.transform.position.x, 1.6f + Mathf.Sin(100 * t) * 13 , point2.transform.position.z);
         //float x = t * maxDistance;
         //float y = x * Mathf.Tan(radianAngle) - ((gravity * x * x)/(2 * velocity * velocity * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle)));
         //return new Vector3(x, y, point1.position.z);
-        return MathParabola.Parabola(point1.transform.position, point2.transform.position, Constants.ShardHeight / 2, t);
     }
 
-
+    private Vector3 GetRaisePoint(float t) {
+        return point1.transform.position + new Vector3(0, 2 + t * 1500, 0);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -123,9 +131,11 @@ public class NukeMissileArchRenderer : MonoBehaviour
     internal void Progress(float progress)
     {
         missile.transform.position = CalculateArcPoint(progress);
+        if(progress >= 0.015) {
+            var nextPoint = CalculateArcPoint(progress + 0.001f);
+            missile.transform.LookAt(nextPoint);
+        }
         //Debug.Log($"{progress} {missile.transform.position}");
-        var nextPoint = CalculateArcPoint(progress + 0.001f);
-        missile.transform.LookAt(nextPoint);
     }
 }
 
@@ -134,7 +144,7 @@ public class MathParabola
 
     public static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
     {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
+        Func<float, float> f = x => -4 * height * x * x + 4 * height * x + 15f;
 
         var mid = Vector3.Lerp(start, end, t);
 
