@@ -10,6 +10,10 @@ public class TabGroup : MonoBehaviour
 
     public List<GameObject> tabs;
 
+    public Color32 tabColor;
+    public Color32 tabHoverColor;
+    public Color32 tabSelectedColor;
+
     public void Subscribe(TabButton button)
     {
         if (tabButtons == null)
@@ -22,16 +26,29 @@ public class TabGroup : MonoBehaviour
 
     public void OnTabEnter(TabButton button)
     {
-
+        if (selectedTab != button)
+        {
+            button.background.color = tabHoverColor;
+        }
     }
     public void OnTabExit(TabButton button)
     {
-
+        if (selectedTab != button)
+        {
+            button.background.color = tabColor;
+        }
     }
 
     public void OnTabSelected(TabButton button)
     {
+        if (selectedTab != null)
+        {
+            selectedTab.background.color = tabColor;
+        }
+
         selectedTab = button;
+
+        button.background.color = tabSelectedColor;
 
         int index = button.transform.GetSiblingIndex();
         for (int i = 0; i < tabs.Count; i++)
@@ -48,8 +65,9 @@ public class TabGroup : MonoBehaviour
             {
                 continue;
             }
+
             // reset
-            //button.background.sprite = null
+            button.background.color = tabColor;
         }
     }
 
