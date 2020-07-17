@@ -27,7 +27,7 @@ namespace Assets.Scripts.Screeps3D.Menus.Options
         {
             resolutionDropdown.ClearOptions();
             List<string> options = new List<string>();
-            resolutions = Screen.resolutions;
+            resolutions = Screen.resolutions.OrderByDescending(r => r.width).ThenByDescending(r => r.height).ToArray();
             int currentResolutionIndex = 0;
 
             for (int i = 0; i < resolutions.Length; i++)
@@ -54,6 +54,9 @@ namespace Assets.Scripts.Screeps3D.Menus.Options
             qualityDropdown.value = QualitySettings.GetQualityLevel();
 
 
+            resolutionDropdown.onValueChanged.AddListener(SetResolution);
+            qualityDropdown.onValueChanged.AddListener(SetQuality);
+
             LoadSettings(currentResolutionIndex);
         }
 
@@ -72,6 +75,7 @@ namespace Assets.Scripts.Screeps3D.Menus.Options
         {
             Resolution resolution = resolutions[resolutionIndex];
             Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+            PlayerPrefs.SetInt("ResolutionPreference", resolutionIndex);
         }
 
         public void SetTextureQuality(int textureIndex)
@@ -120,7 +124,8 @@ namespace Assets.Scripts.Screeps3D.Menus.Options
             ////        break;
             ////}
 
-            qualityDropdown.value = qualityIndex;
+            //qualityDropdown.value = qualityIndex;
+            PlayerPrefs.SetInt("QualitySettingPreference", qualityIndex);
         }
 
         public void SaveSettings()

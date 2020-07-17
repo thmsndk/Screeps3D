@@ -3505,12 +3505,12 @@ PrefabInstance:
     - target: {fileID: 973210978857832094, guid: cc126b576955d094c9470b12a4313e1a,
         type: 3}
       propertyPath: m_text
-      value: Graphics
+      value: Video
       objectReference: {fileID: 0}
     - target: {fileID: 973210978857832094, guid: cc126b576955d094c9470b12a4313e1a,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 973210978857832094, guid: cc126b576955d094c9470b12a4313e1a,
         type: 3}
@@ -3635,7 +3635,7 @@ PrefabInstance:
     - target: {fileID: 973210980226939119, guid: cc126b576955d094c9470b12a4313e1a,
         type: 3}
       propertyPath: m_Name
-      value: GraphicsTabButton
+      value: VideoTabButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc126b576955d094c9470b12a4313e1a, type: 3}
