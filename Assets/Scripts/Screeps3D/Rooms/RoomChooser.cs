@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Common;
+using Assets.Scripts.Common;
 using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 using Common;
 using Screeps_API;
@@ -248,7 +248,9 @@ namespace Screeps3D.Rooms
 
                 if (rooms.Count() > 0)
                 {
-                    var room = rooms.ElementAt(Mathf.FloorToInt(random.Next() * Math.Min(_pvpSpectateBias, rooms.Count())));
+                    var index = Mathf.FloorToInt(random.Next(rooms.Count()) * Math.Min(_pvpSpectateBias, rooms.Count()));
+                    Debug.Log($"warpath room index {index}");
+                    var room = rooms.ElementAt(index);
                     if (PlayerPosition.Instance.RoomName == room.RoomName)
                     {
                         _pvpSpectateBias += 0.5f;
