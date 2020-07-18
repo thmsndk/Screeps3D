@@ -1,5 +1,6 @@
-using Assets.Scripts.Common;
+﻿using Assets.Scripts.Common;
 using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+using Assets.Scripts.Screeps3D.Rooms.Views;
 using Common;
 using Screeps_API;
 using Screeps3D.Player;
@@ -75,16 +76,20 @@ namespace Screeps3D.Rooms
 
             if (isOn)
             {
+                PlaceSpawnView.EnableOverlay = false;
                 _findPvpRooms = FindPvpRoom();
                 StartCoroutine(_findPvpRooms);
             }
             else
             {
+                PlaceSpawnView.EnableOverlay = true;
                 if (_findPvpRooms != null)
                 {
                     StopCoroutine(_findPvpRooms);
                 }
             }
+
+            Debug.Log($"PlaceSpawnView.EnableOverlay {PlaceSpawnView.EnableOverlay}");
         }
 
         private void OnToggleSpectate(bool isOn)
@@ -93,12 +98,14 @@ namespace Screeps3D.Rooms
 
             if (isOn)
             {
+                PlaceSpawnView.EnableOverlay = false;
                 // TODO: Find player owned rooms
                 _findPlayerOwnedRooms = FindPlayerOwnedRoom();
                 StartCoroutine(_findPlayerOwnedRooms);
             }
             else
             {
+                PlaceSpawnView.EnableOverlay = true;
                 if (_findPlayerOwnedRooms != null)
                 {
                     StopCoroutine(_findPlayerOwnedRooms);
