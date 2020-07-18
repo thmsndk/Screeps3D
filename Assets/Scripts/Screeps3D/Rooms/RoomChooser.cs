@@ -187,28 +187,80 @@ namespace Screeps3D.Rooms
             ChooseRoomWithPVPOrOwnedRoom();
         }
 
+        private float _pvpSpectateBias = 0;
         private void ChooseRoomWithPVPOrOwnedRoom()
         {
-            //// requires screepsmod-admin-utils
-            //https://botarena.screepspl.us/api/experimental/pvp?interval=100
-            var body = new RequestBody();
-            body.AddField("interval", "100");
-            ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body, (jsonString) =>
+            if (ScreepsAPI.Cache.Official)
             {
-                var obj = new JSONObject(jsonString);
-                var rooms = obj["pvp"][_shardInput.value]["rooms"].list;
-
-                rooms.Sort((a, b) =>
+                //// requires screepsmod-admin-utils
+                //https://botarena.screepspl.us/api/experimental/pvp?interval=100
+                var body = new RequestBody();
+                body.AddField("interval", "100");
+                ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body, (jsonString) =>
                 {
-                    return (int)b.GetField("lastPvpTime").n - (int)a.GetField("lastPvpTime").n;
+                    var obj = new JSONObject(jsonString);
+                    var rooms = obj["pvp"][_shardInput.value]["rooms"].list;
+
+                    rooms.Sort((a, b) =>
+                    {
+                        return (int)b.GetField("lastPvpTime").n - (int)a.GetField("lastPvpTime").n;
+                    });
+
+                    // TODO: get the room viewer to work, so it renders the room you have "selected"
+                    if (rooms.Count > 0)
+                    {
+                        var room = rooms.ElementAt(random.Next(rooms.Count));
+                        var roomName = room.GetField("_id").str;
+                        _roomInput.text = roomName;
+                        this.GetAndChooseRoom(roomName);
+                    }
+                    else
+                    {
+                        ChooseRandomOwnedRoom();
+                    }
+
+
+                    /*
+                     * {
+                        "ok": 1,
+                        "time": 43584,
+                        "pvp": {
+                            "shardname": {
+                                "rooms": [{
+                                        "_id": "E1S7",
+                                        "lastPvpTime": 43113
+                                    }]
+                                }
+                            }
+                        }
+                     */
                 });
 
-                // TODO: get the room viewer to work, so it renders the room you have "selected"
-                if (rooms.Count > 0)
+            }
+            else
+            {
+                // TODO: verify if the warpath feature is enabled, admin utils gives us this though, so we don't really need the experimental endpoint?
+                // TODO: perhaps we need to still call the experimental endpoint initially to get an initial list to choose from?
+                // Sorting inspired from screeps-cap https://github.com/ags131/screeps-cap/blob/bb9d3954fbd69992b1fa4532ecaf3fe6d797c650/index.js#L260-L261
+                var rooms = ScreepsAPI.Warpath.Rooms
+                    .OrderByDescending(r => ((int)r.Classification * 1000) - (ScreepsAPI.Time - r.LastPvpTime))
+                    .Where(r => r.LastPvpTime > ScreepsAPI.Time - 20);
+
+                if (rooms.Count() > 0)
                 {
-                    var room = rooms.ElementAt(random.Next(rooms.Count));
-                    var roomName = room.GetField("_id").str;
+                    var room = rooms.ElementAt(Mathf.FloorToInt(random.Next() * Math.Min(_pvpSpectateBias, rooms.Count())));
+                    if (PlayerPosition.Instance.RoomName == room.RoomName)
+                    {
+                        _pvpSpectateBias += 0.5f;
+                    }
+                    else
+                    {
+                        _pvpSpectateBias = 0;
+                    }
+
+                    var roomName = room.RoomName;
                     _roomInput.text = roomName;
+                    Debug.Log($"Going to room {roomName} bias: {_pvpSpectateBias} Classification {room.Classification}, Defender: {room.Defender?.Username} , Attackers: {string.Join(",", room.Attackers.Select(a => a.Username))}");
                     this.GetAndChooseRoom(roomName);
                 }
                 else
@@ -216,29 +268,16 @@ namespace Screeps3D.Rooms
                     ChooseRandomOwnedRoom();
                 }
 
-
-                /*
-                 * {
-	                "ok": 1,
-	                "time": 43584,
-	                "pvp": {
-		                "shardname": {
-			                "rooms": [{
-					                "_id": "E1S7",
-					                "lastPvpTime": 43113
-				                }]
-                            }
-                        }
-                    }
-                 */
-            });
+            }
         }
 
         private void ChooseRandomOwnedRoom()
         {
-            if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
+            if (!string.IsNullOrEmpty(PlayerPosition.Instance.ShardName) && MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
             {
-                var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.Level.HasValue && r.Level > 0);
+                var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.Level.HasValue && r.Level > 0)
+                    // remove invaders and source keepers
+                    .Where(r => r.User.UserId != Constants.InvaderUserId);
 
                 if (ownedRooms.Any())
                 {

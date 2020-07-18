@@ -5,6 +5,9 @@ namespace Screeps3D
 {
     public static class Constants
     {
+        public const string InvaderUserId = "2";
+        public const string SourceKeeperUserId = "3";
+
         public const string TypeStorage = "storage";
         public const string TypeExtension = "extension";
         public const string TypeSpawn = "spawn";
