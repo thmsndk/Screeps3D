@@ -80,6 +80,11 @@ namespace Screeps3D.RoomObjects
         float Cooldown { get; set; }
     }
 
+    internal interface ICooldownTime : IRoomObject
+    {
+        long CooldownTime { get; set; }
+    }
+
     internal interface IEffect {
         string effect {get; set;}
         string power {get; set;}
@@ -127,9 +132,14 @@ namespace Screeps3D.RoomObjects
         ScreepsUser ReservedBy { get; set; }
     }
 
-    internal interface IActionObject
+    internal interface IActionObject : IRoomObject
     {
         Dictionary<string, JSONObject> Actions { get; }
+    }
+
+    internal interface ICreepAction : IActionObject
+    {
+        Vector3? ActionTarget { get; set; }
     }
 
     internal interface IBump

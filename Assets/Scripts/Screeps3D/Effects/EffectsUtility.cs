@@ -6,6 +6,11 @@ namespace Screeps3D.Effects
 {
     public static class EffectsUtility
     {
+        public static void ArcBeam(Transform sTransform, Vector3 targetPos, BeamConfig config)
+        {
+            var startPos = sTransform.position;
+            ArcBeam(startPos, targetPos, config.Color);
+        }
         public static void Beam(RoomObject origin, JSONObject target, BeamConfig config)
         {
             var startPos = origin.View.transform.position + new Vector3(0, config.StartHeight, 0);
@@ -13,16 +18,38 @@ namespace Screeps3D.Effects
             Beam(startPos, endPos, config.Color);
         }
         
-        public static void Attack(RoomObject origin, Vector3 targetPos) {
+        public static void Attack(Vector3 targetPos) {
             var go = PoolLoader.Load(AttackEffect.PATH);
             var effect = go.GetComponent<AttackEffect>();
-            effect.Load(origin, targetPos);
+            effect.Load(targetPos);
+        }
+        public static void Heal(RoomObject origin) {
+            var go = PoolLoader.Load(HealEffect.PATH);
+            var effect = go.GetComponent<HealEffect>();
+            effect.Load(origin);
+        }
+        public static void Harvest(Vector3 targetPos) {
+            var go = PoolLoader.Load(HarvestEffect.PATH);
+            var effect = go.GetComponent<HarvestEffect>();
+            effect.Load(targetPos);
+        }
+
+        public static void Reserve(Vector3 targetPos) {
+            var go = PoolLoader.Load(ReserveEffect.PATH);
+            var effect = go.GetComponent<ReserveEffect>();
+            effect.Load(targetPos);
         }
 
         public static void Beam(Vector3 startPos, Vector3 endPos, Color color)
         {
             var go = PoolLoader.Load(BeamEffect.PATH);
             var effect = go.GetComponent<BeamEffect>();
+            effect.Load(startPos, endPos, color);
+        }
+        public static void ArcBeam(Vector3 startPos, Vector3 endPos, Color color)
+        {
+            var go = PoolLoader.Load(ArcBeamEffect.PATH);
+            var effect = go.GetComponent<ArcBeamEffect>();
             effect.Load(startPos, endPos, color);
         }
 

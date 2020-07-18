@@ -18,8 +18,6 @@ namespace Screeps3D.RoomObjects.Views
         {
             _vis.Show();
             _collider.enabled = false;
-            var ls = _rend.transform.localScale;
-            _rend.transform.localScale = new Vector3(ls.x, 2, ls.z);
         }
         public void Hide()
         {

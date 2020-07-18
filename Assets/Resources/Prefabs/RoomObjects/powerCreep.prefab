@@ -8,11 +8,11 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6293215145340076790}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.6170483
+  m_Center: {x: 0, y: 0, z: -0.11704832}
 --- !u!114 &-8842602770909772423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1558d39b4154667a6f0bfcbeef18a9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rotationRoot: {fileID: 0}
 --- !u!114 &2788029097493528501
 MonoBehaviour:
   m_ObjectHideFlags: 0

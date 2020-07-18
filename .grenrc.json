@@ -1,0 +1,14 @@
+{
+    "dataSource": "commits",
+	"ignoreIssuesWith": [
+        "wontfix",
+        "duplicate"
+    ],
+	"groupBy": {
+        "🚀 Enhancements:": ["enhancement", "internal"],
+        "🐛 Bug Fixes:": ["bug"]
+    },
+    "prefix": "v",
+    "includeMessages": "commits",
+    "changelogFilename": "CHANGELOG.md"
+}

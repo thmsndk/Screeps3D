@@ -64,12 +64,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - ColorMix: 1
+    - ColorMix: 0.493
     - EmissionOnOff: 0
     - EmissionStrength: 0
-    - MetallicStrength: 0.7
-    - NormalStrenght: 0.5
-    - SmoothStrength: 0.5
+    - MetallicStrength: 0.5
+    - NormalStrenght: 0.6
+    - SmoothStrength: 0
     - UVScale: 1
     - Vector1_A84FA659: 1
     - Vector1_E094F33F: 0.5
@@ -108,7 +108,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - BaseColor: {r: 0, g: 0, b: 0, a: 0}
+    - BaseColor: {r: 0.30024028, g: 0.3453631, b: 0.3679245, a: 0}
     - Color_49862E07: {r: 0, g: 0, b: 0, a: 0}
     - Color_D9DD3E10: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0}
     - EmissionColor: {r: 1, g: 0.68235296, b: 0, a: 1}

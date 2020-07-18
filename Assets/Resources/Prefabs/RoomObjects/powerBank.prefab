@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &6228776617933477796
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6465305768847032961}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.1686685, y: 2.2704358, z: 2.082749}
+  m_Center: {x: 0.003445506, y: 1.142478, z: -0.011539221}
 --- !u!114 &-6309812485210001425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,21 +66,7 @@ MonoBehaviour:
   _p8: {fileID: 32767617598574454}
   _p9: {fileID: 8465351379094922514}
   _p10: {fileID: 1185290656633956721}
-  _spinner: {fileID: 1887791508466453769}
   _ps: {fileID: 8286409461812026392}
---- !u!65 &6228776617933477796
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6465305768847032961}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6296380342894257714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5054,12 +5053,6 @@ GameObject:
 --- !u!4 &8062068471858442386 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 4258eace69fee87469ba9beed006f47c,
-    type: 3}
-  m_PrefabInstance: {fileID: 3069357361054751624}
-  m_PrefabAsset: {fileID: 0}
---- !u!111 &1887791508466453769 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: -5716681864270162303, guid: 4258eace69fee87469ba9beed006f47c,
     type: 3}
   m_PrefabInstance: {fileID: 3069357361054751624}
   m_PrefabAsset: {fileID: 0}

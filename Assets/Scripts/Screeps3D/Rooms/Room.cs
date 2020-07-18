@@ -35,6 +35,7 @@ namespace Screeps3D.Rooms
         public event Action<bool> OnShowObjects;
         public event Action<bool> OnShowMap;
         public event Action<bool> OnShow;
+        public event Action OnView;
 
         public Room(string roomName, string shardName, string xDir, string yDir, int shardNumber, int xCoord, int yCoord)
         {
@@ -106,6 +107,7 @@ namespace Screeps3D.Rooms
         private void AssignView()
         {
             View = RoomViewFactory.GetInstance(this);
+            OnView?.Invoke();
         }
     }
 }

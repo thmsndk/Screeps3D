@@ -58,7 +58,7 @@ Material:
     m_Floats:
     - ColorMix: 0.7
     - EmissionOnOff: 1
-    - EmissionStrength: 46
+    - EmissionStrength: 4
     - MetallicStrength: 0.91
     - NormalStrenght: 0.07
     - Scaling: 0.58

@@ -42,7 +42,6 @@ namespace Screeps3D.RoomObjects
         internal Portal()
         {
         }
-
         internal override void Delta(JSONObject delta, Room room)
         {
             base.Delta(delta, room);

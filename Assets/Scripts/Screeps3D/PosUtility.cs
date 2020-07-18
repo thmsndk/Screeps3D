@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Screeps3D.RoomObjects;
 using Screeps3D.Rooms;
 using UnityEngine;
@@ -18,11 +19,11 @@ namespace Screeps3D
             var y = 0;
             if (posData["x"])
             {
-                x = (int) posData["x"].n;
+                x = (int)posData["x"].n;
             }
             if (posData["y"])
             {
-                y = (int) posData["y"].n;
+                y = (int)posData["y"].n;
             }
             return Convert(x, y, room);
         }
@@ -41,10 +42,24 @@ namespace Screeps3D
 
         internal static Vector2Int ConvertToXY(Vector3 point, Room room)
         {
-            var basePosition = room.Position - point;
-            var x = Mathf.FloorToInt(Math.Abs(basePosition.x));
-            var y = 49 - Mathf.FloorToInt(Math.Abs(basePosition.z));
+            var basePosition = point - room.Position;
+            var x = Mathf.FloorToInt(Math.Abs(basePosition.x + 0.5f));
+            var y = 49 - Mathf.FloorToInt(Math.Abs(basePosition.z + 0.5f));
             return new Vector2Int(x, y);
+        }
+
+        internal static  (int, int) XYFromRoom(string room)
+        {
+            var match = Regex.Match(room, @"^(?<dx>[WE])(?<x>\d+)(?<dy>[NS])(?<y>\d+)$");
+
+            var dx = match.Groups["dx"].Value;
+            var x = int.Parse(match.Groups["x"].Value);
+
+            var dy = match.Groups["dy"].Value;
+            var y = int.Parse(match.Groups["y"].Value);
+            if (dx == "W") x = -x - 1;
+            if (dy == "N") y = -y - 1;
+            return (x, y);
         }
     }
 }

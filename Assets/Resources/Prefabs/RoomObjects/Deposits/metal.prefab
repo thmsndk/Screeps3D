@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deposit: {fileID: 3424356038528277817}
-  _collider: {fileID: 3330056101996704243}
+  _collider: {fileID: 1287410445919902285}
   _vis: {fileID: 3333163265201434217}
 --- !u!1001 &3447198990839991649
 PrefabInstance:
@@ -114,18 +114,32 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4470708617799309100, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.3569679
+      objectReference: {fileID: 0}
+    - target: {fileID: 4470708617799309100, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.76527023
+      objectReference: {fileID: 0}
+    - target: {fileID: 4470708617799309100, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.57688034
+      objectReference: {fileID: 0}
+    - target: {fileID: 4470708617799309100, guid: 73337e8c70133be46886aad64643191b,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.076880336
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1453467313594893630, guid: 73337e8c70133be46886aad64643191b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 73337e8c70133be46886aad64643191b, type: 3}
 --- !u!1 &3446327533135082359 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1470691814702614, guid: 73337e8c70133be46886aad64643191b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3447198990839991649}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &3330056101996704243 stripped
-SphereCollider:
-  m_CorrespondingSourceObject: {fileID: 135201818668498066, guid: 73337e8c70133be46886aad64643191b,
     type: 3}
   m_PrefabInstance: {fileID: 3447198990839991649}
   m_PrefabAsset: {fileID: 0}
@@ -141,6 +155,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &1287410445919902285 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 4470708617799309100, guid: 73337e8c70133be46886aad64643191b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3447198990839991649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &3424356038528277817 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 23407070794174552, guid: 73337e8c70133be46886aad64643191b,

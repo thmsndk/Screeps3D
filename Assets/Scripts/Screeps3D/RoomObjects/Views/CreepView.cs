@@ -7,6 +7,8 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _body = default;
         [SerializeField] private Transform _rotationRoot = default;
+        [SerializeField] private Light _underLight = default;
+
         [SerializeField] private Renderer _wingLeft;
         [SerializeField] private Renderer _wingRight;
         [SerializeField] private Renderer _horse;
@@ -15,6 +17,7 @@ namespace Screeps3D.RoomObjects.Views
         private Vector3 _posTarget;
         private Vector3 _posRef;
         private Creep _creep;
+        private bool _dead;
 
         private void setWings(bool setWings) {
             float v = setWings ? 0.2f : 15f;
@@ -33,25 +36,24 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
-            } else {                
-                _badge.materials[0].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+            } else {
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
-                _badge.materials[0].SetFloat("EmissionStrength", 3f);
+                _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
 
             // HORSE
             // do not forget to do reposition in .blend files ! 
             // to uncomment:
-            // setWings(false);
-            // setHorse(false);
+            setWings(false);
+            setHorse(false);
             // to comment:
-            if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
-                setWings(true);
-                setHorse(false);
-            } else {
-                setWings(false);
-                setHorse(true);
-            }
+            // if (_creep.Owner.Username == "Tigga" || _creep.Owner.Username == "Geir1983") {
+            //     setWings(true);
+            //     setHorse(false);
+            // } else {
+            //     setWings(false);
+            //     setHorse(true);
+            // }
 
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
@@ -62,6 +64,9 @@ namespace Screeps3D.RoomObjects.Views
         private void ScaleCreepSize()
         {
             var percentage = _creep.Body.Parts.Count / 50f;
+            if(percentage == 0) {
+                _dead = true;
+            }
 
             var minVisibility = 0.001f; /*to keep it visible and selectable*/
             var maxVisibility = 1f;
@@ -82,6 +87,7 @@ namespace Screeps3D.RoomObjects.Views
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
+            _underLight.intensity = _creep.Hits / _creep.HitsMax  * 0.1f;
 
             var posDelta = _posTarget - RoomObject.Position;
 
@@ -94,16 +100,19 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void Update()
-        {
+        {            
             if (_creep == null)
                 return;
+
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 
-            if(_creep.actionTarget.HasValue) {               
+            if(_creep.ActionTarget.HasValue) {               
                 // creep does something, keep it rotated towards target
-                Vector3 relativePos = _rotationRoot.position - (Vector3)_creep.actionTarget;
-                Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
-                _rotationRoot.rotation = tRotation;
+                Vector3 relativePos = _rotationRoot.position - (Vector3)_creep.ActionTarget;
+                if (relativePos != Vector3.zero) {
+                    Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
+                    _rotationRoot.rotation = tRotation;
+                }
             } else {
                 // keep rotation towards move direction
                 _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _creep.Rotation, 

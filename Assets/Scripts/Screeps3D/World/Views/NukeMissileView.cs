@@ -68,13 +68,16 @@ namespace Screeps3D.World.Views
                 var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(Overlay.Shard, Overlay.LaunchRoomName);
                 if (launchRoomInfo != null)
                 {
+                    _nuke.materials[3].SetColor("BaseColor", new Color(0.7f, 0.7f, 0.7f, 1f));
+                    _nuke.materials[3].SetTexture("Colortexture", launchRoomInfo.User?.Badge);
+                    _nuke.materials[3].SetFloat("ColorMix", 1f);
                     _nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
                     _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
-                    _nuke.materials[3].SetFloat("EmissionStrength", 4);
+                    _nuke.materials[3].SetFloat("EmissionStrength", .3f);
                     badgeSet = true;
                 }
             }
-            float decayEmission = 2f + Mathf.Abs(Mathf.Sin(Time.time)) * 3;
+            float decayEmission = .5f + Mathf.Abs(Mathf.Sin(Time.time)) * .3f;
             _nuke.materials[3].SetFloat("EmissionStrength", decayEmission);
 
             // TODO: should we simulate movement / progress in between nukemonitor updates so the misile moves "smoothly"? this neeeds to be in update then. and not sure calling arcRenderer.Progress works, we then need a "targetProgress" or something like that, could let us inspire by creep movement between ticks

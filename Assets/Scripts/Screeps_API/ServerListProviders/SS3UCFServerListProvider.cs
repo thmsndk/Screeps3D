@@ -132,12 +132,18 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
 
             var configPaths = new List<string>
             {
-                Environment.GetEnvironmentVariable("$SCREEPS_CONFIG"),
+                Environment.GetEnvironmentVariable("SCREEPS_CONFIG"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) ?? string.Empty, "screeps/config.yaml"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) ?? string.Empty, "screeps/config.yml"),
                 Path.Combine(Environment.CurrentDirectory, ".screeps.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("$XDG_CONFIG_HOME") ?? string.Empty, "screeps/config.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("$HOME") ?? string.Empty, ".config/screeps/config.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("$HOME") ?? string.Empty, ".screeps.yaml"),
+                Path.Combine(Environment.CurrentDirectory, ".screeps.yml"),
+                /* Linux / Mac*/
+                Path.Combine(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? string.Empty, "screeps/config.yaml"),
+                Path.Combine(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? string.Empty, "screeps/config.yml"),
+                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".config/screeps/config.yaml"),
+                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".config/screeps/config.yml"),
+                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".screeps.yaml"),
+                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".screeps.yml"),
 
             };
 

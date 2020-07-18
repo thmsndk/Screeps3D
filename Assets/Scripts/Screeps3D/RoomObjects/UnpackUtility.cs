@@ -101,6 +101,17 @@ namespace Screeps3D.RoomObjects
             if (coolDownData != null)
             {
                 obj.Cooldown = coolDownData.n;
+                return;
+            }
+        }
+
+        internal static void Cooldown(ICooldownTime obj, JSONObject data)
+        {
+            var coolDownData = data["cooldownTime"];
+            if (coolDownData != null)
+            {
+                obj.CooldownTime = (long)coolDownData.n;
+                return;
             }
         }
 
@@ -167,6 +178,12 @@ namespace Screeps3D.RoomObjects
             if (progressData != null)
             {
                 progressObj.Progress = progressData.n;
+            }
+
+            var progressTotalData = data["progressTotal"];
+            if (progressTotalData != null)
+            {
+                progressObj.ProgressMax = progressTotalData.n;
             }
         }
 

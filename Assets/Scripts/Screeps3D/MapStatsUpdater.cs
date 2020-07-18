@@ -14,6 +14,8 @@ namespace Screeps3D
     // This seems more like "room info" in regards to status of the room
     public class MapStatsUpdater : BaseSingleton<MapStatsUpdater>
     {
+        public event Action OnMapStatsUpdated;
+
         private void Start()
         {
             StartCoroutine(Scan());
@@ -103,6 +105,8 @@ namespace Screeps3D
             Debug.Log("Unpacking users done");
 
             yield return UnpackRooms(shard, result);
+
+            OnMapStatsUpdated?.Invoke();
         }
 
         private IEnumerator UnpackRooms(string shard, JSONObject result, bool wait = true)
@@ -240,7 +244,7 @@ namespace Screeps3D
             var rooms = new List<string>();
             ////var roomName = jsonRoom["id"].str;
 
-            (int x, int y) = XYFromRoom(roomName);
+            (int x, int y) = PosUtility.XYFromRoom(roomName);
             for (var xx = 0; xx < 12; xx++)
             {
                 for (var yy = 0; yy < 12; yy++)
@@ -271,21 +275,7 @@ namespace Screeps3D
             return $"{dx}{x}{dy}{y}";
         }
 
-        // TODO: maybe we should not regex?
-        private (int, int) XYFromRoom(string room)
-        {
-            var match = Regex.Match(room, @"^(?<dx>[WE])(?<x>\d+)(?<dy>[NS])(?<y>\d+)$");
-
-            var dx = match.Groups["dx"].Value;
-            var x = int.Parse(match.Groups["x"].Value);
-
-            var dy = match.Groups["dy"].Value;
-            var y = int.Parse(match.Groups["y"].Value);
-            if (dx == "W") x = -x - 1;
-            if (dy == "N") y = -y - 1;
-            return (x, y);
-        }
-
+        
         private string SectorCenterFromRoom(string room)
         {
             int split = room.IndexOf('N');
@@ -309,6 +299,16 @@ namespace Screeps3D
             string x = room.Substring(0, split - 1).Substring(1);
             string y = room.Substring(split, room.Length - split - 1).Substring(1);
 
+            if (room.IndexOf('W') != -1)
+            {
+                x = "-" + x;
+            }
+
+            if (room.IndexOf('N') != -1)
+            {
+                y = "-" + y;
+            }
+
             return (int.Parse($"{x}5"), int.Parse($"{y}5"));
         }
     }
@@ -324,6 +324,9 @@ namespace Screeps3D
         /// status can at least be "normal" or "out of borders" 
         /// </summary>
         public string Status { get; set; }
+
+        public const string STATUS_NORMAL = "normal";
+        public const string STATUS_OUT_OF_BORDERS = "out of borders";
 
         public bool IsNoviceZone { get; set; }
         public string NoviceTime { get; set; }
@@ -355,7 +358,7 @@ namespace Screeps3D
 
         internal void Unpack(JSONObject roomStats)
         {
-            var status = roomStats["status"];
+            var status = roomStats["status"]; // "out of borders"
             var own = roomStats["own"];
             if (own != null && !own.IsNull)
             {

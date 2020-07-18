@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Screeps_API
@@ -62,6 +64,11 @@ namespace Screeps_API
             var user = new ScreepsUser(id, username, cpu, badge, isNpc);
             _users[id] = user;
             return user;
+        }
+
+        internal ScreepsUser GetUserByName(string username)
+        {
+            return _users.SingleOrDefault(u => u.Value.Username == username).Value;
         }
     }
 }

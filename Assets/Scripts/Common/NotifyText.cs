@@ -9,6 +9,12 @@ namespace Common
         [SerializeField] private TextMeshProUGUI _label = default;
         private float _expire;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="color"></param>
+        /// <param name="duration"> duration in seconds untill expiration</param>
         public static void Message(string msg, Color color = default(Color), float duration = 5)
         {
             if (color == default(Color))

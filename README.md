@@ -34,6 +34,14 @@ Here are the major areas that we would like to tackle next:
 Want to try the client?  
 Download a release from the [release page](https://github.com/thmsndk/Screeps3D/releases)
 
+## Connecting to a server
+* Official client needs an auth token https://docs.screeps.com/auth-tokens.html
+* Private server needs two mods. 
+  * [screepsmod-auth](https://github.com/ScreepsMods/screepsmod-auth) Allows users to assign a password and authenticate
+  * [screepsmod-admin-utils](https://github.com/ScreepsMods/screepsmod-admin-utils) Support for a lot of official endpoints, some new ones and aditional utility features
+ 
+* Currently you need to press the "Save" button to connect to allow it to persist credentials, will be reworked later.
+
 ## Contributing
 The Project is built using Unity and C# so the following software is required to run it.
 

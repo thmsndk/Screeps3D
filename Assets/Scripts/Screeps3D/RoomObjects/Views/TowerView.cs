@@ -13,15 +13,31 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _stand = default;
         [SerializeField] private Renderer _body = default;
         [SerializeField] private Transform _rotationRoot = default;
+        [SerializeField] private LineRenderer _lineRenderer = default;
         private Quaternion _targetRot;
         private bool _idle;
         private float _nextRot;
         private bool _rotating;
         private Tower _tower;
         private Color _actionColor;
-        private LineRenderer _lineRenderer;
+
         private IEnumerator _powerUp;
         private IEnumerator _rotator;
+
+        // New shit
+        [SerializeField] private Transform _barrelEnd = default;
+        private float _maxParabolaHeight = 0.95f;
+        private Vector3? _sPos;
+        private Vector3? _tPos;
+        private float radianAngle = 5f;
+        private float _angle = 1f;
+        private int _resolution = 1000;
+        private int _vertexCount = 12;
+        
+        private float _gravity = Mathf.Abs(Physics.gravity.y);
+        private float _radianAngle = 30f;
+        private float _velocity = 5f;
+
 
         public void Init()
         {
@@ -46,28 +62,41 @@ namespace Screeps3D.RoomObjects.Views
             AdjustScale();
         }
 
+
         public void Delta(JSONObject data)
         {
             AdjustScale();
 
             if (_tower != null)
             {
+                // DEBUG                
+                // _idle = false;
+                // var targetPos = _barrelEnd.position + new Vector3(0, -0.95f, 15);
+                // EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(Color.green, 0f, 0f));
+                // return;
+                // end DEBUG
+
                 var action = _tower.Actions.FirstOrDefault(c => !c.Value.IsNull);
                 if (action.Value == null)
                 {
                     _idle = true;
+                    _stand.materials[1].SetColor("EmissionColor", Color.white);
                     return; // Early
                 }
                 _idle = false;
                 if (_rotator != null) StopCoroutine(_rotator);
 
-                var endPos = PosUtility.Convert(action.Value, _tower.Room);
-                _rotationRoot.rotation = Quaternion.LookRotation(endPos - _tower.Position);
+                var targetPos = PosUtility.Convert(action.Value, _tower.Room);
+                _rotationRoot.rotation = Quaternion.LookRotation(targetPos - _tower.Position);
                 _actionColor = action.Key == "attack" ? Color.blue : action.Key == "heal" ? Color.green : Color.yellow;
-                EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
+
+                EffectsUtility.ArcBeam(_barrelEnd, targetPos, new BeamConfig(_actionColor, 0f, 0f));
+                _stand.materials[1].SetColor("EmissionColor", _actionColor);
+                // EffectsUtility.Beam(_tower, action.Value, new BeamConfig(_actionColor, 0.6f, 0.3f));
+
                 
-                _powerUp = PowerUp();
-                StartCoroutine(_powerUp);
+                // _powerUp = PowerUp();
+                // StartCoroutine(_powerUp);
             }
             // StartCoroutine(Beam.Draw(_tower, action.Value, _lineRenderer, new BeamConfig(color, 0.6f, 0.3f)));
         }
@@ -92,6 +121,7 @@ namespace Screeps3D.RoomObjects.Views
                 // TODO: perhaps we want it to point downwards towards the ground?
                 return;
             }
+            var targetPos = _barrelEnd.position + new Vector3(15, _barrelEnd.position.y * -1 , 15);
 
             if(_idle) {
                 setEmission(Color.black, 0f);
@@ -99,8 +129,8 @@ namespace Screeps3D.RoomObjects.Views
 
             if (!_idle || _rotating || !(Time.time > _nextRot ))  {
                 return; // Early
-            }            
-
+            }
+            
             _rotator = Rotate();
             StartCoroutine(_rotator);
         }
@@ -120,18 +150,18 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private IEnumerator PowerUp() {
-            var targetEmission = 150;
+            var targetEmission = 1f;
             setEmission(_actionColor, 0f);
             // powerUp - brightness up
             while (_base.material.GetFloat("EmissionStrength") < targetEmission)
             {    
-                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") +15f);
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") + .025f);
                 yield return null;
             }
             // powerUp - wind down
             while (_base.material.GetFloat("EmissionStrength") > 0)
             {    
-                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") -5f);
+                setEmission(_actionColor, _base.material.GetFloat("EmissionStrength") - .05f);
                 yield return null;
             }
         }
