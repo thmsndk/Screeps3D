@@ -291,15 +291,39 @@ namespace Screeps3D.RoomObjects
         internal static void ActionLog(IActionObject actionObject, JSONObject data)
         {
             var actionLog = data["actionLog"];
+            var creep = actionObject as Creep;
+            if (creep != null)
+            {
+                Debug.LogError($"{creep.Name} {data.ToString()}");
+            }
             if (actionLog != null)
             {
-                actionObject.Actions.Clear();
+                ////actionObject.Actions.Clear();
                 foreach (var key in actionLog.keys)
                 {
                     var actionData = actionLog[key];
-                    actionObject.Actions[key] = actionData;
+                    if (actionData.IsNull)
+                    {
+                        actionObject.Actions.Remove(key);
+                    }
+                    else
+                    {
+                        actionObject.Actions[key] = actionData;
+                    }
                 }
             }
+            // OLD
+            // var actionLog = data["actionLog"];
+            // if (actionLog != null)
+            // {
+            //     Debug.LogError("actionLog " + actionLog.ToString());
+            //     actionObject.Actions.Clear();
+            //     foreach (var key in actionLog.keys)
+            //     {
+            //         var actionData = actionLog[key];
+            //         actionObject.Actions[key] = actionData;
+            //     }
+            // }
         }
     }
 }
