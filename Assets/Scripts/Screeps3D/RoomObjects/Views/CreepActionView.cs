@@ -30,34 +30,6 @@ namespace Screeps3D.RoomObjects.Views
         // upgradeController    beam
         // reserveController    bump + aura(violet)
         // say                  text
-        private static readonly Dictionary<string, bool> BumpConfig = new Dictionary<string, bool>
-        {
-            {"attack", true},
-            {"harvest", true},
-            {"reserveController", true},
-            {"attackController", true}
-        };
-        private static readonly Dictionary<string, BeamConfig> BeamConfigs = new Dictionary<string, BeamConfig>
-        {   
-            // HORSE 0.3f -> 0.7f
-            {"rangedAttack", new BeamConfig(Color.blue, 0.3f, 0.3f)},
-            {"rangedHeal", new BeamConfig(Color.green, 0.3f, 0.3f)},
-            {"repair", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
-            {"build", new BeamConfig(Color.yellow, 0.3f, 0.3f)},
-            {"upgradeController", new BeamConfig(Color.yellow, 0.3f, 1f)}
-        };
-
-        private static readonly Dictionary<string, Color32> AuraConfigs = new Dictionary<string, Color32> 
-        {
-            {"attack", new Color32(255, 111, 111, 0)},
-            // {"healed", new Color32(65, 140, 65, 0)},
-            {"harvest", new Color32(255, 111, 111, 0)},
-            {"reserveController", new Color32(255, 111, 111, 0)}
-        };
-
-        private static readonly Dictionary<string, bool> RangedMassAttack = new Dictionary<string, bool> {
-            {"rangedMassAttack", true}
-        };
 
         public void Init()
         {
@@ -70,9 +42,6 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Delta(JSONObject data)
         {
-            // if (_creep.BumpPosition == default(Vector3))
-            //     return;
-
             _shouldBump = false;
             _bumping = true;
             _animating = true;
@@ -81,13 +50,11 @@ namespace Screeps3D.RoomObjects.Views
             Color beamColor = Color.black;
 
             List<string> aKeys = _creep.Actions.Keys.ToList();
-            Debug.LogError(_creep.Owner.Username + " aKeys " + string.Join("_", aKeys));
             for(int i = 0; i < aKeys.Count; i++) {
                 string k = aKeys[i];
                 if(_creep.Actions[k].IsNull) {
                     continue;
                 }
-                Debug.LogError(_creep.Owner.Username + " " + k + " " + _creep.Actions[k]);
                 switch(k) {
                     case "rangedMassAttack": 
                         EffectsUtility.ElectricExplosion(_creep as RoomObject);
@@ -116,7 +83,8 @@ namespace Screeps3D.RoomObjects.Views
                     // Beam Stuff
                     case "rangedAttack": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room);
-                        doBeam(_creep.Actions[k] , new BeamConfig(Color.blue, 0.3f, 0.3f)); 
+                        doBeam(_creep.Actions[k] , new BeamConfig(Color.blue, 0.3f, 0.3f));
+                        doAura("rangedAttack", Color.blue);
                         break;
                     case "rangedHeal":
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
@@ -187,9 +155,12 @@ namespace Screeps3D.RoomObjects.Views
         private void doAura(string auraType, Color32 auraColor) {
             var target = _creep.Actions[auraType];
             switch(auraType) {
+                case "rangedAttack":
+                    EffectsUtility.Attack((Vector3)_creep.ActionTarget, Color.blue);                    
+                    break;
                 case "attack":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
+                    EffectsUtility.Attack((_creep as IBump).BumpPosition, Color.red);
                     break;
                 case "heal":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);

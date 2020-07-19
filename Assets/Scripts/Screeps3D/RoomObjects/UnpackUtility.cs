@@ -292,13 +292,8 @@ namespace Screeps3D.RoomObjects
         {
             var actionLog = data["actionLog"];
             var creep = actionObject as Creep;
-            if (creep != null)
-            {
-                Debug.LogError($"{creep.Name} {data.ToString()}");
-            }
             if (actionLog != null)
             {
-                ////actionObject.Actions.Clear();
                 foreach (var key in actionLog.keys)
                 {
                     var actionData = actionLog[key];
@@ -312,18 +307,6 @@ namespace Screeps3D.RoomObjects
                     }
                 }
             }
-            // OLD
-            // var actionLog = data["actionLog"];
-            // if (actionLog != null)
-            // {
-            //     Debug.LogError("actionLog " + actionLog.ToString());
-            //     actionObject.Actions.Clear();
-            //     foreach (var key in actionLog.keys)
-            //     {
-            //         var actionData = actionLog[key];
-            //         actionObject.Actions[key] = actionData;
-            //     }
-            // }
         }
     }
 }

@@ -13,10 +13,14 @@ namespace Screeps3D.Effects
         private const float _attackDuration = 2;
         private Vector3 _target;
         
-        public void Load(Vector3 target)
+        public void Load(Vector3 target, Color? color)
         {
             _target = target;
             _time = 0f;
+            if(color != null) {
+                ParticleSystem.MainModule settings = _attackParticles.main;
+                settings.startColor = Color.blue;
+            }
             StartCoroutine(Fire());
         }
 
