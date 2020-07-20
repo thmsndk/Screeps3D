@@ -14,12 +14,16 @@ public class TabGroup : MonoBehaviour
     public Color32 tabHoverColor;
     public Color32 tabSelectedColor;
 
+    [SerializeField] private GameObject tabsContainer;
+    [SerializeField] private GameObject pagesContainer;
+
     public void Subscribe(TabButton button)
     {
         if (tabButtons == null)
         {
             tabButtons = new List<TabButton>();
         }
+        button.transform.SetParent(tabsContainer.transform);
 
         tabButtons.Add(button);
     }

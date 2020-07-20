@@ -10,25 +10,25 @@ namespace Assets.Scripts.Common.SettingsManagement
 {
     public class SettingsProvider
     {
-        List<string> m_Categories;
-        Dictionary<string, List<PrefEntry>> m_Settings;
+        public List<string> m_Categories;
+        public Dictionary<string, List<PrefEntry>> m_Settings;
         
-        struct PrefEntry
+        public struct PrefEntry
         {
             public GUIContent content { get; }
 
-            public IUserSetting pref { get; }
+            public object /*IUserSetting*/ pref { get; }
 
-            public PrefEntry(GUIContent content, IUserSetting pref)
+            public PrefEntry(GUIContent content, object /*IUserSetting*/ pref)
             {
                 this.content = content;
                 this.pref = pref;
             }
         }
         
-        void SearchForUserSettingAttributes()
+        public void SearchForSettingsAttribute()
         {
-            var m_Assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            var m_Assemblies = System.AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("Assembly-CSharp"));
 
             var keywordsHash = new HashSet<string>();
 
@@ -47,13 +47,15 @@ namespace Assets.Scripts.Common.SettingsManagement
             // collect instance fields/methods too, but only so we can throw a warning that they're invalid.
             var fields = types.SelectMany(x =>
                     x.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                    .Where(prop => Attribute.IsDefined(prop, typeof(SettingAttribute))));
+                    .Where(prop => Attribute.IsDefined(prop, typeof(SettingAttribute)))).ToList();
+
 
             ////var methods = types.SelectMany(x => x.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             ////        .Where(y => Attribute.IsDefined(y, typeof(UserSettingBlockAttribute))));
-
+            Debug.Log($"{fields.Count} fields found");
             foreach (var field in fields)
             {
+                Debug.Log(field.Name);
                 if (!field.IsStatic)
                 {
                     Debug.LogWarning("Cannot create setting entries for instance fields. Skipping \"" + field.Name + "\".");
@@ -65,7 +67,7 @@ namespace Assets.Scripts.Common.SettingsManagement
                 ////if (!attrib.visibleInSettingsProvider)
                 ////    continue;
 
-                var pref = (IUserSetting)field.GetValue(null);
+                var pref = field.GetValue(null);
 
                 ////if (pref == null)
                 ////{
@@ -82,10 +84,44 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 List<PrefEntry> settings;
 
+                // TODO: split categories on / to get a menu (tab) -> section list going.
                 if (m_Settings.TryGetValue(category, out settings))
                     settings.Add(new PrefEntry(content, pref));
                 else
                     m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, pref) });
+            }
+
+            var properties = types.SelectMany(x =>
+                    x.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                    .Where(prop => Attribute.IsDefined(prop, typeof(SettingAttribute)))).ToList();
+            Debug.Log($"{properties.Count} properties found");
+            foreach (var property in properties)
+            {
+                Debug.Log(property.Name);
+                //if (!property.)
+                //{
+                //    Debug.LogWarning("Cannot create setting entries for instance fields. Skipping \"" + field.Name + "\".");
+                //    continue;
+                //}
+                var attrib = (SettingAttribute)Attribute.GetCustomAttribute(property, typeof(SettingAttribute));
+
+                var pref = property.GetValue(null);
+
+                var category = string.IsNullOrEmpty(attrib.Category) ? "Uncategorized" : attrib.Category;
+                //var content = listByKey ? new GUIContent(pref.key) : attrib.Title;
+                var content = attrib.Title;
+
+                //if (developerModeCategory.Equals(category) && !isDeveloperMode)
+                //    continue;
+
+                List<PrefEntry> settings;
+
+                // TODO: split categories on / to get a menu (tab) -> section list going.
+                if (m_Settings.TryGetValue(category, out settings))
+                    settings.Add(new PrefEntry(content, pref));
+                else
+                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, pref) });
+
             }
 
             //foreach (var method in methods)
