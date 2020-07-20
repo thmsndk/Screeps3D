@@ -152,15 +152,15 @@ namespace Screeps3D.RoomObjects.Views
             EffectsUtility.Beam(_creep as RoomObject, target, beamCfg);
         }
 
-        private void doParticles(string auraType, Color32 auraColor) {
-            var target = _creep.Actions[auraType];
-            switch(auraType) {
+        private void doParticles(string particleType, Color32 auraColor) {
+            var target = _creep.Actions[particleType];
+            switch(particleType) {
                 case "rangedAttack":
-                    EffectsUtility.Attack((Vector3)_creep.ActionTarget, auraColor);                    
+                    EffectsUtility.RangedAttackHit((Vector3)_creep.ActionTarget);                    
                     break;
                 case "attack":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack((_creep as IBump).BumpPosition, auraColor);
+                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
                     break;
                 case "heal":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);

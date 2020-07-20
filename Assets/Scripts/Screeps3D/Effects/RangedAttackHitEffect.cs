@@ -5,10 +5,10 @@ using Screeps3D.RoomObjects;
 
 namespace Screeps3D.Effects
 {
-    public class AttackEffect : MonoBehaviour
+    public class RangedAttackHitEffect : MonoBehaviour
     {
-        public const string PATH = "Prefabs/Effects/AttackEffect";
-        [SerializeField] private ParticleSystem _attackParticles = default;
+        public const string PATH = "Prefabs/Effects/RangedAttackHitEffect";
+        [SerializeField] private ParticleSystem _RAHitParticles = default;
         private float _time;
         private const float _attackDuration = 2;
         private Vector3 _target;
@@ -30,13 +30,13 @@ namespace Screeps3D.Effects
             Quaternion tRotation = Quaternion.LookRotation(_target, Vector3.up);
             gameObject.transform.SetPositionAndRotation(_target, tRotation);
 
-            _attackParticles.Play();
+            _RAHitParticles.Play();
             while (_time < _attackDuration)
             {
                 _time += Time.unscaledDeltaTime;
                 yield return null;
             }
-            _attackParticles.Stop();
+            _RAHitParticles.Stop();
             PoolLoader.Return(PATH, gameObject);
         }
     }
