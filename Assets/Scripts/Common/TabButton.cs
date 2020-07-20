@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
-[RequireComponent(typeof(Image))]
 public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
     public TabGroup tabGroup;
     public Image background;
+    public TMP_Text label;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -27,7 +28,8 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
 
     private void Start()
     {
-        background = GetComponent<Image>();
+        background = GetComponentInChildren<Image>();
+        label = GetComponentInChildren<TMP_Text>();
         tabGroup.Subscribe(this);
     }
 }

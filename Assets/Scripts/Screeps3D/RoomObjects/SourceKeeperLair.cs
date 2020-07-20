@@ -15,8 +15,6 @@ namespace Screeps3D.RoomObjects
 
     public class SourceKeeperLair : RoomObject, ISpawningInObject, IOwnedObject
     {
-        const string SourceKeeperUserId = "3";
-
         public float NextSpawnTime { get; set; }
         public string UserId { get; set; }
         public ScreepsUser Owner { get; set; }
@@ -25,7 +23,7 @@ namespace Screeps3D.RoomObjects
         {
             base.Unpack(data, initial);
             
-            Owner = ScreepsAPI.UserManager.GetUser(SourceKeeperUserId);
+            Owner = ScreepsAPI.UserManager.GetUser(Constants.SourceKeeperUserId);
             UserId = Owner.Username;
             var nextSpawnTime = data["nextSpawnTime"];
             if (nextSpawnTime != null)
