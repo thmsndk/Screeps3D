@@ -74,6 +74,8 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             UpdateAvailable();
 
             StartCoroutine(SetDeferredContentHeight());
+
+            constructionSites.SetAllTogglesOff();
         }
 
         private void OnRoomChange()

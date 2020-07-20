@@ -38,8 +38,8 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
                 if (ok != null && ok.n == 1)
                 {
-                    OnFirstSpawnPlaced?.Invoke();
                     HideRoomObject();
+                    OnFirstSpawnPlaced?.Invoke();
                 }
                 else
                 {

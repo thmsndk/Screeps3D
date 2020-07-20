@@ -13,7 +13,7 @@ namespace Common
         private bool wasIdle;        
         private float secondsToBeIdle;
 
-        private bool _disableIdle;
+        private bool _enableCameraIdle;
 
         private void Start()
         {
@@ -21,10 +21,10 @@ namespace Common
             lastZoom = CameraRig.Zoom;
             
             // Check if we're allowing the idle system
-            _disableIdle = CmdArgs.DisableCameraIdle;
-            Debug.Log($"Camera Idle Disabled flag: {_disableIdle}");
+            _enableCameraIdle = !CmdArgs.DisableCameraIdle;
+            Debug.Log($"Camera Idle: {_enableCameraIdle}");
 
-            if (_disableIdle)
+            if (_enableCameraIdle)
             {
                 RandomizeIdleTime();
             }
@@ -32,7 +32,7 @@ namespace Common
 
         private void Update()
         {
-            if (_disableIdle)
+            if (_enableCameraIdle)
             {
                 var idle = Time.time - InputMonitor.LastAction > secondsToBeIdle;
 

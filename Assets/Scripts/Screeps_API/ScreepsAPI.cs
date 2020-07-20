@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Screeps3D;
@@ -20,12 +21,17 @@ namespace Screeps_API
         public static ScreepsConsole Console { get; private set; }
 
         public static ServerMessageMonitor ServerMessageMonitor { get; private set; }
+
+        public static Warpath Warpath { get; private set; }
+
         public static long Time { get; internal set; }
         public static bool IsConnected { get; private set; }
         
         public static event Action<bool> OnConnectionStatusChange;
         public static event Action<long> OnTick;
         public static event Action OnShutdown;
+
+        public static List<string> WorldStartRooms { get; private set; }
 
         private string _token;
 
@@ -40,6 +46,7 @@ namespace Screeps_API
             Console = GetComponent<ScreepsConsole>();
             UserManager = new UserManager();
             ServerMessageMonitor = GetComponent<ServerMessageMonitor>();
+            Warpath = GetComponent<Warpath>();
         }
 
         // Use this for initialization
@@ -124,6 +131,9 @@ namespace Screeps_API
                 var firstRoom = worldStartRooms.list.FirstOrDefault();
                 var firstRoomInfo = firstRoom.str.Split('/'); // on PS we don't recieve a shard, only the room name... so shard will be roomName...
                 var shard = firstRoomInfo[0];
+
+                WorldStartRooms = worldStartRooms.list.Select(x => x.str).ToList();
+
 
                 Http.Request("GET", $"/api/game/time?shard={shard}", null, SetTime);
             }
