@@ -293,11 +293,17 @@ namespace Screeps3D.RoomObjects
             var actionLog = data["actionLog"];
             if (actionLog != null)
             {
-                actionObject.Actions.Clear();
                 foreach (var key in actionLog.keys)
                 {
                     var actionData = actionLog[key];
-                    actionObject.Actions[key] = actionData;
+                    if (actionData.IsNull)
+                    {
+                        actionObject.Actions.Remove(key);
+                    }
+                    else
+                    {
+                        actionObject.Actions[key] = actionData;
+                    }
                 }
             }
         }
