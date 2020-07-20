@@ -62,29 +62,29 @@ namespace Screeps3D.RoomObjects.Views
                     // Bump Stuff
                     case "attack":
                         _shouldBump = true;
-                        doAura(k, new Color32(255, 111, 111, 0));
+                        doParticles(k, new Color32(255, 45, 0, 255));
                         break;
                     case "harvest":
                         _shouldBump = true;
-                        doAura(k, new Color32(255, 111, 111, 0));
+                        doParticles(k, new Color32(255, 111, 111, 255));
                         break;
                     case "reserveController":
                         _shouldBump = true;
-                        doAura(k, new Color32(255, 111, 111, 0));
+                        doParticles(k, new Color32(255, 111, 111, 255));
                         break;
                     case "attackController":
                         _shouldBump = true;
-                        doAura(k, Color.red);
+                        doParticles(k, new Color32(255, 111, 111, 255));
                         break;
                     // Healed - just aura
                     case "healed":
-                        doAura(k, new Color32(65, 140, 65, 0));
+                        doParticles(k, new Color32(65, 140, 65, 255));
                         break;
                     // Beam Stuff
                     case "rangedAttack": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room);
                         doBeam(_creep.Actions[k] , new BeamConfig(Color.blue, 0.3f, 0.3f));
-                        doAura("rangedAttack", Color.blue);
+                        doParticles(k, new Color32(0, 45, 255, 255));
                         break;
                     case "rangedHeal":
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
@@ -100,7 +100,7 @@ namespace Screeps3D.RoomObjects.Views
                         break;
                     case "upgradeController": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
-                        doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 0.3f)); 
+                        doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 1f)); 
                         break;                        
                 }
             }
@@ -152,15 +152,15 @@ namespace Screeps3D.RoomObjects.Views
             EffectsUtility.Beam(_creep as RoomObject, target, beamCfg);
         }
 
-        private void doAura(string auraType, Color32 auraColor) {
+        private void doParticles(string auraType, Color32 auraColor) {
             var target = _creep.Actions[auraType];
             switch(auraType) {
                 case "rangedAttack":
-                    EffectsUtility.Attack((Vector3)_creep.ActionTarget, Color.blue);                    
+                    EffectsUtility.Attack((Vector3)_creep.ActionTarget, auraColor);                    
                     break;
                 case "attack":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack((_creep as IBump).BumpPosition, Color.red);
+                    EffectsUtility.Attack((_creep as IBump).BumpPosition, auraColor);
                     break;
                 case "heal":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);

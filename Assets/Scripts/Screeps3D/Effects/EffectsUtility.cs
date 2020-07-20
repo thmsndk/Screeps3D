@@ -18,10 +18,10 @@ namespace Screeps3D.Effects
             Beam(startPos, endPos, config.Color);
         }
         
-        public static void Attack(Vector3 targetPos, Color? color) {
+        public static void Attack(Vector3 targetPos, Color particleColor) {
             var go = PoolLoader.Load(AttackEffect.PATH);
             var effect = go.GetComponent<AttackEffect>();
-            effect.Load(targetPos, color);
+            effect.Load(targetPos, particleColor);
         }
         public static void Heal(RoomObject origin) {
             var go = PoolLoader.Load(HealEffect.PATH);
