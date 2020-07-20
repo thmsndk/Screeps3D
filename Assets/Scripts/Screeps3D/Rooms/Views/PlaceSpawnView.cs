@@ -12,6 +12,9 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 {
     public class PlaceSpawnView : MonoBehaviour, IRoomViewComponent
     {
+        public static bool EnableOverlay { get; set; } = true;
+        private bool _overlayDisabled = false;
+
         [SerializeField] private GameObject _ProhibitedRoomProjector = default;
 
         private Room room;
@@ -92,16 +95,36 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
             {
                 if (room != null)
                 {
+                    
                     _roomInfo = MapStatsUpdater.Instance.GetRoomInfo(room.ShardName, room.RoomName);
                     UpdateRespawnProhibited();
+
                 }
 
+                return;
+            }
+
+            // when we toggle spectate on, disable the overlay.
+            if (!EnableOverlay)
+            {
+                _overlayDisabled = true;
+                SpawnProhibited(false);
+                return;
+            }
+
+            // when we toggle spectate off, re-enable the overlay.
+            if (EnableOverlay && _overlayDisabled)
+            {
+                _overlayDisabled = false;
+                UpdateRespawnProhibited();
                 return;
             }
         }
 
         private void UpdateRespawnProhibited()
         {
+            
+
             if (WorldStatusUpdater.Instance.WorldStatus == WorldStatus.Empty)
             {
                 MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?

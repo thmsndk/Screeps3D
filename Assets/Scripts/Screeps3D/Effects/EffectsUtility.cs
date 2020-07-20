@@ -16,11 +16,15 @@ namespace Screeps3D.Effects
             var startPos = origin.View.transform.position + new Vector3(0, config.StartHeight, 0);
             var endPos = PosUtility.Convert(target, origin.Room) + new Vector3(0, config.EndHeight, 0);
             Beam(startPos, endPos, config.Color);
-        }
-        
+        }        
         public static void Attack(Vector3 targetPos) {
             var go = PoolLoader.Load(AttackEffect.PATH);
             var effect = go.GetComponent<AttackEffect>();
+            effect.Load(targetPos);
+        }
+        public static void RangedAttackHit(Vector3 targetPos) {
+            var go = PoolLoader.Load(RangedAttackHitEffect.PATH);
+            var effect = go.GetComponent<RangedAttackHitEffect>();
             effect.Load(targetPos);
         }
         public static void Heal(RoomObject origin) {

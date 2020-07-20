@@ -62,17 +62,20 @@ namespace Screeps_API
             {
                 var responseHeaders = outcome.GetResponseHeaders();
 
-                var rateLimitHeaders = responseHeaders.Where(x => x.Key.StartsWith("X-RateLimit"));
-                var rateLimitDebug = new StringBuilder();
-
-                if (rateLimitHeaders.Any())
+                if (responseHeaders != null)
                 {
-                    foreach (var header in rateLimitHeaders)
-                    {
-                        rateLimitDebug.AppendLine($"{header.Key}: {header.Value}");
-                    }
+                    var rateLimitHeaders = responseHeaders.Where(x => x.Key.StartsWith("X-RateLimit"));
+                    var rateLimitDebug = new StringBuilder();
 
-                    Debug.Log(rateLimitDebug.ToString()); 
+                    if (rateLimitHeaders.Any())
+                    {
+                        foreach (var header in rateLimitHeaders)
+                        {
+                            rateLimitDebug.AppendLine($"{header.Key}: {header.Value}");
+                        }
+
+                        Debug.Log(rateLimitDebug.ToString());
+                    } 
                 }
 
                 if (outcome.isNetworkError || outcome.isHttpError)
