@@ -291,7 +291,6 @@ namespace Screeps3D.RoomObjects
         internal static void ActionLog(IActionObject actionObject, JSONObject data)
         {
             var actionLog = data["actionLog"];
-            var creep = actionObject as Creep;
             if (actionLog != null)
             {
                 foreach (var key in actionLog.keys)
