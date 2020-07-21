@@ -64,7 +64,8 @@ namespace Assets.Scripts.Common.SettingsManagement
                     var label = labelInput.GetComponentInChildren<TMP_Text>();
                     label.text = setting.content.text;
                     var input = labelInput.GetComponentInChildren<TMP_InputField>();
-                    input.text = setting.wrapper.GetValue()?.ToString(); // TODO: stuff with type
+                    input.text = setting.GetValue()?.ToString(); // TODO: stuff with type
+                    input.onValueChanged.AddListener(value => setting.SetValue(value));
                     
                     // it is properly initialized after this though, so how do we get the "proper" value?
                 }

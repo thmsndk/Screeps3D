@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,21 +12,78 @@ namespace Assets.Scripts.Common.SettingsManagement
     public class SettingsProvider
     {
         public List<string> m_Categories;
-        public Dictionary<string, List<PrefEntry>> m_Settings;
-        
-        public struct PrefEntry
+        public Dictionary<string, List<SettingEntry>> m_Settings;
+
+        public class SettingEntry
         {
             public GUIContent content { get; }
 
-            public Wrapper /*IUserSetting*/ wrapper { get; }
+            private Wrapper wrapper;
+            private string settingKey;
 
-            public PrefEntry(GUIContent content, Wrapper /*IUserSetting*/ wrapper)
+            public SettingEntry(SettingAttribute attribute, Wrapper wrapper)
             {
-                this.content = content;
+                this.content = attribute.Title;
                 this.wrapper = wrapper;
+
+                settingKey = $"Setting:{wrapper.FullName}"; // TODO: ability to supply setting name
+
+                // Load and set value from playerprefs, should probably replace this with a "storefactory" would allow for server specific persistance as well
+
+                var value = LoadSettingFromStore(wrapper.ValueType);
+
+                wrapper.SetValue(value);
+            }
+
+            private object LoadSettingFromStore<T>(T type) where T : Type
+            {
+                if (!PlayerPrefs.HasKey(settingKey)) { return wrapper.defaultValue; }
+
+                switch (Type.GetTypeCode(type))
+                {
+                    case TypeCode.Int32:
+                        return PlayerPrefs.GetInt(settingKey);
+                    case TypeCode.Single:
+                        return PlayerPrefs.GetFloat(settingKey);
+                    case TypeCode.String:
+                        return PlayerPrefs.GetString(settingKey);
+                }
+
+                return wrapper.defaultValue;
+            }
+
+            private void PersistSettingToStore<T>(T value)
+            {
+                switch (Type.GetTypeCode(value.GetType()))
+                {
+                    case TypeCode.Int32:
+                        PlayerPrefs.SetInt(settingKey, (int)(object)value);
+                        break;
+                    case TypeCode.Single:
+                        PlayerPrefs.SetFloat(settingKey, (float)(object)value);
+                        break;
+                    case TypeCode.String:
+                        PlayerPrefs.SetString(settingKey, (string)(object)value);
+                        break;
+                }
+            }
+
+            public object GetValue()
+            {
+                return wrapper.GetValue();
+            }
+
+            public void SetValue(string o)
+            {
+                var type = wrapper.ValueType;
+                var converter = TypeDescriptor.GetConverter(type);
+
+                var value = converter.ConvertFromString(o);
+                wrapper.SetValue(value);
+                PersistSettingToStore(value);
             }
         }
-        
+
         public void SearchForSettingsAttribute()
         {
             var m_Assemblies = System.AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("Assembly-CSharp"));
@@ -35,7 +93,7 @@ namespace Assets.Scripts.Common.SettingsManagement
             if (m_Settings != null)
                 m_Settings.Clear();
             else
-                m_Settings = new Dictionary<string, List<PrefEntry>>();
+                m_Settings = new Dictionary<string, List<SettingEntry>>();
 
             ////if (m_SettingBlocks != null)
             ////    m_SettingBlocks.Clear();
@@ -52,10 +110,8 @@ namespace Assets.Scripts.Common.SettingsManagement
 
             ////var methods = types.SelectMany(x => x.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             ////        .Where(y => Attribute.IsDefined(y, typeof(UserSettingBlockAttribute))));
-            Debug.Log($"{fields.Count} fields found");
             foreach (var field in fields)
             {
-                Debug.Log(field.Name);
                 if (!field.IsStatic)
                 {
                     Debug.LogWarning("Cannot create setting entries for instance fields. Skipping \"" + field.Name + "\".");
@@ -66,7 +122,8 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 ////if (!attrib.visibleInSettingsProvider)
                 ////    continue;
-
+                ///
+                // settingKey = $"Setting:{field.DeclaringType.FullName}.{field.Name}";
                 var wrapper = new FieldWrapper(field);
 
                 ////if (pref == null)
@@ -77,27 +134,25 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 var category = string.IsNullOrEmpty(attrib.Category) ? "Uncategorized" : attrib.Category;
                 //var content = listByKey ? new GUIContent(pref.key) : attrib.Title;
-                var content = attrib.Title;
 
                 //if (developerModeCategory.Equals(category) && !isDeveloperMode)
                 //    continue;
 
-                List<PrefEntry> settings;
+                List<SettingEntry> settings;
 
                 // TODO: split categories on / to get a menu (tab) -> section list going.
                 if (m_Settings.TryGetValue(category, out settings))
-                    settings.Add(new PrefEntry(content, wrapper));
+                    settings.Add(new SettingEntry(attrib, wrapper));
                 else
-                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, wrapper) });
+                    m_Settings.Add(category, new List<SettingEntry>() { new SettingEntry(attrib, wrapper) });
             }
 
             var properties = types.SelectMany(x =>
                     x.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                     .Where(prop => Attribute.IsDefined(prop, typeof(SettingAttribute)))).ToList();
-            Debug.Log($"{properties.Count} properties found");
+
             foreach (var property in properties)
             {
-                Debug.Log(property.Name);
                 //if (!property.)
                 //{
                 //    Debug.LogWarning("Cannot create setting entries for instance fields. Skipping \"" + field.Name + "\".");
@@ -114,13 +169,13 @@ namespace Assets.Scripts.Common.SettingsManagement
                 //if (developerModeCategory.Equals(category) && !isDeveloperMode)
                 //    continue;
 
-                List<PrefEntry> settings;
+                List<SettingEntry> settings;
 
                 // TODO: split categories on / to get a menu (tab) -> section list going.
                 if (m_Settings.TryGetValue(category, out settings))
-                    settings.Add(new PrefEntry(content, wrapper));
+                    settings.Add(new SettingEntry(attrib, wrapper));
                 else
-                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, wrapper) });
+                    m_Settings.Add(category, new List<SettingEntry>() { new SettingEntry(attrib, wrapper) });
 
             }
 
@@ -183,15 +238,22 @@ namespace Assets.Scripts.Common.SettingsManagement
             //m_Categories.Sort();
         }
     }
-    public abstract class Wrapper {
+    public abstract class Wrapper
+    {
 
-        private object defaultValue;
-        public Wrapper()
-        {
-            defaultValue = GetValue();
-        }
+        internal object defaultValue;
 
         public abstract object GetValue();
+
+        public abstract string FullName { get; }
+        public abstract void SetValue(object value);
+
+        public abstract Type ValueType { get; }
+
+        public object GetDefault()
+        {
+            return defaultValue;
+        }
     }
 
     public class FieldWrapper : Wrapper
@@ -201,25 +263,46 @@ namespace Assets.Scripts.Common.SettingsManagement
         public FieldWrapper(FieldInfo field)
         {
             this.field = field;
+            defaultValue = GetValue();
         }
+
+        public override string FullName { get => $"{field.DeclaringType.FullName}.{field.Name}"; }
+        public override Type ValueType { get => field.FieldType; }
 
         public override object GetValue()
         {
+            // Get static value
             return field.GetValue(null);
+        }
+
+        public override void SetValue(object value)
+        {
+            // Set Static Value
+            field.SetValue(null, value);
         }
     }
     public class PropertyWrapper : Wrapper
     {
         private PropertyInfo property;
 
+        public override string FullName { get => $"{property.DeclaringType.FullName}.{property.Name}"; }
+        public override Type ValueType { get => property.PropertyType; }
         public PropertyWrapper(PropertyInfo property)
         {
             this.property = property;
+            defaultValue = GetValue();
         }
 
         public override object GetValue()
         {
+            // Get static value
             return property.GetValue(null);
+        }
+
+        public override void SetValue(object value)
+        {
+            // Set Static Value
+            property.SetValue(null, value);
         }
     }
 }
