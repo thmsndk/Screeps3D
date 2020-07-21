@@ -10,7 +10,7 @@ namespace Screeps3D.RoomObjects.Views
 
         public const string Path = "Prefabs/RoomObjects/powerBankMV";
 
-        [SerializeField] private GameObject destroyed = default;
+        // [SerializeField] private GameObject destroyed = default;
         [SerializeField] private ScaleVisibility _pbMapView = default;
         [SerializeField] private Collider _collider = default;
         [SerializeField] private MeshRenderer _base;
@@ -24,12 +24,14 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private MeshRenderer _p8;
         [SerializeField] private MeshRenderer _p9;
         [SerializeField] private MeshRenderer _p10;
-        [SerializeField] private ParticleSystem _ps;
+        [SerializeField] private ParticleSystem _psEnergy;
+        [SerializeField] private ParticleSystem _psSmoke;
         private PowerBank _powerBank;
         private GameObject spawnedDebris;
         private IEnumerator _despawnDebris;
         private long _lastTickUpdate;
         private float _decayLeft = 0;
+        private bool destroyed = false;
 
         public void Init()
         {
@@ -37,29 +39,67 @@ namespace Screeps3D.RoomObjects.Views
 
 
         private void setPowerDisplay() {
-            float power = _powerBank.Store["power"];
-            _p1.materials[0].SetFloat("EmissionStrength", (power > 0) ? .6f : 0);
-            _p2.materials[0].SetFloat("EmissionStrength", (power > 1000) ? .6f : 0);
-            _p3.materials[0].SetFloat("EmissionStrength", (power > 2000) ? .6f : 0);
-            _p4.materials[0].SetFloat("EmissionStrength", (power > 3000) ? .6f : 0);
-            _p5.materials[0].SetFloat("EmissionStrength", (power > 4000) ? .6f : 0);
-            _p6.materials[0].SetFloat("EmissionStrength", (power > 5000) ? .6f : 0);
-            _p7.materials[0].SetFloat("EmissionStrength", (power > 6000) ? .6f : 0);
-            _p8.materials[0].SetFloat("EmissionStrength", (power > 7000) ? .6f : 0);
-            _p9.materials[0].SetFloat("EmissionStrength", (power > 8000) ? .6f : 0);
-            _p10.materials[0].SetFloat("EmissionStrength", (power > 9000) ? .6f : 0);
+            _base.materials[0].SetFloat("EmissionStrength", destroyed ? 0 : 2);
+            if(_powerBank != null) {
+                float power = _powerBank.Store["power"];
+                _p1.materials[0].SetFloat("EmissionStrength", (power > 0) ? .6f : 0);
+                _p2.materials[0].SetFloat("EmissionStrength", (power > 1000) ? .6f : 0);
+                _p3.materials[0].SetFloat("EmissionStrength", (power > 2000) ? .6f : 0);
+                _p4.materials[0].SetFloat("EmissionStrength", (power > 3000) ? .6f : 0);
+                _p5.materials[0].SetFloat("EmissionStrength", (power > 4000) ? .6f : 0);
+                _p6.materials[0].SetFloat("EmissionStrength", (power > 5000) ? .6f : 0);
+                _p7.materials[0].SetFloat("EmissionStrength", (power > 6000) ? .6f : 0);
+                _p8.materials[0].SetFloat("EmissionStrength", (power > 7000) ? .6f : 0);
+                _p9.materials[0].SetFloat("EmissionStrength", (power > 8000) ? .6f : 0);
+                _p10.materials[0].SetFloat("EmissionStrength", (power > 9000) ? .6f : 0);
+            } else {
+                _base.materials[0].SetFloat("EmissionStrength", 0);
+                _p1.materials[0].SetFloat("EmissionStrength", 0);
+                _p2.materials[0].SetFloat("EmissionStrength", 0);
+                _p3.materials[0].SetFloat("EmissionStrength", 0);
+                _p4.materials[0].SetFloat("EmissionStrength", 0);
+                _p5.materials[0].SetFloat("EmissionStrength", 0);
+                _p6.materials[0].SetFloat("EmissionStrength", 0);
+                _p7.materials[0].SetFloat("EmissionStrength", 0);
+                _p8.materials[0].SetFloat("EmissionStrength", 0);
+                _p9.materials[0].SetFloat("EmissionStrength", 0);
+                _p10.materials[0].SetFloat("EmissionStrength",0);
+            }
         }
 
-        private void startStopEmission(string startStop) {
-            if(_ps != null) {
-                if(startStop == "start" && !_ps.isPlaying) {
-                    _ps.Play();
-                    return;
-                }
-                if(startStop == "stop" && _ps.isPlaying) {
-                    _ps.Stop();
-                    return;
-                }
+        private void energyEmissionControl(string startStop) {
+            if(_psEnergy == null) {
+                return;
+            }
+            if(destroyed) {
+                return;
+            }
+            _psSmoke.Stop();
+            if(startStop == "start" && !destroyed && !_psEnergy.isPlaying) {
+                _psEnergy.Play();
+                return;
+            }
+
+            if(startStop == "stop" && _psEnergy.isPlaying) {
+                _psEnergy.Stop();
+                return;
+            }          
+        }
+        private void smokeEmissionControl(string startStop) {
+            if(_psSmoke == null) {
+                return ;
+            }
+            if(!destroyed) {
+                return;
+            }
+            _psEnergy.Stop();
+            if(startStop == "start" && !_psSmoke.isPlaying) {
+                _psSmoke.Play();
+                return;
+            }
+            if(startStop == "stop" && _psSmoke.isPlaying) {
+                _psSmoke.Stop();
+                return;
             }
         }
 
@@ -71,18 +111,23 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void Update() {
+            string state = (_powerBank != null && _powerBank.Shown) ? "start" : "stop";
+            energyEmissionControl(state);
+            smokeEmissionControl(state);
+        }
 
-            startStopEmission((_powerBank != null && _powerBank.Shown) ? "start" : "stop");            
-            if (_powerBank == null )
+        public void Delta(JSONObject data)
+        {
+            if (_powerBank == null)
             {
                 return;
             }
 
-
-            if (_ps != null && !_ps.isPlaying) {
-                    _ps.Play();
+            destroyed = _powerBank.Hits < 1;
+            setPowerDisplay();
+            if (_psEnergy != null && !_psEnergy.isPlaying) {
+                _psEnergy.Play();
             }
-
             
             var percentage = _powerBank.Store["power"] / _powerBank.PowerCapacity;
             var minVisibility = 0.001f; /*to keep it visible and selectable, also allows the resource to render again when regen hits*/
@@ -96,21 +141,13 @@ namespace Screeps3D.RoomObjects.Views
 
                 float leftToTick = Mathf.Max(0, _powerBank.NextDecayTime - now);
                 _decayLeft = Mathf.Round((float)leftToTick / _powerBank.maxTTL * 100f) / 100f;
-                if (_ps != null)
+                if (_psEnergy != null && _psEnergy.isPlaying)
                 {
-                    var m = _ps.main;
-                    m.maxParticles = Mathf.RoundToInt(1000 * _decayLeft);
-                    var e = _ps.emission;
+                    var m = _psEnergy.main;
+                    m.maxParticles = Mathf.RoundToInt(500 * _decayLeft);
+                    var e = _psEnergy.emission;
                     e.rateOverTime = Mathf.RoundToInt(250 * _decayLeft);
                 }
-            }
-        }
-
-        public void Delta(JSONObject data)
-        {
-            if (_powerBank == null)
-            {
-                return;
             }
         }
 
