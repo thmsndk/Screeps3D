@@ -14,8 +14,8 @@ public class TabGroup : MonoBehaviour
     public Color32 tabHoverColor;
     public Color32 tabSelectedColor;
 
-    [SerializeField] private GameObject tabsContainer;
-    [SerializeField] private GameObject pagesContainer;
+    public GameObject tabsContainer;
+    public GameObject pagesContainer;
 
     public void Subscribe(TabButton button)
     {

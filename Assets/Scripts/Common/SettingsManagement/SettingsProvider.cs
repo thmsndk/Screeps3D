@@ -17,12 +17,12 @@ namespace Assets.Scripts.Common.SettingsManagement
         {
             public GUIContent content { get; }
 
-            public object /*IUserSetting*/ pref { get; }
+            public Wrapper /*IUserSetting*/ wrapper { get; }
 
-            public PrefEntry(GUIContent content, object /*IUserSetting*/ pref)
+            public PrefEntry(GUIContent content, Wrapper /*IUserSetting*/ wrapper)
             {
                 this.content = content;
-                this.pref = pref;
+                this.wrapper = wrapper;
             }
         }
         
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Common.SettingsManagement
                 ////if (!attrib.visibleInSettingsProvider)
                 ////    continue;
 
-                var pref = field.GetValue(null);
+                var wrapper = new FieldWrapper(field);
 
                 ////if (pref == null)
                 ////{
@@ -86,9 +86,9 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 // TODO: split categories on / to get a menu (tab) -> section list going.
                 if (m_Settings.TryGetValue(category, out settings))
-                    settings.Add(new PrefEntry(content, pref));
+                    settings.Add(new PrefEntry(content, wrapper));
                 else
-                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, pref) });
+                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, wrapper) });
             }
 
             var properties = types.SelectMany(x =>
@@ -105,7 +105,7 @@ namespace Assets.Scripts.Common.SettingsManagement
                 //}
                 var attrib = (SettingAttribute)Attribute.GetCustomAttribute(property, typeof(SettingAttribute));
 
-                var pref = property.GetValue(null);
+                var wrapper = new PropertyWrapper(property);
 
                 var category = string.IsNullOrEmpty(attrib.Category) ? "Uncategorized" : attrib.Category;
                 //var content = listByKey ? new GUIContent(pref.key) : attrib.Title;
@@ -118,9 +118,9 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 // TODO: split categories on / to get a menu (tab) -> section list going.
                 if (m_Settings.TryGetValue(category, out settings))
-                    settings.Add(new PrefEntry(content, pref));
+                    settings.Add(new PrefEntry(content, wrapper));
                 else
-                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, pref) });
+                    m_Settings.Add(category, new List<PrefEntry>() { new PrefEntry(content, wrapper) });
 
             }
 
@@ -181,6 +181,45 @@ namespace Assets.Scripts.Common.SettingsManagement
             //keywords = keywordsHash;
             //m_Categories = m_Settings.Keys.Union(m_SettingBlocks.Keys).ToList();
             //m_Categories.Sort();
+        }
+    }
+    public abstract class Wrapper {
+
+        private object defaultValue;
+        public Wrapper()
+        {
+            defaultValue = GetValue();
+        }
+
+        public abstract object GetValue();
+    }
+
+    public class FieldWrapper : Wrapper
+    {
+        private FieldInfo field;
+
+        public FieldWrapper(FieldInfo field)
+        {
+            this.field = field;
+        }
+
+        public override object GetValue()
+        {
+            return field.GetValue(null);
+        }
+    }
+    public class PropertyWrapper : Wrapper
+    {
+        private PropertyInfo property;
+
+        public PropertyWrapper(PropertyInfo property)
+        {
+            this.property = property;
+        }
+
+        public override object GetValue()
+        {
+            return property.GetValue(null);
         }
     }
 }
