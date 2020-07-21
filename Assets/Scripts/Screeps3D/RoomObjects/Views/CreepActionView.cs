@@ -83,24 +83,29 @@ namespace Screeps3D.RoomObjects.Views
                     // Beam Stuff
                     case "rangedAttack": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room);
-                        doBeam(_creep.Actions[k] , new BeamConfig(Color.blue, 0.3f, 0.3f));
+                        doArcBeam((Vector3)_creep.ActionTarget, Color.blue);
+                        // doBeam(_creep.Actions[k] , new BeamConfig(Color.blue, 0.3f, 0.3f));
                         doParticles(k, new Color32(0, 45, 255, 255));
                         break;
                     case "rangedHeal":
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
-                        doBeam(_creep.Actions[k], new BeamConfig(Color.green, 0.3f, 0.3f)); 
+                        // doBeam(_creep.Actions[k], new BeamConfig(Color.green, 0.3f, 0.3f)); 
+                        doArcBeam((Vector3)_creep.ActionTarget, Color.green);
                         break;
                     case "repair": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
-                        doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 0.3f)); 
+                        // doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 0.3f));
+                        doArcBeam((Vector3)_creep.ActionTarget, Color.yellow);
                         break;
                     case "build": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
-                        doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 0.3f)); 
+                        // doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 0.3f));
+                        doArcBeam((Vector3)_creep.ActionTarget, Color.yellow);
                         break;
                     case "upgradeController": 
                         _creep.ActionTarget = PosUtility.Convert(_creep.Actions[k], _creep.Room); 
-                        doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 1f)); 
+                        // doBeam(_creep.Actions[k], new BeamConfig(Color.yellow, 0.3f, 1f));
+                        doArcBeam((Vector3)_creep.ActionTarget, Color.yellow); 
                         break;                        
                 }
             }
@@ -152,6 +157,10 @@ namespace Screeps3D.RoomObjects.Views
             EffectsUtility.Beam(_creep as RoomObject, target, beamCfg);
         }
 
+        private void doArcBeam(Vector3 target, Color beamColor) {
+            EffectsUtility.ArcBeam(_creepRoot.transform, target, new BeamConfig(beamColor, 0f, 0f));
+        }
+
         private void doParticles(string particleType, Color32 auraColor) {
             var target = _creep.Actions[particleType];
             switch(particleType) {
@@ -160,7 +169,7 @@ namespace Screeps3D.RoomObjects.Views
                     break;
                 case "attack":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
-                    EffectsUtility.Attack((_creep as IBump).BumpPosition);
+                    EffectsUtility.Attack((_creepRoot.transform.position + (Vector3)_creep.ActionTarget) / 2);
                     break;
                 case "heal":
                     _creep.ActionTarget = PosUtility.Convert(target, _creep.Room);
