@@ -57,20 +57,51 @@ namespace Assets.Scripts.Common.SettingsManagement
                 // Loop settings on that tabgroup and add them to page
                 foreach (var setting in category.Value.OrderBy(s => s.content.text))
                 {
-                    var prefab = Resources.Load("Prefabs/Options/" + "LabelInput") as GameObject;
-                    var labelInput = Instantiate(prefab, page.transform);
-                    labelInput.name = setting.content.text;
+
+                    switch (Type.GetTypeCode(setting.ValueType))
+                    {
+                        case TypeCode.Boolean:
+                            LoadLabelToggle(page, setting);
+                            break;
+                        case TypeCode.Int32:
+                        case TypeCode.Single:
+                        case TypeCode.String:
+                        default:
+                            LoadLabelInput(page, setting);
+                            break;
+                    }
                     
-                    var label = labelInput.GetComponentInChildren<TMP_Text>();
-                    label.text = setting.content.text;
-                    var input = labelInput.GetComponentInChildren<TMP_InputField>();
-                    input.text = setting.GetValue()?.ToString(); // TODO: stuff with type
-                    input.onValueChanged.AddListener(value => setting.SetValue(value));
                     
                     // it is properly initialized after this though, so how do we get the "proper" value?
                 }
             }
             // TODO: for each setting we should add a page
+        }
+
+        private static void LoadLabelInput(GameObject page, SettingsProvider.SettingEntry setting)
+        {
+            var prefab = Resources.Load("Prefabs/Options/" + "LabelInput") as GameObject;
+            var labelInput = Instantiate(prefab, page.transform);
+            labelInput.name = setting.content.text;
+
+            var label = labelInput.GetComponentInChildren<TMP_Text>();
+            label.text = setting.content.text;
+            var input = labelInput.GetComponentInChildren<TMP_InputField>();
+            input.text = setting.GetValue()?.ToString();
+            input.onValueChanged.AddListener(value => setting.SetValue(value));
+        }
+
+        private static void LoadLabelToggle(GameObject page, SettingsProvider.SettingEntry setting)
+        {
+            var prefab = Resources.Load("Prefabs/Options/" + "LabelToggle") as GameObject;
+            var labelInput = Instantiate(prefab, page.transform);
+            labelInput.name = setting.content.text;
+
+            var label = labelInput.GetComponentInChildren<TMP_Text>();
+            label.text = setting.content.text;
+            var input = labelInput.GetComponentInChildren<Toggle>();
+            input.isOn = (bool)setting.GetValue();
+            input.onValueChanged.AddListener(value => setting.SetValue(input.isOn));
         }
     }
 }

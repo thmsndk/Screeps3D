@@ -41,6 +41,8 @@ namespace Assets.Scripts.Common.SettingsManagement
 
                 switch (Type.GetTypeCode(type))
                 {
+                    case TypeCode.Boolean:
+                        return PlayerPrefs.GetInt(settingKey) == 1;
                     case TypeCode.Int32:
                         return PlayerPrefs.GetInt(settingKey);
                     case TypeCode.Single:
@@ -56,6 +58,9 @@ namespace Assets.Scripts.Common.SettingsManagement
             {
                 switch (Type.GetTypeCode(value.GetType()))
                 {
+                    case TypeCode.Boolean:
+                        PlayerPrefs.SetInt(settingKey, ((bool)(object)value) ? 1 : 0);
+                        break;
                     case TypeCode.Int32:
                         PlayerPrefs.SetInt(settingKey, (int)(object)value);
                         break;
@@ -68,9 +73,17 @@ namespace Assets.Scripts.Common.SettingsManagement
                 }
             }
 
+            public Type ValueType { get => wrapper.ValueType;  }
+
             public object GetValue()
             {
                 return wrapper.GetValue();
+            }
+
+            public void SetValue(bool value)
+            {
+                wrapper.SetValue(value);
+                PersistSettingToStore(value);
             }
 
             public void SetValue(string o)

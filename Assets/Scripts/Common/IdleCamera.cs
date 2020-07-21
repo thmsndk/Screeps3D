@@ -15,7 +15,7 @@ namespace Common
         private float secondsToBeIdle;
 
         [Setting("Misc/Camera", "Enable CameraIdle", "Enable / Disable camera idle")]
-        private static bool _enableCameraIdle;
+        private static bool _enableCameraIdle = true;
 
         [Setting("Misc/Camera", "Minimum Minutes", "")]
         private static float _minimumIdleMinutes = 1f;
