@@ -15,6 +15,7 @@ public class Windows
         string[] levels = new string[] {
             "Assets/Scenes/Login.unity",
             "Assets/Scenes/Game.unity",
+            "Assets/Scenes/Options.unity",
         };
 
         // Build player.

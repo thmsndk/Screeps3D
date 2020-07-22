@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Common;
 using Screeps_API;
@@ -38,8 +39,10 @@ namespace Screeps3D
         private void Start()
         {
             if (ScreepsAPI.Console == null)
+            {
                 SceneManager.LoadScene(0);
-            
+            }
+
             ScreepsAPI.OnConnectionStatusChange += OnConnectionStatusChange;
             _exitCue.OnFinishedAnimation += OnExitCue;
 
@@ -50,6 +53,15 @@ namespace Screeps3D
         {
             PoolLoader.Init();
             PrefabLoader.Init();
+
+            StartCoroutine(LoadOptions());
+        }
+
+        private IEnumerator LoadOptions()
+        {
+            yield return new WaitForSeconds(1);
+
+            SceneManager.LoadSceneAsync("Scenes/Options", LoadSceneMode.Additive);
         }
 
         private void OnDestroy()
@@ -63,9 +75,14 @@ namespace Screeps3D
                 return;
             
             if (CurrentMode == GameMode.Login)
+            {
                 SceneManager.LoadScene(0);
+            }
+
             if (CurrentMode == GameMode.Room)
+            {
                 SceneManager.LoadScene(1);
+            }
         }
 
         private void Update()

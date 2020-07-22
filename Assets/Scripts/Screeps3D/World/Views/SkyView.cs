@@ -1,3 +1,4 @@
+using Assets.Scripts.Common.SettingsManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -16,13 +17,22 @@ namespace Screeps3D.World.Views
         float _nightExposition = -6f;
         float _expositionChange = 0.001f;
 
-        float _dayLux = 0.04f;
-        float _nightLux = 0.01f;
+        // day-night lux in range of .04 to 0.01
+
+        [Setting("Gameplay/Day & Night", "Day Brightness", "")]
+        static float _dayLux = 0.04f;
+        [Setting("Gameplay/Day & Night", "Night Brightness", "")]
+        static float _nightLux = 0.01f;
+
         float _luxChange = 0.0001f;
 
-        float _nightLength = 10f;
+        // day-night length anywhere between 1 and 1 billion
+        [Setting("Gameplay/Day & Night", "Night Length", "")]
+        static float _nightLength = 10f;
+        [Setting("Gameplay/Day & Night", "Day Length", "")]
+        static float _dayLength = 5f;
+
         float _currentNightProgress = 0f;
-        float _dayLength = 5f;
         float _currentDayProgress = 0f;
         float _nightProgress = 0.005f;
         float _skyRotation = 0.005f;
