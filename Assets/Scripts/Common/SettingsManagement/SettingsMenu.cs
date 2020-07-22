@@ -17,6 +17,7 @@ namespace Assets.Scripts.Common.SettingsManagement
         [SerializeField] public TabGroup TabGroup;
         [SerializeField] public TabButton ButtonPrefab;
         [SerializeField] public GameObject PagePrefab;
+        [SerializeField] public GameObject PageSectionPrefab;
         private void Awake()
         {
             var provider = new SettingsProvider();
@@ -29,11 +30,11 @@ namespace Assets.Scripts.Common.SettingsManagement
                 var categoryName = category.Key.Substring(0, category.Key.IndexOf("/"));
 
                 var buttonName = categoryName + "TabButton";
-                // TODO: find or create tab button
+
                 var button = TabGroup.tabsContainer.GetComponentsInChildren<TabButton>().SingleOrDefault(b => b.name == buttonName);
                 if (button == null)
                 {
-                    button = Instantiate(ButtonPrefab,TabGroup.transform);
+                    button = Instantiate(ButtonPrefab, TabGroup.transform);
                     button.name = buttonName;
                     button.label.text = categoryName;
                     TabGroup.Subscribe(button);
@@ -41,18 +42,28 @@ namespace Assets.Scripts.Common.SettingsManagement
 
 
                 var pageName = categoryName + "Tab";
-                var page = TabGroup.pagesContainer.transform.Find(pageName)?.gameObject;
+                var page = TabGroup.pagesContainer.GetComponentsInChildren<TabPage>(true).SingleOrDefault(b => b.name == pageName);
 
                 if (page == null)
                 {
-                    var prefab = Resources.Load("Prefabs/Options/" + "Page") as GameObject;
+                    var prefab = Resources.Load<TabPage>("Prefabs/Options/" + "Page");
                     page = Instantiate(prefab, TabGroup.pagesContainer.transform);
                     page.name = pageName;
-                    page.SetActive(false);
+                    page.gameObject.SetActive(false);
                     TabGroup.tabs.Add(page);
                 }
 
                 // TODO: Sections
+                var sectionName = category.Key.Substring(category.Key.IndexOf("/") + 1);
+                var section = page.Content.GetComponentsInChildren<TabPageSection>().SingleOrDefault(b => b.name == sectionName);
+
+                if (section == null)
+                {
+                    var prefab = Resources.Load<TabPageSection>("Prefabs/Options/" + "PageSection");
+                    section = Instantiate(prefab, page.Content.transform);
+                    section.name = sectionName;
+                    section.Title.text = sectionName;
+                }
 
                 // Loop settings on that tabgroup and add them to page
                 foreach (var setting in category.Value.OrderBy(s => s.content.text))
@@ -61,27 +72,23 @@ namespace Assets.Scripts.Common.SettingsManagement
                     switch (Type.GetTypeCode(setting.ValueType))
                     {
                         case TypeCode.Boolean:
-                            LoadLabelToggle(page, setting);
+                            LoadLabelToggle(section.Content, setting);
                             break;
                         case TypeCode.Int32:
                         case TypeCode.Single:
                         case TypeCode.String:
                         default:
-                            LoadLabelInput(page, setting);
+                            LoadLabelInput(section.Content, setting);
                             break;
                     }
-                    
-                    
-                    // it is properly initialized after this though, so how do we get the "proper" value?
                 }
             }
-            // TODO: for each setting we should add a page
         }
 
-        private static void LoadLabelInput(GameObject page, SettingsProvider.SettingEntry setting)
+        private static void LoadLabelInput(GameObject parent, SettingsProvider.SettingEntry setting)
         {
             var prefab = Resources.Load("Prefabs/Options/" + "LabelInput") as GameObject;
-            var labelInput = Instantiate(prefab, page.transform);
+            var labelInput = Instantiate(prefab, parent.transform);
             labelInput.name = setting.content.text;
 
             var label = labelInput.GetComponentInChildren<TMP_Text>();
@@ -91,10 +98,10 @@ namespace Assets.Scripts.Common.SettingsManagement
             input.onValueChanged.AddListener(value => setting.SetValue(value));
         }
 
-        private static void LoadLabelToggle(GameObject page, SettingsProvider.SettingEntry setting)
+        private static void LoadLabelToggle(GameObject parent, SettingsProvider.SettingEntry setting)
         {
             var prefab = Resources.Load("Prefabs/Options/" + "LabelToggle") as GameObject;
-            var labelInput = Instantiate(prefab, page.transform);
+            var labelInput = Instantiate(prefab, parent.transform);
             labelInput.name = setting.content.text;
 
             var label = labelInput.GetComponentInChildren<TMP_Text>();

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Common.SettingsManagement;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class TabGroup : MonoBehaviour
 
     private TabButton selectedTab;
 
-    public List<GameObject> tabs;
+    public List<TabPage> tabs;
 
     public Color32 tabColor;
     public Color32 tabHoverColor;
@@ -57,7 +58,7 @@ public class TabGroup : MonoBehaviour
         int index = button.transform.GetSiblingIndex();
         for (int i = 0; i < tabs.Count; i++)
         {
-            tabs[i].SetActive(i == index);
+            tabs[i].gameObject.SetActive(i == index);
         }
     }
 
