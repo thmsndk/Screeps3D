@@ -751,6 +751,8 @@ GameObject:
   m_Component:
   - component: {fileID: 845413983}
   - component: {fileID: 845413982}
+  - component: {fileID: 845413985}
+  - component: {fileID: 845413984}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -786,6 +788,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &845413984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845413981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e146df39e81237644bcfda353f47d95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TabGroup: {fileID: 1011405710}
+  ButtonPrefab: {fileID: 973210980226939117, guid: cc126b576955d094c9470b12a4313e1a,
+    type: 3}
+  PagePrefab: {fileID: 429435659678718660, guid: ed6deca9af056c941af38198214de8c6,
+    type: 3}
+  PageSectionPrefab: {fileID: 2493938911986935129, guid: fdba9a2a6bc31a14faec9bc71a352180,
+    type: 3}
+--- !u!114 &845413985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845413981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b77cedc58446a4e866f47c8c0ce3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OptionsCanvas: {fileID: 1463225191}
 --- !u!1 &862445996
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1096,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1011405709}
   - component: {fileID: 1011405710}
-  - component: {fileID: 1011405711}
   m_Layer: 5
   m_Name: TabArea
   m_TagString: Untagged
@@ -1118,25 +1151,6 @@ MonoBehaviour:
     rgba: 4290072895
   tabsContainer: {fileID: 862445996}
   pagesContainer: {fileID: 164568138}
---- !u!114 &1011405711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1011405708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e146df39e81237644bcfda353f47d95f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TabGroup: {fileID: 1011405710}
-  ButtonPrefab: {fileID: 973210980226939117, guid: cc126b576955d094c9470b12a4313e1a,
-    type: 3}
-  PagePrefab: {fileID: 429435659678718660, guid: ed6deca9af056c941af38198214de8c6,
-    type: 3}
-  PageSectionPrefab: {fileID: 2493938911986935129, guid: fdba9a2a6bc31a14faec9bc71a352180,
-    type: 3}
 --- !u!1 &1071854153
 GameObject:
   m_ObjectHideFlags: 0
@@ -1813,7 +1827,7 @@ PrefabInstance:
     - target: {fileID: 2641905281696269992, guid: ed6deca9af056c941af38198214de8c6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 529
+      value: 597
       objectReference: {fileID: 0}
     - target: {fileID: 2641905281696269992, guid: ed6deca9af056c941af38198214de8c6,
         type: 3}
