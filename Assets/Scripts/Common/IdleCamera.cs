@@ -14,12 +14,12 @@ namespace Common
         private bool wasIdle;        
         private float secondsToBeIdle;
 
-        [Setting("Misc/Camera", "Enable CameraIdle", "Enable / Disable camera idle")]
+        [Setting("Gameplay/Camera", "Enable CameraIdle", "Enable / Disable camera idle")]
         private static bool _enableCameraIdle = true;
 
-        [Setting("Misc/Camera", "Minimum Minutes", "")]
+        [Setting("Gameplay/Camera", "Minimum Minutes", "")]
         private static float _minimumIdleMinutes = 1f;
-        [Setting("Misc/Camera", "Maximum Minutes", "")]
+        [Setting("Gameplay/Camera", "Maximum Minutes", "")]
         private static float _maximumIdleMinutes = 5f;
 
         private void Start()

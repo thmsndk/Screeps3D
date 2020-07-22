@@ -11,9 +11,6 @@ namespace Assets.Scripts.Common.SettingsManagement
 {
     public class SettingsMenu : MonoBehaviour
     {
-        [Setting("Misc/TestCategory", "TestSetting", "TestTooltip")]
-        public static string testSetting = "200";
-
         [SerializeField] public TabGroup TabGroup;
         [SerializeField] public TabButton ButtonPrefab;
         [SerializeField] public GameObject PagePrefab;

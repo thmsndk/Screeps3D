@@ -20,13 +20,13 @@ namespace Assets.Scripts.Common
         /// <summary>
         /// The timer between switching pvp views
         /// </summary>
-        [Setting("Misc/Spectate", "PVP Spectate Timer", "Change the time between room swap in PVP spectate mode")]
+        [Setting("Gameplay/Spectate", "PVP Spectate Timer", "Change the time between room swap in PVP spectate mode")]
         public static int PvPTimerSwitch { get; private set; } = 60;
 
         /// <summary>
         /// The timer for switching in spectate mode
         /// </summary>
-        [Setting("Misc/Spectate", "Spectate Timer", "Change the time between room swap in spectate mode")]
+        [Setting("Gameplay/Spectate", "Spectate Timer", "Change the time between room swap in spectate mode")]
         public static int SpectateTimerSwitch { get; private set; } = 60;
 
         /// <summary>

@@ -19,17 +19,17 @@ namespace Screeps3D.World.Views
 
         // day-night lux in range of .04 to 0.01
 
-        [Setting("Misc/Day & Night", "Day Brightness", "")]
+        [Setting("Gameplay/Day & Night", "Day Brightness", "")]
         static float _dayLux = 0.04f;
-        [Setting("Misc/Day & Night", "Night Brightness", "")]
+        [Setting("Gameplay/Day & Night", "Night Brightness", "")]
         static float _nightLux = 0.01f;
 
         float _luxChange = 0.0001f;
 
         // day-night length anywhere between 1 and 1 billion
-        [Setting("Misc/Day & Night", "Night Length", "")]
+        [Setting("Gameplay/Day & Night", "Night Length", "")]
         static float _nightLength = 10f;
-        [Setting("Misc/Day & Night", "Day Length", "")]
+        [Setting("Gameplay/Day & Night", "Day Length", "")]
         static float _dayLength = 5f;
 
         float _currentNightProgress = 0f;

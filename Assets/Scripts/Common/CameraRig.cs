@@ -12,7 +12,7 @@ namespace Common
         [SerializeField] private int _rigLayer = default;
         [SerializeField] private float _defaultZoom = default;
         [SerializeField] private float _defaultAngle = default;
-        [Setting("Misc/Camera", "Zoom Speed", "The speed when scrolling")]
+        [Setting("Gameplay/Camera", "Zoom Speed", "The speed when scrolling")]
         [SerializeField] private static float _zoomSpeed = 5;
         [SerializeField] private float _minZoom = 1;
         [SerializeField] private float _maxZoom = 400;
@@ -55,9 +55,9 @@ namespace Common
         private float _zoomRef;
         private Vector3 _posRef;
 
-        [Setting("Misc/Camera", "Room Keyboard Speed", "The speed when using WASD or arrow keys in room mode")]
+        [Setting("Gameplay/Camera", "Room Keyboard Speed", "The speed when using WASD or arrow keys in room mode")]
         private static float _keyboardSpeed = 5;
-        [Setting("Misc/Camera", "World Keyboard Speed", "The speed when using WASD or arrow keys in world mode")]
+        [Setting("Gameplay/Camera", "World Keyboard Speed", "The speed when using WASD or arrow keys in world mode")]
         private static float _worldKeyboardSpeed = 5; // TODO: implement
 
         private Vector3 _clickPos;
