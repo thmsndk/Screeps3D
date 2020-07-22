@@ -11,7 +11,7 @@ ModelImporter:
     second: DecayBall
   - first:
       74: 16724179046122165
-    second: Walls
+    second: InvaderCoreRuin
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -114,12 +114,12 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walls
+      name: InvaderCoreRuin
       takeName: Scene
       internalID: 0
       firstFrame: 1
-      lastFrame: 60
-      wrapMode: 0
+      lastFrame: 180
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0

@@ -40,6 +40,8 @@ namespace Screeps3D.RoomObjects
 
         public float DestroyTime { get; set; }
 
+        private MeshFilter meshFilter { get; set; }
+
         internal override void Unpack(JSONObject data, bool initial)
         {
             if (data.keys.Count == 0)
@@ -93,10 +95,17 @@ namespace Screeps3D.RoomObjects
             {
                 var type = this.Type;
 
-                this.Type = this.StructureType;
-
-                // TODO: switch on structure type and depending on what other structures are present, hide them?
-
+                switch(this.StructureType) {                    
+                    case Constants.TypeExtension:
+                    case Constants.TypeInvaderCore:
+                    case Constants.TypePowerBank:
+                    case Constants.TypeSpawn:
+                    case Constants.TypeTower:
+                        this.Type = $"ruins/ruin_{this.StructureType}"; break;
+                    default: 
+                        this.Type = this.StructureType; break;
+                }
+                
                 View = ObjectViewFactory.Instance.NewView(this);
 
                 this.Type = type;
