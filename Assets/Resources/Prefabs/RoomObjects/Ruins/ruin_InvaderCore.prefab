@@ -39,7 +39,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animateOnStart: 1
   _visibleOnStart: 1
-  _speed: 0.2
+  _speed: 0
 --- !u!114 &7890312585713098935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ruinAnimation: {fileID: 8351977774256933959}
+  _ruinRoot: {fileID: 0}
   _psSmoke: {fileID: 5350245599267261945}
   _vis: {fileID: -2678153781992251151}
 --- !u!1 &7693688993970048212

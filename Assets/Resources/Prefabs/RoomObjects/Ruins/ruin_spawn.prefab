@@ -39,7 +39,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animateOnStart: 1
   _visibleOnStart: 1
-  _speed: 0.2
+  _speed: 0
 --- !u!114 &2056955858425763235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +63,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5716681864270162303, guid: 0b0a3bf3eceae954681218953ad383cf,
+        type: 3}
+      propertyPath: m_PlayAutomatically
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 0b0a3bf3eceae954681218953ad383cf, type: 3}
       propertyPath: m_Name
       value: ruin_spawn

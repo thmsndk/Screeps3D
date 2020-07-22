@@ -23,8 +23,11 @@ namespace Screeps3D.RoomObjects.Views
             var euler = transform.eulerAngles;
             euler.y = Random.Range(0.0f, 360.0f);
             _ruinRoot.eulerAngles = euler;
-            
-            _ruinAnimation.Play();
+
+            if(_ruinAnimation != null) {
+                _ruinAnimation.Play();
+            }
+
             if(_psSmoke != null) {
                 _psSmoke.Play();
             }

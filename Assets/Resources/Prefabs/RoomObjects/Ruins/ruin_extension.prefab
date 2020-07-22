@@ -27,7 +27,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animateOnStart: 1
   _visibleOnStart: 1
-  _speed: 1
+  _speed: 0
 --- !u!114 &4105638347300507764
 MonoBehaviour:
   m_ObjectHideFlags: 0

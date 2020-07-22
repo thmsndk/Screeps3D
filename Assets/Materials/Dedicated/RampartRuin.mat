@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RampartRuin
+  m_Shader: {fileID: -6465566751694194690, guid: 1432de596c53a214e9ffa735ef3e2231,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    MotionVector: User
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - PatternTexture:
+        m_Texture: {fileID: 2800000, guid: 2cf64fc6dacbab24ab3749e72170ab9e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_AFF87147_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 104efd6736fc15743b16ec0b8b13d54d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - EmissionStrength: 0
+    - Fill: 0
+    - FresnelPower: 3
+    - OffsetFactor: 0.7
+    - PatterTextureSize: 3
+    - Speed: 0
+    - TextureSize: 0.9
+    m_Colors:
+    - EmissionColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}

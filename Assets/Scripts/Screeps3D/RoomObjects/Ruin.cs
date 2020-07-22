@@ -101,9 +101,16 @@ namespace Screeps3D.RoomObjects
                     case Constants.TypePowerBank:
                     case Constants.TypeSpawn:
                     case Constants.TypeTower:
-                        this.Type = $"ruins/ruin_{this.StructureType}"; break;
+                    case Constants.TypeLab:
+                    case Constants.TypeRampart:
+                    case Constants.TypeFactory:
+                    case Constants.TypeStorage:
+                    case Constants.TypeTerminal:
+                        this.Type = $"ruins/ruin_{this.StructureType}";
+                        break;
                     default: 
-                        this.Type = this.StructureType; break;
+                        this.Type = this.StructureType;
+                        break;
                 }
                 
                 View = ObjectViewFactory.Instance.NewView(this);

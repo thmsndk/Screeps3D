@@ -30,12 +30,20 @@ ModelImporter:
   - first:
       41386430: 2186277476908879412
     second: ImportLogs
+  - first:
+      74: -623603649343465320
+    second: Scene
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: rampart
     second: {fileID: 2100000, guid: 5793f7f62b59b8a40bb59366ebcf317e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rampartRuin
+    second: {fileID: 2100000, guid: 760936c585302a043a88a72f30bbe6e8, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -120,13 +128,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 1
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
