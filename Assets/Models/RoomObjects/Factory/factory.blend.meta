@@ -8,7 +8,7 @@ ModelImporter:
     second: Default Take
   - first:
       74: -623603649343465320
-    second: FactoryRuin
+    second: RuinFactory
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -93,7 +93,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: FactoryRuin
+      name: RuinFactory
       takeName: Scene
       internalID: 0
       firstFrame: 1

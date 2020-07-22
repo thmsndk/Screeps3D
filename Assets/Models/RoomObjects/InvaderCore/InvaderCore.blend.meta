@@ -8,10 +8,10 @@ ModelImporter:
     second: InvaderCoreTop
   - first:
       74: -8769514890835876719
-    second: DecayBall
+    second: InvaderCoreDecayBall
   - first:
       74: 16724179046122165
-    second: InvaderCoreRuin
+    second: RuinInvaderCore
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -85,7 +85,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: DecayBall
+      name: InvaderCoreDecayBall
       takeName: Scene
       internalID: 0
       firstFrame: 1
@@ -114,7 +114,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: InvaderCoreRuin
+      name: RuinInvaderCore
       takeName: Scene
       internalID: 0
       firstFrame: 1

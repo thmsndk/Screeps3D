@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -623603649343465320
-    second: PowerBankRuin
+    second: RuinPowerBank
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -50,7 +50,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PowerBankRuin
+      name: RuinPowerBank
       takeName: Scene
       internalID: 0
       firstFrame: 1

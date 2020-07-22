@@ -65,7 +65,7 @@ ModelImporter:
     second: ImportLogs
   - first:
       74: -623603649343465320
-    second: SpawnRuin
+    second: RuinSpawn
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -115,7 +115,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: SpawnRuin
+      name: RuinSpawn
       takeName: Scene
       internalID: 0
       firstFrame: 1
