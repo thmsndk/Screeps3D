@@ -106,6 +106,7 @@ namespace Screeps3D.RoomObjects
                     case Constants.TypeFactory:
                     case Constants.TypeStorage:
                     case Constants.TypeTerminal:
+                    case Constants.TypeContainer:
                         this.Type = $"ruins/ruin_{this.StructureType}";
                         break;
                     default: 
@@ -115,7 +116,7 @@ namespace Screeps3D.RoomObjects
                 
                 View = ObjectViewFactory.Instance.NewView(this);
 
-                this.Type = type;
+                this.Type = type + " ( " + this.StructureType + " )";
 
                 if (View)
                 {
