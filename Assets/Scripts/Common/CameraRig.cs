@@ -1,4 +1,5 @@
-﻿using Screeps3D.Menus.Options;
+﻿using Assets.Scripts.Common.SettingsManagement;
+using Screeps3D.Menus.Options;
 using System;
 using UnityEngine;
 
@@ -11,9 +12,14 @@ namespace Common
         [SerializeField] private int _rigLayer = default;
         [SerializeField] private float _defaultZoom = default;
         [SerializeField] private float _defaultAngle = default;
-        [SerializeField] private float _zoomSpeed = 5;
+        [Setting("Gameplay/Camera", "Zoom Speed", "The speed when scrolling")]
+        [SerializeField] private static float _zoomSpeed = 5;
         [SerializeField] private float _minZoom = 1;
         [SerializeField] private float _maxZoom = 400;
+
+        
+        
+        
 
         public Action OnTargetReached;
 
@@ -48,7 +54,12 @@ namespace Common
         private Vector3 _targetPosition;
         private float _zoomRef;
         private Vector3 _posRef;
-        private float _keyboardSpeed = 5;
+
+        [Setting("Gameplay/Camera", "Room Keyboard Speed", "The speed when using WASD or arrow keys in room mode")]
+        private static float _keyboardSpeed = 5;
+        [Setting("Gameplay/Camera", "World Keyboard Speed", "The speed when using WASD or arrow keys in world mode")]
+        private static float _worldKeyboardSpeed = 5; // TODO: implement
+
         private Vector3 _clickPos;
 
         private void Start()
