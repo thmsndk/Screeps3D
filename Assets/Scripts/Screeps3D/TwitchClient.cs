@@ -287,18 +287,18 @@ namespace Assets.Scripts.Screeps3D
                     }
 
                     break;
-                case "setinfo":
-                    var allowed = new[] // TODO: detect mods & people allowed
-                    {
-                        "thmsndk",
-                        "ags131"
-                    };
+                ////case "setinfo":
+                ////    var allowed = new[] // TODO: detect mods & people allowed
+                ////    {
+                ////        "thmsndk",
+                ////        "ags131"
+                ////    };
 
-                    if (allowed.Contains(e.Command.ChatMessage.Username))
-                    {
-                        PlayerPrefs.SetString(PP_TWITCH_INFO, e.Command.ArgumentsAsString);
-                    }
-                    break;
+                ////    if (allowed.Contains(e.Command.ChatMessage.Username))
+                ////    {
+                ////        PlayerPrefs.SetString(PP_TWITCH_INFO, e.Command.ArgumentsAsString);
+                ////    }
+                ////    break;
                 default:
                     break;
                     // send a random message at a timer mentioning the channel and the warpath channels
