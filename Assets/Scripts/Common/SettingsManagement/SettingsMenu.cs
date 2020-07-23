@@ -90,9 +90,14 @@ namespace Assets.Scripts.Common.SettingsManagement
 
             var label = labelInput.GetComponentInChildren<TMP_Text>();
             label.text = setting.content.text;
+
             var input = labelInput.GetComponentInChildren<TMP_InputField>();
             input.text = setting.GetValue()?.ToString();
             input.onValueChanged.AddListener(value => setting.SetValue(value));
+            if (setting.Secret)
+            {
+                input.inputType = TMP_InputField.InputType.Password;
+            }
         }
 
         private static void LoadLabelToggle(GameObject parent, SettingsProvider.SettingEntry setting)

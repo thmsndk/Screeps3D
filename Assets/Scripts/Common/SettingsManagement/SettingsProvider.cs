@@ -21,11 +21,13 @@ namespace Assets.Scripts.Common.SettingsManagement
             private Wrapper wrapper;
             private string settingKey;
 
+            public bool Secret { get; set; }
+
             public SettingEntry(SettingAttribute attribute, Wrapper wrapper)
             {
                 this.content = attribute.Title;
                 this.wrapper = wrapper;
-
+                this.Secret = attribute.Secret;
                 settingKey = $"Setting:{wrapper.FullName}"; // TODO: ability to supply setting name
 
                 // Load and set value from playerprefs, should probably replace this with a "storefactory" would allow for server specific persistance as well

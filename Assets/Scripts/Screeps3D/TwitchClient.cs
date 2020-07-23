@@ -39,7 +39,7 @@ namespace Assets.Scripts.Screeps3D
             }
         }
 
-        [Setting("Twitch/General", "Token")]
+        [Setting("Twitch/General", "Token", secret: true)]
         private static string BOT_TOKEN;
         [Setting("Twitch/General", "Channel")]
         private static string CHANNEL;
