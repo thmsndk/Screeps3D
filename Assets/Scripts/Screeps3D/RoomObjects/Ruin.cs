@@ -107,6 +107,7 @@ namespace Screeps3D.RoomObjects
                     case Constants.TypeStorage:
                     case Constants.TypeTerminal:
                     case Constants.TypeContainer:
+                    case Constants.TypeLink:
                         this.Type = $"ruins/ruin_{this.StructureType}";
                         break;
                     default: 
