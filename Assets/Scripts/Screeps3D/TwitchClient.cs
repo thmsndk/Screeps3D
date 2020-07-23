@@ -110,6 +110,34 @@ namespace Assets.Scripts.Screeps3D
             {
                 if (client == null)
                 {
+                    bool settingsValid = true;
+                    var sb = new StringBuilder();
+
+                    if (string.IsNullOrEmpty(channel))
+                    {
+                        settingsValid = false;
+                        sb.AppendLine($"<size=40><b>Missing Channelname</b></size>");
+                    }
+
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        settingsValid = false;
+                        sb.AppendLine($"<size=40><b>Missing token</b></size>");
+                    }
+
+                    if (string.IsNullOrEmpty(username))
+                    {
+                        settingsValid = false;
+                        sb.AppendLine($"<size=40><b>Missing username</b></size>");
+                    }
+
+                    if (!settingsValid)
+                    {
+
+                        NotifyText.Message(sb.ToString(), Color.red);
+                        return;
+                    }
+
                     var credentials = new ConnectionCredentials(username, accessToken);
                     client = new Client();
                     client.Initialize(credentials, channel);
