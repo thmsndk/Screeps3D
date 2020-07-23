@@ -27,7 +27,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: 39ef423f4a930614c8c93caf88df0428, type: 3}
+        m_Texture: {fileID: 2800000, guid: 32f56f74de2ef034cab0ef5cd06bb8ff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -120,8 +120,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - EmissionEV: 1
-    - EmissionExposureWeight: 0.614
-    - EmissionStrength: 3.57
+    - EmissionExposureWeight: 1
+    - EmissionStrength: 2
     - EmissiontextureSize: 5
     - Fill: 0.01
     - FresnelPower: 2
@@ -129,8 +129,8 @@ Material:
     - OffsetFactor: 2
     - SmoothVal: -0.85
     - Speed: 0.1
-    - TextureFloatSpeed: 0.1
-    - TextureSize: 0.8
+    - TextureFloatSpeed: 0.0625
+    - TextureSize: 0.1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -255,7 +255,7 @@ Material:
     m_Colors:
     - BaseColor: {r: 0, g: 0.18620977, b: 0.509434, a: 0}
     - Color_DEE3E845: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0}
-    - EmissionColor: {r: 0.6392157, g: 0, b: 0, a: 0}
+    - EmissionColor: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
