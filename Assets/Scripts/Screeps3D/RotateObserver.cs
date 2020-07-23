@@ -19,7 +19,7 @@ public class RotateObserver : MonoBehaviour
         var initial = transform.rotation.eulerAngles;
         for (var i = 0; i < amount; i++)
         {
-            _rotations[i] = Quaternion.Euler(Random.Range(-10.0f, 90.0f), Random.Range(-10.0f, 90.0f), initial.z);
+            _rotations[i] = Quaternion.Euler(Random.Range(30.0f, 70.0f), Random.Range(30.0f, 70.0f), initial.z);
         }
     }
 
@@ -32,7 +32,7 @@ public class RotateObserver : MonoBehaviour
 
     private void RotateTowardTarget()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, _target, Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, _target, Time.deltaTime);
     }
 
     private void FindNewTarget()
@@ -40,10 +40,5 @@ public class RotateObserver : MonoBehaviour
         if (_nextTarget > Time.time) return;
         _nextTarget = Time.time + TARGET_DELAY;
         _target = _rotations[(int) (_rotations.Length * Random.value)];
-    }
-
-    private float Randomize(float value)
-    {
-        return value + (Random.value * MAX_RANDOM_DELTA * 2) - MAX_RANDOM_DELTA;
     }
 }
