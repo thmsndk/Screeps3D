@@ -1,3 +1,4 @@
+using Assets.Scripts.Common;
 using Assets.Scripts.Common.SettingsManagement;
 using Common;
 using System;
@@ -34,8 +35,17 @@ namespace Assets.Scripts.Screeps3D
         {
             get => _ENABLE_INTEGRATION; set
             {
-                _ENABLE_INTEGRATION = value;
-                OnEnableIntegration?.Invoke(null, value);
+                if (CmdArgs.ForceEnableTwitch)
+                {
+                    Debug.Log("Twitch is force enabled by -twitch argument");
+                    _ENABLE_INTEGRATION = true;
+                }
+                else
+                {
+                    _ENABLE_INTEGRATION = value;
+                }
+
+                OnEnableIntegration?.Invoke(null, _ENABLE_INTEGRATION);
             }
         }
 
