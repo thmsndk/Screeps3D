@@ -1,3 +1,4 @@
+using Assets.Scripts.Common.SettingsManagement;
 using Common;
 using System;
 using System.Collections.Generic;
@@ -24,49 +25,60 @@ namespace Assets.Scripts.Screeps3D
 
     public class TwitchClient : BaseSingleton<TwitchClient>
     {
-        private const string PP_TWITCH_CHANNEL = "twitch:channel";
-        private const string PP_TWITCH_TOKEN = "twitch:bot:token";
-        private const string PP_TWITCH_USERNAME = "twitch:bot:username";
+        private static event EventHandler<bool> OnEnableIntegration;
+
+        private static bool _ENABLE_INTEGRATION = false;
+
+        [Setting("Twitch/General", "Enable")]
+        private static bool ENABLE_INTEGRATION
+        {
+            get => _ENABLE_INTEGRATION; set
+            {
+                _ENABLE_INTEGRATION = value;
+                OnEnableIntegration?.Invoke(null, value);
+            }
+        }
+
+        [Setting("Twitch/General", "Token")]
+        private static string BOT_TOKEN;
+        [Setting("Twitch/General", "Channel")]
+        private static string CHANNEL;
+        [Setting("Twitch/General", "Username")]
+        private static string USERNAME;
+
+        // TODO: not making this a setting you can configure, cause if it is updated from twitch, how do we know the settingname? it is not stored either
+        //[Setting("Twitch/General", "!info")]
+        //private static string STREAM_INFO; 
         private const string PP_TWITCH_INFO = "twitch:stream:info";
 
         public Client client;
-        private string channel_name = "thmsndk"; // TODO: configurable
+
 
         public event EventHandler<GoToRoomEventArgs> OnGoToRoom;
+
+        private void Awake()
+        {
+            OnEnableIntegration += TwitchClient_OnEnableIntegration;
+        }
+
+        private void TwitchClient_OnEnableIntegration(object sender, bool enabled)
+        {
+            if (enabled)
+            {
+                InitializeAndConnect(CHANNEL, BOT_TOKEN, USERNAME);
+            }
+            else
+            {
+                client?.Disconnect();
+            }
+
+            // TODO: handle disconnect
+        }
 
         private void Start()
         {
             // Script should be running always, this is handled in editor settings though, setting it like this is not reccomended.
             // Application.runInBackground = true;
-
-            // TODO: UI for tokens / settings and such
-            var channel = PlayerPrefs.GetString(PP_TWITCH_CHANNEL, string.Empty);
-            var accessToken = PlayerPrefs.GetString(PP_TWITCH_TOKEN, string.Empty);
-            var botTwitchUsername = PlayerPrefs.GetString(PP_TWITCH_USERNAME, string.Empty); // "Screeps3D"
-
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                // TODO: UI
-                PlayerInput.Get("channel:bot_access_token:bot_username", (string input) =>
-                {
-                    var values = input.Split(':');
-                    channel = values[0];
-                    PlayerPrefs.SetString(PP_TWITCH_CHANNEL, channel);
-
-                    accessToken = values[1];
-                    PlayerPrefs.SetString(PP_TWITCH_TOKEN, accessToken);
-
-                    botTwitchUsername = values[2];
-                    PlayerPrefs.SetString(PP_TWITCH_USERNAME, botTwitchUsername);
-
-                    InitializeAndConnect(channel, accessToken, botTwitchUsername);
-                });
-            }
-            else
-            {
-                InitializeAndConnect(channel, accessToken, botTwitchUsername);
-            }
-
         }
 
         private void OnDestroy()
@@ -94,30 +106,29 @@ namespace Assets.Scripts.Screeps3D
 
         private void InitializeAndConnect(string channel, string accessToken, string username)
         {
-            Debug.Log($"{channel}:{accessToken}:{username}");
             try
             {
-                this.channel_name = channel;
-                var credentials = new ConnectionCredentials(username, accessToken);
                 if (client == null)
                 {
+                    var credentials = new ConnectionCredentials(username, accessToken);
                     client = new Client();
-                    client.Initialize(credentials, channel_name);
+                    client.Initialize(credentials, channel);
+
+                    client.OnConnected += Client_OnConnected;
+                    client.OnJoinedChannel += Client_OnJoinedChannel;
+                    client.OnLeftChannel += Client_OnLeftChannel;
+                    client.OnDisconnected += Client_OnDisconnected;
+                    client.OnConnectionError += Client_OnConnectionError;
+                    client.OnUserTimedout += Client_OnUserTimedout;
+
+
+                    client.OnChatCommandReceived += Client_OnChatCommandReceived;
+
+                    client.OnMessageReceived += Client_OnMessageReceived;
+
+                    client.DisableAutoPong = false;
                 }
 
-                client.OnConnected += Client_OnConnected;
-                client.OnJoinedChannel += Client_OnJoinedChannel;
-                client.OnLeftChannel += Client_OnLeftChannel;
-                client.OnDisconnected += Client_OnDisconnected;
-                client.OnConnectionError += Client_OnConnectionError;
-                client.OnUserTimedout += Client_OnUserTimedout;
-
-
-                client.OnChatCommandReceived += Client_OnChatCommandReceived;
-
-                client.OnMessageReceived += Client_OnMessageReceived;
-
-                client.DisableAutoPong = false;
                 client.Connect();
             }
             catch (Exception ex)
@@ -216,7 +227,7 @@ namespace Assets.Scripts.Screeps3D
                 case "warpath":
                     // message the chat with pvp battles / conflicts should this perhaps be something running on a timer?
                     //Apparently loan is utilized https://www.leagueofautomatednations.com/vk/battles.json
-                    
+
                     break;
                 case "pvp":
                     // message the chat with pvp battles from the experimental endpoint.
@@ -258,20 +269,18 @@ namespace Assets.Scripts.Screeps3D
 
         private void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Username != "Screeps3D")
+            if (e.ChatMessage.Username != USERNAME)
             {
-                Debug.Log($"{e.ChatMessage.Username}: {e.ChatMessage.Message}");
+                //Debug.Log($"{e.ChatMessage.Username}: {e.ChatMessage.Message}");
             }
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                client.SendMessage(client.JoinedChannels[0], "This is a test message from the bot / 3D client");
-            }
+            //if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    client.SendMessage(client.JoinedChannels[0], "This is a test message from the bot / 3D client");
+            //}
         }
-        // TODO: a GUI to configure your twitch settings
-
     }
 }
