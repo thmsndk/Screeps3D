@@ -113,6 +113,7 @@ namespace Screeps3D.RoomObjects
                     case Constants.TypeExtractor:
                     case Constants.TypeConstructedWall:
                     case Constants.TypeRoad:
+                    case Constants.TypeNuker:
                         this.Type = $"ruins/ruin_{this.StructureType}";
                         break;
                     default: 
