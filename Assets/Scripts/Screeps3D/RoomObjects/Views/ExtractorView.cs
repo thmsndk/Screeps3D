@@ -5,7 +5,6 @@ namespace Screeps3D.RoomObjects.Views
     public class ExtractorView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private Renderer rend = default;
-        [SerializeField] private Animator anim = default;
 
         private Extractor _extractor;
         // TODO: we also need the mineral on the location to get regen time if we want to do something specific in regards to that
@@ -33,19 +32,11 @@ namespace Screeps3D.RoomObjects.Views
         {
             if (_extractor == null)
                 return;
-
-            if (null != anim)
+         
+            if (_extractor.Cooldown > 0)
             {
-                // play Bounce but start at a quarter of the way though
-                //anim.Play("Bounce", 0, 0.25f);
-                // Sadly I can't get the animation to work, only a Default Take seems to get imported, and when an animation controller is attached, the model dissappears
-                //anim.Play("cooldown");
-                // new Vector2(5 * speed * Time.deltaTime, 0)
-                if (_extractor.Cooldown > 0)
-                {
-                    var speed = 10f;
-                    rend.transform.Rotate(Vector3.up * speed * Time.deltaTime);
-                }
+                var speed = 10f;
+                rend.transform.Rotate(Vector3.up * speed * Time.deltaTime);
             }
         }
     }
