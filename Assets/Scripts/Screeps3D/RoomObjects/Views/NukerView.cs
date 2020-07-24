@@ -1,5 +1,6 @@
 ﻿using Common;
 using UnityEngine;
+using Screeps_API;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -13,28 +14,27 @@ namespace Screeps3D.RoomObjects.Views
         [SerializeField] private Renderer _nuke = default;
         [SerializeField] private Renderer _shell = default;
         private Nuker _nuker;
+        private float _cooldownLeft = 0f;
 
 
         private void showLoadLevels() {
-            _ghodiumScale.SetVisibility(_nuker.ResourceAmount / _nuker.ResourceCapacity  );
+            _ghodiumScale.SetVisibility(_nuker.ResourceAmount/_nuker.ResourceCapacity);
 
             var energy = _nuker.Store.ContainsKey(Constants.TypeResource) ? _nuker.Store[Constants.TypeResource] : 0f;
             var energyCapacity = _nuker.Capacity.ContainsKey(Constants.TypeResource) ? _nuker.Capacity[Constants.TypeResource] : 0f;
             _energyScale.SetVisibility(energy / energyCapacity);
-
-            _cdScale.SetVisibility(1 - _nuker.Cooldown / _nuker.maxCooldown);
+            _cdScale.SetVisibility(1 - (_cooldownLeft / _nuker.maxCooldown));
         }
 
         private void hideNukeIfCooldown() {
-            if (_nuker.Cooldown > 0)
-            {
+            if (_cooldownLeft > 0) {
                 _nuke.enabled = false;
                 _cdRenderer.materials[0].SetColor("EmissionColor", Color.red);
             } else {
                 _nuke.enabled = true;
                 _cdRenderer.materials[0].SetColor("EmissionColor", Color.green);
-                _nuke.materials[2].SetTexture("EmissionTexture", _nuker?.Owner?.Badge);
-                _nuke.materials[2].SetFloat("EmissionStrength", .1f);
+                _nuke.materials[1].SetTexture("EmissionTexture", _nuker?.Owner?.Badge);
+                _nuke.materials[1].SetFloat("EmissionStrength", .1f);
             }
         }
 
@@ -51,6 +51,7 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Delta(JSONObject data)
         {
+            _cooldownLeft = Mathf.Max(0, _nuker.CooldownTime - ScreepsAPI.Time);
             hideNukeIfCooldown();
             showLoadLevels();
         }

@@ -74,8 +74,8 @@ MonoBehaviour:
   _visibleOnStart: 1
   _speed: 0.2
   _x: 0
-  _y: 1
-  _z: 0
+  _y: 0
+  _z: 1
 --- !u!114 &8881831300816417292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,8 +92,8 @@ MonoBehaviour:
   _visibleOnStart: 1
   _speed: 0.2
   _x: 0
-  _y: 1
-  _z: 0
+  _y: 0
+  _z: 1
 --- !u!114 &1428621576928946155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
   _visibleOnStart: 1
   _speed: 0.2
   _x: 0
-  _y: 1
-  _z: 0
+  _y: 0
+  _z: 1
 --- !u!1001 &6077453568276576797
 PrefabInstance:
   m_ObjectHideFlags: 0
