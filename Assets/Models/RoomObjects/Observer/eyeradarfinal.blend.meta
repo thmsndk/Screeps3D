@@ -1,61 +1,143 @@
 fileFormatVersion: 2
 guid: 7e49bb3b73d68964488e51435d0db823
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Cube
-    100002: Cube_001
-    100004: Cylinder
-    100006: Cylinder_001
-    100008: Cylinder_002
-    100010: Empty
-    100012: //RootNode
-    100014: Sphere
-    400000: Cube
-    400002: Cube_001
-    400004: Cylinder
-    400006: Cylinder_001
-    400008: Cylinder_002
-    400010: Empty
-    400012: //RootNode
-    400014: Sphere
-    2300000: Cube
-    2300002: Cube_001
-    2300004: Cylinder
-    2300006: Cylinder_001
-    2300008: Cylinder_002
-    2300010: Sphere
-    3300000: Cube
-    3300002: Cube_001
-    3300004: Cylinder
-    3300006: Cylinder_001
-    3300008: Cylinder_002
-    3300010: Sphere
-    4300000: Cylinder_002
-    4300002: Cube_001
-    4300004: Cylinder_001
-    4300006: Cube
-    4300008: Cylinder
-    4300010: Sphere
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Cube
+  - first:
+      1: 100002
+    second: Cube_001
+  - first:
+      1: 100004
+    second: Cylinder
+  - first:
+      1: 100006
+    second: Cylinder_001
+  - first:
+      1: 100008
+    second: Cylinder_002
+  - first:
+      1: 100010
+    second: Empty
+  - first:
+      1: 100012
+    second: //RootNode
+  - first:
+      1: 100014
+    second: Sphere
+  - first:
+      4: 400000
+    second: Cube
+  - first:
+      4: 400002
+    second: Cube_001
+  - first:
+      4: 400004
+    second: Cylinder
+  - first:
+      4: 400006
+    second: Cylinder_001
+  - first:
+      4: 400008
+    second: Cylinder_002
+  - first:
+      4: 400010
+    second: Empty
+  - first:
+      4: 400012
+    second: //RootNode
+  - first:
+      4: 400014
+    second: Sphere
+  - first:
+      23: 2300000
+    second: Cube
+  - first:
+      23: 2300002
+    second: Cube_001
+  - first:
+      23: 2300004
+    second: Cylinder
+  - first:
+      23: 2300006
+    second: Cylinder_001
+  - first:
+      23: 2300008
+    second: Cylinder_002
+  - first:
+      23: 2300010
+    second: Sphere
+  - first:
+      33: 3300000
+    second: Cube
+  - first:
+      33: 3300002
+    second: Cube_001
+  - first:
+      33: 3300004
+    second: Cylinder
+  - first:
+      33: 3300006
+    second: Cylinder_001
+  - first:
+      33: 3300008
+    second: Cylinder_002
+  - first:
+      33: 3300010
+    second: Sphere
+  - first:
+      43: 4300000
+    second: Cylinder_002
+  - first:
+      43: 4300002
+    second: Cube_001
+  - first:
+      43: 4300004
+    second: Cylinder_001
+  - first:
+      43: 4300006
+    second: Cube
+  - first:
+      43: 4300008
+    second: Cylinder
+  - first:
+      43: 4300010
+    second: Sphere
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
+  - first:
+      74: -623603649343465320
+    second: RuinObserver
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Eyeball
-    second: {fileID: 2100000, guid: d324fc86c0468424b9b6608bd46bbe9e, type: 2}
+    second: {fileID: 2100000, guid: e462e36572bca7648b2dc14f02c424d6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: darkgrey
-    second: {fileID: 2100000, guid: 1b88372551cfd7245b4a8aac5a8c879a, type: 2}
+    second: {fileID: 2100000, guid: 6d0b73b5a81659c41bd4531845ef0a94, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: iris
-    second: {fileID: 2100000, guid: 84e42bf9d334631409d97892fbf06ebc, type: 2}
+    second: {fileID: 2100000, guid: 3df6b77858ed3f248aa4c1db6f6c277c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -67,10 +149,10 @@ ModelImporter:
       name: pupil
     second: {fileID: 2100000, guid: 4663011abce426a4cbab8c11c6b56402, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -92,7 +174,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: RuinObserver
+      takeName: Scene
+      internalID: 0
+      firstFrame: 1
+      lastFrame: 60
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -100,6 +211,7 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -107,18 +219,19 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -127,10 +240,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -140,13 +253,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 1
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Common;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects
 {
@@ -19,11 +21,13 @@ namespace Screeps3D.RoomObjects
         "cooldownTime":2.247301E+07
     }*/
 
-    public class Nuker : OwnedStoreStructure, IResourceObject//, IEnergyObject
+    public class Nuker : OwnedStoreStructure, IResourceObject, ICooldownTime
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }
         public string ResourceType { get; set; }
+        public long CooldownTime { get; set; }
+        public float maxCooldown = 100000f;
 
         internal Nuker()
         {
@@ -32,51 +36,9 @@ namespace Screeps3D.RoomObjects
         
         internal override void Unpack(JSONObject data, bool initial)
         {
-            // Convert pre-store update to post-store update
-            if (!data.HasField("store") && data.keys.Count > 0)
-            {
-                var store = new JSONObject();
-                data.AddField("store", store);
-
-                var storeCapacityResource = new JSONObject();
-                data.AddField("storeCapacityResource", store);
-
-                var energyCapData = data["energyCapacity"];
-                if (energyCapData)
-                {
-                    if (energyCapData != null)
-                    {
-                        storeCapacityResource.AddField(Constants.TypeResource, energyCapData.n);
-                    }
-                }
-
-                var energyData = data["energy"];
-                if (energyData != null)
-                {
-                    if (energyData != null)
-                    {
-                        store.AddField(Constants.TypeResource, energyData.n);
-                    }
-                }
-
-                var minAmountData = data["G"];
-
-                var minCapacityData = data["GCapacity"];
-
-                if (minAmountData != null)
-                {
-                    store.AddField(ResourceType, minAmountData.n);
-                }
-
-                if (minCapacityData != null)
-                {
-                    storeCapacityResource.AddField(ResourceType, minCapacityData.n);
-                }
-                
-            }
-
             base.Unpack(data, initial);
-
+            UnpackUtility.Cooldown(this, data);
+            
             ResourceCapacity = this.Capacity.ContainsKey(ResourceType) ? this.Capacity[ResourceType] : 0;
             ResourceAmount = this.Store.ContainsKey(ResourceType) ? this.Store[ResourceType] : 0;
         }

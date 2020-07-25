@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -623603649343465320
-    second: PowerBankRig
+    second: RuinPowerBank
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -21,7 +21,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: PowerBase
-    second: {fileID: 2100000, guid: 97d9dbea3ebdf0c4bb45477c25fdc742, type: 2}
+    second: {fileID: 2100000, guid: 3df6b77858ed3f248aa4c1db6f6c277c, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -50,12 +50,12 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PowerBankRig
+      name: RuinPowerBank
       takeName: Scene
       internalID: 0
       firstFrame: 1
-      lastFrame: 120
-      wrapMode: 2
+      lastFrame: 50.000004
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0

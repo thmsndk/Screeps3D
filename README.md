@@ -79,8 +79,8 @@ This is an attempt at a feature comparison table.
 | Seamless transition to rooms|  | :heavy_check_mark: |
 | Map View | :heavy_check_mark: | :heavy_check_mark: |
 | Spawn invaders | :heavy_check_mark: |  |
-| Place spawn | :heavy_check_mark: |  |
-| Place construction sites | :heavy_check_mark: |  |
+| Place spawn | :heavy_check_mark: | :heavy_check_mark: |
+| Place construction sites | :heavy_check_mark: | :heavy_check_mark: |
 | Place flags | :heavy_check_mark: | :heavy_check_mark: |
 | Room Visuals | :heavy_check_mark: |  |
 

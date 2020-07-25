@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Common;
+using Assets.Scripts.Common.SettingsManagement;
 using Screeps3D.Menus.Options;
 using System;
 using UnityEngine;
@@ -13,7 +14,13 @@ namespace Common
         private bool wasIdle;        
         private float secondsToBeIdle;
 
-        private bool _enableCameraIdle;
+        [Setting("Gameplay/Camera", "Enable CameraIdle", "Enable / Disable camera idle")]
+        private static bool _enableCameraIdle = true;
+
+        [Setting("Gameplay/Camera", "Minimum Minutes", "")]
+        private static float _minimumIdleMinutes = 1f;
+        [Setting("Gameplay/Camera", "Maximum Minutes", "")]
+        private static float _maximumIdleMinutes = 5f;
 
         private void Start()
         {
@@ -80,8 +87,8 @@ namespace Common
         private void RandomizeIdleTime()
         {
             secondsToBeIdle = UnityEngine.Random.Range(
-                            60f * 1f /* 1 Minutes */,
-                            60f * 5f /* 5 Minutes */);
+                            60f * _minimumIdleMinutes /* 1 Minutes */,
+                            60f * _maximumIdleMinutes /* 5 Minutes */);
         }
 
         private void RestoreRotationAndZoom()

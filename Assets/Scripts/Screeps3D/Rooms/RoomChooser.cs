@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Common;
 using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
+using Assets.Scripts.Screeps3D;
 using Assets.Scripts.Screeps3D.Rooms.Views;
 using Common;
 using Screeps_API;
@@ -10,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -46,6 +48,8 @@ namespace Screeps3D.Rooms
         private IEnumerator _findPvpRooms;
         private IEnumerator _findPlayerOwnedRooms;
 
+        private bool pausedBecauseOfTwitchGoto = false;
+
         private void Start()
         {
             random = new System.Random();
@@ -70,6 +74,28 @@ namespace Screeps3D.Rooms
             _roomList.Hide();
         }
 
+        private void Instance_OnGoToRoom(object sender, GoToRoomEventArgs e)
+        {
+            StartCoroutine(TwitchGotoRoom(e));
+        }
+
+        private IEnumerator TwitchGotoRoom(GoToRoomEventArgs e)
+        {
+            Debug.Log($"Twitch told me to go to {e.RoomName}");
+            this.GetAndChooseRoom(e.RoomName);
+
+            if (_pvpSpectateToggle.isOn)
+            {
+                // TODO: what if people constantly swap rooms?
+                Debug.Log($"Pausing pvp spectate for {e.Seconds}s");
+                pausedBecauseOfTwitchGoto = true;
+                _pvpSpectateToggle.isOn = false;
+                yield return new WaitForSeconds(e.Seconds);
+                _pvpSpectateToggle.isOn = true;
+                pausedBecauseOfTwitchGoto = false;
+            }
+        }
+
         private void OnTogglePvpSpectate(bool isOn)
         {
             PlayerPrefs.SetInt(_prefPvpSpectateToggle, isOn ? 1 : 0);
@@ -82,7 +108,7 @@ namespace Screeps3D.Rooms
             }
             else
             {
-                PlaceSpawnView.EnableOverlay = true;
+                PlaceSpawnView.EnableOverlay = pausedBecauseOfTwitchGoto ? false : true;
                 if (_findPvpRooms != null)
                 {
                     StopCoroutine(_findPvpRooms);
@@ -197,6 +223,11 @@ namespace Screeps3D.Rooms
         private float _pvpSpectateBias = 0;
         private void ChooseRoomWithPVPOrOwnedRoom()
         {
+            // loop rooms and add a list of rooms, mark the selected one bold
+            // https://twitchtv.desk.com/customer/en/portal/articles/2884064-twitch-app-s-chat-message-formatting
+            // the pvp list probably belongs in a twitch extension https://www.twitch.tv/p/extensions/
+            // Still a little spammy with every 30 seconds, should probably collect pvp details in a warpath fashion and put the message on a "warpath" timer
+
             if (ScreepsAPI.Cache.Official)
             {
                 //// requires screepsmod-admin-utils
@@ -257,6 +288,12 @@ namespace Screeps3D.Rooms
                 {
                     var index = Mathf.FloorToInt(random.Next(rooms.Count()) * Math.Min(_pvpSpectateBias, rooms.Count()));
                     Debug.Log($"warpath room index {index}");
+
+                    if (index >= rooms.Count())
+                    {
+                        index -= 1;
+                    }
+
                     var room = rooms.ElementAt(index);
                     if (PlayerPosition.Instance.RoomName == room.RoomName)
                     {
@@ -270,7 +307,48 @@ namespace Screeps3D.Rooms
                     var roomName = room.RoomName;
                     _roomInput.text = roomName;
                     Debug.Log($"Going to room {roomName} bias: {_pvpSpectateBias} Classification {room.Classification}, Defender: {room.Defender?.Username} , Attackers: {string.Join(",", room.Attackers.Select(a => a.Username))}");
-                    this.GetAndChooseRoom(roomName);
+                    var swappingRooms = false;
+                    if (PlayerPosition.Instance.RoomName != roomName)
+                    {
+                        // Only swap room if it is a new one
+                        swappingRooms = true;
+                        this.GetAndChooseRoom(roomName);
+                    }
+
+                    var sb = new StringBuilder();
+                    //var fontSize
+                    var messageColor = Color.white;
+                    switch (room.Classification)
+                    {
+                        case Warpath.Classification.Class2:
+                        case Warpath.Classification.Class3:
+                            messageColor = Color.yellow;
+                            break;
+                        case Warpath.Classification.Class4:
+                        case Warpath.Classification.Class5:
+                        case Warpath.Classification.Class6:
+                            messageColor = Color.red;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    sb.Append("<size=20>");
+                    if (swappingRooms)
+                    {
+                        sb.AppendLine($"Going to {room.RoomName}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"Staying in {room.RoomName}");
+                    }
+
+                    sb.AppendLine($"Class {(int)room.Classification}");
+                    sb.AppendLine($"Defender {room.Defender?.Username}");
+                    sb.AppendLine($"Attackers {string.Join(",", room.Attackers.Select(a => a.Username))}");
+                    sb.Append("</size>");
+
+                    NotifyText.Message(sb.ToString(), messageColor, 2.5f);
                 }
                 else
                 {
@@ -536,6 +614,9 @@ namespace Screeps3D.Rooms
             {
                 this.OnTogglePvpSpectate(_pvpSpectateToggle.isOn);
             }
+
+            // We register it here, cause we are lazy, and hopefully the twitch client is initialized.
+            TwitchClient.Instance.OnGoToRoom += Instance_OnGoToRoom;
         }
 
         private void AddRoomToRoomListGameObject(string shardName, string romName)

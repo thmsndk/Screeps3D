@@ -14,5 +14,9 @@
     }*/
     public class Observer : OwnedStructure
     {
+        internal override void Unpack(JSONObject data, bool initial)
+        {
+            base.Unpack(data, initial);
+        }
     }
 }

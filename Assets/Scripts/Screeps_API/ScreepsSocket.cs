@@ -154,14 +154,14 @@ namespace Screeps_API
 
         public void Subscribe(string path, Action<JSONObject> callback)
         {
-            Debug.Log("subscribing " + path);
+            //Debug.Log("subscribing " + path);
             Socket.Send(string.Format("subscribe {0}", path));
             _subscriptions[path] = callback;
         }
 
         public void Unsub(string path, bool remove = true)
         {
-            Debug.Log("unsub " + path);
+            //Debug.Log("unsub " + path);
             Socket.Send(string.Format("unsubscribe {0}", path));
             if (remove)
                 _subscriptions.Remove(path);

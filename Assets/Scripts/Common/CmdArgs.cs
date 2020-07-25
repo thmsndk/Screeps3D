@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Common.SettingsManagement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,16 +15,18 @@ namespace Assets.Scripts.Common
         /// <summary>
         /// Flags the enabled/disabled state for twitch controls
         /// </summary>
-        public static bool AllowTwitchControl { get; private set; } = false;
+        public static bool ForceEnableTwitch { get; private set; } = false;
 
         /// <summary>
         /// The timer between switching pvp views
         /// </summary>
+        [Setting("Gameplay/Spectate", "PVP Spectate Timer", "Change the time between room swap in PVP spectate mode")]
         public static int PvPTimerSwitch { get; private set; } = 60;
 
         /// <summary>
         /// The timer for switching in spectate mode
         /// </summary>
+        [Setting("Gameplay/Spectate", "Spectate Timer", "Change the time between room swap in spectate mode")]
         public static int SpectateTimerSwitch { get; private set; } = 60;
 
         /// <summary>
@@ -41,11 +44,11 @@ namespace Assets.Scripts.Common
         /// </summary>
         static CmdArgs()
         {
-            var args = Environment.GetCommandLineArgs();
-
             // Only process if we've not already loaded the args
             if (!_loadedArgs)
             {
+                var args = Environment.GetCommandLineArgs();
+
                 foreach (var arg in args)
                 {
                     // Parse the argument to get the key value paris, if there is only a key value, then the value is true
@@ -61,9 +64,9 @@ namespace Assets.Scripts.Common
                             DisableCameraIdle = true;
                             break;
 
-                        case "allowtwitchcontrol":
+                        case "twitch":
                             UnityEngine.Debug.Log($"Handling: {kvp.Key} with value {kvp.Value}");
-                            AllowTwitchControl = true;
+                            ForceEnableTwitch = true;
                             break;
 
                         case "specatetimwerswitch":

@@ -16,6 +16,8 @@ namespace Common
                 _instance = FindObjectOfType<T>();
 
                 if (_instance != null) return _instance;
+                
+                // TOOD: https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-objects-when-scene-r.html
 
                 throw new Exception(string.Format("expecting singleton of type {0} in scene", typeof(T)));
             }

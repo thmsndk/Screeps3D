@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RotateObserver : MonoBehaviour
 {
-    private const float MAX_RANDOM_DELTA = 80;
-    private const float TARGET_DELAY = 1;
+    private const float MAX_RANDOM_DELTA = 360;
+    private const float TARGET_DELAY = 2;
 
     private float _nextTarget;
     private Quaternion[] _rotations;
@@ -14,11 +14,12 @@ public class RotateObserver : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _rotations = new Quaternion[5];
+        int amount = 10;
+        _rotations = new Quaternion[amount];
         var initial = transform.rotation.eulerAngles;
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < amount; i++)
         {
-            _rotations[i] = Quaternion.Euler(Randomize(initial.x), Randomize(initial.y), initial.z);
+            _rotations[i] = Quaternion.Euler(Random.Range(-300.0f, -220.0f), Random.Range(-300.0f, -220.0f), initial.z);
         }
     }
 
@@ -39,10 +40,5 @@ public class RotateObserver : MonoBehaviour
         if (_nextTarget > Time.time) return;
         _nextTarget = Time.time + TARGET_DELAY;
         _target = _rotations[(int) (_rotations.Length * Random.value)];
-    }
-
-    private float Randomize(float value)
-    {
-        return value + (Random.value * MAX_RANDOM_DELTA * 2) - MAX_RANDOM_DELTA;
     }
 }
