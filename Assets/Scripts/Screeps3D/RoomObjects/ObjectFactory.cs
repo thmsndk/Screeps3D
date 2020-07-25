@@ -68,6 +68,8 @@ namespace Screeps3D.RoomObjects
                     return new Ruin();
                 case Constants.TypeInvaderCore:
                     return new InvaderCore();
+                case Constants.TypeNuke:
+                    return new Nuke();
                 default:
                     return new PlaceHolderRoomObject();
             }

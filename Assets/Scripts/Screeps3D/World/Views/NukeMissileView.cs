@@ -1,5 +1,7 @@
 ﻿using Screeps_API;
+using System.Linq;
 using Screeps3D.Effects;
+using Screeps3D.Rooms;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ namespace Screeps3D.World.Views
         private bool nukeLaunched = true;
 
         private bool badgeSet = false;
+        private bool launchLocationSet = false;
 
         private void setBadge() {
             if (!badgeSet)
@@ -33,11 +36,29 @@ namespace Screeps3D.World.Views
             }
         }
 
-        private void playLaunchEffect(float progress) {
-        if(progress < 0.015 && !_launchSmoke.isPlaying) {
-                Debug.LogError(Overlay.LaunchRoomName + " launching nuke ");
-                _launchSmoke.Play();
+        private void setLaunchLocation(Room room, JSONObject roomData) {
+
+            if(!launchLocationSet) {
+                var nuker = room.Objects.SingleOrDefault(ro => ro.Value.Type == Constants.TypeNuker);
+
+                // if nuker present, shift arc renderer start point to it
+                if (nuker.Value != null) {
+                    arcRenderer.point1.transform.position = nuker.Value.Position;
+                    _launchSmoke.transform.position = arcRenderer.point1.transform.position;
+                    _launchSmoke.transform.position += new Vector3(0, 0.6f, 0);
+                }
+                // regardless - position was set (default or nuker) - unsubscribe from unpack
+                launchLocationSet = true;
+                Overlay.LaunchRoom.RoomUnpacker.OnUnpack -= setLaunchLocation;
             }
+        }
+
+        private void playLaunchEffect(float progress) {
+            if(progress < 0.015 && !_launchSmoke.isPlaying) {
+                    Debug.LogError(Overlay.LaunchRoomName + " launching nuke ");
+                    _launchSmoke.Play();
+                }
+            
         }
 
         private void landNukeEffect(float progress) {// explosion progress check should be landTime and current tick
@@ -56,6 +77,8 @@ namespace Screeps3D.World.Views
             _bigBadaBoom.Stop();
             _launchSmoke.Stop();
             Overlay = overlay as NukeMissileOverlay;
+            
+
             this.arcRenderer = this.gameObject.GetComponentInChildren<NukeMissileArchRenderer>();
 
             // do we have a launchroom? what if we first acquire the launchroom later?, should this be in update?
@@ -78,10 +101,10 @@ namespace Screeps3D.World.Views
             point2Text.text = ""; //$"{progress*100}%";
             arcRenderer.Progress(Overlay.Progress - 0.3f); // give a little smoke trail when initialized
             //arcRenderer.Progress(Overlay.Progress); // TODO: render progress on selection panel when you select the missile.
-
+            
             initialized = true;
             // spawn nuke explosion for testing purposes, not sure it belongs on the missile view? :shrugh: belongs in an "onTick" event or something
-            //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);            
+            //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);
         }
 
         private void Update()
@@ -95,13 +118,17 @@ namespace Screeps3D.World.Views
             {
                 return;
             }
-
+            if(!launchLocationSet) {
+                if(Overlay.LaunchRoom != null && Overlay.LaunchRoom.RoomUnpacker != null) {
+                    Overlay.LaunchRoom.RoomUnpacker.OnUnpack += setLaunchLocation;
+                }
+            }
             setBadge();
 
             // TODO: should we simulate movement / progress in between nukemonitor updates so the misile moves "smoothly"? this neeeds to be in update then. and not sure calling arcRenderer.Progress works, we then need a "targetProgress" or something like that, could let us inspire by creep movement between ticks
             // TODO: should perhaps move this calculation so progress is updated on each tick? and not each rendering?
             float progress = (float)(ScreepsAPI.Time - Overlay.InitialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
-
+            // progress = 0.998f;
             playLaunchEffect(progress);
             arcRenderer.Progress(progress);
 

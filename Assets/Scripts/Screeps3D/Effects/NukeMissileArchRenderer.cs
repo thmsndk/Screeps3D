@@ -107,16 +107,19 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// <returns></returns>
     private Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
     {
+        float groundLevel = point1.transform.position.y;
         if(t < 0.015) {
-            return new Vector3(point1.transform.position.x, 1.6f + Mathf.Sin(100 * t) * 13 , point1.transform.position.z);
+            return new Vector3(point1.transform.position.x, groundLevel + t * 1000, point1.transform.position.z);
         }
+        float elevation = groundLevel + 0.015f * 1000;
+        // start and end parabola at elevation
+        Vector3 parabolaStartV = new Vector3(point1.transform.position.x, elevation, point1.transform.position.z);
+        Vector3 parabolaEndV = new Vector3(point2.transform.position.x, elevation,  point2.transform.position.z);
+
         if ( t >= 0.015 && t <= 0.985 ) {
-            return MathParabola.Parabola(point1.transform.position, point2.transform.position, Constants.ShardHeight, t);
+            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, 15f);
         }
-        return new Vector3(point2.transform.position.x, 1.6f + Mathf.Sin(100 * t) * 13 , point2.transform.position.z);
-        //float x = t * maxDistance;
-        //float y = x * Mathf.Tan(radianAngle) - ((gravity * x * x)/(2 * velocity * velocity * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle)));
-        //return new Vector3(x, y, point1.position.z);
+        return new Vector3(parabolaEndV.x, groundLevel + (1 - t) * 1000, parabolaEndV.z);
     }
 
     private Vector3 GetRaisePoint(float t) {
@@ -131,33 +134,10 @@ public class NukeMissileArchRenderer : MonoBehaviour
     internal void Progress(float progress)
     {
         missile.transform.position = CalculateArcPoint(progress);
-        if(progress >= 0.015) {
+        // if(progress <= 0.986) {
             var nextPoint = CalculateArcPoint(progress + 0.001f);
             missile.transform.LookAt(nextPoint);
-        }
-        //Debug.Log($"{progress} {missile.transform.position}");
+        // }
     }
 }
 
-public class MathParabola
-{
-
-    public static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
-    {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x + 15f;
-
-        var mid = Vector3.Lerp(start, end, t);
-
-        return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
-    }
-
-    public static Vector2 Parabola(Vector2 start, Vector2 end, float height, float t)
-    {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
-
-        var mid = Vector2.Lerp(start, end, t);
-
-        return new Vector2(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t));
-    }
-
-}

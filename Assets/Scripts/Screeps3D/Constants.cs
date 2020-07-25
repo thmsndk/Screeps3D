@@ -38,6 +38,7 @@ namespace Screeps3D
         public const string TypeDeposit = "deposit";
         public const string TypeRuin = "ruin";
         public const string TypeInvaderCore = "invaderCore";
+        public const string TypeNuke = "nuke";
 
 
 
