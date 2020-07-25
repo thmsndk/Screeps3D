@@ -56,10 +56,11 @@ namespace Screeps3D.World.Views
 
         private void playLaunchEffect(float progress) {
             if(progress < 0.015 && !_launchSmoke.isPlaying) {
-                    Debug.LogError(Overlay.LaunchRoomName + " launching nuke ");
-                    _launchSmoke.Play();
-                }
-            
+            _launchSmoke.Play();
+            }
+            if(progress >= 0.015 && _launchSmoke.isPlaying) {
+            _launchSmoke.Stop();
+            }            
         }
 
         private void landNukeEffect(float progress) {// explosion progress check should be landTime and current tick
@@ -86,6 +87,9 @@ namespace Screeps3D.World.Views
             // do we have a launchroom? what if we first acquire the launchroom later?, should this be in update?
             if (Overlay.LaunchRoom != null)
             {
+                // try{
+                    
+                // }
                 arcRenderer.point1.transform.position = Overlay.LaunchRoom.Position + new Vector3(25, 0, 25); // Center of the room, because we do not know where the nuke is, could perhaps scan for it and correct it?
                 _launchSmoke.transform.position = arcRenderer.point1.transform.position;
                 _launchSmoke.transform.position += new Vector3(0, 0.6f, 0);
@@ -101,7 +105,7 @@ namespace Screeps3D.World.Views
 
             var point2Text = arcRenderer.point2.GetComponentInChildren<TMP_Text>();
             point2Text.text = ""; //$"{progress*100}%";
-            arcRenderer.Progress(Overlay.Progress - 0.3f); // give a little smoke trail when initialized
+            // arcRenderer.Progress(Overlay.Progress - 0.3f); // give a little smoke trail when initialized
             //arcRenderer.Progress(Overlay.Progress); // TODO: render progress on selection panel when you select the missile.
             
             initialized = true;
@@ -130,7 +134,11 @@ namespace Screeps3D.World.Views
             // TODO: should we simulate movement / progress in between nukemonitor updates so the misile moves "smoothly"? this neeeds to be in update then. and not sure calling arcRenderer.Progress works, we then need a "targetProgress" or something like that, could let us inspire by creep movement between ticks
             // TODO: should perhaps move this calculation so progress is updated on each tick? and not each rendering?
             float progress = (float)(ScreepsAPI.Time - Overlay.InitialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
-            p += 0.0005f;
+            
+            if(launchLocationSet) {
+                
+                p +=  p < 0.015f ? 0.00001f : 0.001f;
+            }
 
             progress = p;
             playLaunchEffect(progress);
@@ -142,9 +150,10 @@ namespace Screeps3D.World.Views
             landNukeEffect(progress);
 
             if(progress == 1) {
-                Overlay = null;
+                // i guess it should be properly unloaded somehow ?
+                // Overlay.enabled = false;
                 _nuke.enabled = false;
-                arcRenderer = null;
+                arcRenderer.enabled = false;
             }
         }
     }

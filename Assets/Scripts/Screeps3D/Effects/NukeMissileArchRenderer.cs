@@ -117,7 +117,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
         Vector3 parabolaEndV = new Vector3(point2.transform.position.x, elevation,  point2.transform.position.z);
 
         if ( t >= 0.015 && t <= 0.985 ) {
-            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, 15f);
+            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, 0f);
         }
         return new Vector3(parabolaEndV.x, groundLevel + (1 - t) * 1000, parabolaEndV.z);
     }
