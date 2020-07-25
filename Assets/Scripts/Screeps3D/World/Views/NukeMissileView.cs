@@ -105,7 +105,7 @@ namespace Screeps3D.World.Views
 
             var point2Text = arcRenderer.point2.GetComponentInChildren<TMP_Text>();
             point2Text.text = ""; //$"{progress*100}%";
-            // arcRenderer.Progress(Overlay.Progress - 0.3f); // give a little smoke trail when initialized
+            arcRenderer.Progress(Overlay.Progress); // give a little smoke trail when initialized
             //arcRenderer.Progress(Overlay.Progress); // TODO: render progress on selection panel when you select the missile.
             
             initialized = true;
@@ -135,12 +135,11 @@ namespace Screeps3D.World.Views
             // TODO: should perhaps move this calculation so progress is updated on each tick? and not each rendering?
             float progress = (float)(ScreepsAPI.Time - Overlay.InitialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
             
-            if(launchLocationSet) {
-                
-                p +=  p < 0.015f ? 0.00001f : 0.001f;
-            }
+            // if(launchLocationSet) {                
+            // p +=  p < 0.015f ? 0.00001f : 0.001f;
+            // }
 
-            progress = p;
+            // progress = p;
             playLaunchEffect(progress);
             arcRenderer.Progress(progress);
 
