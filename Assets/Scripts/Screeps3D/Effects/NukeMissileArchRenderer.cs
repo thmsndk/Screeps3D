@@ -22,7 +22,6 @@ public class NukeMissileArchRenderer : MonoBehaviour
     public float nukeHeightOffset = 1.64f;
 
     public int vertexCount = 12;
-    private bool renderArc = true;
 
     private void Awake()
     {
@@ -44,6 +43,9 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// </summary>
     private void RenderArc()
     {
+        if(!lr.enabled) {
+            return;
+        }
         lr.positionCount = resolution + 1;
         lr.SetPositions(CalculateArcArray());
     }
@@ -90,13 +92,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!renderArc) {
-            return;
-        }
         RenderArc();
-    }
-    internal void StopRender() {
-        renderArc = false;
     }
 }
 

@@ -65,12 +65,14 @@ namespace Screeps3D.World.Views
             }            
         }
 
-        private void landNukeEffect(float progress) {// explosion progress check should be landTime and current tick
+        private void landNukeEffect(float progress) {
             if (progress >= 1f && !nukeExploded)
             {
                 _nukeTrail.Stop();   
                 _bigBadaBoom.Play();
                 nukeExploded = true;
+                LineRenderer lr = nukeArcRenderer.GetComponent<LineRenderer>();
+                lr.enabled = false;
                 nukeArcRenderer.enabled = false;
             }
         }
@@ -138,7 +140,7 @@ namespace Screeps3D.World.Views
             
             // For Debug purposes
             // if(launchLocationSet) {
-            // p +=  p < 0.015f ? 0.00001f : 0.001f;
+            //     p +=  p < 0.015f ? 0.00001f : 0.001f;
             // }
             // progress = p;
 
@@ -146,7 +148,7 @@ namespace Screeps3D.World.Views
 
             moveMissleAlongArc(progress);
 
-            // nuke explosion and stopping of nukeSmoke particle effect
+            // nuke explosion and stopping of nukeSmoke particle effect, disabling the ArcRenderer also
             landNukeEffect(progress);
             
             // quadratic curves tend to be far more exciting
