@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Screeps3D.RoomObjects;
 using Screeps_API;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace Screeps3D.Rooms
             UnpackUsers(roomData);
             UnpackFlags(roomData);
             UnpackObjects(roomData);
+            RemoveObjects();
 
             OnUnpack?.Invoke(_room, roomData);
         }
@@ -50,7 +52,6 @@ namespace Screeps3D.Rooms
             }
 
             // process existing object deltas
-            _removeList.Clear();
             foreach (var kvp in _room.Objects)
             {
                 var id = kvp.Key;
@@ -80,11 +81,6 @@ namespace Screeps3D.Rooms
                 {
                     roomObject.Delta(objectData, _room);
                 }
-            }
-
-            foreach (var id in _removeList)
-            {
-                _room.Objects.Remove(id);
             }
         }
 
@@ -119,6 +115,8 @@ namespace Screeps3D.Rooms
         // "swarm_W3N7s~4~9~25~25|intel_nsa~4~9~25~25|control_W3N7c~4~9~25~25"
         private void UnpackFlags(JSONObject roomData)
         {
+            List<string> flagNameList = new List<string>();
+            List<string> activeFlagsList = new List<string>();
             var flagsData = roomData["flags"];
             if (flagsData == null)
                 return;
@@ -135,10 +133,45 @@ namespace Screeps3D.Rooms
                 var dataArray = flagStr.Split('~');
                 if (dataArray.Length < 5)
                     continue;
+                flagNameList.Add(dataArray[0]);
                 var flag = ObjectManager.Instance.GetFlag(dataArray);
                 flag.FlagDelta(dataArray, _room);
                 _room.Objects[flag.Name] = flag;
             }
+            
+            // process existing flag deltas
+            foreach (var kvp in _room.Objects.Values.OfType<Flag>().ToList())
+            {
+                
+                var id = kvp.Id;
+                var flagObject = kvp;
+
+                if (flagNameList.Contains(id))
+                {
+                    activeFlagsList.Add(id);
+
+                }
+                
+                if (!activeFlagsList.Contains(id))
+                {
+                    flagObject.HideObject(_room);
+                    _removeList.Add(id);
+                }
+            }
+            
+            foreach (var id in _removeList)
+            {
+                _room.Objects.Remove(id);
+            }
+        }
+
+        private void RemoveObjects()
+        {
+            foreach (var id in _removeList)
+            {
+                _room.Objects.Remove(id);
+            }
+            _removeList.Clear();
         }
     }
 }
