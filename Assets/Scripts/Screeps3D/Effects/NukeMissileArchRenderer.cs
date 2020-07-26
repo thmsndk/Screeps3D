@@ -19,10 +19,10 @@ public class NukeMissileArchRenderer : MonoBehaviour
     public GameObject point1;
     public GameObject point2;
     public Transform point3;
-
-    public GameObject missile;
+    public float nukeHeightOffset = 1.64f;
 
     public int vertexCount = 12;
+    private bool renderArc = true;
 
     private void Awake()
     {
@@ -31,26 +31,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
         gravity = Mathf.Abs(Physics.gravity.y);
         lr.startWidth = 1.5f;
         lr.endWidth = 1.5f;
-
-        //missile.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(point1.position, point2.position);
-
-    //    Gizmos.color = Color.cyan;
-    //    Gizmos.DrawLine(point2.position, point3.position);
-
-    //    Gizmos.color = Color.red;
-    //    for (float ratio = 0.5f / vertexCount; ratio < 1; ratio += 1.0f / vertexCount)
-    //    {
-    //        Gizmos.DrawLine(Vector3.Lerp(point1.position, point2.position, ratio), Vector3.Lerp(point2.position, point3.position, ratio));
-    //    }
-    //}
-
 
     // Start is called before the first frame update
     void Start()
@@ -63,27 +44,8 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// </summary>
     private void RenderArc()
     {
-
-
         lr.positionCount = resolution + 1;
         lr.SetPositions(CalculateArcArray());
-
-        //var pointList = new List<Vector3>();
-        //for (float ratio = 0; ratio <= 1; ratio += 1.0f / vertexCount)
-        //{
-        //    var tangentLineVertex1 = Vector3.Lerp(point1.position, point2.position, ratio);
-        //    var tangentLineVertex2 = Vector3.Lerp(point2.position, point3.position, ratio);
-        //    var bezierpoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
-        //    pointList.Add(bezierpoint);
-        //}
-
-        //lr.positionCount = pointList.Count;
-        //lr.SetPositions(pointList.ToArray());
-
-        //missile.transform.LookAt(point2.transform, Vector3.down);
-        //missile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-
-
     }
 
     private Vector3[] CalculateArcArray()
@@ -105,7 +67,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// Calculates height and distance
     /// </summary>
     /// <returns></returns>
-    private Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
+    public Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
     {
         float groundLevel = point1.transform.position.y;
         if(t < 0.015) {
@@ -117,9 +79,9 @@ public class NukeMissileArchRenderer : MonoBehaviour
         Vector3 parabolaEndV = new Vector3(point2.transform.position.x, elevation,  point2.transform.position.z);
 
         if ( t >= 0.015 && t <= 0.985 ) {
-            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, 0f);
+            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, nukeHeightOffset);
         }
-        return new Vector3(parabolaEndV.x, groundLevel + (1 - t) * 1000, parabolaEndV.z);
+        return new Vector3(parabolaEndV.x, groundLevel + (1 - t) * 1000 + nukeHeightOffset, parabolaEndV.z);
     }
 
     private Vector3 GetRaisePoint(float t) {
@@ -128,16 +90,13 @@ public class NukeMissileArchRenderer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!renderArc) {
+            return;
+        }
         RenderArc();
     }
-
-    internal void Progress(float progress)
-    {
-        missile.transform.position = CalculateArcPoint(progress);
-        // if(progress <= 0.986) {
-            var nextPoint = CalculateArcPoint(progress + 0.001f);
-            missile.transform.LookAt(nextPoint);
-        // }
+    internal void StopRender() {
+        renderArc = false;
     }
 }
 

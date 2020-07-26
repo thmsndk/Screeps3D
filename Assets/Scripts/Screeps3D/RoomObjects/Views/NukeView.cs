@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         public const string Path = "Prefabs/RoomObjects/nuke";
         private Nuke _nuke;
+        [SerializeField] private ParticleSystem _beacon = default;
 
         public void Init()
         {
@@ -25,6 +26,9 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Unload(RoomObject roomObject)
         {
+            _beacon.Stop();
+            _nuke = null;
+            _beacon = null;
         }
 
         private void Update()
