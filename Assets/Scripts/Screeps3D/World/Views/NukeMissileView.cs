@@ -111,7 +111,7 @@ namespace Screeps3D.World.Views
 
         private void moveMissleAlongArc(float progress) {
             _nuke.transform.position = nukeArcRenderer.CalculateArcPoint(progress);
-            var nextPoint = nukeArcRenderer.CalculateArcPoint(progress + 0.00001f);
+            var nextPoint = nukeArcRenderer.CalculateArcPoint(progress + 0.001f);
             _nuke.transform.LookAt(nextPoint);
         }
 
