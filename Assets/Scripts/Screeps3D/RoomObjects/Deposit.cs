@@ -72,36 +72,28 @@ namespace Screeps3D.RoomObjects
             {
                 var type = this.Type;
 
-                string alternative = null;
+                string dType = null;
 
                 switch (this.DepositType)
                 {
                     case Constants.BaseDeposit.Silicon:
-                        alternative = "silicon";
+                        dType = "silicon";
                         break;
                     case Constants.BaseDeposit.Metal:
-                        alternative = "metal";
+                        dType = "metal";
                         break;
                     case Constants.BaseDeposit.Biomass:
-                        alternative = "biomass";
+                        dType = "biomass";
                         break;
                     case Constants.BaseDeposit.Mist:
-                        alternative = "mist";
+                        dType = "mist";
                         break;
                 }
 
-                if (alternative == null)
-                {
-                    this.Type = "placeholder";
-                }
-                else
-                {
-                    this.Type = $"Deposits/{alternative}";
-                }
-
+                this.Type = dType == null ? "placeholder" : $"Deposits/{dType}";
                 View = ObjectViewFactory.Instance.NewView(this);
-
-                this.Type = type;
+                
+                this.Type = dType;
 
                 if (View)
                 {
