@@ -1,5 +1,7 @@
 ﻿using Screeps_API;
+using System.Linq;
 using Screeps3D.Effects;
+using Screeps3D.Rooms;
 using TMPro;
 using UnityEngine;
 
@@ -8,47 +10,109 @@ namespace Screeps3D.World.Views
     public class NukeMissileView : MonoBehaviour, IWorldOverlayViewComponent
     {
         public NukeMissileOverlay Overlay { get; private set; }
-        [SerializeField] private Renderer _nuke;        
-
-        private NukeMissileArchRenderer arcRenderer;
+        [SerializeField] private GameObject _nuke;
+        [SerializeField] private ParticleSystem _nukeTrail;    
+        [SerializeField] private ParticleSystem _bigBadaBoom;
+        [SerializeField] private ParticleSystem _launchSmoke;
+        private NukeMissileArchRenderer nukeArcRenderer;
 
         private bool initialized = false;
 
         private bool nukeExploded = false;
+        private bool nukeLaunched = true;
 
         private bool badgeSet = false;
+        private bool launchLocationSet = false;
+        private float p;
+
+        private void setBadge() {
+            if (!badgeSet)
+            {
+                var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(Overlay.Shard, Overlay.LaunchRoomName);
+                if (launchRoomInfo != null)
+                {
+                    Renderer r = _nuke.GetComponentInChildren<Renderer>();
+                    r.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
+                    r.materials[3].SetFloat("EmissionStrength", .1f);
+                    badgeSet = true;
+                }
+            }
+        }
+
+        private void setLaunchLocation(Room room, JSONObject roomData) {
+
+            if(!launchLocationSet) {
+                var nuker = room.Objects.SingleOrDefault(ro => ro.Value.Type == Constants.TypeNuker);
+
+                // if nuker present, shift arc renderer start point to it
+                if (nuker.Value != null) {
+                    nukeArcRenderer.point1.transform.position = nuker.Value.Position;
+                    _launchSmoke.transform.position = nukeArcRenderer.point1.transform.position;
+                    _launchSmoke.transform.position += new Vector3(0, 0.6f, 0);
+                }
+                // regardless - position was set (default or nuker) - unsubscribe from unpack
+                launchLocationSet = true;
+                Overlay.LaunchRoom.RoomUnpacker.OnUnpack -= setLaunchLocation;
+            }
+        }
+
+        private void playLaunchEffect(float progress) {
+            if(progress < 0.015 && !_launchSmoke.isPlaying) {
+            _launchSmoke.Play();
+            }
+            if(progress >= 0.015 && _launchSmoke.isPlaying) {
+            _launchSmoke.Stop();
+            }            
+        }
+
+        private void landNukeEffect(float progress) {
+            if (progress >= 1f && !nukeExploded)
+            {
+                _nukeTrail.Stop();   
+                _bigBadaBoom.Play();
+                nukeExploded = true;
+                LineRenderer lr = nukeArcRenderer.GetComponent<LineRenderer>();
+                lr.enabled = false;
+                nukeArcRenderer.enabled = false;
+            }
+        }
 
         public void Init(WorldOverlay overlay)
         {
+            _bigBadaBoom.Stop();
+            _launchSmoke.Stop();
             Overlay = overlay as NukeMissileOverlay;
+            p = 0f;
+            
 
-            this.arcRenderer = this.gameObject.GetComponentInChildren<NukeMissileArchRenderer>();
+            this.nukeArcRenderer = this.gameObject.GetComponentInChildren<NukeMissileArchRenderer>();
 
             // do we have a launchroom? what if we first acquire the launchroom later?, should this be in update?
             if (Overlay.LaunchRoom != null)
             {
-                arcRenderer.point1.transform.position = Overlay.LaunchRoom.Position + new Vector3(25, 0, 25); // Center of the room, because we do not know where the nuke is, could perhaps scan for it and correct it?
-                
+                nukeArcRenderer.point1.transform.position = Overlay.LaunchRoom.Position + new Vector3(25, 0, 25); // Center of the room, because we do not know where the nuke is, could perhaps scan for it and correct it?
+                _launchSmoke.transform.position = nukeArcRenderer.point1.transform.position;
+                _launchSmoke.transform.position += new Vector3(0, 0.6f, 0);
             }
-            var launchRoomText = arcRenderer.point1.GetComponentInChildren<TMP_Text>();
+            var launchRoomText = nukeArcRenderer.point1.GetComponentInChildren<TMP_Text>();
             launchRoomText.text = "";//launcRoom.Name;
 
             if (Overlay.ImpactRoom != null)
             {
-                arcRenderer.point2.transform.position = Overlay.ImpactPosition;
+                nukeArcRenderer.point2.transform.position = Overlay.ImpactPosition;
+                _bigBadaBoom.transform.position = Overlay.ImpactPosition;
             }
 
-            var point2Text = arcRenderer.point2.GetComponentInChildren<TMP_Text>();
+            var point2Text = nukeArcRenderer.point2.GetComponentInChildren<TMP_Text>();
             point2Text.text = ""; //$"{progress*100}%";
-            arcRenderer.Progress(Overlay.Progress - 0.3f); // give a little smoke trail when initialized
-            //arcRenderer.Progress(Overlay.Progress); // TODO: render progress on selection panel when you select the missile.
-
+            
             initialized = true;
-            // spawn nuke explosion for testing purposes, not sure it belongs on the missile view? :shrugh: belongs in an "onTick" event or something
-            //EffectsUtility.NukeExplosition(Overlay.ImpactPosition);
+        }
 
-            
-            
+        private void moveMissleAlongArc(float progress) {
+            _nuke.transform.position = nukeArcRenderer.CalculateArcPoint(progress);
+            var nextPoint = nukeArcRenderer.CalculateArcPoint(progress + 0.001f);
+            _nuke.transform.LookAt(nextPoint);
         }
 
         private void Update()
@@ -63,43 +127,33 @@ namespace Screeps3D.World.Views
                 return;
             }
 
-            if (!badgeSet)
-            {
-                var launchRoomInfo = MapStatsUpdater.Instance.GetRoomInfo(Overlay.Shard, Overlay.LaunchRoomName);
-                if (launchRoomInfo != null)
-                {
-                    _nuke.materials[3].SetColor("BaseColor", new Color(0.7f, 0.7f, 0.7f, 1f));
-                    _nuke.materials[3].SetTexture("Colortexture", launchRoomInfo.User?.Badge);
-                    _nuke.materials[3].SetFloat("ColorMix", 1f);
-                    _nuke.materials[3].SetColor("EmissionColor", new Color(0.7f, 0.7f, 0.7f, 1f));
-                    _nuke.materials[3].SetTexture("EmissionTexture", launchRoomInfo.User?.Badge);
-                    _nuke.materials[3].SetFloat("EmissionStrength", .3f);
-                    badgeSet = true;
+            if(!launchLocationSet) {
+                if(Overlay.LaunchRoom != null && Overlay.LaunchRoom.RoomUnpacker != null) {
+                    Overlay.LaunchRoom.RoomUnpacker.OnUnpack += setLaunchLocation;
                 }
             }
-            float decayEmission = .5f + Mathf.Abs(Mathf.Sin(Time.time)) * .3f;
-            _nuke.materials[3].SetFloat("EmissionStrength", decayEmission);
+            setBadge();
 
             // TODO: should we simulate movement / progress in between nukemonitor updates so the misile moves "smoothly"? this neeeds to be in update then. and not sure calling arcRenderer.Progress works, we then need a "targetProgress" or something like that, could let us inspire by creep movement between ticks
             // TODO: should perhaps move this calculation so progress is updated on each tick? and not each rendering?
             float progress = (float)(ScreepsAPI.Time - Overlay.InitialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
-            // TODO: the nuke position progress should be at the tip of the nuke
-            arcRenderer.Progress(progress);
+            
+            // For Debug purposes
+            // if(launchLocationSet) {
+            //     p +=  p < 0.015f ? 0.00001f : 0.001f;
+            // }
+            // progress = p;
 
+            playLaunchEffect(progress);
+
+            moveMissleAlongArc(progress);
+
+            // nuke explosion and stopping of nukeSmoke particle effect, disabling the ArcRenderer also
+            landNukeEffect(progress);
+            
             // quadratic curves tend to be far more exciting
             // make it fast at launch, spending most time in the middle, and gain more and more speed towards impact so it "lands" with a bang?
-
             gameObject.name = $"nukeMissile:{this.Overlay.Id}:{Overlay?.LaunchRoom?.Name}->{Overlay?.ImpactRoom?.Name} {progress * 100}%";
-
-            // explosion progress check should be landTime and current tick
-            if (progress >= 1f && !nukeExploded)
-            {
-                // TODO: nuke effect should be slower, and last longer, when you wait 50k ticks for an explosion, it should be GRAND!!!
-                EffectsUtility.NukeExplosion(Overlay.ImpactPosition);
-                nukeExploded = true;
-                arcRenderer.enabled = false;
-            }
-
         }
     }
 }

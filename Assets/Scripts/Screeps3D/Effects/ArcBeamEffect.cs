@@ -52,11 +52,11 @@ namespace Screeps3D.Effects
             for (int i = 0; i <= _resolution; i++)
             {
                 var t = (float)i / (float)_resolution;
-                arcArray[i] = CalculateArcPoint((Vector3)_sPos, (Vector3)_tPos, t, maxDistance);
+                arcArray[i] = CalculateArcBeamPoint((Vector3)_sPos, (Vector3)_tPos, t, maxDistance);
             }
             return arcArray;
         }
-        private Vector3 CalculateArcPoint(Vector3 sPos, Vector3 tPos, float t, float maxDistance = 0f)
+        private Vector3 CalculateArcBeamPoint(Vector3 sPos, Vector3 tPos, float t, float maxDistance = 0f)
         {
             return MathParabola.Parabola(sPos, tPos, _maxParabolaHeight, t);
         }

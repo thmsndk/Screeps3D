@@ -19,8 +19,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
     public GameObject point1;
     public GameObject point2;
     public Transform point3;
-
-    public GameObject missile;
+    public float nukeHeightOffset = 1.64f;
 
     public int vertexCount = 12;
 
@@ -31,26 +30,7 @@ public class NukeMissileArchRenderer : MonoBehaviour
         gravity = Mathf.Abs(Physics.gravity.y);
         lr.startWidth = 1.5f;
         lr.endWidth = 1.5f;
-
-        //missile.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(point1.position, point2.position);
-
-    //    Gizmos.color = Color.cyan;
-    //    Gizmos.DrawLine(point2.position, point3.position);
-
-    //    Gizmos.color = Color.red;
-    //    for (float ratio = 0.5f / vertexCount; ratio < 1; ratio += 1.0f / vertexCount)
-    //    {
-    //        Gizmos.DrawLine(Vector3.Lerp(point1.position, point2.position, ratio), Vector3.Lerp(point2.position, point3.position, ratio));
-    //    }
-    //}
-
 
     // Start is called before the first frame update
     void Start()
@@ -63,27 +43,11 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// </summary>
     private void RenderArc()
     {
-
-
+        if(!lr.enabled) {
+            return;
+        }
         lr.positionCount = resolution + 1;
         lr.SetPositions(CalculateArcArray());
-
-        //var pointList = new List<Vector3>();
-        //for (float ratio = 0; ratio <= 1; ratio += 1.0f / vertexCount)
-        //{
-        //    var tangentLineVertex1 = Vector3.Lerp(point1.position, point2.position, ratio);
-        //    var tangentLineVertex2 = Vector3.Lerp(point2.position, point3.position, ratio);
-        //    var bezierpoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
-        //    pointList.Add(bezierpoint);
-        //}
-
-        //lr.positionCount = pointList.Count;
-        //lr.SetPositions(pointList.ToArray());
-
-        //missile.transform.LookAt(point2.transform, Vector3.down);
-        //missile.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-
-
     }
 
     private Vector3[] CalculateArcArray()
@@ -105,49 +69,30 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// Calculates height and distance
     /// </summary>
     /// <returns></returns>
-    private Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
+    public Vector3 CalculateArcPoint(float t, float maxDistance = 0f)
     {
-        //float x = t * maxDistance;
-        //float y = x * Mathf.Tan(radianAngle) - ((gravity * x * x)/(2 * velocity * velocity * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle)));
-        //return new Vector3(x, y, point1.position.z);
-        return MathParabola.Parabola(point1.transform.position, point2.transform.position, Constants.ShardHeight / 2, t);
+        float groundLevel = point1.transform.position.y;
+        if(t < 0.015) {
+            return new Vector3(point1.transform.position.x, groundLevel + t * 1000, point1.transform.position.z);
+        }
+        float elevation = groundLevel + 0.015f * 1000;
+        // start and end parabola at elevation
+        Vector3 parabolaStartV = new Vector3(point1.transform.position.x, elevation, point1.transform.position.z);
+        Vector3 parabolaEndV = new Vector3(point2.transform.position.x, elevation,  point2.transform.position.z);
+
+        if ( t >= 0.015 && t <= 0.985 ) {
+            return MathParabola.ElevatedParabola(parabolaStartV, parabolaEndV, Constants.ShardHeight, t, nukeHeightOffset);
+        }
+        return new Vector3(parabolaEndV.x, groundLevel + (1 - t) * 1000 + nukeHeightOffset, parabolaEndV.z);
     }
 
-
+    private Vector3 GetRaisePoint(float t) {
+        return point1.transform.position + new Vector3(0, 2 + t * 1500, 0);
+    }
     // Update is called once per frame
     void Update()
     {
         RenderArc();
     }
-
-    internal void Progress(float progress)
-    {
-        missile.transform.position = CalculateArcPoint(progress);
-        //Debug.Log($"{progress} {missile.transform.position}");
-        var nextPoint = CalculateArcPoint(progress + 0.001f);
-        missile.transform.LookAt(nextPoint);
-    }
 }
 
-public class MathParabola
-{
-
-    public static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
-    {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
-
-        var mid = Vector3.Lerp(start, end, t);
-
-        return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
-    }
-
-    public static Vector2 Parabola(Vector2 start, Vector2 end, float height, float t)
-    {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
-
-        var mid = Vector2.Lerp(start, end, t);
-
-        return new Vector2(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t));
-    }
-
-}
