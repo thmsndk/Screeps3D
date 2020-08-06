@@ -38,19 +38,13 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void setDorito(bool isDorito) {
-            // _creepCore.enabled = !isDorito;
-            // _doritoCore.enabled = isDorito;
             if(isDorito) {
                 _doritoCore.gameObject.SetActive(true);
                 _creepCore.gameObject.SetActive(false);
-                //_creepCore.transform.localScale = Vector3.zero;
-                //_doritoCore.transform.localScale = Vector3.one;
                 _underLight.color = Color.red;
             } else {
                 _creepCore.gameObject.SetActive(true);
                 _doritoCore.gameObject.SetActive(false);
-                //_doritoCore.transform.localScale = Vector3.zero;
-                //_creepCore.transform.localScale = Vector3.one;
                 _underLight.color = _initialUnderlightColor;
             }
         }
@@ -68,7 +62,6 @@ namespace Screeps3D.RoomObjects.Views
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
-                _badge.materials[0].SetFloat("EmissionStrength", .1f);
             } else {
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", .1f);
