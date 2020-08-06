@@ -54,7 +54,7 @@ namespace Screeps3D.RoomObjects.Views
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
-            Debug.LogError("_creep.Owner.Username" + _creep.Owner.Username);
+            
             setDorito(_creep.Owner.Username == "Invader" || _creep.Owner.Username == "Source Keeper");
 
             // HORSE
