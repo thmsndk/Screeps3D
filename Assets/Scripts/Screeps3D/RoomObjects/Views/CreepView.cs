@@ -5,7 +5,8 @@ namespace Screeps3D.RoomObjects.Views
     internal class CreepView : ObjectView
     {
         [SerializeField] private Renderer _badge = default;
-        [SerializeField] private Renderer _body = default;
+        [SerializeField] private Renderer _creepCore = default;
+        [SerializeField] private Renderer _doritoCore = default;
         [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private Light _underLight = default;
 
@@ -29,6 +30,19 @@ namespace Screeps3D.RoomObjects.Views
                 _horse.material.SetFloat("Magic", v);
         }
 
+        private void setDorito(bool isDorito) {
+            // _creepCore.enabled = !isDorito;
+            // _doritoCore.enabled = isDorito;
+            if(isDorito) {
+                _creepCore.transform.localScale = Vector3.zero;
+                _doritoCore.transform.localScale = Vector3.one;
+                _underLight.color = Color.red;
+            } else {
+                _doritoCore.transform.localScale = Vector3.zero;
+                _creepCore.transform.localScale = Vector3.one;
+            }
+        }
+
         internal override void Load(RoomObject roomObject)
         {            
             base.Load(roomObject);
@@ -40,6 +54,8 @@ namespace Screeps3D.RoomObjects.Views
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
+            Debug.LogError("_creep.Owner.Username" + _creep.Owner.Username);
+            setDorito(_creep.Owner.Username == "Invader" || _creep.Owner.Username == "Source Keeper");
 
             // HORSE
             // do not forget to do reposition in .blend files ! 
