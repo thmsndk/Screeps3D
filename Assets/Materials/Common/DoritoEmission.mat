@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PowerEmission
+  m_Name: DoritoEmission
   m_Shader: {fileID: -6465566751694194690, guid: 9c7411cd7d7cd2d46a055dc140a24ac8,
     type: 3}
   m_ShaderKeywords: 
@@ -147,7 +147,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionStrength: 1
+    - EmissionExposureWeight: 0.7
+    - EmissionStrength: 0.2
+    - TextureFloatSpeed: 0
+    - TextureSize: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
