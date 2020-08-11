@@ -47,6 +47,7 @@ namespace Assets.Scripts.Screeps3D.World.Views
 
         public void Init(object o)
         {
+            return;
             this.data = o as OwnerControllerLevelData;
             // TODO: we need the room position and move it there
             //arcRenderer.point1.transform.position = Overlay.LaunchRoom.Position + new Vector3(25, 0, 25); // Center of the room, because we do not know where the nuke is, could perhaps scan for it and correct it?
