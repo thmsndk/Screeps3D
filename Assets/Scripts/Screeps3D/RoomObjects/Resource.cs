@@ -40,6 +40,7 @@ namespace Screeps3D.RoomObjects
         internal override void Unpack(JSONObject data, bool initial)
         {
             base.Unpack(data, initial);
+            Debug.LogError("data " + data);
 
             if (initial)
             {

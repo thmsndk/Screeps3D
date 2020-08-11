@@ -7,6 +7,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private Renderer _renderer = default;
         [SerializeField] private ScaleAxes _scale = default;
+        [SerializeField] private ParticleSystem _ps = default;
 
         private bool _initialized;
         private Resource _resource;
@@ -29,19 +30,23 @@ namespace Screeps3D.RoomObjects.Views
             if (_resource == null)
                 return;
             
+
             if (!_initialized)
             {
-                if (_resource.ResourceType.Equals("energy"))
-                    _renderer.material.color = new Color(1.0f, 0.91f, 0.49f);
-                else
-                    _renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
+                if (!_resource.ResourceType.Equals("energy")) {
+                    _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .3f, .3f));
+                    var main = _ps.main;
+                    main.startColor = new Color(1f, 1f, 1f);
+                }
                 _initialized = true;
             }
 
-            if (_resource.ResourceType.Equals("energy"))
+            if (_resource.ResourceType.Equals("energy")) {
                 _scale.SetVisibility(0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
-            else
+            }
+            else {
                 _scale.SetVisibility(0.92f * Mathf.Min(1500.0f, _resource.ResourceAmount) / 1500.0f);
+            }
         }
     }
 }
