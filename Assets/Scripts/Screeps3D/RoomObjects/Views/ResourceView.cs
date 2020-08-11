@@ -31,7 +31,7 @@ namespace Screeps3D.RoomObjects.Views
             base.Delta(data);
         }
 
-        internal private scaleMesh() {
+        private void scaleMesh() {
             if (_resource.ResourceType.Equals("energy")) {
                 _scale.SetVisibility(0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
             }
@@ -40,7 +40,7 @@ namespace Screeps3D.RoomObjects.Views
             }
         }
 
-        internal private initialize() {
+        private void initialize() {
             var main = _ps.main;
             switch(_resource.ResourceType) {
                 case "energy":
@@ -52,6 +52,7 @@ namespace Screeps3D.RoomObjects.Views
                 default:
                     _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .3f, .3f));
                     main.startColor = new Color(1f, 1f, 1f);
+                    break;
             }
 
             _initialized = true;
