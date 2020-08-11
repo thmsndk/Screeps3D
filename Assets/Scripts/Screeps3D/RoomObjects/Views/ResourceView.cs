@@ -41,21 +41,19 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         private void initialize() {
+            _initialized = true;
             var main = _ps.main;
-            switch(_resource.ResourceType) {
-                case "energy":
-                    break;
-                case "power":
+
+            if(_resource.ResourceType.Equals("energy")) {
+                    return;
+            }
+            if(_resource.ResourceType.Equals("power")) {
                     _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .0f, .0f));
                     main.startColor = new Color(1f, 0f, 0f);
-                    break;
-                default:
-                    _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .3f, .3f));
-                    main.startColor = new Color(1f, 1f, 1f);
-                    break;
+                    return;
             }
-
-            _initialized = true;
+            _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .3f, .3f));
+            main.startColor = new Color(1f, 1f, 1f);
         }
 
         private void Update()
@@ -66,7 +64,7 @@ namespace Screeps3D.RoomObjects.Views
 
             scaleMesh();
 
-            if(_initialized) {
+            if(!_initialized) {
                 initialize();
             }
 
