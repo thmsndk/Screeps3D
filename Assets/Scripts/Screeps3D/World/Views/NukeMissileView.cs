@@ -1,7 +1,6 @@
 ﻿using Screeps_API;
-using System.Linq;
-using Screeps3D.Effects;
 using Screeps3D.Rooms;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -77,7 +76,7 @@ namespace Screeps3D.World.Views
             }
         }
 
-        public void Init(WorldOverlay overlay)
+        public void Init(object overlay)
         {
             _bigBadaBoom.Stop();
             _launchSmoke.Stop();

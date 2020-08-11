@@ -11,10 +11,14 @@ namespace Screeps3D.Tools.Selection
     [DisallowMultipleComponent]
     internal class SelectionView : MonoBehaviour
     {
-        private static readonly Dictionary<string, float> CircleSizes = new Dictionary<string, float>
+        private static readonly Dictionary<string, Vector3> CircleSizes = new Dictionary<string, Vector3>
         {
             // Prefab default 1.5
-            {"extension", 1.0f}
+            {"extension", Vector3.one},
+            {"source", new Vector3(2.15f,2.15f,10)},
+            {"constructedWall", new Vector3(2.15f,2.15f,10)},
+            {"storage", new Vector3(2.15f,2.15f,10)},
+            {"powerSpawn", new Vector3(2.15f,2.15f,10)}
         };
 
         private string _type;
@@ -114,7 +118,8 @@ namespace Screeps3D.Tools.Selection
             go.transform.SetParent(Selected.gameObject.transform, false);
             if (CircleSizes.ContainsKey(_type))
             {
-                _decalProjector.size = new Vector3(CircleSizes[_type], CircleSizes[_type], _decalProjector.size.z);
+                var size = CircleSizes[_type];
+                _decalProjector.size = new Vector3(size.x, size.y, size.z);
             }
             return go;
         }

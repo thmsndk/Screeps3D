@@ -25,7 +25,6 @@ namespace Screeps_API
 
         private void SubscribeResources(bool connected)
         {
-            Debug.Log("connected: " + connected);
             if (connected)
             {
                 Debug.Log("subscribing to resources");
@@ -49,12 +48,6 @@ namespace Screeps_API
 
         private void UnpackResources(JSONObject data)
         {
-            Debug.Log(data.ToString());
-            // pixels
-            // credits
-
-            // cpu-unlock
-            // keys
             var creditsData = data["credits"];
             if (creditsData != null)
             {

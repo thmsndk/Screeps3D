@@ -47,9 +47,9 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
             if (_roomInfo.Status == RoomInfo.STATUS_OUT_OF_BORDERS)
             {
-                return false;
+                return true;
             }
-
+            // TODO: we should render time left untill open somehow
             if (int.TryParse(_roomInfo.OpenTime, out var openTime) && DateTimeOffset.FromUnixTimeMilliseconds(openTime) > DateTimeOffset.UtcNow)
             {
                 return true;

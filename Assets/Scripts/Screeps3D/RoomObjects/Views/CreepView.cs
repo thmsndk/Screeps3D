@@ -5,7 +5,8 @@ namespace Screeps3D.RoomObjects.Views
     internal class CreepView : ObjectView
     {
         [SerializeField] private Renderer _badge = default;
-        [SerializeField] private Renderer _body = default;
+        [SerializeField] private Renderer _creepCore = default;
+        [SerializeField] private Renderer _doritoCore = default;
         [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private Light _underLight = default;
 
@@ -19,6 +20,13 @@ namespace Screeps3D.RoomObjects.Views
         private Creep _creep;
         private bool _dead;
 
+        private Color32 _initialUnderlightColor;
+
+        private void Awake()
+        {
+            _initialUnderlightColor = _underLight.color;
+        }
+
         private void setWings(bool setWings) {
             float v = setWings ? 0.2f : 15f;
                 _wingRight.material.SetFloat("Magic", v);
@@ -29,10 +37,28 @@ namespace Screeps3D.RoomObjects.Views
                 _horse.material.SetFloat("Magic", v);
         }
 
+        private void setDorito(bool isDorito) {
+            if(isDorito) {
+                _doritoCore.gameObject.SetActive(true);
+                _creepCore.gameObject.SetActive(false);
+                _underLight.color = Color.red;
+            } else {
+                _creepCore.gameObject.SetActive(true);
+                _doritoCore.gameObject.SetActive(false);
+                _underLight.color = _initialUnderlightColor;
+            }
+        }
+
         internal override void Load(RoomObject roomObject)
         {            
             base.Load(roomObject);
             _creep = roomObject as Creep;
+
+            if (_creep != null)
+            {
+                // Allows you to find the specific creep by search
+                this.name = $"Creep:{_creep.Name}";
+            }
 
             if (_creep?.Owner?.Badge == null) {
                 Debug.LogError("A creep with no owner?");
@@ -40,6 +66,9 @@ namespace Screeps3D.RoomObjects.Views
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
+            
+            setDorito(_creep.Owner.UserId == Constants.InvaderUserId
+                      || _creep.Owner.UserId == Constants.SourceKeeperUserId);
 
             // HORSE
             // do not forget to do reposition in .blend files ! 

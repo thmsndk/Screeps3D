@@ -1,12 +1,13 @@
 ﻿using System;
 using Assets.Scripts.Screeps3D;
+using Assets.Scripts.Screeps3D.World.Overlay;
 using Screeps3D.Rooms;
 using UnityEngine;
 
 namespace Screeps3D.World.Views
 {
     // This is not the "overlay" but the actual rendering of the missile and arc prefab ... hmmmm
-    public class NukeMissileOverlay : WorldOverlay
+    public class NukeMissileOverlay : SingleNukeWorldOverlay
     {
         private NukeMonitor.NukeData nuke;
 
@@ -21,8 +22,6 @@ namespace Screeps3D.World.Views
         {
             this.nuke = nuke;
         }
-
-        public override string Type { get; set; } = "nukeMissile";
 
         public string Shard { get { return nuke.Shard; } }
 

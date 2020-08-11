@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Assets.Scripts.Screeps3D.World.Views;
+using Common;
 using UnityEngine;
 
 namespace Screeps3D.World.Views
@@ -7,18 +8,18 @@ namespace Screeps3D.World.Views
     {
         //[SerializeField] private ScaleVisibility _vis = default;
 
-        public WorldOverlay Overlay { get; private set; }
+        public WorldViewData Data { get; private set; }
         private IWorldOverlayViewComponent[] _viewComponents;
 
-        public void Init(WorldOverlay overlay)
+        public void Init(WorldViewData data)
         {
             //_vis.Show();
-            Overlay = overlay;
+            Data = data;
 
             _viewComponents = GetComponentsInChildren<IWorldOverlayViewComponent>();
             foreach (var component in _viewComponents)
             {
-                component.Init(overlay);
+                component.Init(data);
             }
         }
     }

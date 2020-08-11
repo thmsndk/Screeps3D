@@ -2,6 +2,6 @@
 {
     public interface IWorldOverlayViewComponent
     {
-        void Init(WorldOverlay overlay);
+        void Init(object data);
     }
 }

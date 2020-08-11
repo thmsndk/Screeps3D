@@ -40,7 +40,8 @@ namespace Screeps_API
                     fullPath = fullPath + body.ToQueryString();
                 }
                 www = UnityWebRequest.Get(fullPath);
-            } else if (requestMethod == UnityWebRequest.kHttpVerbPOST)
+            }
+            else if (requestMethod == UnityWebRequest.kHttpVerbPOST)
             {
                 www = new UnityWebRequest(fullPath, "POST");
                 if (body != null)
@@ -48,10 +49,11 @@ namespace Screeps_API
                     byte[] bodyRaw = Encoding.UTF8.GetBytes(body.ToString());
                     www.uploadHandler = new UploadHandlerRaw(bodyRaw);
                 }
-                
+
                 www.downloadHandler = new DownloadHandlerBuffer();
                 www.SetRequestHeader("Content-Type", "application/json");
-            } else
+            }
+            else
             {
                 var message = $"HTTP: request method {requestMethod} unrecognized";
                 Debug.Log(message);
@@ -75,7 +77,7 @@ namespace Screeps_API
                         }
 
                         Debug.Log(rateLimitDebug.ToString());
-                    } 
+                    }
                 }
 
                 if (outcome.isNetworkError || outcome.isHttpError)
@@ -90,7 +92,7 @@ namespace Screeps_API
                     if (onError != null)
                     {
                         onError();
-                    } 
+                    }
                     else
                     {
                         if (skipAuth)
@@ -108,7 +110,8 @@ namespace Screeps_API
                             });
                         }
                     }
-                } else
+                }
+                else
                 {
                     // Debug.Log(string.Format("HTTP: success, data: \n{0}", outcome.downloadHandler.text));
                     if (outcome.downloadHandler.text.Contains("token"))
@@ -223,7 +226,8 @@ namespace Screeps_API
             body.AddField("statName", statName);
             body.AddField("shard", shard);
 
-            Action<string> onRequestSuccess = (json) => {
+            Action<string> onRequestSuccess = (json) =>
+            {
                 onSuccess(shard, json);
             };
 
@@ -322,7 +326,7 @@ namespace Screeps_API
             body.AddField("structureType", structureType);
             if (!string.IsNullOrEmpty(name))
             {
-                body.AddField("name", name); 
+                body.AddField("name", name);
             }
             body.AddField("x", x);
             body.AddField("y", y);
@@ -386,6 +390,51 @@ namespace Screeps_API
             body.AddField("y", y);
 
             return Request("POST", "/api/game/place-spawn", body, onSuccess: onSuccess, noNotification: noNotification);
+        }
+
+        public IEnumerator<UnityWebRequestAsyncOperation> AddObjectIntent(string shard, string room, string name, JSONObject intent, Action<string> onSuccess, bool noNotification = false)
+        {
+            //  POST https://screeps.com/api/game/add-object-intent
+            /* request: {
+                        "room": "E19S38",
+	                    "shard": "shard3",
+	                    "_id": "room",
+	                    "name": "destroyStructure",
+	                    "intent": [{
+			                    "id": "5e7ff81a7e00f81474101903",
+			                    "roomName": "E19S38",
+			                    "user": "5a44e109ac5a5f1d0146916e"
+
+                            }
+	                    ]
+                    }*/
+
+            // response: 
+
+            var body = new RequestBody();
+            body.AddField("room", room);
+            body.AddField("shard", shard);
+            body.AddField("_id", "room");
+            body.AddField("name", name);
+            body.AddField("intent", intent);
+
+            Debug.LogError(body.ToString());
+
+            return Request("POST", "/api/game/add-object-intent", body, onSuccess: onSuccess, noNotification: noNotification);
+        }
+
+        public IEnumerator<UnityWebRequestAsyncOperation> DestroyStructureObjectIntent(string shard, string room, string id, string userId, Action<string> onSuccess, bool noNotification = false)
+        {
+            var list = new JSONObject();
+            var intent = new JSONObject();
+            list.Add(intent);
+
+            intent.AddField("id", id);
+            intent.AddField("roomName", room);
+            intent.AddField("user", userId);
+
+
+            return AddObjectIntent(shard, room, "destroyStructure", list, onSuccess);
         }
 
         /* Experimental */

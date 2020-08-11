@@ -1,17 +1,21 @@
-﻿using Common;
+﻿using Assets.Scripts.Screeps3D.World.Views;
+using Common;
+using Screeps3D.World.Views;
+using UnityEngine;
 
-namespace Screeps3D.World.Views
+namespace Assets.Scripts.Screeps3D.World.Overlay
 {
     // Q: Will we be using this for WorldMap overlays?
-    public class WorldOverlay
+    public class SingleNukeWorldOverlay : WorldViewData
     {
-        public virtual string Type { get; set; }
         //public bool Shown { get; private set; }
 
         public WorldView View { get; private set; }
 
-        public WorldOverlay()
+        public SingleNukeWorldOverlay()
         {
+            this.Type = "nukeMissile";
+
             Scheduler.Instance.Add(AssignView); // Should probably be done based on Show, like Room, this would allow us to show / hide objects based on how far a player can actually see and possible help with performance.
         }
 
@@ -32,8 +36,8 @@ namespace Screeps3D.World.Views
 
             ////RoomObject.OnShow -= Show;
             ////RoomObject.DetachView();
+            WorldViewFactory.Instance.AddToPool(this.View);
             View = null;
-            WorldViewFactory.Instance.AddToPool(this);
             ////RoomObject = null;
         }
     }

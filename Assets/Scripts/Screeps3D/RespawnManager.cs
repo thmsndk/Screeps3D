@@ -97,6 +97,13 @@ namespace Screeps3D
 
         private static void Respawn()
         {
+            if (WorldStatusUpdater.Instance.WorldStatus == WorldStatus.Empty)
+            {
+                // "trigger" a fake respawn
+                WorldStatusUpdater.Instance.SetWorldStatus(WorldStatus.Empty);
+                return;
+            }
+
             ScreepsAPI.Http.Respawn((jsonResponse) =>
             {
                 var result = new JSONObject(jsonResponse);
@@ -106,6 +113,7 @@ namespace Screeps3D
                 {
                     WorldStatusUpdater.Instance.SetWorldStatus(WorldStatus.Empty);
                 }
+
             });
         }
 
@@ -137,7 +145,14 @@ namespace Screeps3D
                     _toolChooser?.Hide(ToolType.Construction);
                     _toolChooser?.Show(ToolType.Spawn);
 
-                    _toolChooser?.SelectTool(ToolType.Spawn);
+                    if (previous == WorldStatus.None)
+                    {
+                        _toolChooser?.SelectTool(ToolType.Selection);
+                    }
+                    else
+                    {
+                        _toolChooser?.SelectTool(ToolType.Spawn);
+                    }
 
                     _roomChooser.GetAndChooseRandomWorldStartRoom();
 

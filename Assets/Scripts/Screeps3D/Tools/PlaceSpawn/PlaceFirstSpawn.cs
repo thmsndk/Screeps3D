@@ -55,6 +55,12 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
             // ask for name and then spawn.
             PlayerInput.Get("Name your spawn", spawnName =>
             {
+                if (spawnName == null)
+                {
+                    // cancel clicked, should probably have a cancel callback instead.
+                    return;
+                }
+
                 if (string.IsNullOrWhiteSpace(spawnName))
                 {
                     NotifyText.Message($"Invalid spawnname", Color.red);
