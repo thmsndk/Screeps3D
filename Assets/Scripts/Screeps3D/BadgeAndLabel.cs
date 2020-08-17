@@ -23,8 +23,15 @@ namespace Assets.Scripts.Screeps3D
                 Name.enabled = true;
                 Badge.enabled = true;
                 Name.text = string.Format("{0}", user.Username);
-                Badge.sprite = Sprite.Create(user.Badge,
-                    new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
+                if (user.Badge != null)
+                {
+                    Badge.sprite = Sprite.Create(user.Badge,
+                        new Rect(0.0f, 0.0f, BadgeManager.BADGE_SIZE, BadgeManager.BADGE_SIZE), new Vector2(.5f, .5f));
+                }
+                else
+                {
+                    Badge.enabled = false;
+                }
             }
             else
             {
