@@ -104,41 +104,6 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
             ETAEarly.text = nuke.EtaEarly.ToString();
             ETALate.text = nuke.EtaLate.ToString();
-
-            //if (buttonImage != null)
-            //{
-            //    buttonImage.color = server.Selected ? UnityEngine.Random.ColorHSV() : Color.white;
-            //}
-
-            //OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
-
-            //ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
-
-            //ServerAddressHostLabel.text = server.Address.HostName;
-            //ServerAddressPortLabel.text = server.Address.Port;
-            //ServerAddressSSLToggle.isOn = server.Address.Ssl;
-
-            //UserCountLabel.text = server.Users.ToString();
-
-            //if (!server.Official)
-            //{
-            //    LikesLabel.text = server.LikeCount.ToString();
-            //    foreach (Transform child in LikesLabel.transform)
-            //    {
-            //        child.gameObject.SetActive(true);
-            //    }
-            //}
-            //else
-            //{
-            //    LikesLabel.text = string.Empty;
-            //    foreach (Transform child in LikesLabel.transform)
-            //    {
-            //        child.gameObject.SetActive(false);
-            //    }
-            //}
-
-
-            //PackageVersionLabel.text = server.Version;
         }
 
         private void Update()

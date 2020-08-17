@@ -1,8 +1,10 @@
 ﻿using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Screeps_API
 {
@@ -111,6 +113,12 @@ namespace Screeps_API
                 {
                     room = new WarpathRoom(shardName, roomName);
                     Rooms.Add(room);
+                    StartCoroutine(GetRoomTexture(shardName, roomName, (roomTexture) =>
+                    {
+                        room.RoomTexture = roomTexture;
+
+                        OnClassificationsUpdated?.Invoke();
+                    }));
                 }
 
                 // TODO: make event and raise classification has gone up.
@@ -144,6 +152,31 @@ namespace Screeps_API
 
         }
 
+        private IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
+        {
+            var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
+
+            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
+            {
+                // Private servers runs with a different url.
+                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
+            }
+
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                //Texture myTexture = DownloadHandlerTexture.GetContent(www);
+                response(myTexture);
+            }
+        }
+
         public class WarpathRoom
         {
             public WarpathRoom(string shardName, string roomName)
@@ -153,6 +186,8 @@ namespace Screeps_API
                 Attackers = new List<ScreepsUser>();
             }
 
+            public Texture RoomTexture { get; internal set; }
+
             public string RoomName { get; internal set; }
             public string Shard { get; internal set; }
             public Classification Classification { get; internal set; }
@@ -161,6 +196,8 @@ namespace Screeps_API
             public List<ScreepsUser> Attackers { get; internal set; }
             public int LastPvpTime { get; internal set; }
             public int StrongholdLevel { get; internal set; }
+
+            
         }
 
         /// <summary>
