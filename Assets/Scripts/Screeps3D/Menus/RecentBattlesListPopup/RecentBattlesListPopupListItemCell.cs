@@ -118,11 +118,11 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
             if (ScreepsAPI.Time > this.battle.LastPvpTime)
             {
                 var ticksAgo = (ScreepsAPI.Time - this.battle.LastPvpTime).ToString();  // can't actually show this for other shards?
-                TicksAgo.text = $"{ticksAgo} Ticks ago";
+                TicksAgo.text = $"({ticksAgo} Ticks ago)";
             }
 
             ClassificationLabel.text = $"Class {(int)this.battle.Classification}";
-            Progress.fillAmount = (float)this.battle.Classification / 8f;
+            Progress.fillAmount = (float)this.battle.Classification / 6f;
         }
 
         private void Update()
