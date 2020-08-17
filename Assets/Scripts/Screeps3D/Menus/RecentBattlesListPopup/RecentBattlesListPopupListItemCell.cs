@@ -115,10 +115,22 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
             }
 
             LastPvpTime.text = this.battle.LastPvpTime.ToString();
-            if (ScreepsAPI.Time > this.battle.LastPvpTime)
+
+            if (this.battle.ShardInfo != null)
             {
-                var ticksAgo = (ScreepsAPI.Time - this.battle.LastPvpTime).ToString();  // can't actually show this for other shards?
-                TicksAgo.text = $"({ticksAgo} Ticks ago)";
+                TicksAgo.gameObject.SetActive(true);
+
+                var shardTime = this.battle.ShardInfo.Time;
+
+                if (shardTime > this.battle.LastPvpTime)
+                {
+                    var ticksAgo = (shardTime - this.battle.LastPvpTime).ToString();
+                    TicksAgo.text = $"({ticksAgo} Ticks ago)";
+                } 
+            }
+            else
+            {
+                TicksAgo.gameObject.SetActive(false);
             }
 
             ClassificationLabel.text = $"Class {(int)this.battle.Classification}";

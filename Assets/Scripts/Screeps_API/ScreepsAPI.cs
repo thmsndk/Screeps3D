@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Screeps_API;
 using Common;
 using Screeps3D;
 using UnityEngine;
@@ -26,6 +27,8 @@ namespace Screeps_API
 
         public static ResourceMonitor Resources { get; private set; }
 
+        public static ShardInfoMonitor ShardInfo { get; private set; }
+
         public static long Time { get; internal set; }
         public static bool IsConnected { get; private set; }
         
@@ -50,6 +53,7 @@ namespace Screeps_API
             ServerMessageMonitor = GetComponent<ServerMessageMonitor>();
             Warpath = GetComponent<Warpath>();
             Resources = GetComponent<ResourceMonitor>();
+            ShardInfo = GetComponent<ShardInfoMonitor>();
         }
 
         // Use this for initialization

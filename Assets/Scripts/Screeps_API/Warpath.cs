@@ -33,6 +33,7 @@ namespace Screeps_API
                 if (ScreepsAPI.Cache.Type == SourceProviderType.Official)
                 {
                     // On official we need to start a timer that pulls data from LOAN e.g. https://www.leagueofautomatednations.com/vk/battles.json
+                    // TODO: considering LOAN data is "old", we might want to sprinkle the experimental PVP endpoint ontop of this to get more accurate "pvp timestamps"
                     StartCoroutine(GetLOANBattles());
 
                 }
@@ -197,6 +198,16 @@ namespace Screeps_API
                 }));
             }
 
+            if (room.ShardInfo == null)
+            {
+                room.ShardInfo = ScreepsAPI.ShardInfo[room.Shard];
+                if (room.ShardInfo == null)
+                {
+                    Debug.LogWarning($"Could not find shard info for {room.Shard} {ScreepsAPI.ShardInfo.GetInstanceID()}");
+                    
+                }
+            }
+
             // TODO: make event and raise classification has gone up.
             room.Classification = (Classification)classification;
 
@@ -274,8 +285,7 @@ namespace Screeps_API
             public List<ScreepsUser> Attackers { get; internal set; }
             public int LastPvpTime { get; internal set; }
             public int StrongholdLevel { get; internal set; }
-
-
+            public ShardInfoDto ShardInfo { get; internal set; }
         }
 
         /// <summary>

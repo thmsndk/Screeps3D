@@ -4344,6 +4344,7 @@ GameObject:
   - component: {fileID: 1015231804}
   - component: {fileID: 1015231805}
   - component: {fileID: 1015231808}
+  - component: {fileID: 1015231809}
   m_Layer: 0
   m_Name: ScreepsAPI
   m_TagString: Untagged
@@ -4472,6 +4473,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ac516d03c6f9674fad52ed8c559ee87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1015231809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015231798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e801d353d9def614a98aa4e616d95883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1032182217

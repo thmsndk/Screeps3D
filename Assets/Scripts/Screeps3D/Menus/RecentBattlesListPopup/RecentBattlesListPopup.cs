@@ -47,6 +47,7 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
 
         private void ClassificationsUpdated()
         {
+            Debug.Log("ClassificationsUpdated");
             if (ScreepsAPI.Warpath != null)
             {
                 var battles = ScreepsAPI.Warpath.Rooms;

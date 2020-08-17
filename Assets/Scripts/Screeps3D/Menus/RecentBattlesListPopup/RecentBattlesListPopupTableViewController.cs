@@ -74,6 +74,7 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
 
         internal void UpdateList(List<Warpath.WarpathRoom> battles)
         {
+            Debug.Log("RecentBattles.UpdateList called");
             var sb = new StringBuilder();
             foreach (var shardBattles in battles.GroupBy(n => n.Shard))
             {
