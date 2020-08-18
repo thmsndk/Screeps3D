@@ -29,6 +29,11 @@ namespace Screeps_API
         
         internal ScreepsUser CacheUser(JSONObject data)
         {
+            // Handle using GetUserByName
+            if (data["user"] != null)
+            {
+                data = data["user"];
+            }
 
             var id = data["_id"].str;
             

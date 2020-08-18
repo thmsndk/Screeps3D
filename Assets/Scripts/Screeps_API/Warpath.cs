@@ -217,7 +217,10 @@ namespace Screeps_API
                 room.Defender = ScreepsAPI.UserManager.GetUserByName(defender);
                 if (room.Defender == null)
                 {
-                    room.Defender = new ScreepsUser(null, defender, 0, null, false);
+                    ScreepsAPI.Http.GetUserByName(defender, json => {
+                        room.Defender = ScreepsAPI.UserManager.CacheUser(new JSONObject(json));
+                        //OnClassificationsUpdated?.Invoke();
+                    });
                 }
             }
 
@@ -231,7 +234,10 @@ namespace Screeps_API
                 }
                 else
                 {
-                    room.Attackers.Add(new ScreepsUser(null, attacker, 0, null, false));
+                    ScreepsAPI.Http.GetUserByName(attacker, json => {
+                        room.Attackers.Add(ScreepsAPI.UserManager.CacheUser(new JSONObject(json)));
+                        //OnClassificationsUpdated?.Invoke();
+                    });
                 }
             }
 
