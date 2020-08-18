@@ -22,16 +22,9 @@ namespace Assets.Scripts.Screeps_API
         {
             get
             {
-                Debug.Log($"Getting {shardName} from indexer");
                 if (ShardInfo.TryGetValue(shardName, out var shardInfo))
                 {
-                    Debug.Log($"We found one!");
                     return shardInfo;
-                }
-
-                foreach (var item in ShardInfo.Keys)
-                {
-                    Debug.LogWarning($"indexer {item}");
                 }
 
                 return null;
@@ -73,11 +66,6 @@ namespace Assets.Scripts.Screeps_API
 
                         shardInfo.Update(shard);
 
-                        foreach (var item in ShardInfo.Keys)
-                        {
-                            Debug.LogWarning($" shards info looping shards {item}");
-                        }
-
                         var time = ScreepsAPI.Time;
                         // TODO: Make requests for current tick for each shard, initialize a "tick timer" that increases tick based on average tickrate untill a new ticktime is requested.
                         ScreepsAPI.Http.Request("GET", $"/api/game/time?shard={shardName}", null, (jsonTime) =>
@@ -90,13 +78,7 @@ namespace Assets.Scripts.Screeps_API
 
                             if (ShardInfo.TryGetValue(shardName, out var shardInfo2))
                             {
-                                Debug.Log($"{this.GetInstanceID()} {shardName} time set to {time}");
                                 shardInfo2.Time = time;
-
-                                foreach (var item in ShardInfo.Keys)
-                                {
-                                    Debug.LogWarning($"time set {item}");
-                                }
                             }
                             else
                             {

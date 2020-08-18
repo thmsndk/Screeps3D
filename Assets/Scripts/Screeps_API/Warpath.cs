@@ -46,38 +46,44 @@ namespace Screeps_API
 
         private IEnumerator GetLOANBattles()
         {
-            var www = UnityWebRequest.Get($"https://www.leagueofautomatednations.com/vk/battles.json");
+            yield return new WaitForSecondsRealtime(10);
 
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
+            while (true)
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                var responseText = www.downloadHandler.text;
+                var www = UnityWebRequest.Get($"https://www.leagueofautomatednations.com/vk/battles.json");
 
-                var response = new JSONObject(responseText); // Unity only supports parsing objects
+                yield return www.SendWebRequest();
 
-                foreach (var shardName in response.keys)
+                if (www.isNetworkError || www.isHttpError)
                 {
-                    var shardRooms = response[shardName];
-                    if (shardRooms != null)
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    var responseText = www.downloadHandler.text;
+
+                    var response = new JSONObject(responseText); // Unity only supports parsing objects
+
+                    foreach (var shardName in response.keys)
                     {
-                        HandleLOANShard(shardName, shardRooms.list);
+                        var shardRooms = response[shardName];
+                        if (shardRooms != null)
+                        {
+                            HandleLOANShard(shardName, shardRooms.list);
+                        }
                     }
+
+                    OnClassificationsUpdated?.Invoke();
                 }
 
-                OnClassificationsUpdated?.Invoke();
+
+                yield return new WaitForSecondsRealtime(60); 
             }
-
-
-            yield return new WaitForSecondsRealtime(10);
         }
 
         private void HandleLOANShard(string shardName, List<JSONObject> shardRooms)
         {
+            Debug.Log($"Warpath: {shardName} has {shardRooms.Count} rooms");
             foreach (var roomClassification in shardRooms)
             {
                 var roomName = roomClassification["room"].str;
@@ -95,7 +101,7 @@ namespace Screeps_API
                 var lastPvpTime = (int)roomClassification["lasttick"].n;
 
                 var powerCreepsData = roomClassification["powerCreeps"];
-                var powerCreeps = powerCreepsData != null ? powerCreepsData.list : null; 
+                var powerCreeps = powerCreepsData != null ? powerCreepsData.list : null;
 
                 //var stronghold = (int)roomClassification["stronghold"].n; // stronghold level LOAN does not give stronghold level
                 var stronghold = 0;
@@ -201,11 +207,6 @@ namespace Screeps_API
             if (room.ShardInfo == null)
             {
                 room.ShardInfo = ScreepsAPI.ShardInfo[room.Shard];
-                if (room.ShardInfo == null)
-                {
-                    Debug.LogWarning($"Could not find shard info for {room.Shard} {ScreepsAPI.ShardInfo.GetInstanceID()}");
-                    
-                }
             }
 
             // TODO: make event and raise classification has gone up.
