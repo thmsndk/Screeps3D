@@ -115,7 +115,14 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
             }
 
             LastPvpTime.text = this.battle.LastPvpTime.ToString();
+            UpdateTicksAgo();
 
+            ClassificationLabel.text = $"Class {(int)this.battle.Classification}";
+            Progress.fillAmount = (float)this.battle.Classification / 6f;
+        }
+
+        private void UpdateTicksAgo()
+        {
             if (this.battle.ShardInfo != null)
             {
                 TicksAgo.gameObject.SetActive(true);
@@ -126,21 +133,20 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
                 {
                     var ticksAgo = (shardTime - this.battle.LastPvpTime).ToString();
                     TicksAgo.text = $"({ticksAgo} Ticks ago)";
-                } 
+                }
             }
             else
             {
                 TicksAgo.gameObject.SetActive(false);
             }
-
-            ClassificationLabel.text = $"Class {(int)this.battle.Classification}";
-            Progress.fillAmount = (float)this.battle.Classification / 6f;
         }
 
         private void Update()
         {
             if (battle != null)
             {
+                UpdateTicksAgo();
+
                 // calculate estimated time based on average tickrate.
                 //var timeSinceLastUpdate = DateTime.Now - battle.ShardInfo.TimeUpdated;
                 //var ticksSinceLastUpdate = (long)Math.Floor(timeSinceLastUpdate.TotalMilliseconds / (double)battle.ShardInfo.AverageTick);

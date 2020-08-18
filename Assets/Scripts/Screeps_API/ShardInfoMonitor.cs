@@ -12,6 +12,8 @@ namespace Assets.Scripts.Screeps_API
     public class ShardInfoMonitor : MonoBehaviour
     {
         public Dictionary<string, ShardInfoDto> ShardInfo { get; set; } = new Dictionary<string, ShardInfoDto>();
+
+        public Dictionary<string, IEnumerator> ShardTicker { get; set; } = new Dictionary<string, IEnumerator>();
         private void Start()
         {
             Debug.Log("ShardInfoMonitor Started");
@@ -67,7 +69,14 @@ namespace Assets.Scripts.Screeps_API
                         shardInfo.Update(shard);
 
                         var time = ScreepsAPI.Time;
-                        // TODO: Make requests for current tick for each shard, initialize a "tick timer" that increases tick based on average tickrate untill a new ticktime is requested.
+
+                        if (!ShardTicker.TryGetValue(shardName, out var ticker))
+                        {
+                            ticker = SimulateTick(shardName, shardInfo);
+                            ShardTicker.Add(shardName, ticker);
+                            StartCoroutine(ticker);
+                        }
+
                         ScreepsAPI.Http.Request("GET", $"/api/game/time?shard={shardName}", null, (jsonTime) =>
                         {
                             var timeData = new JSONObject(jsonTime)["time"];
@@ -93,6 +102,16 @@ namespace Assets.Scripts.Screeps_API
                 });
 
                 yield return new WaitForSecondsRealtime(60);
+            }
+        }
+
+        private IEnumerator SimulateTick(string shardName, ShardInfoDto shardInfo)
+        {
+            while (true)
+            {
+                shardInfo.Time += 1;
+
+                yield return new WaitForSecondsRealtime((float)shardInfo.AverageTick / 1000);
             }
         }
     }

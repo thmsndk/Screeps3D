@@ -46,7 +46,7 @@ namespace Screeps_API
 
         private IEnumerator GetLOANBattles()
         {
-            yield return new WaitForSecondsRealtime(10);
+            yield return new WaitForSecondsRealtime(20);
 
             while (true)
             {
