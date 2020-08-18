@@ -1191,10 +1191,10 @@ MonoBehaviour:
   m_ChildAlignment: 2
   m_StartCorner: 1
   m_StartAxis: 1
-  m_CellSize: {x: 150, y: 30}
+  m_CellSize: {x: 200, y: 30}
   m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Constraint: 1
+  m_ConstraintCount: 1
 --- !u!1 &5000083305435937376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,10 +1793,10 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 150, y: 30}
+  m_CellSize: {x: 200, y: 30}
   m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Constraint: 1
+  m_ConstraintCount: 1
 --- !u!1 &7156096918886918091
 GameObject:
   m_ObjectHideFlags: 0

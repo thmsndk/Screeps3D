@@ -103,6 +103,9 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
             var defender = Instantiate(DefendersPrefab, DefendersContainer.transform);
             defender.SetOwner(this.battle.Defender);
 
+            var scale = 1.2f;
+            this.DefendersContainer.transform.localScale = new Vector3(scale, scale, 1f);
+
             foreach (Transform child in AttackersContainer.transform)
             {
                 Destroy(child.gameObject);
@@ -113,6 +116,24 @@ namespace Assets.Scripts.Screeps3D.Menus.RecentBattlesListPopup
                 var attacker = Instantiate(AttackersPrefab, AttackersContainer.transform);
                 attacker.SetOwner(user);
             }
+
+            var attackerCount = this.battle.Attackers.Count;
+
+            if (attackerCount >= 5)
+            {
+                // TODO: 5 attackers needs another column.
+                scale = 0.4f;
+            }
+            else if (attackerCount == 4)
+            {
+                scale = 0.6f;
+            }
+            else if (attackerCount == 3)
+            {
+                scale = 0.8f;
+            }
+
+            this.AttackersContainer.transform.localScale = new Vector3(scale, scale, 1f);
 
             LastPvpTime.text = this.battle.LastPvpTime.ToString();
             UpdateTicksAgo();
