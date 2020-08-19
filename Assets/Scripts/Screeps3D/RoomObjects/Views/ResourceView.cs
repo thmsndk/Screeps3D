@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private Renderer _renderer = default;
         [SerializeField] private ScaleAxes _scale = default;
+        [SerializeField] private ParticleSystem _ps = default;
 
         [SerializeField] private Material[] _materials = default;
         private const int energyMaterialIndex = 0;
@@ -23,34 +24,57 @@ namespace Screeps3D.RoomObjects.Views
             _initialized = false;
             _resource = roomObject as Resource;
             _scale.SetVisibility(1.0f);
+            
+        }
+        public void Unload(RoomObject roomObject)
+        {
+            if(_ps == null) {
+                return ;
+            }
+
+            _ps.Stop();
         }
 
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
+
+            if(!_ps.isPlaying) {
+                _ps.Play();
+                return;
+            }            
+        }
+
+        private void scaleMesh() {
+            if (_resource.ResourceType.Equals("energy")) {
+                _scale.SetVisibility(0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
+            }
+            else {
+                _scale.SetVisibility(0.92f * Mathf.Min(1500.0f, _resource.ResourceAmount) / 1500.0f);
+            }
+        }
+
+        private void initialize() {
+            _initialized = true;
+            var main = _ps.main;
+            Color rColor = Constants.ResourceColors[_resource.ResourceType];
+
+            _renderer.materials[0].SetColor("EmissionColor", rColor);
+            main.startColor = rColor;
         }
 
         private void Update()
         {
-            if (_resource == null)
+            if (_resource == null){
                 return;
-            
-            if (!_initialized)
-            {
-                if (_resource.ResourceType.Equals("energy"))
-                    _renderer.material = _materials[energyMaterialIndex];
-                else if (_resource.ResourceType.Equals("power"))
-                    _renderer.material = _materials[powerMaterialIndex];
-                else
-                    _renderer.material = _materials[commonMaterialIndex];
-
-                _initialized = true;
             }
 
-            if (_resource.ResourceType.Equals("energy"))
-                _scale.SetVisibility(0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
-            else
-                _scale.SetVisibility(0.92f * Mathf.Min(1500.0f, _resource.ResourceAmount) / 1500.0f);
+            scaleMesh();
+
+            if(!_initialized) {
+                initialize();
+            }
+
         }
     }
 }

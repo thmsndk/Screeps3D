@@ -148,6 +148,25 @@ namespace Screeps3D
             {4, 100000}
         };
 
+        public static readonly Dictionary<string, Color> ResourceColors = new Dictionary<string, Color> {
+            {"other", new Color32(204, 204, 204, 255)},
+            {"energy", new Color32(118, 93, 0, 255)},
+            {"power", new Color32(255, 0, 0, 255)},
+            // MINERALS
+            {Constants.BaseMineral.Hydrogen, new   Color32(205,205,205,255)},
+            {Constants.BaseMineral.Oxygen, new   Color32(205,205,205,255)},
+            {Constants.BaseMineral.Utrium, new   Color32(80,215,249,255)},
+            {Constants.BaseMineral.Keanium, new   Color32(160,113,255,255)},
+            {Constants.BaseMineral.Lemergium, new   Color32(0,244,162,255)},
+            {Constants.BaseMineral.Zynthium, new   Color32(253,211,136,255)},
+            {Constants.BaseMineral.Catalyst, new   Color32(255,119,119,255)},
+            // DEPOSITS
+            {Constants.BaseDeposit.Biomass, new   Color32(38,110,0,255)},
+            {Constants.BaseDeposit.Metal, new   Color32(128,58,0,255)},
+            {Constants.BaseDeposit.Mist, new   Color32(97,0,128,255)},
+            {Constants.BaseDeposit.Silicon, new   Color32(0,102,128,255)}
+        };
+
         public static class BaseMineral
         {
             public const string Hydrogen = "H";
