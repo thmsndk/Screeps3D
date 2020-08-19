@@ -24,11 +24,25 @@ namespace Screeps3D.RoomObjects.Views
             _initialized = false;
             _resource = roomObject as Resource;
             _scale.SetVisibility(1.0f);
+            
+        }
+        public void Unload(RoomObject roomObject)
+        {
+            if(_ps == null) {
+                return ;
+            }
+
+            _ps.Stop();
         }
 
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
+
+            if(!_ps.isPlaying) {
+                _ps.Play();
+                return;
+            }            
         }
 
         private void scaleMesh() {
@@ -43,17 +57,10 @@ namespace Screeps3D.RoomObjects.Views
         private void initialize() {
             _initialized = true;
             var main = _ps.main;
+            Color rColor = Constants.ResourceColors[_resource.ResourceType];
 
-            if(_resource.ResourceType.Equals("energy")) {
-                    return;
-            }
-            if(_resource.ResourceType.Equals("power")) {
-                    _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .0f, .0f));
-                    main.startColor = new Color(1f, 0f, 0f);
-                    return;
-            }
-            _renderer.materials[0].SetColor("EmissionColor", new Color(.3f, .3f, .3f));
-            main.startColor = new Color(1f, 1f, 1f);
+            _renderer.materials[0].SetColor("EmissionColor", rColor);
+            main.startColor = rColor;
         }
 
         private void Update()
