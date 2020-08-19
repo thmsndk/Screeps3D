@@ -65,11 +65,18 @@ namespace Assets.Scripts.Screeps3D
             }
 
             // TODO: Should probably do this lookup on connect
-            yield return ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
+            ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
             {
                 // tickrates and such, what about private servers?
                 var shardInfo = new JSONObject(jsonShardInfo);
-                var shards = shardInfo["shards"].list;
+                var shardsData = shardInfo["shards"];
+                if (shardsData == null)
+                {
+                    Debug.LogWarning("no shards foound? " + jsonShardInfo); // we recieved an empty jsonShardInfo object
+                    return;
+                }
+
+                var shards = shardsData.list;
                 foreach (var shard in shards)
                 {
                     var tickRateString = shard["tick"].n;

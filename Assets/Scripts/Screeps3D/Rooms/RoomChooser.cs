@@ -615,6 +615,7 @@ namespace Screeps3D.Rooms
                 this.OnTogglePvpSpectate(_pvpSpectateToggle.isOn);
             }
 
+            // TODO: we need to look into this, TwitchClient has not been initialized at this point, and Instance throws an error.
             // We register it here, cause we are lazy, and hopefully the twitch client is initialized.
             TwitchClient.Instance.OnGoToRoom += Instance_OnGoToRoom;
         }

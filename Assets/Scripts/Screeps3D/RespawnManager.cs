@@ -64,13 +64,20 @@ namespace Screeps3D
 
         private void OnDestroy()
         {
-            WorldStatusUpdater.Instance.OnWorldStatusChanged -= OnWorldStatusChanged;
-            _lostSpawnPopup.OnCancel -= LostSpawnPopupCancelClicked;
-            _lostSpawnPopup.OnRespawn -= LostSpawnPopupRespawnClicked;
-            PlaceFirstSpawn.Instance.OnFirstSpawnPlaced -= FirstSpawnPlaced;
+            try
+            {
+                WorldStatusUpdater.Instance.OnWorldStatusChanged -= OnWorldStatusChanged;
+                _lostSpawnPopup.OnCancel -= LostSpawnPopupCancelClicked;
+                _lostSpawnPopup.OnRespawn -= LostSpawnPopupRespawnClicked;
+                PlaceFirstSpawn.Instance.OnFirstSpawnPlaced -= FirstSpawnPlaced;
 
-            _respawnWarningPopup.OnCancel -= RespawnWarningPopupCancelClicked;
-            _respawnWarningPopup.OnRespawn -= RespawnWarningPopupRespawnClicked;
+                _respawnWarningPopup.OnCancel -= RespawnWarningPopupCancelClicked;
+                _respawnWarningPopup.OnRespawn -= RespawnWarningPopupRespawnClicked;
+            }
+            catch (MissingSingletonException ex)
+            {
+                // This is okay, we are being destroyed, but why are we being destroyed? due to scene load?
+            }
         }
 
         private void LostSpawnPopupCancelClicked()

@@ -3,6 +3,14 @@ using UnityEngine;
 
 namespace Common
 {
+    public class MissingSingletonException : Exception
+    {
+        public MissingSingletonException(string message) : base(message)
+        {
+
+        }
+    }
+
     public class BaseSingleton<T> : MonoBehaviour where T : Component
     {
         [SerializeField] private bool _keepAlive = default;
@@ -19,7 +27,7 @@ namespace Common
                 
                 // TOOD: https://answers.unity.com/questions/1399742/dontdestroyonload-duplicating-objects-when-scene-r.html
 
-                throw new Exception(string.Format("expecting singleton of type {0} in scene", typeof(T)));
+                throw new MissingSingletonException(string.Format("expecting singleton of type {0} in scene", typeof(T)));
             }
         }
 
