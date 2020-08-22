@@ -55,6 +55,9 @@ namespace Screeps3D.Rooms.Views
             Y = y;
             _mapView = mapView;
             transform.position = PosUtility.Convert(x, y, mapView.Room);
+            transform.name = $"{mapView.Room.Name}:MapDotView:{x},{y}";
+            transform.SetParent(mapView.transform);
+
         }
     }
 }

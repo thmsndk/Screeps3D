@@ -49,10 +49,10 @@ namespace Screeps3D.Player
         {
             if (!showResources)
             {
-                creditsContainer.gameObject.SetActive(showResources);
-                cpuUnlocksContainer.gameObject.SetActive(showResources);
-                pixelsContainer.gameObject.SetActive(showResources);
-                keysContainer.gameObject.SetActive(showResources);
+                creditsContainer?.gameObject?.SetActive(showResources);
+                cpuUnlocksContainer?.gameObject?.SetActive(showResources);
+                pixelsContainer?.gameObject?.SetActive(showResources);
+                keysContainer?.gameObject?.SetActive(showResources);
 
                 return;
             }
@@ -62,7 +62,7 @@ namespace Screeps3D.Player
                 credits.text = ScreepsAPI.Resources.Credits.ToString("N0");
                 cpuUnlocks.text = ScreepsAPI.Resources.CPUUnlocks.ToString();
                 pixels.text = ScreepsAPI.Resources.Pixels.ToString("N0");
-                keys.text = ScreepsAPI.Resources.Keys.ToString();
+                keys.text = ScreepsAPI.Resources.AccessKeys.ToString();
 
                 creditsContainer.gameObject.SetActive(ScreepsAPI.Resources.Credits > 0);
                 creditsContainer.sizeDelta = new Vector2(credits.rectTransform.sizeDelta.x, creditsContainer.sizeDelta.y);
@@ -73,7 +73,7 @@ namespace Screeps3D.Player
                 pixelsContainer.gameObject.SetActive(ScreepsAPI.Resources.Pixels > 0);
                 pixelsContainer.sizeDelta = new Vector2(pixels.rectTransform.sizeDelta.x, pixelsContainer.sizeDelta.y);
 
-                keysContainer.gameObject.SetActive(ScreepsAPI.Resources.Keys > 0);
+                keysContainer.gameObject.SetActive(ScreepsAPI.Resources.AccessKeys > 0);
                 keysContainer.sizeDelta = new Vector2(keys.rectTransform.sizeDelta.x, keysContainer.sizeDelta.y);
 
                 float layoutsizeX = SecondaryLine.padding.right + SecondaryLine.padding.left;

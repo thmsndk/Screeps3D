@@ -57,7 +57,11 @@ namespace Screeps3D.RoomObjects.Views
         private void initialize() {
             _initialized = true;
             var main = _ps.main;
-            Color rColor = Constants.ResourceColors[_resource.ResourceType];
+
+            if (!Constants.ResourceColors.TryGetValue(_resource.ResourceType, out var rColor))
+            {
+                rColor = Constants.ResourceColors["other"];
+            }
 
             _renderer.materials[0].SetColor("EmissionColor", rColor);
             main.startColor = rColor;

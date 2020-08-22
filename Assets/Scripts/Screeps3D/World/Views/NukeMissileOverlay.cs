@@ -39,5 +39,7 @@ namespace Screeps3D.World.Views
         public float Progress { get { return nuke.Progress; } }
         public DateTime EtaEarly { get { return nuke.EtaEarly; } }
         public DateTime EtaLate { get { return nuke.EtaLate; } }
+
+        public NukeMonitor.ShardInfoDto ShardInfo { get { return nuke.ShardInfo; } }
     }
 }

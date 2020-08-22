@@ -41,11 +41,8 @@ public class NukeMissileArchRenderer : MonoBehaviour
     /// <summary>
     /// Populates the line renderer
     /// </summary>
-    private void RenderArc()
+    public void RenderArc()
     {
-        if(!lr.enabled) {
-            return;
-        }
         lr.positionCount = resolution + 1;
         lr.SetPositions(CalculateArcArray());
     }
@@ -92,7 +89,13 @@ public class NukeMissileArchRenderer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RenderArc();
+        //calling this every frame is.... bad xD performance takes a huge hit #217
+        //RenderArc();
+    }
+
+    public void Show(bool show)
+    {
+        lr.enabled = show;
     }
 }
 

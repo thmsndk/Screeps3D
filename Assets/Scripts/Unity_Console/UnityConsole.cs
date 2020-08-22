@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Common.SettingsManagement;
 using Common;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,17 @@ namespace Unity_Console
 {
     public class UnityConsole : MonoBehaviour
     {
+        private static event EventHandler<bool> OnToggleConsole;
+
+        [Setting("Gameplay/UI", "Enable Console")]
+        public static bool EnableConsole
+        {
+            get => enableConsole; set
+            {
+                enableConsole = value;
+                OnToggleConsole?.Invoke(null, value);
+            }
+        }
         struct Message
         {
             public Color color;
@@ -16,8 +28,9 @@ namespace Unity_Console
         }
 
         public Action<string> OnInput;
-    
+
         [SerializeField] private ConsoleLine _prototype = default;
+        [SerializeField] private GameObject _display = default;
         [SerializeField] private TMP_InputField _input = default;
         [SerializeField] public FadePanel _panel = default;
         [SerializeField] public RectTransform _content = default;
@@ -29,18 +42,32 @@ namespace Unity_Console
         private float _cycleDelay;
         private float _nextCycle;
         private string _currentMsg;
+        private static bool enableConsole = true;
+
+        private void UnityConsole_OnToggleConsole(object sender, bool showConsole)
+        {
+            _display?.gameObject?.SetActive(showConsole);
+            _input?.gameObject?.SetActive(showConsole);
+        }
 
         private void Start()
         {
             _prototype.Hide();
             _input.onSubmit.AddListener(OnSubmit);
+
+            OnToggleConsole += UnityConsole_OnToggleConsole;
+        }
+
+        private void OnDestroy()
+        {
+            OnToggleConsole -= UnityConsole_OnToggleConsole;
         }
 
         private void OnSubmit(string msg)
         {
             if (msg.Length == 0 || _input.wasCanceled)
                 return;
-        
+
             if (OnInput != null) OnInput.Invoke(msg);
             AddMessage(string.Format("> {0}", msg), Color.cyan);
             _input.text = "";
@@ -51,7 +78,7 @@ namespace Unity_Console
 
         public void AddMessage(string msg, Color color)
         {
-            _messages.Enqueue(new Message() {text = msg, color = color});
+            _messages.Enqueue(new Message() { text = msg, color = color });
         }
 
         private void Update()
@@ -167,7 +194,8 @@ namespace Unity_Console
                 line.transform.SetParent(_prototype.transform.parent);
                 _lines.Add(line);
                 return line;
-            } else
+            }
+            else
             {
                 var line = _lines[0];
                 _lines.RemoveAt(0);

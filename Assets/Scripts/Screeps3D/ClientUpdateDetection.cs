@@ -40,7 +40,7 @@ namespace Assets.Scripts.Screeps3D
                 var responseText = www.downloadHandler.text;
                 var response = JsonUtility.FromJson<Rootobject>("{\"releases\":" + responseText + "}"); // Unity only supports parsing objects
 
-                var currentVersion = PlayerSettings.bundleVersion;
+                var currentVersion = Application.version;
 
                 var latestRelease = response.releases.FirstOrDefault();
 

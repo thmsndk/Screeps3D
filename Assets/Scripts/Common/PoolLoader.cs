@@ -30,7 +30,7 @@ namespace Common
             var prefab = PrefabLoader.Look(path);
             if (!prefab)
                 throw new Exception(string.Format("no resource found at path: {0}", path));
-            return UnityEngine.Object.Instantiate(prefab, _parent);
+            return UnityEngine.Object.Instantiate(prefab, _parent); // parent not initialized yet, so this does nothing
         }
 
         public static void Preload(string path, int count)
@@ -39,7 +39,11 @@ namespace Common
 
             for (var i = 0; i < count; i++)
             {
-                stack.Push(Instantiate(path));
+                var go = Instantiate(path);
+                stack.Push(go);
+
+                go.name = $"Preload:{go.name}";
+                go.transform.SetParent(_parent); // parent not initialized yet, so this does nothing
             }
         }
 
@@ -61,6 +65,9 @@ namespace Common
             {
                 throw new Exception(path + " returned pooled object to unused pool");
             }
+
+            // This causes the SelectionPanel to go wonky. with negative "margins"
+            //go.transform.SetParent(_parent);
 
             _pools[path].Push(go);
         }

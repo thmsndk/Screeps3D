@@ -116,12 +116,11 @@ namespace Assets.Scripts.Screeps3D.Menus.NukeListPopup
 
                 var time = nuke.ShardInfo.Time + ticksSinceLastUpdate;
 
-
                 var initialLaunchTick = Math.Max(nuke.LandingTime - Constants.NUKE_TRAVEL_TICKS, 0);
                 var progress = (float)(time - initialLaunchTick) / Constants.NUKE_TRAVEL_TICKS;
                 Progress.fillAmount = progress;// / 100f;
 
-                var ticksLeft = (nuke.LandingTime - time); // TODO: this does not work for other shards
+                var ticksLeft = (nuke.LandingTime - time);
                 TicksLeft.text = $"Ticks remaining {ticksLeft.ToString()}";
 
                 var impactTimeSpan = nuke.EtaEarly - DateTime.Now;

@@ -37,18 +37,43 @@ namespace Screeps3D.World.Views
         float _nightProgress = 0.005f;
         float _skyRotation = 0.005f;
 
+        [Setting("Gameplay/Fog", "Fog Attenuation Distance", "")]
+        static float _fogAttenuationDistance = 5f;
+
+        [Setting("Gameplay/Fog", "Maximum Height", "")]
+        static float _fogMaximumHeight = 15f;
+
+        [Setting("Gameplay/Fog", "Max Fog Distance", "")]
+        static float _fogMaxDistance = 0f;
+
+        private Fog _fog;
+
         void Start()
         {            
             Volume volume = GetComponent<Volume>();
-    
+            
             if (volume.profile.TryGet<HDRISky>(out HDRISky tempSkySett))
             {
                 _skySettings = tempSkySett;
             }
+
+            if (volume.profile.TryGet<Fog>(out var fog))
+            {
+                _fog = fog;
+                UpdateFogSettings();
+            }
+
             _sunRise = false;
             _day = true;
             _sunSet = false;
             _night = false;
+        }
+
+        private void UpdateFogSettings()
+        {
+            _fog.maximumHeight.value = _fogMaximumHeight;
+            _fog.maxFogDistance.value = _fogMaxDistance;
+            _fog.meanFreePath.value = _fogAttenuationDistance;
         }
 
         private void rotateSky() {
@@ -145,6 +170,8 @@ namespace Screeps3D.World.Views
             rotateSky();
             // return;
             luxSkySet();
+
+            UpdateFogSettings();
         }
     }
 }

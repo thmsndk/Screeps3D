@@ -19,7 +19,6 @@ namespace Assets.Scripts.Screeps3D.Menus.Options
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("escape was clicked");
                 OptionsCanvas.SetActive(!OptionsCanvas.activeSelf);
             }
         }

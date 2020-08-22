@@ -26,6 +26,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture:
+        m_Texture: {fileID: 2800000, guid: 39dbda199bcbc9c469149883cbbb33e9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -147,9 +151,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionEV: 3
+    - BlendWithBlackWeight: 0.73
+    - EmissionEV: 1
     - MetallicVal: 1
     - SmoothVal: 0
+    - Speed: 0.002
     - Vector1_6D6E0534: 0.5
     - Vector1_75B8D4BF: 0
     - Vector1_E9000F23: 0
@@ -286,7 +292,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - Color_DEE3E845: {r: 0.003337487, g: 0.028301895, b: 0.003337487, a: 0}
+    - Color_DEE3E845: {r: 0.021, g: 0.03, b: 0.012000001, a: 1}
     - _BaseColor: {r: 0.0678066, g: 0.21698111, b: 0, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.06780658, g: 0.21698105, b: 0, a: 1}

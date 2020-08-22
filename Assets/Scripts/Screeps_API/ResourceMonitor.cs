@@ -13,7 +13,9 @@ namespace Screeps_API
         public float Credits { get; private set; }
         public int CPUUnlocks { get; private set; }
         public int Pixels { get; private set; }
-        public int Keys { get; private set; }
+        public int AccessKeys { get; private set; }
+
+        public int Tokens { get; private set; }
 
         private Queue<JSONObject> queue = new Queue<JSONObject>();
 
@@ -48,13 +50,19 @@ namespace Screeps_API
 
         private void UnpackResources(JSONObject data)
         {
+            var tokenData = data["token"];
+            if (tokenData != null)
+            {
+                Tokens = (int)tokenData.n;
+            }
+
             var creditsData = data["credits"];
             if (creditsData != null)
             {
                 Credits = creditsData.n;
             }
 
-            var cpuUnlockData = data["cpu-unlock"];
+            var cpuUnlockData = data["cpuUnlock"];
             if (cpuUnlockData != null)
             {
                 CPUUnlocks = (int)cpuUnlockData.n;
@@ -66,10 +74,10 @@ namespace Screeps_API
                 Pixels = (int)pixelData.n;
             }
 
-            var keysData = data["keys"];
+            var keysData = data["accessKey"];
             if (keysData != null)
             {
-                Keys = (int)keysData.n;
+                AccessKeys = (int)keysData.n;
             }
 
             if (OnResources != null)

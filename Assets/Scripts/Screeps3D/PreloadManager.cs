@@ -8,7 +8,8 @@ namespace Screeps3D
     {
         private void Start()
         {
-            PoolLoader.Preload(MapDotView.Path, 1000);
+            // Preloaded mapdots does not seem to do anything :thinking:
+            //PoolLoader.Preload(MapDotView.Path, 200);
         }
     }
 }
