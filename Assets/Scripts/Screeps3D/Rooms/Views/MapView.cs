@@ -127,15 +127,23 @@ namespace Screeps3D.Rooms.Views
 
         private void SpawnDots(string key, List<JSONObject> list)
         {
-            Color randomEnemyColor;
-            if (!GameManager.Instance.PlayerColors.TryGetValue(key, out randomEnemyColor))
+            Color enemyPlayerColor;
+            if (!GameManager.Instance.PlayerColors.TryGetValue(key, out enemyPlayerColor))
             {
-                randomEnemyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-                GameManager.Instance.PlayerColors.Add(key, randomEnemyColor);
+                var user = ScreepsAPI.UserManager.GetUser(key);
+                if (user != null)
+                {
+                    enemyPlayerColor = user.BadgeColor1;
+                }
+                else
+                {
+                    enemyPlayerColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                }
+                GameManager.Instance.PlayerColors.Add(key, enemyPlayerColor);
             }
 
 
-            var color = key == ScreepsAPI.Me.UserId ? Color.green : randomEnemyColor;
+            var color = key == ScreepsAPI.Me.UserId ? Color.green : enemyPlayerColor;
             foreach (var numArray in list)
             {
                 var x = (int)numArray.list[0].n;

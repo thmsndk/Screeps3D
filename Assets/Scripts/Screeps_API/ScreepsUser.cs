@@ -18,5 +18,9 @@ namespace Screeps_API
             this.Badge = badge;
             this.IsNpc = isNpc;
         }
+
+        public Color BadgeColor1 { get; internal set; }
+        public Color BadgeColor2 { get; internal set; }
+        public Color BadgeColor3 { get; internal set; }
     }
 }
