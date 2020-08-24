@@ -20,7 +20,7 @@ public class Windows
 
         // Build player.
         BuildPipeline.BuildPlayer(levels, path + "/Screeps3D.exe", BuildTarget.StandaloneWindows, 
-            BuildOptions.Development 
+            BuildOptions.Development | BuildOptions.EnableDeepProfilingSupport
         );
 
         // Copy a file from the project folder to the build folder, alongside the built game.
