@@ -171,7 +171,7 @@ namespace Screeps3D.Rooms
             {
                 if (MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
                 {
-                    var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.User.UserId == ScreepsAPI.Me.UserId);
+                    var ownedRooms = shardRoomInfo.Where(r => r.Value.User != null && r.Value.User.UserId == ScreepsAPI.Me.UserId).Select(r=> r.Value);
 
                     if (ownedRooms.Any())
                     {
@@ -362,9 +362,9 @@ namespace Screeps3D.Rooms
         {
             if (!string.IsNullOrEmpty(PlayerPosition.Instance.ShardName) && MapStatsUpdater.Instance.RoomInfo.TryGetValue(PlayerPosition.Instance.ShardName, out var shardRoomInfo))
             {
-                var ownedRooms = shardRoomInfo.Where(r => r.User != null && r.Level.HasValue && r.Level > 0)
+                var ownedRooms = shardRoomInfo.Where(r => r.Value.User != null && r.Value.Level.HasValue && r.Value.Level > 0)
                     // remove invaders and source keepers
-                    .Where(r => r.User.UserId != Constants.InvaderUserId);
+                    .Where(r => r.Value.User.UserId != Constants.InvaderUserId).Select(r => r.Value);
 
                 if (ownedRooms.Any())
                 {

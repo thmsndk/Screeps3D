@@ -21,13 +21,16 @@ namespace Screeps3D
             StartCoroutine(Scan());
         }
 
-        public Dictionary<string, List<RoomInfo>> RoomInfo { get; } = new Dictionary<string, List<RoomInfo>>();
+        public Dictionary<string, Dictionary<string, RoomInfo>> RoomInfo { get; } = new Dictionary<string, Dictionary<string, RoomInfo>>();
 
         public RoomInfo GetRoomInfo(string shardName, string roomName)
         {
             if (RoomInfo.TryGetValue(shardName, out var shardRoomInfo))
             {
-                return shardRoomInfo.SingleOrDefault(room => room.RoomName == roomName);
+                if (shardRoomInfo.TryGetValue(roomName, out var roomInfo))
+                {
+                    return roomInfo;
+                }
             }
 
             return null;
@@ -123,7 +126,7 @@ namespace Screeps3D
 
             if (!RoomInfo.TryGetValue(shard, out var shardRoomInfo))
             {
-                shardRoomInfo = new List<RoomInfo>();
+                shardRoomInfo = new Dictionary<string, RoomInfo>();
                 RoomInfo.Add(shard, shardRoomInfo);
             }
 
@@ -141,11 +144,10 @@ namespace Screeps3D
                 // should we store this info on the room so it is available for others?
 
 
-                var roomInfo = shardRoomInfo.SingleOrDefault(info => info.RoomName == roomName);
-                if (roomInfo == null)
+                if (!shardRoomInfo.TryGetValue(roomName, out var roomInfo))
                 {
                     roomInfo = new RoomInfo(roomName);
-                    shardRoomInfo.Add(roomInfo);
+                    shardRoomInfo.Add(roomName, roomInfo);
                 }
 
                 roomInfo.Unpack(stats[roomName]);
