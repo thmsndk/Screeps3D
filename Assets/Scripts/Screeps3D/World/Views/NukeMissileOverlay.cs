@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Screeps_API;
 using Assets.Scripts.Screeps3D;
 using Assets.Scripts.Screeps3D.World.Overlay;
 using Screeps3D.Rooms;
@@ -40,6 +41,6 @@ namespace Screeps3D.World.Views
         public DateTime EtaEarly { get { return nuke.EtaEarly; } }
         public DateTime EtaLate { get { return nuke.EtaLate; } }
 
-        public NukeMonitor.ShardInfoDto ShardInfo { get { return nuke.ShardInfo; } }
+        public ShardInfoDto ShardInfo { get { return nuke.ShardInfo; } }
     }
 }

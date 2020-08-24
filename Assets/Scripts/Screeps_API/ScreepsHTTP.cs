@@ -464,5 +464,30 @@ namespace Screeps_API
 
             return Request("GET", "/api/experimental/nukes", onSuccess: onSuccess);
         }
+
+        public IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
+        {
+            var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
+
+            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
+            {
+                // Private servers runs with a different url.
+                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
+            }
+
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                //Texture myTexture = DownloadHandlerTexture.GetContent(www);
+                response(myTexture);
+            }
+        }
     }
 }

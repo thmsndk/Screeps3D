@@ -1,3 +1,4 @@
+using Assets.Scripts.Screeps_API;
 using Common;
 using Screeps_API;
 using Screeps3D;
@@ -48,42 +49,8 @@ namespace Assets.Scripts.Screeps3D
         private void Start()
         {
             //PlayerPosition.Instance.OnRoomChange += OnRoomChange; // this triggers twice, we might need a more reliable way to detect when loaded
-            StartCoroutine(GetShardInfo());
             getNukes = GetNukes();
             StartCoroutine(getNukes);
-        }
-
-        /// <summary>
-        /// Used to get shard tickrates
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator GetShardInfo()
-        {
-            while (!ScreepsAPI.IsConnected)
-            {
-                yield return new WaitForSeconds(5);
-            }
-
-            // TODO: Should probably do this lookup on connect
-            ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
-            {
-                // tickrates and such, what about private servers?
-                var shardInfo = new JSONObject(jsonShardInfo);
-                var shardsData = shardInfo["shards"];
-                if (shardsData == null)
-                {
-                    Debug.LogWarning("no shards foound? " + jsonShardInfo); // we recieved an empty jsonShardInfo object
-                    return;
-                }
-
-                var shards = shardsData.list;
-                foreach (var shard in shards)
-                {
-                    var tickRateString = shard["tick"].n;
-                    // TODO: find existing shard info and update it.
-                    ShardInfo.Add(shard["name"].str, new ShardInfoDto(shard));
-                }
-            });
         }
 
         private IEnumerator GetNukes()
@@ -92,7 +59,7 @@ namespace Assets.Scripts.Screeps3D
 
             while (true)
             {
-                if (ShardInfo.Count == 0)
+                if (ScreepsAPI.ShardInfo.Count == 0)
                 {
                     Debug.LogWarning("shardinfo not fetched yet, waiting 5 seconds");
                     yield return new WaitForSeconds(5);
@@ -114,8 +81,6 @@ namespace Assets.Scripts.Screeps3D
                             nukesInitialized[nukesShardName] = false;
                         }
 
-
-
                         var shardNukes = nukesObject[nukesShardName].list;
                         Debug.Log($"{nukesShardName} has {shardNukes.Count} nukes!");
 
@@ -124,37 +89,14 @@ namespace Assets.Scripts.Screeps3D
                         var time = ScreepsAPI.Time;
 
                         // TODO: getting time should be moved to when logging or switching shards? - we do need the time for every shard to render this though.
-                        ScreepsAPI.Http.Request("GET", $"/api/game/time?shard={nukesShardName}", null, (jsonTime) =>
-                        {
+                       
                             var roomsToGetMapStatsFrom = new List<string>(); // TODO: handle getting map-stats from other shards
-
-                            var timeData = new JSONObject(jsonTime)["time"];
-                            if (timeData != null)
-                            {
-                                time = (long)timeData.n;
-                            }
 
                             if (!Nukes.TryGetValue(nukesShardName, out var nukes))
                             {
                                 nukes = new List<NukeData>();
                                 Nukes.Add(nukesShardName, nukes);
                             }
-
-                            
-                            if (ShardInfo.TryGetValue(nukesShardName, out var shardInfo))
-                            {
-                                shardInfo.Time = time;
-                            }
-                            else
-                            {
-                                // Handle cases where server has not updated to latest admin-util yet. this should really be in a "ShardInfo" component, that is initialized on connect, and updated with realtime average ticks like the serverinfo box top left uses.
-                                shardInfo = new ShardInfoDto(null);
-                                ShardInfo.Add(nukesShardName, shardInfo);
-                                shardInfo.Time = time;
-                                shardInfo.AverageTick = 1000;
-                            }
-
-                            shardInfo.TimeUpdated = DateTime.Now;
 
                             var shardXName = nukesShardName;
                             // Temp fix because RoomFactory expects shards to be named shardX
@@ -169,6 +111,13 @@ namespace Assets.Scripts.Screeps3D
                                 var key = id;
 
                                 var nuke = nukes.SingleOrDefault(n => n.Id == id);
+
+                                var shardInfo = ScreepsAPI.ShardInfo[nukesShardName];
+
+                                if (shardInfo == null)
+                                {
+                                    continue;
+                                }
 
                                 if (nuke == null)
                                 {
@@ -198,7 +147,7 @@ namespace Assets.Scripts.Screeps3D
                                     roomsToGetMapStatsFrom.Add(launchRoomName);
                                     nuke.LaunchRoom = RoomManager.Instance.Get(launchRoomName, shardXName/*nukesShardName*/);
                                     nuke.LaunchRoomName = launchRoomName;
-                                    StartCoroutine(GetRoomTexture(nuke.Shard, launchRoomName, (roomTexture) =>
+                                    StartCoroutine(ScreepsAPI.Http.GetRoomTexture(nuke.Shard, launchRoomName, (roomTexture) =>
                                     {
                                         nuke.LaunchRoomTexture = roomTexture;
 
@@ -213,7 +162,7 @@ namespace Assets.Scripts.Screeps3D
                                     nuke.ImpactRoom = RoomManager.Instance.Get(impactRoomName, shardXName/*nukesShardName*/);
                                     nuke.ImpactRoomName = impactRoomName;
                                     nuke.ImpactPosition = PosUtility.Convert(shardNuke, nuke.ImpactRoom);
-                                    StartCoroutine(GetRoomTexture(nuke.Shard, impactRoomName, (roomTexture) =>
+                                    StartCoroutine(ScreepsAPI.Http.GetRoomTexture(nuke.Shard, impactRoomName, (roomTexture) =>
                                     {
                                         nuke.ImpactRoomTexture = roomTexture;
 
@@ -273,7 +222,7 @@ namespace Assets.Scripts.Screeps3D
                                     OnNukesRefreshed?.Invoke();
                                 });
                             }
-                        });
+                        
                     }
 
                     OnNukesRefreshed?.Invoke();
@@ -313,55 +262,7 @@ namespace Assets.Scripts.Screeps3D
             }
         }
 
-        private IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
-        {
-            var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
 
-            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
-            {
-                // Private servers runs with a different url.
-                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
-            }
-
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-                //Texture myTexture = DownloadHandlerTexture.GetContent(www);
-                response(myTexture);
-            }
-        }
-
-        public class ShardInfoDto
-        {
-            public ShardInfoDto(JSONObject info)
-            {
-                if (info == null)
-                {
-                    return;
-                }
-
-                // should be a float, but it seems like something is wrong when parsing json?
-                var tickRateString = info["tick"].n.ToString();
-                if (float.TryParse(tickRateString, out var tickRate))
-                {
-                    this.AverageTick = tickRate; // for some reason .n in the jsonobject returns a really really wonky float.. :S
-                }
-            }
-
-            /// <summary>
-            /// Average length of a tick (in milliseconds)
-            /// </summary>
-            public float? AverageTick { get; internal set; }
-            public long Time { get; internal set; }
-            public DateTime TimeUpdated { get; internal set; }
-        }
 
         // How do we instantiate the object, it's kinda like RoomObjects that has a view attached, we should probably do something like that
         // except this object can be between rooms, and should be using a "global" position, for placement. probably need to use PosUtility to some regards

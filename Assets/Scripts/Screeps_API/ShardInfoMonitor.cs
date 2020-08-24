@@ -14,6 +14,9 @@ namespace Assets.Scripts.Screeps_API
         public Dictionary<string, ShardInfoDto> ShardInfo { get; set; } = new Dictionary<string, ShardInfoDto>();
 
         public Dictionary<string, IEnumerator> ShardTicker { get; set; } = new Dictionary<string, IEnumerator>();
+
+        public int Count { get { return ShardInfo.Count; } }
+
         private void Start()
         {
             Debug.Log("ShardInfoMonitor Started");
