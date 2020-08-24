@@ -20,8 +20,11 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
         private Room room;
         private RoomInfo _roomInfo;
 
+        private bool _subscribingToOnMapStatsUpdated = false;
         public void Init(Room room)
         {
+            _subscribingToOnMapStatsUpdated = false;
+
             this.room = room;
             room.MapStream.OnData += OnMapData;
             room.OnShowObjects += OnShowObjects;
@@ -33,7 +36,12 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
             WorldStatusUpdater.Instance.OnWorldStatusChanged += OnWorldStatusChanged;
             if (WorldStatusUpdater.Instance.WorldStatus == WorldStatus.Empty)
             {
-                MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                if (!_subscribingToOnMapStatsUpdated)
+                {
+                    MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                    _subscribingToOnMapStatsUpdated = true;
+                }
+
                 UpdateRespawnProhibited();
             }
         }
@@ -79,7 +87,11 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
         {
             if (current == WorldStatus.Empty)
             {
-                MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe? and do we risk double subscriptions here?
+                if (!_subscribingToOnMapStatsUpdated)
+                {
+                    MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                    _subscribingToOnMapStatsUpdated = true;
+                }
 
                 UpdateRespawnProhibited();
             }
@@ -127,7 +139,12 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
             if (WorldStatusUpdater.Instance.WorldStatus == WorldStatus.Empty)
             {
-                MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                if (!_subscribingToOnMapStatsUpdated)
+                {
+                    MapStatsUpdater.Instance.OnMapStatsUpdated += OnMapStatsUpdated; // TODO: how to unsubscribe?
+                    _subscribingToOnMapStatsUpdated = true;
+                }
+
                 SpawnProhibited(ShouldRenderProhibitedRespawn());
             }
         }
@@ -156,10 +173,10 @@ namespace Assets.Scripts.Screeps3D.Rooms.Views
 
         public void SpawnProhibited(bool prohibited)
         {
-            //if (_ProhibitedRoomProjector.activeSelf != prohibited)
-            //{
-                _ProhibitedRoomProjector.SetActive(prohibited); 
-            //}
+            if (_ProhibitedRoomProjector.activeSelf != prohibited)
+            {
+                _ProhibitedRoomProjector.SetActive(prohibited);
+            }
         }
     }
 }
