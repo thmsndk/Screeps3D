@@ -18,8 +18,8 @@ Scroll to the bottom for a feature comparison with official clients
 
 Here are the major areas that we would like to tackle next: 
 * ~Get it working with private servers~
-* Respawn / Placing spawn
-* Placing construction sites
+* ~Respawn / Placing spawn~
+* ~Placing construction sites~
 * Gameplay options like hotkeys, camera controls, console colors, etc.
 * ~Finish model set for room objects~
 * ~Rendering roads~
@@ -92,7 +92,7 @@ This is an attempt at a feature comparison table.
 | deposit | :heavy_check_mark: | :heavy_check_mark: |
 | flag | :heavy_check_mark: | :heavy_check_mark: |
 | mineral | :heavy_check_mark: | :heavy_check_mark: |
-| Nuke | :heavy_check_mark: | :white_check_mark: |
+| Nuke | :heavy_check_mark: | :heavy_check_mark: |
 | PowerCreep | :heavy_check_mark: | :heavy_check_mark: |
 | Resource | :heavy_check_mark: | :heavy_check_mark: |
 | Ruin | :heavy_check_mark: | :heavy_check_mark: |
