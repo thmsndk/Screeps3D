@@ -229,8 +229,6 @@ namespace Screeps3D.RoomObjects
                 {
                     foreach (var resourceType in store.keys)
                     {
-                        if (!Constants.ResourcesAll.Contains(resourceType)) continue; // Early
-
                         if (obj.Store.ContainsKey(resourceType))
                         {
                             obj.Store[resourceType] = store[resourceType].n;
