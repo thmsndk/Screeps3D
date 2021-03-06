@@ -70,12 +70,19 @@ namespace Screeps3D.RoomObjects
                     return new InvaderCore();
                 case Constants.TypeNuke:
                     return new Nuke();
-                
+
                 // Season 1
                 case Constants.Season1_TypeScoreContainer:
                     return new ScoreContainer();
                 case Constants.Season1_TypeScoreCollector:
                     return new ScoreCollector();
+
+                // Season 2
+                case Constants.Season2_TypeSymbolContainer:
+                    return new SymbolContainer();
+                case Constants.Season2_TypeSymbolDecoder:
+                    return new SymbolDecoder();
+
                 default:
                     return new PlaceHolderRoomObject();
             }

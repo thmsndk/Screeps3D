@@ -43,6 +43,9 @@ namespace Screeps3D
         public const string Season1_TypeScoreContainer = "scoreContainer";
         public const string Season1_TypeScoreCollector = "scoreCollector";
 
+        public const string Season2_TypeSymbolContainer = "symbolContainer";
+        public const string Season2_TypeSymbolDecoder = "symbolDecoder";
+
 
 
 
