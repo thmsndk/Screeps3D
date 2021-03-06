@@ -252,8 +252,6 @@ namespace Screeps3D.RoomObjects
 
                         foreach (var resourceType in storeCapacityResource.keys)
                         {
-                            if (!Constants.ResourcesAll.Contains(resourceType)) continue; // Early
-
                             obj.TotalCapacity += storeCapacityResource[resourceType].n;
 
                             if (obj.Capacity.ContainsKey(resourceType))
