@@ -17,14 +17,14 @@ namespace Screeps3D.RoomObjects
        }
     */
 
-    public class SymbolContainer : PlaceHolderRoomObject/*StoreStructure*/, IDecay
+    public class SymbolContainer : StoreStructure, IDecay
     {
         
         public float NextDecayTime { get; set; }
 
         public SymbolContainer()
         {
-            //OverrideTypePath = "Season2/";
+            OverrideTypePath = "Season2/";
         }
 
         internal override void Unpack(JSONObject data, bool initial)

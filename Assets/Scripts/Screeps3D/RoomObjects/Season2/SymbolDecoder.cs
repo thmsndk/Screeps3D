@@ -19,7 +19,7 @@ namespace Screeps3D.RoomObjects
     }
     */
 
-    public class SymbolDecoder : PlaceHolderRoomObject/*StoreStructure*/, IResourceObject
+    public class SymbolDecoder : StoreStructure, IResourceObject
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }
@@ -27,7 +27,7 @@ namespace Screeps3D.RoomObjects
 
         public SymbolDecoder()
         {
-            //OverrideTypePath = "Season2/";
+            OverrideTypePath = "Season2/";
         }
 
         internal override void Unpack(JSONObject data, bool initial)
