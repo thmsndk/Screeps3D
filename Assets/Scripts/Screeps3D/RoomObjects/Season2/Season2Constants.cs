@@ -1,21 +1,15 @@
-﻿using Common;
-using UnityEngine;
-using System.Linq;
-using Screeps_API;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Screeps3D.RoomObjects.Views
+namespace Assets.Scripts.Screeps3D.RoomObjects.Season2
 {
-    public class SymbolContainerView : MonoBehaviour, IObjectViewComponent
+    public static class Season2Constants
     {
-        private SymbolContainer _sContainer;
-        [SerializeField] private Renderer _base = default;
-        [SerializeField] private Light _light = default;
-        public void Init()
-        {
-        }
-
-        private Color32 symbolToColor(string symbol)
+        public static Color32 SymbolToColor(string symbol)
         {
             /*
                 symbol_aleph: 0xC63946,
@@ -71,28 +65,5 @@ namespace Screeps3D.RoomObjects.Views
             }
             return newCol;
         }
-
-        public void Load(RoomObject roomObject)
-        {
-            _sContainer = roomObject as SymbolContainer;
-            _light.gameObject.SetActive(true);
-            string symbol = new List<string>(_sContainer.Store.Keys)[0];
-            Color32 c = this.symbolToColor(symbol);
-            Debug.LogError("symbol is " + symbol);
-            Debug.LogError("color is " + c);
-
-            // _base.materials[1].SetFloat("EmissionStrength", 0.35f);
-            _base.materials[1].SetFloat("EmissionStrength", 1.5f);
-            _base.materials[1].SetColor("EmissionColor", c);
-            _light.color = c;
-        }
-        public void Delta(JSONObject data)
-        { }
-        public void Unload(RoomObject roomObject)
-        {
-            _sContainer = null;
-            _light.gameObject.SetActive(false);
-        }
-
     }
 }
