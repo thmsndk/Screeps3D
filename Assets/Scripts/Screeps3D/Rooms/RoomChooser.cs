@@ -605,19 +605,26 @@ namespace Screeps3D.Rooms
         public void GetAndChooseRoom(string roomName)
         {
             // _roomInput.text
-            var shardName = _shards[_shardInput.value];
-            var room = RoomManager.Instance.Get(roomName, shardName);
-            if (room == null)
+            // index out of bounds
+            try
             {
-                Debug.Log($"invalid room {roomName} {shardName}");
-                return;
+                var shardName = _shards[_shardInput.value];
+                var room = RoomManager.Instance.Get(roomName, shardName);
+                if (room == null)
+                {
+                    Debug.Log($"invalid room {roomName} {shardName}");
+                    return;
+                }
+
+                CameraRig.Instance.OnTargetReached += OnTargetReached;
+
+                if (OnChooseRoom != null) OnChooseRoom.Invoke(room);
             }
-
-            CameraRig.Instance.OnTargetReached += OnTargetReached;
-
-            if (OnChooseRoom != null) OnChooseRoom.Invoke(room);
-
-
+            catch (Exception ex)
+            {
+                Debug.LogError($"failed to go to {roomName}");
+                Debug.LogException(ex);
+            }
         }
 
         private void OnTargetReached()

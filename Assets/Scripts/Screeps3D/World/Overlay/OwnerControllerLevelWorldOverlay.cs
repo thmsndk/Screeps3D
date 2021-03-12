@@ -85,6 +85,12 @@ namespace Screeps3D.World.Views
 
         private void LoadViewsByPlayerPosition()
         {
+            if (string.IsNullOrEmpty(PlayerPosition.Instance.ShardName))
+            {
+                // we don't know where we are yet, we can't load views
+                return;
+            }
+
             var playerPosition = PlayerPosition.Instance.transform.position;
             foreach (var col in Physics.OverlapSphere(playerPosition, OverlayDistance, 1 << 10))
             {

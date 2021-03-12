@@ -20,6 +20,7 @@ namespace Assets.Scripts.Screeps_API
         private void Start()
         {
             Debug.Log("ShardInfoMonitor Started");
+
             StartCoroutine(GetShardInfo());
         }
 
@@ -43,8 +44,16 @@ namespace Assets.Scripts.Screeps_API
                 yield return new WaitForSeconds(5);
             }
 
+            Debug.Log("ShardInfoMonitor populating shardnames from cache");
+            foreach (var shardName in ScreepsAPI.Cache.ShardNames)
+            {
+                var shardInfo = new ShardInfoDto();
+                ShardInfo.Add(shardName, shardInfo);
+            }
+
             while (ScreepsAPI.IsConnected)
             {
+                // screeps-admin-utils adds this endpoint, it does not exist on a default server installation, it does exist on mmo though.
                 // Yield return here seems broken, is it because of the callback? or because i've made a faulty return type on requests?
                 ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
                 {
@@ -67,7 +76,12 @@ namespace Assets.Scripts.Screeps_API
 
                         var shardNameObject = shard["name"];
 
-                        var shardName = shardNameObject != null ? shardNameObject.str : "shard0";
+                        if (shardNameObject == null || shardNameObject.IsNull)
+                        {
+                            return;
+                        }
+
+                        var shardName = shardNameObject.str;
                         if (!ShardInfo.TryGetValue(shardName, out var shardInfo))
                         {
                             shardInfo = new ShardInfoDto();

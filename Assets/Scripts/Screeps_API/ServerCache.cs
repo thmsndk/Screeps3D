@@ -42,6 +42,11 @@ namespace Screeps_API
         [field: NonSerialized]
         public bool Persist { get; internal set; }
 
+        /// <summary>
+        /// Populated by api/version
+        /// </summary>
+        public List<string> ShardNames { get; internal set; }
+
         public ServerCache()
         {
             Persist = true;

@@ -263,42 +263,10 @@ namespace Screeps_API
 
             Debug.Log($"Loaded {_servers.Count} servers from servers.dat");
 
-            // Get status of servers, should probably be async for each server and a coroutine.
-            // Need to double wrap it to keep a reference to the server
-            Action<ServerCache> queryServerInfo = server =>
-            {
-                ScreepsAPI.Cache = server;
-                server.Online = null;
-                Action<string> queryServerInfoCallback = str =>
-                {
-                    // {"ok":1,"package":159,"protocol":13,"serverData":{"historyChunkSize":100,"shards":["shard0","shard1","shard2","shard3"]},"users":1606}
-                    var obj = new JSONObject(str);
-                    var package = obj["package"]; // MMO
-                    var packageVersion = obj["packageVersion"]; // Private Server
-                    var users = Convert.ToInt32(obj["users"].n);
-
-                    server.Online = true;
-                    // TODO: timestamp of online status?
-                    server.Users = users;
-                    server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
-                    UpdateServerList();
-                };
-
-                Action queryServerInfoErrorCallback = () =>
-                {
-                    server.Online = false;
-
-                    UpdateServerList();
-                };
-
-                var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, noNotification: true);
-                //stuff.Current
-            };
-
             // query saved servers, should probably only query the ones where source == custom cause the providers will query the others
             foreach (var server in _servers)
             {
-                queryServerInfo(server);
+                QueryAndUpdateServerInfo(server);
             }
 
             foreach (var provider in serverListProviders)
@@ -352,7 +320,7 @@ namespace Screeps_API
                             // TODO: server icon
                         }
 
-                        queryServerInfo(server);
+                        QueryAndUpdateServerInfo(server);
                     }
 
                     var sortedCache = new CacheList();
@@ -368,6 +336,59 @@ namespace Screeps_API
                     UpdateServerList();
                 });
             }
+        }
+
+        private void QueryAndUpdateServerInfo(ServerCache server)
+        {
+            // Get status of servers, should probably be async for each server and a coroutine.
+            // Need to double wrap it to keep a reference to the server
+            ScreepsAPI.Cache = server;
+            server.Online = null;
+            Action<string> queryServerInfoCallback = str =>
+            {
+                UpdateServerVersionInfo(server, str);
+                UpdateServerList();
+            };
+
+            Action queryServerInfoErrorCallback = () =>
+            {
+                server.Online = false;
+
+                UpdateServerList();
+            };
+
+            var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, noNotification: true);
+            //stuff.Current
+        }
+
+        private static void UpdateServerVersionInfo(ServerCache server, string str)
+        {
+            // {"ok":1,"package":159,"protocol":13,"serverData":{"historyChunkSize":100,"shards":["shard0","shard1","shard2","shard3"]},"users":1606}
+            var obj = new JSONObject(str);
+            var package = obj["package"]; // MMO
+            var packageVersion = obj["packageVersion"]; // Private Server
+            var users = Convert.ToInt32(obj["users"].n);
+            var serverData = obj["serverData"];
+
+            if (serverData != null && !serverData.IsNull)
+            {
+                // screeps-admin-utils adds shards, default server does not have it
+                var shards = serverData["shards"];
+
+                server.ShardNames = new List<string>();
+                if (shards != null && !shards.IsNull)
+                {
+                    foreach (var shard in shards.list)
+                    {
+                        server.ShardNames.Add(shard.str);
+                    }
+                } 
+            }
+
+            server.Online = true;
+            // TODO: timestamp of online status?
+            server.Users = users;
+            server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
         }
 
         private void UpdateServerList()

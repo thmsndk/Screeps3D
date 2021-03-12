@@ -99,11 +99,6 @@ namespace Assets.Scripts.Screeps3D
                             }
 
                             var shardXName = nukesShardName;
-                            // Temp fix because RoomFactory expects shards to be named shardX
-                            if (!nukesShardName.StartsWith("shard"))
-                            {
-                                shardXName = "shard0";
-                            }
 
                             foreach (var shardNuke in shardNukes)
                             {
