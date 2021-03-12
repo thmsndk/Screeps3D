@@ -76,8 +76,6 @@ namespace Screeps3D.RoomObjects.Views
         {
             _sDecoder = roomObject as SymbolDecoder;
             Color32 c = this.symbolToColor(_sDecoder.ResourceType);
-            Debug.LogError("symbol is " + _sDecoder.ResourceType);
-            Debug.LogError("color is " + c);
 
             // _base.materials[1].SetFloat("EmissionStrength", 0.35f);
             _base.materials[1].SetFloat("EmissionStrength", 1.5f);
