@@ -22,13 +22,21 @@ namespace Screeps3D.RoomObjects.Views
 
             var euler = transform.eulerAngles;
             euler.y = Random.Range(0.0f, 360.0f);
+            if (_ruinObject.StructureType == Constants.TypeInvaderCore)
+            {
+                // forgive me father because i sinned...
+                // it's easier than rotating whole animation in blender...
+                euler.x = -90f;
+            }
             _ruinRoot.eulerAngles = euler;
 
-            if(_ruinAnimation != null) {
+            if (_ruinAnimation != null)
+            {
                 _ruinAnimation.Play();
             }
 
-            if(_psSmoke != null) {
+            if (_psSmoke != null)
+            {
                 _psSmoke.Play();
             }
         }
@@ -39,7 +47,8 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Unload(RoomObject roomObject)
         {
-            if(_psSmoke != null) {
+            if (_psSmoke != null)
+            {
                 _psSmoke.Stop();
             }
         }

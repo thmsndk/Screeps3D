@@ -43,14 +43,18 @@ namespace Assets.Scripts.Screeps_API
             {
                 yield return new WaitForSeconds(5);
             }
-
+            while (ScreepsAPI.Cache.ShardNames == null)
+            {
+                Debug.Log("Waiting for ShardNames");
+                yield return new WaitForSeconds(1);
+            }
             Debug.Log("ShardInfoMonitor populating shardnames from cache");
             foreach (var shardName in ScreepsAPI.Cache.ShardNames)
             {
                 if (shardName != null)
                 {
                     var shardInfo = new ShardInfoDto();
-                    ShardInfo.Add(shardName, shardInfo); 
+                    ShardInfo.Add(shardName, shardInfo);
                 }
             }
 
@@ -165,7 +169,7 @@ namespace Assets.Scripts.Screeps_API
                 if (float.TryParse(tickRateString, out var tickRate))
                 {
                     this.AverageTick = tickRate; // for some reason .n in the jsonobject returns a really really wonky float.. :S
-                } 
+                }
             }
 
             this.TimeUpdated = DateTime.Now;
