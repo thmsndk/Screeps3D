@@ -10,10 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4580319934611090}
   - component: {fileID: -4629841733828211044}
-  - component: {fileID: 5949984077314482218}
   - component: {fileID: 992226191331107606}
   - component: {fileID: 4392142570572120973}
-  - component: {fileID: 503566653090585679}
   m_Layer: 0
   m_Name: resource
   m_TagString: Untagged
@@ -49,21 +47,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5949984077314482218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198475642829558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animateOnStart: 1
-  _visibleOnStart: 1
-  _speed: 0.2
 --- !u!114 &992226191331107606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,21 +81,6 @@ MonoBehaviour:
   _x: 1
   _y: 1
   _z: 1
---- !u!114 &503566653090585679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198475642829558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animateOnStart: 1
-  _visibleOnStart: 1
-  _speed: 0.2
 --- !u!1 &5561037580154211532
 GameObject:
   m_ObjectHideFlags: 0
@@ -4971,6 +4939,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
       propertyPath: m_Name
       value: resource
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9e38136d5bc964445bd7767fa279acfc, type: 3}
       propertyPath: m_StaticEditorFlags

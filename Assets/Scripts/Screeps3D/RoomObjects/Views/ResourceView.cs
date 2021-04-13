@@ -20,18 +20,20 @@ namespace Screeps3D.RoomObjects.Views
 
         internal override void Load(RoomObject roomObject)
         {
+            _renderer.enabled = false;
             base.Load(roomObject);
             _initialized = false;
             _resource = roomObject as Resource;
-            // mineralcolor = ;
-            _scale.SetVisibility(1.0f);
-            Debug.LogError("_resource.ResourceType " + _resource.ResourceType);
-            Debug.LogError("would map to color " + Constants.GetComplexResourceColor(_resource.ResourceType));
-            // _resource.material.SetColor("EmissionColor", c);
+            
+            scaleMesh();
+
+            _renderer.enabled = true;
 
         }
         public void Unload(RoomObject roomObject)
         {
+            _scale.Hide();
+
             if (_ps == null)
             {
                 _ps.Stop();
@@ -45,6 +47,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Delta(data);
 
+            scaleMesh();
+
             if (!_ps.isPlaying)
             {
                 _ps.Play();
@@ -54,6 +58,12 @@ namespace Screeps3D.RoomObjects.Views
 
         private void scaleMesh()
         {
+            if (_resource == null)
+            {
+                _scale.SetVisibility(0.001f, true);
+                return;
+            }
+
             if (_resource.ResourceType.Equals("energy"))
             {
                 _scale.SetVisibility(0.2f + 0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
@@ -69,10 +79,7 @@ namespace Screeps3D.RoomObjects.Views
             _initialized = true;
             var main = _ps.main;
 
-            if (!Constants.ResourceColors.TryGetValue(_resource.ResourceType, out var rColor))
-            {
-                rColor = Constants.ResourceColors["other"];
-            }
+            var rColor = Constants.GetComplexResourceColor(_resource.ResourceType);
 
             _renderer.materials[0].SetColor("EmissionColor", rColor);
             main.startColor = rColor;
@@ -84,8 +91,6 @@ namespace Screeps3D.RoomObjects.Views
             {
                 return;
             }
-
-            scaleMesh();
 
             if (!_initialized)
             {

@@ -177,27 +177,27 @@ namespace Screeps3D
             {Constants.BaseDeposit.Silicon, new   Color32(0,102,128,255)}
         };
 
-        public static Color GetComplexResourceColor(string mineralType)
+        public static Color GetComplexResourceColor(string resourceType)
         {
-            if (ResourcesAll.Contains(mineralType) == false)
+            if (ResourcesAll.Contains(resourceType) == false)
             {
-                Debug.LogError("Unsupported mineralType (not in ResourcesAll)");
-                return new Color32(0, 0, 0, 255);
+                Debug.LogWarning("Unsupported mineralType (not in ResourcesAll)");
+                return ResourceColors["other"];
             }
-            if (ResourceColors.ContainsKey(mineralType) == true)
+            if (ResourceColors.ContainsKey(resourceType) == true)
             {
-                return ResourceColors[mineralType];
+                return ResourceColors[resourceType];
             }
-            if (Char.IsUpper(mineralType.ToCharArray(0, 1)[0]) == false)
+            if (Char.IsUpper(resourceType.ToCharArray(0, 1)[0]) == false)
             {
                 Debug.LogWarning("Unsupported mineralType (deposit/commodity)");
                 return new Color32(0, 0, 0, 255);
             }
-            if (mineralType.Length == 5)
+            if (resourceType.Length == 5)
             {
-                return ResourceColors[mineralType[1].ToString()];
+                return ResourceColors[resourceType[1].ToString()];
             }
-            return ResourceColors[mineralType[0].ToString()];
+            return ResourceColors[resourceType[0].ToString()];
         }
 
         public static class BaseMineral
