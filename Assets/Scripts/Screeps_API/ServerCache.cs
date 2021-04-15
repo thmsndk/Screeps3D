@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Screeps_API
 {
+    [Obsolete("This class was the old server cache data saved in servers.dat, it will be deleted if we decide not to use migrations.")]
     [Serializable]
     public class ServerCache
     {

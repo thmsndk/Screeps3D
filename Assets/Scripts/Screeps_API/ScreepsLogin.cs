@@ -30,6 +30,7 @@ namespace Screeps_API
         [SerializeField] private Button _exit = default;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
+
         private CacheList _servers;
         private int _serverIndex;
         private string _savePath = "servers";
@@ -43,9 +44,9 @@ namespace Screeps_API
         private void Start()
         {
             GameManager.OnModeChange += OnModeChange;
-            serverListProviders.Add(new OfficialServerListProvider());
-            serverListProviders.Add(new OfficialCommunityServerListProvider());
-            serverListProviders.Add(new SS3UCFServerListProvider());
+            serverListProviders.Add(new SS3UCFServerListProvider()); // Load all servers/credentials the user has supplied, it is important that this is the first entry.
+            serverListProviders.Add(new OfficialServerListProvider()); // Add official servers, in case the user does not have any servers
+            serverListProviders.Add(new OfficialCommunityServerListProvider()); // Add community servers provided by the official team.
             // TODO: SS3 Unified Credentials File .ini
             // https://screeps.online/ ?
 
@@ -168,6 +169,8 @@ namespace Screeps_API
 
         private void OnServerSelected(ServerCache server)
         {
+            QueryAndUpdateServerInfo(server);
+
             int serverIndex = _servers.IndexOf(server);
             //_serverSelect.value = serverIndex; // Updates dropdown
             OnServerChange(serverIndex);
@@ -255,68 +258,85 @@ namespace Screeps_API
             _save.isOn = cache.SaveCredentials;
         }
 
+        private void MigrateOldServersDatToUnifiedCredentials()
+        {
+            var oldServersDat = SaveManager.Load<CacheList>(_savePath);
+
+            // TODO: migrate it to SS3 and a "server meta data file"
+
+            // TODO: load SS3 credentials file
+            // TODO: no credentials file found should result in a popup asking where to save it, same as when a user checks of save credentials
+
+            //foreach (var server in oldServersDat)
+            //{
+            //    Debug.LogError($"{server.Address.Http()} {server.Credentials.Token} {server.Credentials.Email} {server.Credentials.Password}");
+            //}
+
+        }
+
         private void LoadServers()
         {
-            //SaveManager.Save(_savePath, new CacheList()); // clear servers
+            MigrateOldServersDatToUnifiedCredentials();
 
-            _servers = SaveManager.Load<CacheList>(_savePath) ?? new CacheList();
-
-            Debug.Log($"Loaded {_servers.Count} servers from servers.dat");
-
-            // query saved servers, should probably only query the ones where source == custom cause the providers will query the others
-            foreach (var server in _servers)
-            {
-                QueryAndUpdateServerInfo(server);
-            }
+            _servers = new CacheList();
 
             foreach (var provider in serverListProviders)
             {
                 provider.Load(servers =>
                 {
+                    Debug.LogError($"{provider.GetType()}");
                     foreach (var server in servers)
                     {
                         if (provider.MergeWithCache)
                         {
-                            var cachedServer = _servers.SingleOrDefault(cache =>
-                                cache.Name == server.Name
+                            // TODO: a "display name" or the "name" property in the yaml file can be used to merge the different providers
+
+                            if (!server.HasCredentials)
+                            {
+                                var cachedServer = _servers.FirstOrDefault(cache => cache.HasCredentials
                                 && cache.Address.HostName == server.Address.HostName
                                 && cache.Address.Path == server.Address.Path
                                 && cache.Address.Port == server.Address.Port);
 
-                            if (cachedServer == null)
-                            {
-                                _servers.Add(server);
+                                if (cachedServer == null)
+                                {
+                                    _servers.Add(server);
+                                }
+                                else
+                                {
+                                    cachedServer.Persist = server.Persist;
+                                    cachedServer.Name = server.Name;
+                                    cachedServer.LikeCount = server.LikeCount;
+
+                                    //Backwards compatibility
+                                    cachedServer.Type = server.Type;
+
+                                    // Update credentials
+                                    if (!string.IsNullOrEmpty(server.Credentials.Token))
+                                    {
+                                        cachedServer.Credentials.Token = server.Credentials.Token;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(server.Credentials.Email))
+                                    {
+                                        cachedServer.Credentials.Email = server.Credentials.Email;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(server.Credentials.Password))
+                                    {
+                                        cachedServer.Credentials.Password = server.Credentials.Password;
+                                    }
+                                }
                             }
                             else
                             {
-                                cachedServer.Persist = server.Persist;
-                                cachedServer.Name = server.Name;
-                                cachedServer.LikeCount = server.LikeCount;
-
-                                //Backwards compatibility
-                                cachedServer.Type = server.Type;
-
-                                // Update credentials
-                                if (!string.IsNullOrEmpty(server.Credentials.Token))
-                                {
-                                    cachedServer.Credentials.Token = server.Credentials.Token;
-                                }
-
-                                if (!string.IsNullOrEmpty(server.Credentials.Email))
-                                {
-                                    cachedServer.Credentials.Email = server.Credentials.Email;
-                                }
-
-                                if (!string.IsNullOrEmpty(server.Credentials.Password))
-                                {
-                                    cachedServer.Credentials.Password = server.Credentials.Password;
-                                }
+                                // Add as a new server
+                                _servers.Add(server);
                             }
                         }
                         else
                         {
                             _servers.AddRange(servers);
-                            // TODO: servers also need to be marked if they should be saved to the cachelist or not. e.g. SS3 should not be persisted, they already contain passwords
                             // TODO: server icon
                         }
 
@@ -397,7 +417,7 @@ namespace Screeps_API
             server.Online = true;
             // TODO: timestamp of online status?
             server.Users = users;
-            server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
+            server.Version = "v" + (package != null ? package.n.ToString() : packageVersion.str);
         }
 
         private void UpdateServerList()
@@ -413,6 +433,13 @@ namespace Screeps_API
         private void OnConnect()
         {
             var cache = _servers[_serverIndex];
+            
+            QueryAndUpdateServerInfo(cache);
+            // TODO: persist server info / meta data to a file. mainly containing data from api/version endpoint. likes, shard, last online status and so forth.
+            // TODO: persist last connection date
+            // TODO: meta data could also contain what shard you where on last time you connected, what room you where loaded into. Will we use PlayerPrefs for meta data?
+
+            // TODO: handle no SS3 credentials file existing, popping up a dialog allowing the user to choose where to save it
             cache.SaveCredentials = _save.isOn;
             //cache.Address.Port = _port.text;
             //cache.Address.Ssl = _ssl.isOn;
@@ -424,19 +451,11 @@ namespace Screeps_API
                 cache.Credentials.Token = _token.text;
             }
 
-            // TODO: When saving servers, we do not wish to persist servers we've gotten from third party sources, 
-            // UNLESS we have saved credentials for them that we did not get from the third party source.
-            // If we however already have credentials from the third party source, then we don't want to save it either.
-
-            // Sources column
-            // Official, UCF, Custom
-
-            // TODO: look into SSL
-
-            var filteredServers = new CacheList();
-            filteredServers.AddRange(_servers.Where(s => s.HasCredentials && s.Persist));
-
-            SaveManager.Save(_savePath, filteredServers);
+            // TODO: persist credentials to the SS3 credentials file
+            //var filteredServers = new CacheList();
+            //filteredServers.AddRange(_servers.Where(s => s.HasCredentials && s.Persist));
+            
+            //SaveManager.Save(_savePath, filteredServers);
             NotifyText.Message("Connecting...");
             _api.Connect(cache);
         }
@@ -448,6 +467,15 @@ namespace Screeps_API
         public string Token;
         public string Email;
         public string Password;
+
+        public bool HasCredentials
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Token) || !string.IsNullOrEmpty(Email) &&
+                       !string.IsNullOrEmpty(Email);
+            }
+        }
     }
 
     [Serializable]
