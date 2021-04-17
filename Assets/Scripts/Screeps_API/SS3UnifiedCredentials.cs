@@ -7,11 +7,32 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Assets.Scripts.Screeps_API
 {
     public static class SS3UnifiedCredentials
     {
+        // TODO: value types?
+        public static string SetValueOrdefault(YamlMappingNode server, string property, string value)
+        {
+            var node = new YamlScalarNode(property);
+
+            if (!server.Children.ContainsKey(node))
+            {
+                server.Add(property, value);
+            }
+            else
+            {
+                // Update existing nodes value
+                var existingNode = ((YamlScalarNode)server.Children[node]);
+                existingNode.Value = value;
+            }
+
+            return server.Children.ContainsKey(node) ? ((YamlScalarNode)server.Children[node]).Value : null;
+        }
+
         public static string GetValueOrdefault(YamlMappingNode server, string property)
         {
             var node = new YamlScalarNode(property);
@@ -93,84 +114,26 @@ namespace Assets.Scripts.Screeps_API
 
                 Debug.Log($"Found config at {configPath}");
 
-                var yaml = new YamlStream();
+                var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new CamelCaseNamingConvention())
+                .Build();
 
                 using (var reader = File.OpenText(configPath))
                 {
-                    yaml.Load(reader);
+                    var deserializedServers = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
 
-                    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+                    //Debug.Log($"yaml deserialize found {deserializedServers.Servers.Count} servers");
 
-                    var servers = (YamlMappingNode)mapping.Children[new YamlScalarNode("servers")];
-
-                    foreach (var item in servers.Children)
+                    foreach (var item in deserializedServers.Servers)
                     {
-                        var serverKey = ((YamlScalarNode)item.Key).Value;
-                        var server = (YamlMappingNode)item.Value;
-
-                        var name = GetValueOrdefault(server, "name") ?? serverKey;
-                        var host = GetValueOrdefault(server, "host");
-                        var secure = bool.Parse(GetValueOrdefault(server, "secure") ?? "false");
-                        var port = GetValueOrdefault(server, "port") ?? (secure ? "443" : "21025"); // TODO: this default logic belongs in the connection handler.
-                        var ptr = bool.Parse(GetValueOrdefault(server, "ptr") ?? "false");
-                        var sim = bool.Parse(GetValueOrdefault(server, "sim") ?? "false"); // if true, skip
-                        var season = bool.Parse(GetValueOrdefault(server, "season") ?? "false"); // if true, skip
-
-                        var path = GetValueOrdefault(server, "path");
-
-                        var token = GetValueOrdefault(server, "token");
-                        var username = GetValueOrdefault(server, "username");
-                        var password = GetValueOrdefault(server, "password");
-
-                        //Debug.Log($"{serverName} {host} {port} {secure} {ptr} {sim} {token} {username} {password}");
-
-                        // TODO: attempt to find the screeps server in case of multiple registrations / names
-                        // TODO: the hostname and port identifies a unique server. we should prefer the SS3 name.
-                        // TODO: In case of multiple entries to the same server, where do we store the alias? perhaps as a duplicate with the alias applies as a parenthesis
-                        // TODO: how do we merge servers from different sources? If we have credentials for a server, assume that we use thoose credentials, but allow a user to change them later for that specific server. only persist them in edit mode, not when connecting.
-                        // TODO: a "display name" or the "name" property in the yaml file can be used to merge the different providers
-
-                        var screepsServer = new ScreepsServer
-                        {
-                            Address = { HostName = host, Port = port, Ssl = secure },
-                            Name = name,
-                        };
-
-                        // TODO: What if they have supplied a path, but it is not equal to the bools?
-                        if (ptr)
-                        {
-                            screepsServer.Address.Path = "/ptr";
-                        }
-
-                        if (season)
-                        {
-                            screepsServer.Address.Path = "/season";
-                        }
-
-                        // Assist with merging
-                        if (host.ToLowerInvariant().EndsWith("screeps.com"))
-                        {
-                            screepsServer.Name = $"Screeps.com";
-                            if (ptr || path == "/ptr")
-                            {
-                                screepsServer.Name = $"PTR " + screepsServer.Name;
-                            }
-
-                            if (season || path == "/season")
-                            {
-                                screepsServer.Name = $"SEASONAL " + screepsServer.Name;
-                            }
-                        }
-
-                        screepsServer.Credentials.Token = token;
-                        screepsServer.Credentials.Email = username;
-                        screepsServer.Credentials.Password = password;
+                        //Debug.Log($"{item.Key} => {item.Value.Host}:{item.Value.Port}");
+                        var screepsServer = new ScreepsServer(item.Key, item.Value);
 
                         result.Add(screepsServer);
                     }
-
-                    return result;
                 }
+
+                return result;
             }
             catch (FileNotFoundException ex)
             {
@@ -182,6 +145,56 @@ namespace Assets.Scripts.Screeps_API
                 Debug.LogException(ex);
                 throw;
             }
+        }
+
+        public static void SaveServer(ScreepsServer server)
+        {
+            //var configPath = GetScreepsConfigFilePath();
+
+            //Debug.Log($"Found config at {configPath}"); // TODO: handle a case where there is no config, throw exception?
+
+            //var yaml = new YamlStream();
+
+            //using (var stream = File.Open(configPath, FileMode.OpenOrCreate | FileMode.Append))
+            //{
+            //    yaml.Load(new StreamReader(stream));
+
+            //    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+            //    var servers = (YamlMappingNode)mapping.Children[new YamlScalarNode("servers")];
+
+            //    // TODO: find existing node and update it, can we change the key?
+            //    var yamlServerEntry = new YamlMappingNode();
+            //    servers.Add(server.Name, yamlServerEntry);
+
+
+            //    yaml.Save()
+
+
+            //}
+        }
+
+        public class SS3UnifiedCredentialsDocument
+        {
+            /// <summary>
+            /// A key value pair where the key is a server name / entry
+            /// </summary>
+            public Dictionary<string, SS3UnifiedCredentialsServer> Servers { get; set; }
+        }
+
+        public class SS3UnifiedCredentialsServer
+        {
+            public string Name { get; set; }
+            public string Host { get; set; }
+            public bool? Secure { get; set; }
+            public string Port { get; set; }
+            public bool? Ptr { get; set; }
+            public bool? Sim { get; set; }
+            public bool? Season { get; set; }
+            public string Path { get; set; }
+            public string Token { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
         }
     }
 }

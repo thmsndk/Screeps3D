@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Screeps_API;
 using Assets.Scripts.Screeps_API.ServerListProviders;
 using Common;
 using Screeps3D;
@@ -140,31 +141,45 @@ namespace Screeps_API
 
             if (match.Success)
             {
+
                 var protocol = match.Groups["protocol"].Value;
                 var hostName = match.Groups["hostname"].Value;
                 var port = match.Groups["port"].Value;
 
+                var ss3Server = new ScreepsServer(hostName);
+
                 if (!string.IsNullOrEmpty(hostName))
                 {
+                    ss3Server.Address.HostName = hostName;
                     server.Address.HostName = hostName;
                 }
 
                 if (protocol.ToLowerInvariant() == "https" || port == "443")
                 {
                     port = "443";
+
+                    ss3Server.Address.Ssl = true;
                     server.Address.Ssl = true;
                 }
 
                 if (!string.IsNullOrEmpty(port))
                 {
+                    ss3Server.Address.Port = port;
                     server.Address.Port = port;
                 }
-            }
 
-            _servers.Add(server);
-            OnServerChange(_servers.IndexOf(server));
-            UpdateServerList();
-            SaveManager.Save(_savePath, _servers);
+                SS3UnifiedCredentials.SaveServer(ss3Server);
+
+                _servers.Add(server);
+
+                OnServerChange(_servers.IndexOf(server));
+
+                UpdateServerList();
+            }
+            else
+            {
+                // inform the player that adding it failed.
+            }
         }
 
         private void OnServerSelected(ServerCache server)
