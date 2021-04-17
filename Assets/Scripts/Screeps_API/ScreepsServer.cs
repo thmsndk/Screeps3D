@@ -14,7 +14,7 @@ namespace Screeps_API
 
         public ScreepsServer(string key)
         {
-
+            this.Key = key;
         }
 
         public ScreepsServer(string key, SS3UnifiedCredentials.SS3UnifiedCredentialsServer server)

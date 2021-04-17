@@ -133,6 +133,10 @@ namespace Screeps_API
 
             var server = new ServerCache
             { Type = SourceProviderType.Custom, Address = { HostName = input, Port = "21025" } };
+            
+            var ss3Server = new ScreepsServer(input);
+            ss3Server.Address.HostName = input;
+            ss3Server.Address.Port = "21025";
 
             // split/parse http url and port and assign properly e.g. http://screeps.reggaemuffin.me:21025
             var urlPattern =
@@ -143,15 +147,15 @@ namespace Screeps_API
             {
 
                 var protocol = match.Groups["protocol"].Value;
-                var hostName = match.Groups["hostname"].Value;
+                var hostname = match.Groups["hostname"].Value;
                 var port = match.Groups["port"].Value;
 
-                var ss3Server = new ScreepsServer(hostName);
+                
 
-                if (!string.IsNullOrEmpty(hostName))
+                if (!string.IsNullOrEmpty(hostname))
                 {
-                    ss3Server.Address.HostName = hostName;
-                    server.Address.HostName = hostName;
+                    ss3Server.Address.HostName = hostname;
+                    server.Address.HostName = hostname;
                 }
 
                 if (protocol.ToLowerInvariant() == "https" || port == "443")
@@ -168,18 +172,19 @@ namespace Screeps_API
                     server.Address.Port = port;
                 }
 
-                SS3UnifiedCredentials.SaveServer(ss3Server);
-
-                _servers.Add(server);
-
-                OnServerChange(_servers.IndexOf(server));
-
-                UpdateServerList();
             }
             else
             {
                 // inform the player that adding it failed.
             }
+
+            SS3UnifiedCredentials.SaveServer(ss3Server);
+
+            _servers.Add(server);
+
+            OnServerChange(_servers.IndexOf(server));
+
+            UpdateServerList();
         }
 
         private void OnServerSelected(ServerCache server)

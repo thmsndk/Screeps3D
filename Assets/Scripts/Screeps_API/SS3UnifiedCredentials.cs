@@ -149,29 +149,53 @@ namespace Assets.Scripts.Screeps_API
 
         public static void SaveServer(ScreepsServer server)
         {
-            //var configPath = GetScreepsConfigFilePath();
+            var configPath = GetScreepsConfigFilePath();
 
-            //Debug.Log($"Found config at {configPath}"); // TODO: handle a case where there is no config, throw exception?
+            Debug.Log($"Found config at {configPath}"); // TODO: handle a case where there is no config, throw exception?
 
-            //var yaml = new YamlStream();
+            var deserializer = new DeserializerBuilder()
+                //.WithNamingConvention(new CamelCaseNamingConvention())
+                .Build();
 
-            //using (var stream = File.Open(configPath, FileMode.OpenOrCreate | FileMode.Append))
-            //{
-            //    yaml.Load(new StreamReader(stream));
+            SS3UnifiedCredentialsDocument document;
+            using (var reader = File.OpenText(configPath))
+            {
+                document = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
+            }
 
-            //    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+            if (!document.Servers.TryGetValue(server.Key, out var yamlServer))
+            {
+                yamlServer = new SS3UnifiedCredentialsServer();
+                document.Servers.Add(server.Key, yamlServer);
+            };
 
-            //    var servers = (YamlMappingNode)mapping.Children[new YamlScalarNode("servers")];
+            yamlServer.Name = server.Name;
+            yamlServer.Secure = server.Address.Ssl;
+            yamlServer.Host = server.Address.HostName;
+            yamlServer.Port = server.Address.Port;
 
-            //    // TODO: find existing node and update it, can we change the key?
-            //    var yamlServerEntry = new YamlMappingNode();
-            //    servers.Add(server.Name, yamlServerEntry);
+            yamlServer.Path = server.Address.Path;
+            yamlServer.Ptr = server.Address.Path == "/ptr";
+            yamlServer.Season = server.Address.Path == "/season";
 
 
-            //    yaml.Save()
+            if (server.Official)
+            {
+                yamlServer.Token = server.Credentials.Token;
+            }
+            else
+            {
+                yamlServer.Username = server.Credentials.Email;
+                yamlServer.Password = server.Credentials.Password;
+            }
 
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(new CamelCaseNamingConvention())
+                .Build();
+            var yaml = serializer.Serialize(document);
 
-            //}
+            File.WriteAllText(configPath, yaml);
+
         }
 
         public class SS3UnifiedCredentialsDocument
@@ -179,21 +203,43 @@ namespace Assets.Scripts.Screeps_API
             /// <summary>
             /// A key value pair where the key is a server name / entry
             /// </summary>
-            public Dictionary<string, SS3UnifiedCredentialsServer> Servers { get; set; }
+            [YamlMember(Alias = "servers", ApplyNamingConventions = false)]
+            public Dictionary<string, SS3UnifiedCredentialsServer> Servers { get; set; } // gotta be lowercase to not mess up the seralizer
         }
 
         public class SS3UnifiedCredentialsServer
         {
+            [YamlMember(Alias = "name", ApplyNamingConventions = false)]
             public string Name { get; set; }
+            
+            [YamlMember(Alias = "host", ApplyNamingConventions = false)]
             public string Host { get; set; }
+
+            [YamlMember(Alias = "secure", ApplyNamingConventions = false)]
             public bool? Secure { get; set; }
+
+            [YamlMember(Alias = "port", ApplyNamingConventions = false)]
             public string Port { get; set; }
-            public bool? Ptr { get; set; }
-            public bool? Sim { get; set; }
-            public bool? Season { get; set; }
+
+            [YamlMember(Alias = "path", ApplyNamingConventions = false)]
             public string Path { get; set; }
+
+            [YamlMember(Alias = "ptr", ApplyNamingConventions = false)]
+            public bool? Ptr { get; set; }
+
+            [YamlMember(Alias = "sim", ApplyNamingConventions = false)]
+            public bool? Sim { get; set; }
+
+            [YamlMember(Alias = "season", ApplyNamingConventions = false)]
+            public bool? Season { get; set; }
+
+            [YamlMember(Alias = "token", ApplyNamingConventions = false)]
             public string Token { get; set; }
+
+            [YamlMember(Alias = "username", ApplyNamingConventions = false)]
             public string Username { get; set; }
+
+            [YamlMember(Alias = "password", ApplyNamingConventions = false)]
             public string Password { get; set; }
         }
     }
