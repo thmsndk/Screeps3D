@@ -29,6 +29,7 @@ namespace Screeps_API
         [SerializeField] private Button _removeServer = default;
         [SerializeField] private Button _editServer = default;
         [SerializeField] private Button _exit = default;
+        [SerializeField] private GameObject _chooseSS3UnifiedCredentialsFileLocationPopup = default;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
 

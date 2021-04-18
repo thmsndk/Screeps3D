@@ -79,27 +79,55 @@ namespace Assets.Scripts.Screeps_API
                 https://assetstore.unity.com/packages/tools/integration/yamldotnet-for-unity-36292
              */
 
-            var configPaths = new List<string>
+            var validFileNames = new List<string>
             {
-                Environment.GetEnvironmentVariable("SCREEPS_CONFIG"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) ?? string.Empty, "screeps/config.yaml"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) ?? string.Empty, "screeps/config.yml"),
-                Path.Combine(Environment.CurrentDirectory, ".screeps.yaml"),
-                Path.Combine(Environment.CurrentDirectory, ".screeps.yml"),
-                /* Linux / Mac*/
-                Path.Combine(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? string.Empty, "screeps/config.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? string.Empty, "screeps/config.yml"),
-                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".config/screeps/config.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".config/screeps/config.yml"),
-                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".screeps.yaml"),
-                Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? string.Empty, ".screeps.yml"),
-
+                "config.yaml",
+                "config.yml"
             };
 
-            // TODO: iterate paths and find valid ones for the choose save location dialog
+            var validFileNamesInAScreepsFolder = validFileNames.Select(f => Path.Combine("screeps", f));
+
+            var validFileNamesWithADot = validFileNames.Select(f => "." + f);
+
+            var configPaths = new List<string>();
+
+            AddConfigPath(configPaths, Environment.GetEnvironmentVariable("SCREEPS_CONFIG"), null);
+
+            AddConfigPath(configPaths, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), validFileNamesInAScreepsFolder);
+
+            AddConfigPath(configPaths, Environment.CurrentDirectory, validFileNamesWithADot);
+
+            /* Linux / Mac*/
+            AddConfigPath(configPaths, Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), validFileNamesInAScreepsFolder);
+
+            AddConfigPath(configPaths, Environment.GetEnvironmentVariable("HOME"), validFileNames.Select(f => Path.Combine(".config/screeps", f)));
+
+            AddConfigPath(configPaths, Environment.GetEnvironmentVariable("HOME"), validFileNamesWithADot);
 
             return configPaths;
 
+        }
+
+        private static bool AddConfigPath(List<string> paths, string path, IEnumerable<string> fileNames)
+        {
+            if (Directory.Exists(path))
+            {
+                if (fileNames == null)
+                {
+                    paths.Add(path);
+                }
+                else
+                {
+                    foreach (var fileName in fileNames)
+                    {
+                        paths.Add(Path.Combine(path, fileName));
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public static List<ScreepsServer> LoadServers(string configPath = null)
