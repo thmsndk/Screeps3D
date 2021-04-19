@@ -14,6 +14,8 @@ namespace Assets.Scripts.Screeps_API
 {
     public static class SS3UnifiedCredentials
     {
+        public static string ConfigFilePath { get; private set; }
+
         // TODO: value types?
         public static string SetValueOrdefault(YamlMappingNode server, string property, string value)
         {
@@ -39,14 +41,25 @@ namespace Assets.Scripts.Screeps_API
             return server.Children.ContainsKey(node) ? ((YamlScalarNode)server.Children[node]).Value : null;
         }
 
+        internal static void SetConfigFile(string configFilepath)
+        {
+            ConfigFilePath = configFilepath;
+        }
+
         public static string GetScreepsConfigFilePath()
         {
+            if (ConfigFilePath != null)
+            {
+                return ConfigFilePath;
+            }
+
             var configPaths = GetValidConfigPaths();
 
             foreach (var file in configPaths)
             {
                 if (File.Exists(file))
                 {
+                    ConfigFilePath = file;
                     return file;
                 }
             }
@@ -146,12 +159,23 @@ namespace Assets.Scripts.Screeps_API
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
 
+                // initially, a config path is set, but the file does not exist yet.
+                if (!File.Exists(configPath))
+                {
+                    return result;
+                }
+
                 using (var reader = File.OpenText(configPath))
                 {
                     var deserializedServers = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
 
-                    //Debug.Log($"yaml deserialize found {deserializedServers.Servers.Count} servers");
+                    // in case of an empty file, we won't get servers
+                    if (deserializedServers == null)
+                    {
+                        return result;
+                    }
 
+                    //Debug.Log($"yaml deserialize found {deserializedServers.Servers.Count} servers");
                     foreach (var item in deserializedServers.Servers)
                     {
                         //Debug.Log($"{item.Key} => {item.Value.Host}:{item.Value.Port}");
@@ -185,10 +209,18 @@ namespace Assets.Scripts.Screeps_API
                 //.WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
 
-            SS3UnifiedCredentialsDocument document;
-            using (var reader = File.OpenText(configPath))
+            var document = new SS3UnifiedCredentialsDocument() { Servers = new Dictionary<string, SS3UnifiedCredentialsServer>() };
+
+            if (File.Exists(configPath))
             {
-                document = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
+                using (var reader = File.OpenText(configPath))
+                {
+                    document = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
+                    if (document == null)
+                    {
+                        document = new SS3UnifiedCredentialsDocument() { Servers = new Dictionary<string, SS3UnifiedCredentialsServer>() };
+                    }
+                }
             }
 
             if (!document.Servers.TryGetValue(server.Key, out var yamlServer))
@@ -205,6 +237,7 @@ namespace Assets.Scripts.Screeps_API
             yamlServer.Path = server.Address.Path;
             yamlServer.Ptr = server.Address.Path == "/ptr";
             yamlServer.Season = server.Address.Path == "/season";
+            yamlServer.Sim = server.Address.Path == "/sim";
 
 
             if (server.Official)

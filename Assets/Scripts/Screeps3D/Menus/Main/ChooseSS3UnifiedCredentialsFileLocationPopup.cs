@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Screeps_API;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,10 @@ namespace Assets.Scripts.Screeps3D.Main
 
         private void OkClicked()
         {
+            var selectedConfigFile = _validFileLocations.options[_validFileLocations.value];
+
+            SS3UnifiedCredentials.SetConfigFile(selectedConfigFile.text);
+
             OnOkClicked?.Invoke();
         }
         private void CancelClicked()

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Screeps_API;
 using Assets.Scripts.Screeps_API.ServerListProviders;
+using Assets.Scripts.Screeps3D.Main;
 using Common;
 using Screeps3D;
 using Screeps3D.Menus.ServerList;
@@ -29,7 +31,7 @@ namespace Screeps_API
         [SerializeField] private Button _removeServer = default;
         [SerializeField] private Button _editServer = default;
         [SerializeField] private Button _exit = default;
-        [SerializeField] private GameObject _chooseSS3UnifiedCredentialsFileLocationPopup = default;
+        [SerializeField] private ChooseSS3UnifiedCredentialsFileLocationPopup _chooseSS3UnifiedCredentialsFileLocationPopup = default;
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
 
@@ -51,11 +53,18 @@ namespace Screeps_API
             serverListProviders.Add(new OfficialCommunityServerListProvider()); // Add community servers provided by the official team.
             // TODO: SS3 Unified Credentials File .ini
             // https://screeps.online/ ?
-
-            LoadServers();
-            //UpdateServerDropdown();
-            UpdateFieldVisibility();
-            UpdateFieldContent();
+            
+            if (HasUnifiedCredentials())
+            {
+                LoadServers();
+                UpdateFieldVisibility();
+                UpdateFieldContent();
+            }
+            else
+            {
+                _chooseSS3UnifiedCredentialsFileLocationPopup.OnOkClicked += SS3UnifiedCredentialsFileLocationSelected;
+                _chooseSS3UnifiedCredentialsFileLocationPopup?.gameObject?.SetActive(true);
+            }
 
             _connect.onClick.AddListener(OnConnect);
             _serverSelect.onValueChanged.AddListener(OnServerChange);
@@ -225,9 +234,15 @@ namespace Screeps_API
             UpdateFieldContent();
         }
 
+        private void SS3UnifiedCredentialsFileLocationSelected()
+        {
+            _chooseSS3UnifiedCredentialsFileLocationPopup?.gameObject?.SetActive(false);
+            LoadServers();
+        }
+
         private void UpdateFieldVisibility()
         {
-            if (_serverIndex == -1)
+            if (_serverIndex == -1 || _servers == null)
             {
                 _username.gameObject.SetActive(false);
                 _password.gameObject.SetActive(false);
@@ -279,33 +294,38 @@ namespace Screeps_API
             _save.isOn = cache.SaveCredentials;
         }
 
-        private void MigrateOldServersDatToUnifiedCredentials()
+        private bool HasUnifiedCredentials()
         {
-            var oldServersDat = SaveManager.Load<CacheList>(_savePath);
+            try
+            {
+                var ss3ConfigPath = SS3UnifiedCredentials.GetScreepsConfigFilePath();
 
-            // TODO: migrate it to SS3 and a "server meta data file"
+                if (ss3ConfigPath != null)
+                {
+                    return true;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-            // TODO: load SS3 credentials file
-            // TODO: no credentials file found should result in a popup asking where to save it, same as when a user checks of save credentials
-
-            //foreach (var server in oldServersDat)
-            //{
-            //    Debug.LogError($"{server.Address.Http()} {server.Credentials.Token} {server.Credentials.Email} {server.Credentials.Password}");
-            //}
-
+            return false;
         }
 
         private void LoadServers()
         {
-            MigrateOldServersDatToUnifiedCredentials();
-
             _servers = new CacheList();
 
             foreach (var provider in serverListProviders)
             {
                 provider.Load(servers =>
                 {
-                    Debug.LogError($"{provider.GetType()}");
+                    //Debug.LogError($"{provider.GetType()}");
                     foreach (var server in servers)
                     {
                         if (provider.MergeWithCache)
@@ -318,6 +338,8 @@ namespace Screeps_API
                                 && cache.Address.HostName == server.Address.HostName
                                 && cache.Address.Path == server.Address.Path
                                 && cache.Address.Port == server.Address.Port);
+
+                                //Debug.LogError($"{server.Name} => {server.Address.Http()}");
 
                                 if (cachedServer == null)
                                 {
@@ -372,7 +394,7 @@ namespace Screeps_API
                     _servers = sortedCache;
 
                     // preselecting selected server might be an issue when the selected server status is not saved for like SS3
-                    _serverIndex = sortedCache.FindIndex(s => s.Selected);
+                    //_serverIndex = sortedCache.FindIndex(s => s.Selected);
 
                     UpdateServerList();
                 });
