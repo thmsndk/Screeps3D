@@ -26,7 +26,7 @@ namespace Assets.Scripts.Screeps3D.Main
             _okButton.onClick.AddListener(OkClicked);
 
             _validFileLocations.ClearOptions();
-            var validLocations = SS3UnifiedCredentials.GetValidConfigPaths();
+            var validLocations = SS3UnifiedCredentials.GetValidConfigPaths().Where(path => path.EndsWith(".yml")).ToList();
 
             _validFileLocations.AddOptions(validLocations); ;
         }
