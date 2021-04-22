@@ -27,22 +27,28 @@ namespace Screeps3D.RoomObjects.Views
             _initialUnderlightColor = _underLight.color;
         }
 
-        private void setWings(bool setWings) {
+        private void setWings(bool setWings)
+        {
             float v = setWings ? 0.2f : 15f;
-                _wingRight.material.SetFloat("Magic", v);
-                _wingLeft.material.SetFloat("Magic", v);
+            _wingRight.material.SetFloat("Magic", v);
+            _wingLeft.material.SetFloat("Magic", v);
         }
-        private void setHorse(bool setHorse) {
+        private void setHorse(bool setHorse)
+        {
             float v = setHorse ? 0.2f : 15f;
-                _horse.material.SetFloat("Magic", v);
+            _horse.material.SetFloat("Magic", v);
         }
 
-        private void setDorito(bool isDorito) {
-            if(isDorito) {
+        private void setDorito(bool isDorito)
+        {
+            if (isDorito)
+            {
                 _doritoCore.gameObject.SetActive(true);
                 _creepCore.gameObject.SetActive(false);
                 _underLight.color = Color.red;
-            } else {
+            }
+            else
+            {
                 _creepCore.gameObject.SetActive(true);
                 _doritoCore.gameObject.SetActive(false);
                 _underLight.color = _initialUnderlightColor;
@@ -50,7 +56,7 @@ namespace Screeps3D.RoomObjects.Views
         }
 
         internal override void Load(RoomObject roomObject)
-        {            
+        {
             base.Load(roomObject);
             _creep = roomObject as Creep;
 
@@ -60,13 +66,16 @@ namespace Screeps3D.RoomObjects.Views
                 this.name = $"Creep:{_creep.Name}";
             }
 
-            if (_creep?.Owner?.Badge == null) {
+            if (_creep?.Owner?.Badge == null)
+            {
                 Debug.LogError("A creep with no owner?");
-            } else {
+            }
+            else
+            {
                 _badge.materials[0].SetTexture("EmissionTexture", _creep?.Owner?.Badge);
                 _badge.materials[0].SetFloat("EmissionStrength", .1f);
             }
-            
+
             setDorito(_creep.Owner.UserId == Constants.InvaderUserId
                       || _creep.Owner.UserId == Constants.SourceKeeperUserId);
 
@@ -93,7 +102,9 @@ namespace Screeps3D.RoomObjects.Views
         private void ScaleCreepSize()
         {
             var percentage = _creep.Body.Parts.Count / 50f;
-            if(percentage == 0) {
+            _dead = false;
+            if (percentage == 0)
+            {
                 _dead = true;
             }
 
@@ -116,7 +127,7 @@ namespace Screeps3D.RoomObjects.Views
         internal override void Delta(JSONObject data)
         {
             base.Delta(data);
-            _underLight.intensity = _creep.Hits / _creep.HitsMax  * 0.1f;
+            _underLight.intensity = _creep.Hits / _creep.HitsMax * .1f;
 
             var posDelta = _posTarget - RoomObject.Position;
 
@@ -126,25 +137,35 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             ScaleCreepSize();
+            _dead = _dead || _creep.TTL == 1;
+            if (_dead)
+            {
+                _underLight.gameObject.SetActive(false);
+                _underLight = null;
+            }
         }
 
         private void Update()
-        {            
+        {
             if (_creep == null)
                 return;
 
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 
-            if(_creep.ActionTarget.HasValue) {               
+            if (_creep.ActionTarget.HasValue)
+            {
                 // creep does something, keep it rotated towards target
                 Vector3 relativePos = _rotationRoot.position - (Vector3)_creep.ActionTarget;
-                if (relativePos != Vector3.zero) {
+                if (relativePos != Vector3.zero)
+                {
                     Quaternion tRotation = Quaternion.LookRotation(relativePos, Vector3.up);
                     _rotationRoot.rotation = tRotation;
                 }
-            } else {
+            }
+            else
+            {
                 // keep rotation towards move direction
-                _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _creep.Rotation, 
+                _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, _creep.Rotation,
                     Time.deltaTime * 5);
             }
 

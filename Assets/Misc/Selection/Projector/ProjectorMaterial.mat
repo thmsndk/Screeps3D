@@ -625,7 +625,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.5493819, b: 0.8018868, a: 1.000088}
+    - _BaseColor: {r: 0, g: 0.5493819, b: 0.8018868, a: 1.043085}
     - _BaseColor0: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor1: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor2: {r: 1, g: 1, b: 1, a: 1}

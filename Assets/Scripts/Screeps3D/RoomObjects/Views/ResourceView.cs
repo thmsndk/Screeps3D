@@ -20,16 +20,24 @@ namespace Screeps3D.RoomObjects.Views
 
         internal override void Load(RoomObject roomObject)
         {
+            _renderer.enabled = false;
             base.Load(roomObject);
             _initialized = false;
             _resource = roomObject as Resource;
-            _scale.SetVisibility(1.0f);
             
+            scaleMesh();
+
+            _renderer.enabled = true;
+
         }
         public void Unload(RoomObject roomObject)
         {
-            if(_ps == null) {
-                return ;
+            _scale.Hide();
+
+            if (_ps == null)
+            {
+                _ps.Stop();
+                return;
             }
 
             _ps.Stop();
@@ -39,29 +47,39 @@ namespace Screeps3D.RoomObjects.Views
         {
             base.Delta(data);
 
-            if(!_ps.isPlaying) {
+            scaleMesh();
+
+            if (!_ps.isPlaying)
+            {
                 _ps.Play();
                 return;
-            }            
-        }
-
-        private void scaleMesh() {
-            if (_resource.ResourceType.Equals("energy")) {
-                _scale.SetVisibility(0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
-            }
-            else {
-                _scale.SetVisibility(0.92f * Mathf.Min(1500.0f, _resource.ResourceAmount) / 1500.0f);
             }
         }
 
-        private void initialize() {
+        private void scaleMesh()
+        {
+            if (_resource == null)
+            {
+                _scale.SetVisibility(0.001f, true);
+                return;
+            }
+
+            if (_resource.ResourceType.Equals("energy"))
+            {
+                _scale.SetVisibility(0.2f + 0.6f * Mathf.Min(1000.0f, _resource.ResourceAmount) / 1000.0f);
+            }
+            else
+            {
+                _scale.SetVisibility(0.3f + 0.9f * Mathf.Min(1500.0f, _resource.ResourceAmount) / 1500.0f);
+            }
+        }
+
+        private void initialize()
+        {
             _initialized = true;
             var main = _ps.main;
 
-            if (!Constants.ResourceColors.TryGetValue(_resource.ResourceType, out var rColor))
-            {
-                rColor = Constants.ResourceColors["other"];
-            }
+            var rColor = Constants.GetComplexResourceColor(_resource.ResourceType);
 
             _renderer.materials[0].SetColor("EmissionColor", rColor);
             main.startColor = rColor;
@@ -69,13 +87,13 @@ namespace Screeps3D.RoomObjects.Views
 
         private void Update()
         {
-            if (_resource == null){
+            if (_resource == null)
+            {
                 return;
             }
 
-            scaleMesh();
-
-            if(!_initialized) {
+            if (!_initialized)
+            {
                 initialize();
             }
 

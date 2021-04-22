@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace Screeps3D
 {
@@ -166,12 +168,37 @@ namespace Screeps3D
             {Constants.BaseMineral.Lemergium, new   Color32(0,244,162,255)},
             {Constants.BaseMineral.Zynthium, new   Color32(253,211,136,255)},
             {Constants.BaseMineral.Catalyst, new   Color32(255,119,119,255)},
+            // GHODIUM
+            {"G", new   Color32(11,11,11,255)},
             // DEPOSITS
             {Constants.BaseDeposit.Biomass, new   Color32(38,110,0,255)},
             {Constants.BaseDeposit.Metal, new   Color32(128,58,0,255)},
             {Constants.BaseDeposit.Mist, new   Color32(97,0,128,255)},
             {Constants.BaseDeposit.Silicon, new   Color32(0,102,128,255)}
         };
+
+        public static Color GetComplexResourceColor(string resourceType)
+        {
+            if (ResourcesAll.Contains(resourceType) == false)
+            {
+                Debug.LogWarning("Unsupported mineralType (not in ResourcesAll)");
+                return ResourceColors["other"];
+            }
+            if (ResourceColors.ContainsKey(resourceType) == true)
+            {
+                return ResourceColors[resourceType];
+            }
+            if (Char.IsUpper(resourceType.ToCharArray(0, 1)[0]) == false)
+            {
+                Debug.LogWarning("Unsupported mineralType (deposit/commodity)");
+                return new Color32(0, 0, 0, 255);
+            }
+            if (resourceType.Length == 5)
+            {
+                return ResourceColors[resourceType[1].ToString()];
+            }
+            return ResourceColors[resourceType[0].ToString()];
+        }
 
         public static class BaseMineral
         {
