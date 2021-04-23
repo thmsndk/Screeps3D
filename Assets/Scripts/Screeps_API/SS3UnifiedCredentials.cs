@@ -176,10 +176,16 @@ namespace Assets.Scripts.Screeps_API
                     }
 
                     //Debug.Log($"yaml deserialize found {deserializedServers.Servers.Count} servers");
-                    foreach (var item in deserializedServers.Servers)
+                    foreach (var server in deserializedServers.Servers)
                     {
+                        if (server.Value.Sim.HasValue && server.Value.Sim.Value)
+                        {
+                            // We don't load sim
+                            continue;
+                        }
+
                         //Debug.Log($"{item.Key} => {item.Value.Host}:{item.Value.Port}");
-                        var screepsServer = new ScreepsServer(item.Key, item.Value);
+                        var screepsServer = new ScreepsServer(server.Key, server.Value);
 
                         result.Add(screepsServer);
                     }

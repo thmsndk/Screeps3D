@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -56,7 +57,8 @@ namespace Screeps_API
             
             if (HasUnifiedCredentials())
             {
-                LoadServers();
+                StartCoroutine(LoadServers());
+
                 UpdateFieldVisibility();
                 UpdateFieldContent();
             }
@@ -231,7 +233,7 @@ namespace Screeps_API
         private void SS3UnifiedCredentialsFileLocationSelected()
         {
             _chooseSS3UnifiedCredentialsFileLocationPopup?.gameObject?.SetActive(false);
-            LoadServers();
+            StartCoroutine(LoadServers());
         }
 
         private void UpdateFieldVisibility()
@@ -310,12 +312,14 @@ namespace Screeps_API
             return false;
         }
 
-        private void LoadServers()
+        private IEnumerator LoadServers()
         {
             _servers = new List<IScreepsServer>();
 
             foreach (var provider in serverListProviders)
             {
+                var finishedLoading = false;
+
                 provider.Load(servers =>
                 {
                     //Debug.LogError($"{provider.GetType()}");
@@ -325,14 +329,16 @@ namespace Screeps_API
                         {
                             // TODO: a "display name" or the "name" property in the yaml file can be used to merge the different providers
 
+                            //Debug.LogError($"{server.Name} => {server.Address.Http()}");
+
                             if (!server.HasCredentials)
                             {
-                                var existingServer = _servers.FirstOrDefault(server => server.HasCredentials
-                                && server.Address.HostName == server.Address.HostName
-                                && server.Address.Path == server.Address.Path
-                                && server.Address.Port == server.Address.Port);
+                                // Official community server does not have any credentials, we can however update entries from SS3 with the server name
+                                var existingServer = _servers.FirstOrDefault(s => s.HasCredentials
+                                && s.Address.HostName == server.Address.HostName
+                                && s.Address.Path == server.Address.Path
+                                && s.Address.Port == server.Address.Port);
 
-                                //Debug.LogError($"{server.Name} => {server.Address.Http()}");
 
                                 if (existingServer == null)
                                 {
@@ -340,6 +346,9 @@ namespace Screeps_API
                                 }
                                 else
                                 {
+
+                                    //Debug.LogError($"{server.Name} => {server.Address.Http()} ==> {existingServer.Address.Http()}");
+
                                     existingServer.Name = server.Name;
                                     existingServer.Meta.LikeCount = server.Meta.LikeCount;
 
@@ -375,6 +384,8 @@ namespace Screeps_API
                         QueryAndUpdateServerInfo(server);
                     }
 
+                    
+
                     _servers = _servers.OrderByDescending(s => s.Official)
                         .ThenByDescending(s => s.Meta.LikeCount)
                         .ThenBy(s => s.Address.Path)
@@ -383,9 +394,19 @@ namespace Screeps_API
                     // preselecting selected server might be an issue when the selected server status is not saved for like SS3
                     //_serverIndex = sortedCache.FindIndex(s => s.Selected);
 
-                    UpdateServerList();
+                    
+
+                    finishedLoading = true;
                 });
+
+                while (!finishedLoading)
+                {
+                    yield return new WaitForSeconds(1);
+                }
             }
+
+            UpdateServerList();
+
         }
 
         private void QueryAndUpdateServerInfo(IScreepsServer server)

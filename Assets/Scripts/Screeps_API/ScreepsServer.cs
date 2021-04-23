@@ -29,6 +29,11 @@ namespace Screeps_API
                 this.Address.Ssl = server.Secure.Value;
             }
 
+            if (this.Address.Ssl && string.IsNullOrEmpty(server.Port))
+            {
+                this.Address.Port = "443";
+            }
+
             this.Key = key;
             this.Name = server.Name ?? key;
 
@@ -47,6 +52,7 @@ namespace Screeps_API
             if (server.Host.ToLowerInvariant().EndsWith("screeps.com"))
             {
                 this.Official = true;
+                
 
                 this.Name = $"Screeps.com";
 
