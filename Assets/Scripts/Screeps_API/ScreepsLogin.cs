@@ -203,24 +203,6 @@ namespace Screeps_API
 
         private void OnServerChange(int serverIndex)
         {
-            // TODO: selection in server list?
-            if (_serverIndex != -1)
-            {
-                // deselect previous server
-                var previousServer = _servers[_serverIndex];
-                if (previousServer != null)
-                {
-                    //previousServer.Selected = false;
-                }
-            }
-
-            // select new server
-            var selectedServer = _servers[serverIndex];
-            if (selectedServer != null)
-            {
-                //selectedServer.Selected = true;
-            }
-
             UpdateServerList();
 
             editServer = false;

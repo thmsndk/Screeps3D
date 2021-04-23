@@ -25,5 +25,8 @@ namespace Screeps_API
         List<string> ShardNames { get; set; }
         int Users { get; set; }
         string Version { get; set; }
+        // raw point: "useNativeAuth": false, ??
+
+        // TODO: features (mods) screepsmod-mongo, screepsmod-auth, screepsmod-admin-utils market
     }
 }

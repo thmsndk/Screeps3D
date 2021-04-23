@@ -15,10 +15,13 @@ namespace Screeps3D.Menus.ServerList
         public TableView m_tableView;
 
         public int m_numRows;
+
+        public OnServerSelected onServerSelected;
+
         private int m_numInstancesCreated = 0;
         private List<IScreepsServer> _servers;
 
-        public OnServerSelected onServerSelected;
+        private IScreepsServer selectedServer;
 
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
@@ -39,7 +42,7 @@ namespace Screeps3D.Menus.ServerList
         //Will be called by the TableView to know what is the height of each row
         public float GetHeightForRowInTableView(TableView tableView, int row)
         {
-            return ((RectTransform) m_cellPrefab.transform).rect.height;
+            return ((RectTransform)m_cellPrefab.transform).rect.height;
         }
 
         //Will be called by the TableView when a cell needs to be created for display
@@ -54,8 +57,10 @@ namespace Screeps3D.Menus.ServerList
             }
 
             var server = _servers[row];
-
+            
             cell.SetServer(server);
+            
+            cell.SetSelectedState(selectedServer);
             return cell;
         }
 
@@ -73,6 +78,8 @@ namespace Screeps3D.Menus.ServerList
 
         private void OnServerSelected(IScreepsServer server)
         {
+            selectedServer = server;
+
             onServerSelected?.Invoke(server);
         }
     }

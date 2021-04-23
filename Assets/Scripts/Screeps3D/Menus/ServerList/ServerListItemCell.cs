@@ -25,8 +25,8 @@ namespace Screeps3D.Menus.ServerList
         public Text PackageVersionLabel;
         
         public OnServerSelected onServerSelected;
-
-        private IScreepsServer server;
+        public IScreepsServer Server { get; private set; }
+        
         private Image buttonImage;
 
         void Start()
@@ -38,19 +38,14 @@ namespace Screeps3D.Menus.ServerList
         {
             if (onServerSelected != null)
             {
-                onServerSelected.Invoke(server);
+                onServerSelected.Invoke(Server);
             }
         }
 
         internal void SetServer(IScreepsServer server)
         {
-            this.server = server;
-
-            if (buttonImage != null) {
-                // TODO handle selected server another way
-                //buttonImage.color = server.Selected ? UnityEngine.Random.ColorHSV() : Color.white;
-            }
-            
+            this.Server = server;
+           
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
@@ -78,8 +73,15 @@ namespace Screeps3D.Menus.ServerList
                 }
             }
 
-
             PackageVersionLabel.text = server.Meta.Version;
+        }
+
+        internal void SetSelectedState(IScreepsServer server)
+        {
+            if (buttonImage != null)
+            {
+                buttonImage.color = this.Server == server ? UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) : Color.white;
+            }
         }
     }
 }
