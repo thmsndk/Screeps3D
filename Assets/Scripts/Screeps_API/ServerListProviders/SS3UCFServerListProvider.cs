@@ -27,14 +27,12 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
 
                 foreach (var server in servers)
                 {
-
                     var cachedServer = new ServerCache
                     {
                         Address = server.Address,
                         Type = SourceProviderType.SS3_UCF_YAML,
                         Name = server.Name,
                         Credentials = server.Credentials
-
                     };
 
                     serverList.Add(cachedServer);
