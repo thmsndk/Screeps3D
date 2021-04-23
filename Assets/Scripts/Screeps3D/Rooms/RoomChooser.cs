@@ -378,7 +378,7 @@ namespace Screeps3D.Rooms
             // the pvp list probably belongs in a twitch extension https://www.twitch.tv/p/extensions/
             // Still a little spammy with every 30 seconds, should probably collect pvp details in a warpath fashion and put the message on a "warpath" timer
 
-            if (ScreepsAPI.Cache.Official)
+            if (ScreepsAPI.Server.Official)
             {
                 //// requires screepsmod-admin-utils
                 //https://botarena.screepspl.us/api/experimental/pvp?interval=100
@@ -794,8 +794,8 @@ namespace Screeps3D.Rooms
 
         private string GetServerPrefKey(string prefKey)
         {
-            var hostname = ScreepsAPI.Cache.Address.HostName;
-            var port = ScreepsAPI.Cache.Address.Port;
+            var hostname = ScreepsAPI.Server.Address.HostName;
+            var port = ScreepsAPI.Server.Address.Port;
 
             return string.Format("{0} {1} {2}", hostname, port, prefKey);
         }

@@ -4,20 +4,22 @@ using System.Collections.Generic;
 
 namespace Screeps_API
 {
-    public class ScreepsServer
+    public class ScreepsServer : IScreepsServer
     {
         public string Key { get; set; }
         public string Name { get; set; }
+        public Address Address { get; } = new Address();
+        public Credentials Credentials { get; } = new Credentials();
 
-        public Address Address = new Address();
-        public Credentials Credentials = new Credentials();
+        public IScreepsServerMetaData Meta { get; set; }
 
         public ScreepsServer(string key)
         {
             this.Key = key;
+            this.Meta = new ScreepsServerMetaData();
         }
 
-        public ScreepsServer(string key, SS3UnifiedCredentials.SS3UnifiedCredentialsServer server)
+        public ScreepsServer(string key, SS3UnifiedCredentials.SS3UnifiedCredentialsServer server): this(key)
         {
             this.Address.HostName = server.Host;
             this.Address.Port = server.Port;
@@ -47,6 +49,7 @@ namespace Screeps_API
                 this.Official = true;
 
                 this.Name = $"Screeps.com";
+
                 if (this.Address.Path == "/ptr")
                 {
                     this.Name = $"PTR " + this.Name;
@@ -68,6 +71,8 @@ namespace Screeps_API
         /// </summary>
         public bool Official { get; internal set; }
 
+        public bool? Online { get; set; }
+
         public bool HasCredentials
         {
             get
@@ -80,14 +85,53 @@ namespace Screeps_API
     /// <summary>
     /// Primarly consists of data from api/version, but additional custom data about a server is stored here.
     /// </summary>
-    public class ScreepsServerMetaData
+    public class ScreepsServerMetaData : IScreepsServerMetaData
     {
-        public bool? Online { get; internal set; }
-        public int Users { get; internal set; }
-        public string Version { get; internal set; }
+        
+        public int Users { get; set; }
+        public string Version { get; set; }
         public int LikeCount { get; set; }
 
-        public List<string> ShardNames { get; internal set; }
+        public List<string> ShardNames { get; set; }
+    }
+
+
+    public class Credentials
+    {
+        public string Token;
+        public string Email;
+        public string Password;
+
+        public bool HasCredentials
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Token) || !string.IsNullOrEmpty(Email) &&
+                       !string.IsNullOrEmpty(Email);
+            }
+        }
+    }
+
+    public class Address
+    {
+        public bool Ssl;
+        public string HostName;
+        public string Port;
+        public string Path = "/";
+
+        public string Http(string path = "")
+        {
+            if (path.StartsWith("/") && Path.EndsWith("/"))
+            {
+                path = path.Substring(1);
+            }
+
+            var protocol = Ssl ? "https" : "http";
+            var port = HostName.ToLowerInvariant() == "screeps.com" ? "" : string.Format(":{0}", this.Port);
+            var url = string.Format("{0}://{1}{2}{3}{4}", protocol, HostName, port, this.Path, path);
+            //Debug.Log(url);
+            return url;
+        }
     }
 
 }

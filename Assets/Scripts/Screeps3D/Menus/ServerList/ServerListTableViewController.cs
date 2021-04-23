@@ -4,6 +4,7 @@ using Tacticsoft;
 using Screeps_API;
 using System;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -15,7 +16,7 @@ namespace Screeps3D.Menus.ServerList
 
         public int m_numRows;
         private int m_numInstancesCreated = 0;
-        private CacheList _servers;
+        private List<IScreepsServer> _servers;
 
         public OnServerSelected onServerSelected;
 
@@ -62,15 +63,15 @@ namespace Screeps3D.Menus.ServerList
 
         #region Table View event handlers
 
-        internal void UpdateServerList(CacheList servers)
+        internal void UpdateServerList(List<IScreepsServer> servers)
         {
-            _servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object without cache
+            _servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object where we can set "Selected" property
             m_tableView.ReloadData();
         }
 
         #endregion
 
-        private void OnServerSelected(ServerCache server)
+        private void OnServerSelected(IScreepsServer server)
         {
             onServerSelected?.Invoke(server);
         }

@@ -70,7 +70,7 @@ namespace Screeps3D.World.Views
             _parent = new GameObject("MapVisual").transform;
             _parent.SetParent(this.gameObject.transform);
 
-            if (ScreepsAPI.Cache.Official)
+            if (ScreepsAPI.Server.Official)
             {
                 // TODO: Handle shard change. 
                 ScreepsAPI.Socket.Subscribe(string.Format("mapVisual:{0}/{1}", ScreepsAPI.Me.UserId, PlayerPosition.Instance.ShardName), RecieveData);

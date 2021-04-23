@@ -10,6 +10,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
     {
         bool MergeWithCache { get; }
 
-        void Load(Action<IEnumerable<ServerCache>> callback);
+        void Load(Action<IEnumerable<IScreepsServer>> callback);
     }
 }

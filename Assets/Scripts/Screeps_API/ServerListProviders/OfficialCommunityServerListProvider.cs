@@ -15,9 +15,9 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
             get { return true; }
         }
 
-        public void Load(Action<IEnumerable<ServerCache>> callback)
+        public void Load(Action<IEnumerable<IScreepsServer>> callback)
         {
-            var serverList = new List<ServerCache>();
+            var serverList = new List<IScreepsServer>();
 
             Action<string> serverCallback = str =>
             {
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
             ScreepsAPI.Http.GetServerList(serverCallback, errorCallBack);
         }
 
-        private static void UnpackServers(string str, List<ServerCache> serverList)
+        private static void UnpackServers(string str, List<IScreepsServer> serverList)
         {
             var obj = new JSONObject(str);
             var servers = obj["servers"].list;
@@ -57,13 +57,13 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
                 var host = settings["host"].str;
                 var port = settings["port"].str;
 
-                var cachedServer = new ServerCache
+                var cachedServer = new ScreepsServer(name)
                 {
                     Address = { HostName = host, Port = port },
-                    Type = SourceProviderType.Community,
                     Name = name,
-                    LikeCount = likeCount
                 };
+
+                cachedServer.Meta.LikeCount = likeCount;
 
                 serverList.Add(cachedServer);
 

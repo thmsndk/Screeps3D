@@ -32,7 +32,7 @@ namespace Screeps_API
             // TODO: all theese requests needs to be queued to not hit request limits
             //Debug.Log(string.Format("HTTP: attempting {0} to {1}", requestMethod, path));
             UnityWebRequest www;
-            var fullPath = path.StartsWith("/api") ? ScreepsAPI.Cache.Address.Http(path) : path;
+            var fullPath = path.StartsWith("/api") ? ScreepsAPI.Server.Address.Http(path) : path;
             if (requestMethod == UnityWebRequest.kHttpVerbGET)
             {
                 if (body != null)
@@ -151,16 +151,16 @@ namespace Screeps_API
 
         public void Auth(Action<string> onSuccess, Action onError = null, bool noNotification = false)
         {
-            if (!string.IsNullOrEmpty(ScreepsAPI.Cache.Credentials.Token))
+            if (!string.IsNullOrEmpty(ScreepsAPI.Server.Credentials.Token))
             {
-                Token = ScreepsAPI.Cache.Credentials.Token;
+                Token = ScreepsAPI.Server.Credentials.Token;
                 Request("GET", "/api/auth/me", null, onSuccess, onError, noNotification: noNotification);
             }
             else
             {
                 var body = new RequestBody();
-                body.AddField("email", ScreepsAPI.Cache.Credentials.Email);
-                body.AddField("password", ScreepsAPI.Cache.Credentials.Password);
+                body.AddField("email", ScreepsAPI.Server.Credentials.Email);
+                body.AddField("password", ScreepsAPI.Server.Credentials.Password);
                 Request("POST", "/api/auth/signin", body, onSuccess, onError, noNotification: noNotification);
             }
         }
@@ -467,12 +467,13 @@ namespace Screeps_API
 
         public IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
         {
+            // TODO: this url should not be hardcoded
             var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
 
-            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
+            if (!ScreepsAPI.Server.Official)
             {
                 // Private servers runs with a different url.
-                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
+                roomTextureUrl = ScreepsAPI.Server.Address.Http($"/assets/map/{roomName}.png");
             }
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);

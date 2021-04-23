@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace Screeps3D.Menus.ServerList
 {
     [System.Serializable]
-    public class OnServerSelected : UnityEvent<ServerCache> { }
+    public class OnServerSelected : UnityEvent<IScreepsServer> { }
 
     //Inherit from TableViewCell instead of MonoBehavior to use the GameObject
     //containing this component as a cell in a TableView
@@ -26,7 +26,7 @@ namespace Screeps3D.Menus.ServerList
         
         public OnServerSelected onServerSelected;
 
-        private ServerCache server;
+        private IScreepsServer server;
         private Image buttonImage;
 
         void Start()
@@ -42,12 +42,13 @@ namespace Screeps3D.Menus.ServerList
             }
         }
 
-        internal void SetServer(ServerCache server)
+        internal void SetServer(IScreepsServer server)
         {
             this.server = server;
 
             if (buttonImage != null) {
-                buttonImage.color = server.Selected ? UnityEngine.Random.ColorHSV() : Color.white;
+                // TODO handle selected server another way
+                //buttonImage.color = server.Selected ? UnityEngine.Random.ColorHSV() : Color.white;
             }
             
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
@@ -58,11 +59,11 @@ namespace Screeps3D.Menus.ServerList
             ServerAddressPortLabel.text = server.Address.Port;
             ServerAddressSSLToggle.isOn = server.Address.Ssl;
 
-            UserCountLabel.text = server.Users.ToString();
+            UserCountLabel.text = server.Meta.Users.ToString();
 
-            if (server.Type != SourceProviderType.Official)
+            if (!server.Official)
             {
-                LikesLabel.text = server.LikeCount.ToString();
+                LikesLabel.text = server.Meta.LikeCount.ToString();
                 foreach (Transform child in LikesLabel.transform)
                 {
                     child.gameObject.SetActive(true);
@@ -78,7 +79,7 @@ namespace Screeps3D.Menus.ServerList
             }
 
 
-            PackageVersionLabel.text = server.Version;
+            PackageVersionLabel.text = server.Meta.Version;
         }
     }
 }

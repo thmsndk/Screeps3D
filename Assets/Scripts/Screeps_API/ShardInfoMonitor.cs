@@ -43,13 +43,13 @@ namespace Assets.Scripts.Screeps_API
             {
                 yield return new WaitForSeconds(5);
             }
-            while (ScreepsAPI.Cache.ShardNames == null)
+            while (ScreepsAPI.Server.Meta.ShardNames == null || !ScreepsAPI.Server.Meta.ShardNames.Any())
             {
                 Debug.Log("Waiting for ShardNames");
                 yield return new WaitForSeconds(1);
             }
             Debug.Log("ShardInfoMonitor populating shardnames from cache");
-            foreach (var shardName in ScreepsAPI.Cache.ShardNames)
+            foreach (var shardName in ScreepsAPI.Server.Meta.ShardNames)
             {
                 if (shardName != null)
                 {
