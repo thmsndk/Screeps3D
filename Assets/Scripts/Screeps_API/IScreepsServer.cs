@@ -4,6 +4,8 @@ namespace Screeps_API
 {
     public interface IScreepsServer
     {
+        string Key { get; set; }
+
         string Name { get; set; }
         
         bool Official { get; }

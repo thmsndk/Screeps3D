@@ -19,13 +19,6 @@ namespace Screeps_API
     public class ScreepsLogin : MonoBehaviour
     {
         [SerializeField] private ScreepsAPI _api = default;
-        [SerializeField] private Toggle _save = default;
-        [SerializeField] private Toggle _ssl = default;
-        [SerializeField] private TMP_InputField _port = default;
-        [SerializeField] private TMP_InputField _username = default;
-        [SerializeField] private TMP_InputField _password = default;
-        [SerializeField] private TMP_InputField _token = default;
-        [SerializeField] private TMP_Dropdown _serverSelect = default;
         [SerializeField] private Button _connect = default;
         [SerializeField] private FadePanel _panel = default;
         [SerializeField] private Button _addServer = default;
@@ -33,6 +26,8 @@ namespace Screeps_API
         [SerializeField] private Button _editServer = default;
         [SerializeField] private Button _exit = default;
         [SerializeField] private ChooseSS3UnifiedCredentialsFileLocationPopup _chooseSS3UnifiedCredentialsFileLocationPopup = default;
+        [SerializeField] private EditServerPopup _editServerPopup = default;
+
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
 
@@ -45,6 +40,8 @@ namespace Screeps_API
         private List<IServerListProvider> serverListProviders = new List<IServerListProvider>();
 
         private bool editServer = false;
+
+        private IScreepsServer selectedServer;
 
         private void Start()
         {
@@ -60,7 +57,6 @@ namespace Screeps_API
                 StartCoroutine(LoadServers());
 
                 UpdateFieldVisibility();
-                UpdateFieldContent();
             }
             else
             {
@@ -69,7 +65,6 @@ namespace Screeps_API
             }
 
             _connect.onClick.AddListener(OnConnect);
-            _serverSelect.onValueChanged.AddListener(OnServerChange);
             _addServer.onClick.AddListener(OnAddServer);
             _removeServer.onClick.AddListener(OnRemoveServer);
             _editServer.onClick.AddListener(OnEditServer);
@@ -104,6 +99,14 @@ namespace Screeps_API
         {
             editServer = true;
             UpdateFieldVisibility();
+            ShowEditServerDialog();
+
+        }
+
+        private void ShowEditServerDialog()
+        {
+            _editServerPopup?.SetServer(selectedServer);
+            _editServerPopup?.gameObject?.SetActive(true);
         }
 
         private void OnRemoveServer()
@@ -196,6 +199,8 @@ namespace Screeps_API
         {
             QueryAndUpdateServerInfo(server);
 
+            selectedServer = server;
+
             int serverIndex = _servers.IndexOf(server);
             //_serverSelect.value = serverIndex; // Updates dropdown
             OnServerChange(serverIndex);
@@ -206,10 +211,9 @@ namespace Screeps_API
             UpdateServerList();
 
             editServer = false;
-            PlayerPrefs.SetInt("serverIndex", serverIndex);
+            PlayerPrefs.SetInt("serverIndex", serverIndex); // TODO: persist server key instead
             _serverIndex = serverIndex;
             UpdateFieldVisibility();
-            UpdateFieldContent();
         }
 
         private void SS3UnifiedCredentialsFileLocationSelected()
@@ -220,55 +224,13 @@ namespace Screeps_API
 
         private void UpdateFieldVisibility()
         {
-            if (_serverIndex == -1 || _servers == null)
+            if (selectedServer == null)
             {
-                _username.gameObject.SetActive(false);
-                _password.gameObject.SetActive(false);
-                _token.gameObject.SetActive(false);
-
                 _removeServer.gameObject.SetActive(false);
                 return;
             }
 
-            var selectedServer = _servers[_serverIndex];
-            var usesTokens = selectedServer.Official;
-
-            //_ssl.gameObject.SetActive(!isPublic);
-            //_port.gameObject.SetActive(!isPublic);
-
-            var showCredentialInput =
-                string.IsNullOrEmpty(!usesTokens ? selectedServer.Credentials.Email : selectedServer.Credentials.Token) ||
-                editServer;
-
-            _username.gameObject.SetActive(!usesTokens && showCredentialInput);
-            _password.gameObject.SetActive(!usesTokens && showCredentialInput);
-            _token.gameObject.SetActive(usesTokens && showCredentialInput);
-
             _removeServer.gameObject.SetActive(!selectedServer.Official);
-
-            if (!usesTokens && (string.IsNullOrEmpty(selectedServer.Address.Port) || editServer))
-            {
-                _port.gameObject.SetActive(true);
-            }
-            else
-            {
-                _port.gameObject.SetActive(false);
-            }
-        }
-
-        private void UpdateFieldContent()
-        {
-            if (_serverIndex == -1)
-            {
-                return;
-            }
-
-            var server = _servers[_serverIndex];
-            _port.text = server.Address.Port ?? "21025";
-            _username.text = server.Credentials.Email ?? "";
-            _token.text = server.Credentials.Token ?? "";
-            _password.text = server.Credentials.Password ?? "";
-            _ssl.isOn = server.Address.Ssl;
         }
 
         private bool HasUnifiedCredentials()
@@ -465,36 +427,19 @@ namespace Screeps_API
 
         private void OnConnect()
         {
-            var cache = _servers[_serverIndex];
+            var server = _servers[_serverIndex];
             
-            QueryAndUpdateServerInfo(cache);
+            QueryAndUpdateServerInfo(server);
 
-            // TODO: only persist on connect, if save credentials is marked.
-
-
-            // TODO: persist server info / meta data to a file. mainly containing data from api/version endpoint. likes, shard, last online status and so forth.
-            // TODO: persist last connection date
-            // TODO: meta data could also contain what shard you where on last time you connected, what room you where loaded into. Will we use PlayerPrefs for meta data?
-
-            // TODO: handle no SS3 credentials file existing, popping up a dialog allowing the user to choose where to save it
-            //cache.SaveCredentials = _save.isOn;
-            //cache.Address.Port = _port.text;
-            //cache.Address.Ssl = _ssl.isOn;
-
-            //if (cache.SaveCredentials)
-            //{
-                cache.Credentials.Email = _username.text;
-                cache.Credentials.Password = _password.text;
-                cache.Credentials.Token = _token.text;
-            //}
-
-            // TODO: persist credentials to the SS3 credentials file
-            //var filteredServers = new CacheList();
-            //filteredServers.AddRange(_servers.Where(s => s.HasCredentials && s.Persist));
-            
-            //SaveManager.Save(_savePath, filteredServers);
-            NotifyText.Message("Connecting...");
-            _api.Connect(cache);
+            if (!server.HasCredentials)
+            {
+                ShowEditServerDialog(); // TODO: supply the fact that the server is in "Edit Credentials" mode, only connect after pressing OK
+            }
+            else
+            {
+                NotifyText.Message("Connecting...");
+                _api.Connect(server);
+            }
         }
     }
 }
