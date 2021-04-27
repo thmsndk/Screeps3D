@@ -34,6 +34,8 @@ namespace Assets.Scripts.Screeps3D.Main
         [SerializeField] private GameObject _passwordAndLabel = default;
         [SerializeField] private TMP_InputField _password = default;
 
+        [SerializeField] private Toggle _usesSSL = default;
+
         private IScreepsServer server;
 
         public Action OnCancel;
@@ -58,6 +60,7 @@ namespace Assets.Scripts.Screeps3D.Main
             _host.text = server.Address.HostName;
             _port.text = server.Address.Port;
             _path.text = server.Address.Path;
+            _usesSSL.isOn = server.Address.Ssl;
 
             
             if (server.Official)
@@ -67,7 +70,7 @@ namespace Assets.Scripts.Screeps3D.Main
                 _host.readOnly = true;
                 _port.readOnly = true;
                 _path.readOnly = true;
-
+                //_usesSSL // can't mark this readon only
                 _tokenAndLabel.gameObject.SetActive(true);
                 _usernameAndLabel.gameObject.SetActive(false);
                 _passwordAndLabel.gameObject.SetActive(false);
@@ -79,6 +82,7 @@ namespace Assets.Scripts.Screeps3D.Main
                 _host.readOnly = false;
                 _port.readOnly = false;
                 _path.readOnly = false;
+                //_usesSSL // can't mark this readon only
 
                 _tokenAndLabel.gameObject.SetActive(false);
                 _usernameAndLabel.gameObject.SetActive(true);
