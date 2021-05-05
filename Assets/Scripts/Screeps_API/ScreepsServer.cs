@@ -29,9 +29,9 @@ namespace Screeps_API
                 this.Address.Ssl = server.Secure.Value;
             }
 
-            if (this.Address.Ssl && string.IsNullOrEmpty(server.Port))
+            if (string.IsNullOrEmpty(server.Port))
             {
-                this.Address.Port = "443";
+                this.Address.Port = this.Address.Ssl ? "443" : "21025";
             }
 
             this.Key = key;

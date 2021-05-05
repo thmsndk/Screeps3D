@@ -44,11 +44,6 @@ namespace Assets.Scripts.Screeps3D.Main
         {
             _cancelButton.onClick.AddListener(CancelClicked);
             _okButton.onClick.AddListener(OkClicked);
-
-            //_validFileLocations.ClearOptions();
-            //var validLocations = SS3UnifiedCredentials.GetValidConfigPaths().Where(path => path.EndsWith(".yml")).ToList();
-
-            //_validFileLocations.AddOptions(validLocations); ;
         }
 
         public void SetServer(IScreepsServer server)
@@ -70,7 +65,7 @@ namespace Assets.Scripts.Screeps3D.Main
                 _host.readOnly = true;
                 _port.readOnly = true;
                 _path.readOnly = true;
-                //_usesSSL // can't mark this readon only
+                //_usesSSL // can't mark this read only
                 _tokenAndLabel.gameObject.SetActive(true);
                 _usernameAndLabel.gameObject.SetActive(false);
                 _passwordAndLabel.gameObject.SetActive(false);
@@ -82,7 +77,7 @@ namespace Assets.Scripts.Screeps3D.Main
                 _host.readOnly = false;
                 _port.readOnly = false;
                 _path.readOnly = false;
-                //_usesSSL // can't mark this readon only
+                //_usesSSL // can't mark this read only
 
                 _tokenAndLabel.gameObject.SetActive(false);
                 _usernameAndLabel.gameObject.SetActive(true);
@@ -98,11 +93,21 @@ namespace Assets.Scripts.Screeps3D.Main
 
         private void OkClicked()
         {
-            //var selectedConfigFile = _validFileLocations.options[_validFileLocations.value];
+            var oldKey = this.server.Key;
 
-            //SS3UnifiedCredentials.SetConfigFile(selectedConfigFile.text);
+            server.Key = _key.text;
+            server.Name = _name.text;
+            server.Address.HostName = _host.text;
+            server.Address.Port = _port.text;
+            server.Address.Path = _path.text;
+            server.Address.Ssl = _usesSSL.isOn;
 
-            // TODO: detect if key was changed and remove that entry
+            server.Credentials.Token = _token.text;
+
+            server.Credentials.Email = _username.text;
+            server.Credentials.Password = _password.text;
+
+            SS3UnifiedCredentials.SaveServer(this.server, oldKey, _persistCredentials.isOn);
 
             this.gameObject.SetActive(false);
 

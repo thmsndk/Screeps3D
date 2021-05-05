@@ -205,7 +205,7 @@ namespace Assets.Scripts.Screeps_API
             }
         }
 
-        public static void SaveServer(ScreepsServer server)
+        public static void SaveServer(IScreepsServer server, string oldKey = null, bool persistCredentials = false)
         {
             var configPath = GetScreepsConfigFilePath();
 
@@ -229,31 +229,47 @@ namespace Assets.Scripts.Screeps_API
                 }
             }
 
-            if (!document.Servers.TryGetValue(server.Key, out var yamlServer))
+            if (!document.Servers.TryGetValue(oldKey ?? server.Key, out var yamlServer))
             {
                 yamlServer = new SS3UnifiedCredentialsServer();
                 document.Servers.Add(server.Key, yamlServer);
             };
 
-            yamlServer.Name = server.Name;
-            yamlServer.Secure = server.Address.Ssl;
+            if (server.Key != oldKey)
+            {
+                document.Servers.Remove(oldKey);
+                document.Servers.Add(server.Key, yamlServer);
+            }
+
+            yamlServer.Name = server.Key != server.Name ? server.Name : null;
+            yamlServer.Secure = server.Address.Ssl ? true : (bool?)null;
             yamlServer.Host = server.Address.HostName;
             yamlServer.Port = server.Address.Port;
 
-            yamlServer.Path = server.Address.Path;
-            yamlServer.Ptr = server.Address.Path == "/ptr";
-            yamlServer.Season = server.Address.Path == "/season";
-            yamlServer.Sim = server.Address.Path == "/sim";
+            if (server.Address.Port == "443" || server.Address.Port == "21025")
+            {
+                yamlServer.Port = null;
+            }
 
+            yamlServer.Path = server.Address.Path;
+            
+            if (server.Address.Path == "/")
+            {
+                yamlServer.Path = null;
+            }
+
+            yamlServer.Ptr = server.Address.Path == "/ptr" ? true : (bool?)null;
+            yamlServer.Season = server.Address.Path == "/season" ? true : (bool?)null;
+            yamlServer.Sim = server.Address.Path == "/sim" ? true : (bool?)null;
 
             if (server.Official)
             {
-                yamlServer.Token = server.Credentials.Token;
+                yamlServer.Token = persistCredentials && !string.IsNullOrEmpty(server.Credentials.Token) ? server.Credentials.Token : null;
             }
             else
             {
-                yamlServer.Username = server.Credentials.Email;
-                yamlServer.Password = server.Credentials.Password;
+                yamlServer.Username = persistCredentials&& !string.IsNullOrEmpty(server.Credentials.Email) ? server.Credentials.Email : null;
+                yamlServer.Password = persistCredentials && !string.IsNullOrEmpty(server.Credentials.Password) ? server.Credentials.Password : null;
             }
 
             var serializer = new SerializerBuilder()
