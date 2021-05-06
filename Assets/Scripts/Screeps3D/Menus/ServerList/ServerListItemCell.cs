@@ -23,7 +23,9 @@ namespace Screeps3D.Menus.ServerList
         public Text UserCountLabel;
         public Text LikesLabel;
         public Text PackageVersionLabel;
-        
+
+        public Text ShardNames;
+
         public OnServerSelected onServerSelected;
         public IScreepsServer Server { get; private set; }
         
@@ -49,10 +51,10 @@ namespace Screeps3D.Menus.ServerList
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
-
-            ServerAddressHostLabel.text = server.Address.HostName;
-            ServerAddressPortLabel.text = server.Address.Port;
-            ServerAddressSSLToggle.isOn = server.Address.Ssl;
+            ShardNames.text = string.Join(" ", server.Meta.ShardNames) + Environment.NewLine + string.Join(" ", server.Meta.Features);
+            ServerAddressHostLabel.text = $"{server.Address.Http()}";
+            //ServerAddressPortLabel.text = server.Address.Port;
+            //ServerAddressSSLToggle.isOn = server.Address.Ssl;
 
             UserCountLabel.text = server.Meta.Users.ToString();
 

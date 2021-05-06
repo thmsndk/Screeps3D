@@ -98,7 +98,8 @@ namespace Screeps_API
         public string Version { get; set; }
         public int LikeCount { get; set; }
 
-        public List<string> ShardNames { get; set; }
+        public List<string> ShardNames { get; set; } = new List<string>();
+        public Dictionary<string, string> Features { get; set; } = new Dictionary<string, string>();
     }
 
 

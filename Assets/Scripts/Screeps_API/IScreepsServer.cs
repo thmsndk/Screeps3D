@@ -29,6 +29,9 @@ namespace Screeps_API
         string Version { get; set; }
         // raw point: "useNativeAuth": false, ??
 
-        // TODO: features (mods) screepsmod-mongo, screepsmod-auth, screepsmod-admin-utils market
+        /// <summary>
+        /// A dictionary with they key being the modname and the value being version
+        /// </summary>
+        Dictionary<string, string> Features { get; set; }
     }
 }

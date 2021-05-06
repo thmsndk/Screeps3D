@@ -362,6 +362,20 @@ namespace Screeps_API
             Action<string> queryServerInfoCallback = str =>
             {
                 UpdateServerVersionInfo(server, str);
+
+                // TODO: get world status, that does require us to have credentials available to lookup
+
+                // Do we have admin utils?
+                // TODO: /stats, if we have a username in credentials we can find our user stats, if we have token/password we could user other endpoints and just auth, 
+                // leaning mostly towards /stats for private servers, and /api/user/overview for official servers
+
+                // TODO: cache our badge? /api/auth/me gives a lot of details, requires us to auth though, and we don't get owned rooms, we do get cpu allocated to shards and their shardnames, as well as credits and resources
+                // /api/user/rooms?id={userId} gives us owned rooms but requires us to have the user id
+
+                // TODO: message count?
+
+                // TODO: a tooltip that shows features / welcome message on hover or on click
+
                 UpdateServerList();
             };
 
@@ -390,9 +404,9 @@ namespace Screeps_API
                 // screeps-admin-utils adds shards, default server does not have it
                 var shards = serverData["shards"];
 
-                server.Meta.ShardNames = new List<string>();
                 if (shards != null && !shards.IsNull)
                 {
+                    server.Meta.ShardNames.Clear();
                     foreach (var shard in shards.list)
                     {
                         if (!shard.IsNull)
@@ -406,6 +420,19 @@ namespace Screeps_API
                 {
                     // if server does not have a shardname set, version seems to return null
                     server.Meta.ShardNames.Add("shard0");
+                }
+
+                var features = serverData["features"];
+                if (features != null && !features.IsNull)
+                {
+                    server.Meta.Features.Clear();
+                    foreach (var feature in features.list)
+                    {
+                        if (!feature.IsNull)
+                        {
+                            server.Meta.Features.Add(feature["name"].ToString(), feature["version"].ToString());
+                        }
+                    }
                 }
             }
 
