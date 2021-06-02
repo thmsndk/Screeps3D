@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Screeps_API;
 using System;
 using UnityEngine.Events;
+using System.Text;
+using System.Linq;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -25,6 +27,8 @@ namespace Screeps3D.Menus.ServerList
         public Text PackageVersionLabel;
 
         public Text ShardNames;
+
+        public TooltipTrigger tooltipTrigger;
 
         public OnServerSelected onServerSelected;
         public IScreepsServer Server { get; private set; }
@@ -51,7 +55,26 @@ namespace Screeps3D.Menus.ServerList
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
-            ShardNames.text = string.Join(" ", server.Meta.ShardNames) + Environment.NewLine + string.Join(" ", server.Meta.Features);
+            //ShardNames.text = string.Join(" ", server.Meta.ShardNames) + Environment.NewLine + string.Join(" ", server.Meta.Features);
+            var sb = new StringBuilder();
+
+            sb.AppendLine(@$"<b>Shards</b>: {string.Join(" ", server.Meta.ShardNames)}");
+
+
+            if (server.Meta.Features.Count > 0)
+            {
+                sb.AppendLine("<b>Features</b>:");
+            }
+
+            foreach (var item in server.Meta.Features.OrderBy(f => f.Key))
+            {
+                var feature = item.Key.Trim('"');
+                var version = item.Value.Trim('"');
+                sb.AppendLine($"{feature}: {version}");
+            }
+
+            tooltipTrigger.Content = sb.ToString();
+
             ServerAddressHostLabel.text = $"{server.Address.Http()}";
             //ServerAddressPortLabel.text = server.Address.Port;
             //ServerAddressSSLToggle.isOn = server.Address.Ssl;
