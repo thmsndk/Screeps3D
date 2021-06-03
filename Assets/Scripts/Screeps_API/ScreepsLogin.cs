@@ -390,16 +390,28 @@ namespace Screeps_API
             var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, server, noNotification: true);
             //stuff.Current
 
-            Action<string> queryAuthMeCallback = str =>
-            {
-                UpdateServerAuthInfo(server, str);
-
-                UpdateServerList();
-            };
-
             if (server.Credentials.HasCredentials)
             {
-                ScreepsAPI.Http.GetUser(queryAuthMeCallback, server, noNotification: true); 
+                Action<string> queryAuthMeCallback = str =>
+                {
+                    UpdateServerAuthInfo(server, str);
+
+                    UpdateServerList();
+                };
+
+                ScreepsAPI.Http.GetUser(queryAuthMeCallback, server, noNotification: true);
+
+                Action<string> queryWorldStatusCallback = str =>
+                {
+                    var obj = new JSONObject(str);
+                    if (Enum.TryParse<WorldStatus>(obj["status"].str, true, out var worldStatus)) { 
+                        server.Meta.WorldStatus = worldStatus;
+                    }
+
+                    UpdateServerList();
+                };
+
+                ScreepsAPI.Http.GetWorldStatus(queryWorldStatusCallback, server, noNotification: true);
             }
         }
         
@@ -408,6 +420,13 @@ namespace Screeps_API
             var obj = new JSONObject(str);
             var me = ScreepsAPI.UserManager.CacheUser(obj);
             server.Meta.Me = me;
+
+            var GCL_POW = 2.4;
+            var GCL_MULTIPLY = 1000000;
+
+            var gcl = (int)obj["gcl"].n;
+            var gclLevel = Math.Floor(Math.Pow((gcl) / GCL_MULTIPLY, 1 / GCL_POW)) + 1;
+            server.Meta.GlobalControlLevel = gclLevel;
         }
 
         private static void UpdateServerVersionInfo(IScreepsServer server, string str)

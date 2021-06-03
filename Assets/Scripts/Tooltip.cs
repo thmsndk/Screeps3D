@@ -38,7 +38,7 @@ public class Tooltip : MonoBehaviour
         Vector2 position = Input.mousePosition;
         
         // move to mouse
-        transform.position = position;
+        transform.position = position + new Vector2(50f, 0f);
 
         // keep tooltip on screen
         var pivotX = position.x / Screen.width;

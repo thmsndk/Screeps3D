@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Screeps3D;
+using System.Collections.Generic;
 
 namespace Screeps_API
 {
@@ -39,5 +40,7 @@ namespace Screeps_API
         /// </summary>
         Dictionary<string, string> Features { get; set; }
         ScreepsUser Me { get; set; }
+        double GlobalControlLevel { get; set; }
+        WorldStatus WorldStatus { get; set; }
     }
 }

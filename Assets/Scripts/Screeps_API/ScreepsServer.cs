@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Screeps_API;
+using Screeps3D;
 using System;
 using System.Collections.Generic;
 
@@ -104,6 +105,9 @@ namespace Screeps_API
         public Dictionary<string, string> Features { get; set; } = new Dictionary<string, string>();
 
         public ScreepsUser Me { get; set; }
+
+        public double GlobalControlLevel { get; set; }
+        public WorldStatus WorldStatus { get; set; }
     }
 
 

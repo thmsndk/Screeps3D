@@ -8,6 +8,8 @@ using UnityEngine.Events;
 using System.Text;
 using System.Linq;
 using Assets.Scripts.Screeps3D;
+using TMPro;
+using Assets.Scripts.Screeps_API.ConsoleClientAbuse;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -30,6 +32,8 @@ namespace Screeps3D.Menus.ServerList
         public Text ShardNames;
 
         public TooltipTrigger tooltipTrigger;
+
+        public TooltipTrigger BadgeTooltip;
 
         public BadgeAndLabel badge;
 
@@ -104,6 +108,35 @@ namespace Screeps3D.Menus.ServerList
             PackageVersionLabel.text = server.Meta.Version;
 
             this.badge.SetOwner(server.Meta.Me);
+            // set GCL
+            //gclLevel.text = server.Meta.GlobalControlLevel.ToString();
+            //gclLevel.enabled = server.Meta.GlobalControlLevel >= 1;
+
+
+            var worldStatusColor = "#FFFFFF";
+            var worldStatusDescription = string.Empty;
+            switch (server.Meta.WorldStatus)
+            {
+                case WorldStatus.None:
+                    break;
+                case WorldStatus.Normal:
+                    worldStatusColor = "#32a852"; //green
+                    worldStatusDescription = " - Everything is fine";
+                    break;
+                case WorldStatus.Lost:
+                    worldStatusColor = "#f3f70c"; // yellow
+                    worldStatusDescription = " - Currently have no spawns";
+                    break;
+                case WorldStatus.Empty:
+                    worldStatusColor = "#d11111"; // red
+                    worldStatusDescription = " - Respawned, place spawn";
+                    break;
+                default:
+                    break;
+            }
+            
+            BadgeTooltip.Header = $"<size=25><b><color={worldStatusColor}>{server.Meta.WorldStatus}</color></b></size>";
+            BadgeTooltip.Content = $"{worldStatusDescription}\n\n<b>Global Control Level:</b> {server.Meta.GlobalControlLevel}";
         }
 
         internal void SetSelectedState(IScreepsServer server)

@@ -218,6 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6278283663074396843}
   - component: {fileID: 7906235426404364064}
+  - component: {fileID: 8060901239657790173}
   m_Layer: 5
   m_Name: BadgeContainer
   m_TagString: Untagged
@@ -260,6 +261,18 @@ MonoBehaviour:
   Name: {fileID: 0}
   Badge: {fileID: 296104554548290749}
   BadgeMask: {fileID: 0}
+--- !u!114 &8060901239657790173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002310869335554948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac22ed4f8a4fa841a23045d0fbdcb67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2044547610945073271
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +625,9 @@ MonoBehaviour:
   PackageVersionLabel: {fileID: 2385657124660562117}
   ShardNames: {fileID: 5433435889648447228}
   tooltipTrigger: {fileID: 8058509818921312033}
+  BadgeTooltip: {fileID: 8060901239657790173}
   badge: {fileID: 7906235426404364064}
+  gclLevel: {fileID: 0}
   onServerSelected:
     m_PersistentCalls:
       m_Calls: []
