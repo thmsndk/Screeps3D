@@ -6,6 +6,8 @@ namespace Screeps_API
 {
     public class ScreepsServer : IScreepsServer
     {
+        public string AuthToken { get; set; }
+
         public string Key { get; set; }
         public string Name { get; set; }
         public Address Address { get; } = new Address();
@@ -100,6 +102,8 @@ namespace Screeps_API
 
         public List<string> ShardNames { get; set; } = new List<string>();
         public Dictionary<string, string> Features { get; set; } = new Dictionary<string, string>();
+
+        public ScreepsUser Me { get; set; }
     }
 
 

@@ -7,6 +7,7 @@ using System;
 using UnityEngine.Events;
 using System.Text;
 using System.Linq;
+using Assets.Scripts.Screeps3D;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -29,6 +30,8 @@ namespace Screeps3D.Menus.ServerList
         public Text ShardNames;
 
         public TooltipTrigger tooltipTrigger;
+
+        public BadgeAndLabel badge;
 
         public OnServerSelected onServerSelected;
         public IScreepsServer Server { get; private set; }
@@ -99,6 +102,8 @@ namespace Screeps3D.Menus.ServerList
             }
 
             PackageVersionLabel.text = server.Meta.Version;
+
+            this.badge.SetOwner(server.Meta.Me);
         }
 
         internal void SetSelectedState(IScreepsServer server)

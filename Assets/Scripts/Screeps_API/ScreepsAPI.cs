@@ -35,7 +35,7 @@ namespace Screeps_API
 
         public static long Time { get; internal set; }
         public static bool IsConnected { get; private set; }
-        
+
         public static event Action<bool> OnConnectionStatusChange;
         public static event Action<long> OnTick;
         public static event Action OnShutdown;
@@ -64,9 +64,9 @@ namespace Screeps_API
         public void Connect(IScreepsServer server)
         {
             Server = server;
-            
+
             // configure HTTP
-            Http.Auth(o =>
+            Http.Auth(server, o =>
             {
                 NotifyText.Message("Success", Color.green, 1);
                 Socket.Connect();
@@ -88,11 +88,11 @@ namespace Screeps_API
 
         internal void UpdateTime(long currentTime)
         {
-            if(currentTime == Time)
+            if (currentTime == Time)
             {
                 return;
             }
-            if(currentTime - Time > 1)
+            if (currentTime - Time > 1)
             {
                 Debug.LogWarning("Lost ticks count: " + (currentTime - Time));
             }
@@ -145,7 +145,7 @@ namespace Screeps_API
                     yield return new WaitForSeconds(1);
                 }
 
-                Http.Request("GET", "/api/user/world-start-room", null, GetShardSetTime);
+                Http.Request("GET", "/api/user/world-start-room", body: null, onSuccess: GetShardSetTime);
             }
         }
 
@@ -166,7 +166,7 @@ namespace Screeps_API
 
                 WorldStartRooms = worldStartRooms.list.Select(x => x.str).ToList();
 
-                Http.Request("GET", $"/api/game/time?shard={shard}", null, SetTime);
+                Http.Request("GET", $"/api/game/time?shard={shard}", body: null, onSuccess: SetTime);
             }
         }
 
@@ -176,7 +176,7 @@ namespace Screeps_API
             var timeData = new JSONObject(obj)["time"];
             if (timeData != null)
             {
-                Time = (int) timeData.n;
+                Time = (int)timeData.n;
                 //Debug.Log($"time/tick is now {Time}");
             }
         }

@@ -55,7 +55,7 @@ namespace Screeps_API
             try
             {
                 Debug.Log("Socket Open");
-                Socket.Send(string.Format("auth {0}", ScreepsAPI.Http.Token));
+                Socket.Send(string.Format("auth {0}", ScreepsAPI.Server.AuthToken));
                 if (OnOpen != null) OnOpen.Invoke(e);
             } catch (Exception exception)
             {

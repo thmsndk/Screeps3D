@@ -20,9 +20,13 @@ namespace Assets.Scripts.Screeps3D
         {
             if (user != null)
             {
-                Name.enabled = true;
+                if (Name != null)
+                {
+                    Name.enabled = true;
+                    Name.text = string.Format("{0}", user.Username); 
+                }
+
                 Badge.enabled = true;
-                Name.text = string.Format("{0}", user.Username);
                 if (user.Badge != null)
                 {
                     Badge.sprite = Sprite.Create(user.Badge,
@@ -35,7 +39,10 @@ namespace Assets.Scripts.Screeps3D
             }
             else
             {
-                Name.enabled = false;
+                if (Name != null)
+                {
+                    Name.enabled = false; 
+                }
                 Badge.enabled = false;
             }
         }

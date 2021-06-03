@@ -291,20 +291,20 @@ namespace Screeps3D.Rooms
                     var ownedRooms = shardRoomInfo.Where(r => r.Value.User != null && r.Value.User.UserId != Constants.InvaderUserId)
                         .Select(r => r.Value);
 
-                        if (ownedRooms.Any())
-                        {
-                            var random = new System.Random();
-                            var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                            var roomName = room?.RoomName;
+                    if (ownedRooms.Any())
+                    {
+                        var random = new System.Random();
+                        var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                        var roomName = room?.RoomName;
 
-                            Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-                            _roomInput.text = roomName;
-                            this.GetAndChooseRoom(roomName);
-                        }
-                        else
-                        {
-                            Debug.Log($"Could not find any owned rooms :/");
-                        }
+                        Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                        _roomInput.text = roomName;
+                        this.GetAndChooseRoom(roomName);
+                    }
+                    else
+                    {
+                        Debug.Log($"Could not find any owned rooms :/");
+                    }
                     //});
 
 
@@ -384,7 +384,7 @@ namespace Screeps3D.Rooms
                 //https://botarena.screepspl.us/api/experimental/pvp?interval=100
                 var body = new RequestBody();
                 body.AddField("interval", "100");
-                ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body, (jsonString) =>
+                ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body: body, onSuccess: (jsonString) =>
                 {
                     var obj = new JSONObject(jsonString);
                     var rooms = obj["pvp"][_shardInput.value]["rooms"].list;
@@ -409,7 +409,7 @@ namespace Screeps3D.Rooms
 
 
                     /*
-                     * {
+                    * {
                         "ok": 1,
                         "time": 43584,
                         "pvp": {
@@ -421,7 +421,7 @@ namespace Screeps3D.Rooms
                                 }
                             }
                         }
-                     */
+                    */
                 });
 
             }

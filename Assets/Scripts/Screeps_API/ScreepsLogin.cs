@@ -357,8 +357,9 @@ namespace Screeps_API
         {
             // Get status of servers, should probably be async for each server and a coroutine.
             // Need to double wrap it to keep a reference to the server
-            ScreepsAPI.Server = server; // TODO: Currently all ScreepsAPI.Http calls utilize this server property, we need a ScreepsAPI.Http(server).GetVersion... ability
+
             server.Online = null;
+
             Action<string> queryServerInfoCallback = str =>
             {
                 UpdateServerVersionInfo(server, str);
@@ -386,8 +387,27 @@ namespace Screeps_API
                 UpdateServerList();
             };
 
-            var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, noNotification: true);
+            var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, server, noNotification: true);
             //stuff.Current
+
+            Action<string> queryAuthMeCallback = str =>
+            {
+                UpdateServerAuthInfo(server, str);
+
+                UpdateServerList();
+            };
+
+            if (server.Credentials.HasCredentials)
+            {
+                ScreepsAPI.Http.GetUser(queryAuthMeCallback, server, noNotification: true); 
+            }
+        }
+        
+        private static void UpdateServerAuthInfo(IScreepsServer server, string str)
+        {
+            var obj = new JSONObject(str);
+            var me = ScreepsAPI.UserManager.CacheUser(obj);
+            server.Meta.Me = me;
         }
 
         private static void UpdateServerVersionInfo(IScreepsServer server, string str)

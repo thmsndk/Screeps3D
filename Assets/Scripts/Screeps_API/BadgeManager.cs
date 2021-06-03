@@ -13,9 +13,9 @@ namespace Screeps_API
     public class BadgeManager : MonoBehaviour
     {
         public const int BADGE_SIZE = 250;
-        
+
         public Texture2D Invader { get; private set; }
-        
+
         private BadgePathGenerator _badgePaths = new BadgePathGenerator();
         private BadgeColorGenerator _badgeColors = new BadgeColorGenerator();
         private Dictionary<string, Texture2D> _badges;
@@ -60,7 +60,7 @@ namespace Screeps_API
             var body = new RequestBody();
             body.AddField("username", username);
 
-            ScreepsAPI.Http.Request("GET", "/api/user/badge-svg", body, xml =>
+            ScreepsAPI.Http.Request("GET", "/api/user/badge-svg", body: body, onSuccess: xml =>
             {
                 _badges[username] = Texturize(xml);
                 callback(_badges[username]);

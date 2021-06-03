@@ -19,6 +19,11 @@ namespace Screeps_API
         public IScreepsServerMetaData Meta { get; }
         
         public bool HasCredentials { get; }
+
+        /// <summary>
+        /// The token we use to authenticate Http requests with
+        /// </summary>
+        string AuthToken { get; set; }
     }
 
     public interface IScreepsServerMetaData
@@ -33,5 +38,6 @@ namespace Screeps_API
         /// A dictionary with they key being the modname and the value being version
         /// </summary>
         Dictionary<string, string> Features { get; set; }
+        ScreepsUser Me { get; set; }
     }
 }
