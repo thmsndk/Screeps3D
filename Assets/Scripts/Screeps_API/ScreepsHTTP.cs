@@ -102,7 +102,7 @@ namespace Screeps_API
                     {
                         if (outcome.responseCode == 404)
                         {
-                            Debug.LogError("404 received, returning");
+                            Debug.LogError($"{outcome.uri} 404 received, returning");
                             return;
                         }
 
