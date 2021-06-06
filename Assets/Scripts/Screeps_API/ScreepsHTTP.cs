@@ -91,15 +91,21 @@ namespace Screeps_API
                         NotifyText.Message(string.Format("HTTP: error ({1}), reason: {0}", outcome.error,
                             outcome.responseCode));
                     }
-                    
+
                     Debug.Log(string.Format("HTTP: error ({1}), reason: {0}", outcome.error, outcome.responseCode));
-                    
+
                     if (onError != null)
                     {
                         onError();
                     }
                     else
                     {
+                        if (outcome.responseCode == 404)
+                        {
+                            Debug.LogError("404 received, returning");
+                            return;
+                        }
+
                         if (skipAuth)
                         {
                             Request(requestMethod, path, server, body, onSuccess);
