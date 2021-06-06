@@ -158,6 +158,12 @@ namespace Screeps3D.Rooms
                     yield return new WaitForSeconds(1);
                 }
 
+                // quick fix for /api/user/rooms not existing in xxscreeps? this needs to be reworked either way.
+                foreach (var shard in ScreepsAPI.ShardInfo.ShardInfo)
+                {
+                    _shards.Add(shard.Key);
+                }
+
                 ScreepsAPI.Http.GetRooms(ScreepsAPI.Me.UserId, InitializeChooser);
             }
             else
