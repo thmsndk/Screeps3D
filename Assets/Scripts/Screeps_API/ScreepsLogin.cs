@@ -424,9 +424,13 @@ namespace Screeps_API
             var GCL_POW = 2.4;
             var GCL_MULTIPLY = 1000000;
 
-            var gcl = (int)obj["gcl"].n;
-            var gclLevel = Math.Floor(Math.Pow((gcl) / GCL_MULTIPLY, 1 / GCL_POW)) + 1;
-            server.Meta.GlobalControlLevel = gclLevel;
+            var gclObject = obj["gcl"];
+            if (gclObject != null && !gclObject.IsNull)
+            {
+                var gcl = (int)obj["gcl"].n;
+                var gclLevel = Math.Floor(Math.Pow((gcl) / GCL_MULTIPLY, 1 / GCL_POW)) + 1;
+                server.Meta.GlobalControlLevel = gclLevel;
+            }
         }
 
         private static void UpdateServerVersionInfo(IScreepsServer server, string str)
