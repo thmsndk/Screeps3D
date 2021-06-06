@@ -124,7 +124,21 @@ namespace Screeps_API
                 }
                 else
                 {
-                    // Debug.Log(string.Format("HTTP: success, data: \n{0}", outcome.downloadHandler.text));
+                    // Update token from response header
+                    if (responseHeaders != null)
+                    {
+                        var xTokenHeader = responseHeaders.Where(x => x.Key.StartsWith("X-Token"));
+
+                        if (xTokenHeader.Any())
+                        {
+                            foreach (var header in xTokenHeader)
+                            {
+                                server.AuthToken = header.Value;
+                            }
+                        }
+                    }
+
+                    //Debug.Log(string.Format("HTTP: success, data: {0}\n{1}", outcome.url, outcome.downloadHandler.text));
                     if (outcome.downloadHandler.text.Contains("token"))
                     {
                         var reply = new JSONObject(outcome.downloadHandler.text);
@@ -132,7 +146,7 @@ namespace Screeps_API
                         if (token != null)
                         {
                             server.AuthToken = token.str;
-                            Debug.Log($"HTTP: found a token! {token.str}");
+                            //Debug.Log($"HTTP: found a token! {token.str}");
                         }
                     }
 
@@ -160,7 +174,7 @@ namespace Screeps_API
             onComplete(www);
         }
 
-        public void Auth(IScreepsServer server,Action<string> onSuccess, Action onError = null, bool noNotification = false)
+        public void Auth(IScreepsServer server, Action<string> onSuccess, Action onError = null, bool noNotification = false)
         {
             if (!string.IsNullOrEmpty(server.Credentials.Token))
             {
