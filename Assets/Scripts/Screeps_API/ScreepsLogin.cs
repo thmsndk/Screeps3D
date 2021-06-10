@@ -473,7 +473,7 @@ namespace Screeps_API
                     {
                         if (!feature.IsNull)
                         {
-                            server.Meta.Features.Add(feature["name"].ToString(), feature["version"].ToString());
+                            server.Meta.Features.Add(feature["name"].ToString().Trim('"'), feature["version"].ToString().Trim('"'));
                         }
                     }
                 }
@@ -482,7 +482,7 @@ namespace Screeps_API
             server.Online = true;
             // TODO: timestamp of online status?
             server.Meta.Users = users;
-            server.Meta.Version = "v" + (package != null ? package.n.ToString() : packageVersion.str);
+            server.Meta.Version = "v" + (packageVersion != null ? packageVersion.str : package.n.ToString());
         }
 
         private void UpdateServerList()

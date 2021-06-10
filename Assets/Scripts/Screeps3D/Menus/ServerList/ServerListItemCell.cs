@@ -23,23 +23,21 @@ namespace Screeps3D.Menus.ServerList
         public Image OnlineIndicator;
         public Text ServerNameLabel;
         public Text ServerAddressHostLabel;
-        public Text ServerAddressPortLabel;
-        public Toggle ServerAddressSSLToggle;
         public Text UserCountLabel;
         public Text LikesLabel;
         public Text PackageVersionLabel;
-
-        public Text ShardNames;
 
         public TooltipTrigger tooltipTrigger;
 
         public TooltipTrigger BadgeTooltip;
 
+        public TooltipTrigger WarningTooltip;
+
         public BadgeAndLabel badge;
 
         public OnServerSelected onServerSelected;
         public IScreepsServer Server { get; private set; }
-        
+
         private Image buttonImage;
 
         void Start()
@@ -58,7 +56,7 @@ namespace Screeps3D.Menus.ServerList
         internal void SetServer(IScreepsServer server)
         {
             this.Server = server;
-           
+
             OnlineIndicator.color = server.Online.HasValue ? server.Online.Value ? Color.green : Color.red : Color.yellow;
 
             ServerNameLabel.text = server.Name ?? server.Address.HostName; // TODO: perhaps a tooltip on hover with server address?
@@ -134,9 +132,48 @@ namespace Screeps3D.Menus.ServerList
                 default:
                     break;
             }
-            
+
             BadgeTooltip.Header = $"<size=25><b><color={worldStatusColor}>{server.Meta.WorldStatus}</color></b></size>";
             BadgeTooltip.Content = $"{worldStatusDescription}\n\n<b>Global Control Level:</b> {server.Meta.GlobalControlLevel}";
+
+
+            var warningMessage = new StringBuilder();
+
+            if (!server.Official && server.Online.HasValue && server.Online.Value)
+            {
+                if (server.Meta.Version != null && server.Meta.Version.Contains("xxscreeps"))
+                {
+                    warningMessage.AppendLine("<b>xxscreeps</b> is not fully supported yet, some features might not work.");
+                }
+
+                var hasAdminUtils = server.Meta.Features.ContainsKey("screepsmod-admin-utils");
+
+                if (!hasAdminUtils)
+                {
+                    warningMessage.AppendLine("<b>screepsmod-admin-utils</b> is required on the server for a proper experience");
+                }
+
+                var hasAuthMod = server.Meta.Features.ContainsKey("screepsmod-auth");
+
+                if (!hasAuthMod)
+                {
+                    warningMessage.AppendLine("<b>screepsmod-auth</b> is required on the server to be able to connect!");
+                }
+
+                if (warningMessage.Length > 0)
+                {
+                    WarningTooltip.gameObject.SetActive(true);
+                    WarningTooltip.Content = warningMessage.ToString();
+                }
+                else
+                {
+                    WarningTooltip.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                WarningTooltip.gameObject.SetActive(false);
+            }
         }
 
         internal void SetSelectedState(IScreepsServer server)
