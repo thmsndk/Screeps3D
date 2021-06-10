@@ -35,9 +35,9 @@ namespace Screeps3D.World.Views
 
         private static event EventHandler<bool> OnEnableMapVisuals;
 
-        private static bool _ENABLE_MAP_VISUALS = true;
+        private static bool _ENABLE_MAP_VISUALS = false;
 
-        [Setting("Overlay/(WIP) Map Visuals", "Enable")]
+        [Setting("Overlay/(WIP) Map Visuals - Can cause crashes with large visuals", "Enable")]
         private static bool ENABLE_INTEGRATION
         {
             get => _ENABLE_MAP_VISUALS; set
