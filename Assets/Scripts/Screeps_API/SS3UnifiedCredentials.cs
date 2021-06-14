@@ -246,10 +246,11 @@ namespace Assets.Scripts.Screeps_API
             yamlServer.Host = server.Address.HostName;
             yamlServer.Port = server.Address.Port;
 
-            if (server.Address.Port == "443" || server.Address.Port == "21025")
-            {
-                yamlServer.Port = null;
-            }
+            // Persist port, even if "default"
+            //if (server.Address.Port == "443" || server.Address.Port == "21025")
+            //{
+            //    yamlServer.Port = null;
+            //}
 
             yamlServer.Path = server.Address.Path;
             
@@ -277,6 +278,7 @@ namespace Assets.Scripts.Screeps_API
                 .Build();
             var yaml = serializer.Serialize(document);
 
+            // TODO: backup of config?
             File.WriteAllText(configPath, yaml);
 
         }
