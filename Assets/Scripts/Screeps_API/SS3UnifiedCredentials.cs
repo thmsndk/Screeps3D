@@ -207,9 +207,9 @@ namespace Assets.Scripts.Screeps_API
 
         public static void SaveServer(IScreepsServer server, string oldKey = null, bool persistCredentials = false)
         {
-            var configPath = GetScreepsConfigFilePath();
+            var configFilePath = GetScreepsConfigFilePath();
 
-            Debug.Log($"Found config at {configPath}"); // TODO: handle a case where there is no config, throw exception?
+            Debug.Log($"Found config at {configFilePath}"); // TODO: handle a case where there is no config, throw exception?
 
             var deserializer = new DeserializerBuilder()
                 //.WithNamingConvention(new CamelCaseNamingConvention())
@@ -217,9 +217,9 @@ namespace Assets.Scripts.Screeps_API
 
             var document = new SS3UnifiedCredentialsDocument() { Servers = new Dictionary<string, SS3UnifiedCredentialsServer>() };
 
-            if (File.Exists(configPath))
+            if (File.Exists(configFilePath))
             {
-                using (var reader = File.OpenText(configPath))
+                using (var reader = File.OpenText(configFilePath))
                 {
                     document = deserializer.Deserialize<SS3UnifiedCredentialsDocument>(reader);
                     if (document == null)
@@ -278,8 +278,13 @@ namespace Assets.Scripts.Screeps_API
                 .Build();
             var yaml = serializer.Serialize(document);
 
-            // TODO: backup of config?
-            File.WriteAllText(configPath, yaml);
+            if (File.Exists(configFilePath))
+            {
+                var filename = Path.GetFileName(configFilePath);
+                File.Copy(configFilePath, configFilePath.Replace(filename, filename + $".{DateTime.Now:yyyyMMddHHmm}.bak"));
+            }
+
+            File.WriteAllText(configFilePath, yaml);
 
         }
 
