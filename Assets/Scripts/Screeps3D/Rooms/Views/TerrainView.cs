@@ -217,7 +217,7 @@ namespace Screeps3D.Rooms.Views
             return Y;
         }
 
-        private void generateWalls2()
+        private void generateWallsAndTerrain()
         {
             // calculate wall depth
             var wallDepth = new int[50, 50];
@@ -272,7 +272,7 @@ namespace Screeps3D.Rooms.Views
                     }
                     else
                     {
-                        wallHeight[x, y] = 0.0f;
+                        wallHeight[x, y] = -0.6f;
                     }
                 }
             foreach (var pos in _sourcePositions)
@@ -310,40 +310,68 @@ namespace Screeps3D.Rooms.Views
 
 
             // make mesh
-            var wallCount = 0;
-            for (int x = 0; x < 50; ++x)
-                for (int y = 0; y < 50; ++y)
-                    if (_wallPositions[x, y])
-                        ++wallCount;
+            var wallCount = 50 * 50;
+            // for (int x = 0; x < 50; ++x)
+            //     for (int y = 0; y < 50; ++y)
+            //         if (_wallPositions[x, y])
+            //             ++wallCount;
             const int quadsPerWall = 5;
-            int vertCount = wallCount * 4 * quadsPerWall;
-            int triangleCount = wallCount * 6 * quadsPerWall;
+            int wallVertCount = wallCount * 4 * quadsPerWall;
+            int wallTriangleCount = wallCount * 6 * quadsPerWall;
 
-            var vertices = new Vector3[vertCount];
-            var uv = new Vector2[vertCount];
-            var triangles = new int[triangleCount];
+            var wallVertices = new Vector3[wallVertCount];
+            var wallUV = new Vector2[wallVertCount];
+            var wallTriangles = new int[wallTriangleCount];
 
-            var index = 0;
-            var tIndex = 0;
+            var wallIndex = 0;
+            var wallTriIndex = 0;
 
-            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (Vector3 A, Vector3 B, Vector3 C, Vector3 D) =>
+            Action<Vector3, Vector3, Vector3, Vector3> addWallQuad = (Vector3 A, Vector3 B, Vector3 C, Vector3 D) =>
             {
-                vertices[index] = A;
-                vertices[index + 1] = B;
-                vertices[index + 2] = C;
-                vertices[index + 3] = D;
-                uv[index] = new Vector2(0, 0);
-                uv[index + 1] = new Vector2(0, 1);
-                uv[index + 2] = new Vector2(1, 0);
-                uv[index + 3] = new Vector2(1, 1);
-                triangles[tIndex] = index;
-                triangles[tIndex + 1] = index + 1;
-                triangles[tIndex + 2] = index + 2;
-                triangles[tIndex + 3] = index + 3;
-                triangles[tIndex + 4] = index + 2;
-                triangles[tIndex + 5] = index + 1;
-                index += 4;
-                tIndex += 6;
+                wallVertices[wallIndex] = A;
+                wallVertices[wallIndex + 1] = B;
+                wallVertices[wallIndex + 2] = C;
+                wallVertices[wallIndex + 3] = D;
+                wallUV[wallIndex] = new Vector2(0, 0);
+                wallUV[wallIndex + 1] = new Vector2(0, 1);
+                wallUV[wallIndex + 2] = new Vector2(1, 0);
+                wallUV[wallIndex + 3] = new Vector2(1, 1);
+                wallTriangles[wallTriIndex] = wallIndex;
+                wallTriangles[wallTriIndex + 1] = wallIndex + 1;
+                wallTriangles[wallTriIndex + 2] = wallIndex + 2;
+                wallTriangles[wallTriIndex + 3] = wallIndex + 3;
+                wallTriangles[wallTriIndex + 4] = wallIndex + 2;
+                wallTriangles[wallTriIndex + 5] = wallIndex + 1;
+                wallIndex += 4;
+                wallTriIndex += 6;
+            };
+
+            const int quadsPerTerrain = 5;
+
+            var terrainVertices = new Vector3[wallVertCount];
+            var terrainUV = new Vector2[wallVertCount];
+            var terrainTriangles = new int[wallTriangleCount];
+
+            var terrainIndex = 0;
+            var terrainTriIndex = 0;
+            Action<Vector3, Vector3, Vector3, Vector3> addTerrainQuad = (Vector3 A, Vector3 B, Vector3 C, Vector3 D) =>
+            {
+                terrainVertices[terrainIndex] = A;
+                terrainVertices[terrainIndex + 1] = B;
+                terrainVertices[terrainIndex + 2] = C;
+                terrainVertices[terrainIndex + 3] = D;
+                terrainUV[terrainIndex] = new Vector2(0, 0);
+                terrainUV[terrainIndex + 1] = new Vector2(0, 1);
+                terrainUV[terrainIndex + 2] = new Vector2(1, 0);
+                terrainUV[terrainIndex + 3] = new Vector2(1, 1);
+                terrainTriangles[terrainTriIndex] = terrainIndex;
+                terrainTriangles[terrainTriIndex + 1] = terrainIndex + 1;
+                terrainTriangles[terrainTriIndex + 2] = terrainIndex + 2;
+                terrainTriangles[terrainTriIndex + 3] = terrainIndex + 3;
+                terrainTriangles[terrainTriIndex + 4] = terrainIndex + 2;
+                terrainTriangles[terrainTriIndex + 5] = terrainIndex + 1;
+                terrainIndex += 4;
+                terrainTriIndex += 6;
             };
 
             for (int x = 0; x < 50; ++x)
@@ -355,33 +383,66 @@ namespace Screeps3D.Rooms.Views
                         float h2;
                         var z = 49 - y;
 
-                        addQuad(
+                        addWallQuad(
                             new Vector3(x, h, z),
                             new Vector3(x, h, z + 1),
                             new Vector3(x + 1, h, z),
                             new Vector3(x + 1, h, z + 1));
 
-                        h2 = x > 0 ? wallHeight[x - 1, y] : 0.0f;
-                        addQuad(
+                        h2 = x > 0 ? wallHeight[x - 1, y] : -0.6f;
+                        addWallQuad(
                             new Vector3(x, h, z + 1),
                             new Vector3(x, h, z),
                             new Vector3(x, h2, z + 1),
                             new Vector3(x, h2, z));
-                        h2 = x < 49 ? wallHeight[x + 1, y] : 0.0f;
-                        addQuad(
+                        h2 = x < 49 ? wallHeight[x + 1, y] : -0.6f;
+                        addWallQuad(
                             new Vector3(x + 1, h, z),
                             new Vector3(x + 1, h, z + 1),
                             new Vector3(x + 1, h2, z),
                             new Vector3(x + 1, h2, z + 1));
 
-                        h2 = y > 0 ? wallHeight[x, y - 1] : 0.0f;
-                        addQuad(
+                        h2 = y > 0 ? wallHeight[x, y - 1] : -0.6f;
+                        addWallQuad(
                             new Vector3(x + 1, h, z + 1),
                             new Vector3(x, h, z + 1),
                             new Vector3(x + 1, h2, z + 1),
                             new Vector3(x, h2, z + 1));
-                        h2 = y < 49 ? wallHeight[x, y + 1] : 0.0f;
-                        addQuad(
+                        h2 = y < 49 ? wallHeight[x, y + 1] : -0.6f;
+                        addWallQuad(
+                            new Vector3(x, h, z),
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x, h2, z),
+                            new Vector3(x + 1, h2, z));
+                    }
+                    else if (!_swampPositions[x, y])
+                    {
+                        float h = UnityEngine.Random.Range(-0.05f, 0.02f);
+                        float h2 = -0.3f;
+                        var z = 49 - y;
+
+                        addTerrainQuad(
+                            new Vector3(x, h, z),
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x + 1, h, z + 1));
+
+                        addTerrainQuad(
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x, h, z),
+                            new Vector3(x, h2, z + 1),
+                            new Vector3(x, h2, z));
+                        addTerrainQuad(
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x + 1, h, z + 1),
+                            new Vector3(x + 1, h2, z),
+                            new Vector3(x + 1, h2, z + 1));
+                        addTerrainQuad(
+                            new Vector3(x + 1, h, z + 1),
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x + 1, h2, z + 1),
+                            new Vector3(x, h2, z + 1));
+                        addTerrainQuad(
                             new Vector3(x, h, z),
                             new Vector3(x + 1, h, z),
                             new Vector3(x, h2, z),
@@ -389,22 +450,30 @@ namespace Screeps3D.Rooms.Views
                     }
                 }
 
-            Mesh mesh = new Mesh();
-            mesh.Clear();
-            mesh.vertices = vertices;
-            mesh.uv = uv;
-            mesh.triangles = triangles;
-            mesh.RecalculateNormals();
+            Mesh wallMesh = new Mesh();
+            wallMesh.Clear();
+            wallMesh.vertices = wallVertices;
+            wallMesh.uv = wallUV;
+            wallMesh.triangles = wallTriangles;
+            wallMesh.RecalculateNormals();
+            _wallMesh.mesh = wallMesh;
 
-            _wallMesh.mesh = mesh;
+            Mesh terrainMesh = new Mesh();
+            terrainMesh.Clear();
+            terrainMesh.vertices = terrainVertices;
+            terrainMesh.uv = terrainUV;
+            terrainMesh.triangles = terrainTriangles;
+            terrainMesh.RecalculateNormals();
+            _terrainMesh.mesh = terrainMesh;
         }
 
-        private void generateTerrain() {
+        private void generateTerrain()
+        {
             const float terrainSwampHole = -0.3f;
             const float swampRandom = 0.0f;
 
             // swamps
-            var vertices = _terrainMesh.mesh.vertices;
+            var vertices = _terrainMesh.sharedMesh.vertices;
             for (var i = 0; i < vertices.Length; i++)
             {
                 var point = vertices[i];
@@ -424,16 +493,16 @@ namespace Screeps3D.Rooms.Views
 
                 vertices[i] = new Vector3(point.x, terrainSwampHole + UnityEngine.Random.value * swampRandom, point.z);
             }
-            _terrainMesh.mesh.vertices = vertices;
-            _terrainMesh.mesh.RecalculateNormals();
+            _terrainMesh.sharedMesh.vertices = vertices;
+            _terrainMesh.sharedMesh.RecalculateNormals();
         }
 
         private void Deform()
         {
             // generateSwamps();
-            generateTerrain();
+            // generateTerrain();
             // generateWalls1();
-            generateWalls2();
+            generateWallsAndTerrain();
 
             _wallPositions = null;
             _swampPositions = null;
