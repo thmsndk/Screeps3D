@@ -1,4 +1,9 @@
 ﻿using System.Collections.Generic;
+using Common;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects
 {
@@ -15,6 +20,62 @@ namespace Screeps3D.RoomObjects
             Store = new Dictionary<string, float>();
             Capacity = new Dictionary<string, float>();
         }
+
+        public Texture2D CreateStorageTexture()
+        {
+            this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            List<string> resources = new List<string>(this.Store.Keys);
+
+            int height = 1000;
+            int width = 10;
+            float yStep = 0.01f;
+
+            int resourceIndex = 0;
+            float percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+            float nextResourceAt = 1000 * percent;
+            Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+
+            Texture2D texture = new Texture2D(width, height);
+            Debug.LogError("Resources to draw " + resources.Count);
+            Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+            for (int y = 0; y < height; y++)
+            {
+                if (y >= nextResourceAt)
+                {
+                    resourceIndex += 1;
+                    if (resourceIndex >= resources.Count)
+                    {
+                        resourceIndex -= 1;
+                        nextResourceAt = height + 1;
+                    }
+                    else
+                    {
+                        percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+                        nextResourceAt = y + 1000 * percent;
+                    }
+                    color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+                    Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+                }
+
+                for (int x = 0; x < Mathf.CeilToInt(width); x++)
+                {
+                    texture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
+                }
+            }
+            texture.Apply();
+            return texture;
+        }
+
+        public Texture getLastStoreKeyTexture()
+        {
+            List<string> resources = new List<string>(this.Store.Keys);
+            Texture2D texture = new Texture2D(1, 1);
+            texture.SetPixel(1, 1, Constants.GetComplexResourceColor(resources[resources.Count - 1]));
+            texture.Apply();
+            return texture;
+        }
+
+
 
         internal override void Unpack(JSONObject data, bool initial)
         {

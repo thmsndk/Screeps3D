@@ -160,6 +160,7 @@ namespace Screeps3D
             {"other", new Color32(204, 204, 204, 255)},
             {"energy", new Color32(118, 93, 0, 255)},
             {"power", new Color32(255, 0, 0, 255)},
+            {"battery", new Color32(217, 213, 0, 255)},
             // MINERALS
             {Constants.BaseMineral.Hydrogen, new   Color32(205,205,205,255)},
             {Constants.BaseMineral.Oxygen, new   Color32(205,205,205,255)},
