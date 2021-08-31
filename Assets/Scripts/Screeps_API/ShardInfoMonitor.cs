@@ -43,13 +43,13 @@ namespace Assets.Scripts.Screeps_API
             {
                 yield return new WaitForSeconds(5);
             }
-            while (ScreepsAPI.Cache.ShardNames == null)
+            while (ScreepsAPI.Server.Meta.ShardNames == null || !ScreepsAPI.Server.Meta.ShardNames.Any())
             {
                 Debug.Log("Waiting for ShardNames");
                 yield return new WaitForSeconds(1);
             }
             Debug.Log("ShardInfoMonitor populating shardnames from cache");
-            foreach (var shardName in ScreepsAPI.Cache.ShardNames)
+            foreach (var shardName in ScreepsAPI.Server.Meta.ShardNames)
             {
                 if (shardName != null)
                 {
@@ -62,73 +62,73 @@ namespace Assets.Scripts.Screeps_API
             {
                 // screeps-admin-utils adds this endpoint, it does not exist on a default server installation, it does exist on mmo though.
                 // Yield return here seems broken, is it because of the callback? or because i've made a faulty return type on requests?
-                ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", null, (jsonShardInfo) =>
-                {
-                    // tickrates and such, what about private servers?
-                    var shardInfoData = new JSONObject(jsonShardInfo);
-                    //Debug.LogError(shardInfoData);
+                ScreepsAPI.Http.Request("GET", $"/api/game/shards/info", body: null, onSuccess: (jsonShardInfo) =>
+                  {
+                      // tickrates and such, what about private servers?
+                      var shardInfoData = new JSONObject(jsonShardInfo);
+                      //Debug.LogError(shardInfoData);
 
-                    var shardsData = shardInfoData["shards"];
-                    if (shardsData == null)
-                    {
-                        Debug.LogError("no shards foound? " + jsonShardInfo); // we recieved an empty jsonShardInfo object
-                        return;
-                    }
+                      var shardsData = shardInfoData["shards"];
+                      if (shardsData == null)
+                      {
+                          Debug.LogError("no shards foound? " + jsonShardInfo); // we recieved an empty jsonShardInfo object
+                          return;
+                      }
 
-                    var shards = shardsData.list;
-                    foreach (var shard in shards)
-                    {
-                        //var shardTick = shard["tick"];
-                        //var tickRateString = shardTick != null ? shardTick.n : 0;
+                      var shards = shardsData.list;
+                      foreach (var shard in shards)
+                      {
+                          //var shardTick = shard["tick"];
+                          //var tickRateString = shardTick != null ? shardTick.n : 0;
 
-                        var shardNameObject = shard["name"];
+                          var shardNameObject = shard["name"];
 
-                        if (shardNameObject == null || shardNameObject.IsNull)
-                        {
-                            return;
-                        }
+                          if (shardNameObject == null || shardNameObject.IsNull)
+                          {
+                              return;
+                          }
 
-                        var shardName = shardNameObject.str;
-                        if (!ShardInfo.TryGetValue(shardName, out var shardInfo))
-                        {
-                            shardInfo = new ShardInfoDto();
-                            ShardInfo.Add(shardName, shardInfo);
-                        }
+                          var shardName = shardNameObject.str;
+                          if (!ShardInfo.TryGetValue(shardName, out var shardInfo))
+                          {
+                              shardInfo = new ShardInfoDto();
+                              ShardInfo.Add(shardName, shardInfo);
+                          }
 
-                        shardInfo.Update(shard);
+                          shardInfo.Update(shard);
 
-                        var time = ScreepsAPI.Time;
+                          var time = ScreepsAPI.Time;
 
-                        if (!ShardTicker.TryGetValue(shardName, out var ticker))
-                        {
-                            ticker = SimulateTick(shardName, shardInfo);
-                            ShardTicker.Add(shardName, ticker);
-                            StartCoroutine(ticker);
-                        }
+                          if (!ShardTicker.TryGetValue(shardName, out var ticker))
+                          {
+                              ticker = SimulateTick(shardName, shardInfo);
+                              ShardTicker.Add(shardName, ticker);
+                              StartCoroutine(ticker);
+                          }
 
-                        ScreepsAPI.Http.Request("GET", $"/api/game/time?shard={shardName}", null, (jsonTime) =>
-                        {
-                            var timeData = new JSONObject(jsonTime)["time"];
-                            if (timeData != null)
-                            {
-                                time = (long)timeData.n;
-                            }
+                          ScreepsAPI.Http.Request("GET", $"/api/game/time?shard={shardName}", body: null, onSuccess: (jsonTime) =>
+                          {
+                              var timeData = new JSONObject(jsonTime)["time"];
+                              if (timeData != null)
+                              {
+                                  time = (long)timeData.n;
+                              }
 
-                            if (ShardInfo.TryGetValue(shardName, out var shardInfo2))
-                            {
-                                shardInfo2.Time = time;
-                            }
-                            else
-                            {
+                              if (ShardInfo.TryGetValue(shardName, out var shardInfo2))
+                              {
+                                  shardInfo2.Time = time;
+                              }
+                              else
+                              {
                                 // Handle cases where server has not updated to latest admin-util yet.
                                 shardInfo2 = new ShardInfoDto();
-                                ShardInfo.Add(shardName, shardInfo2);
-                                shardInfo2.Time = time;
-                                shardInfo2.AverageTick = 1000;
-                            }
-                        });
-                    }
-                });
+                                  ShardInfo.Add(shardName, shardInfo2);
+                                  shardInfo2.Time = time;
+                                  shardInfo2.AverageTick = 1000;
+                              }
+                          });
+                      }
+                  });
 
                 yield return new WaitForSecondsRealtime(60);
             }

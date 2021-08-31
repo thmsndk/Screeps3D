@@ -13,30 +13,30 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
             get { return true; }
         }
 
-        public void Load(Action<IEnumerable<ServerCache>> callback)
+        public void Load(Action<IEnumerable<IScreepsServer>> callback)
         {
-            var serverList = new List<ServerCache>();
+            var serverList = new List<IScreepsServer>();
 
-            var publicServer = new ServerCache
+            var publicServer = new ScreepsServer("main")
             {
-                Type = SourceProviderType.Official,
+                Official = true,
                 Name = "Screeps.com",
                 Address = {HostName = "screeps.com", Path = "/", Port = "443", Ssl = true}
             };
             serverList.Add(publicServer);
 
-            var ptr = new ServerCache
+            var ptr = new ScreepsServer("ptr")
             {
-                Type = SourceProviderType.Official,
+                Official = true,
                 Name = "PTR Screeps.com",
                 Address = { HostName = "screeps.com", Path = "/ptr", Port = "443", Ssl = true }
             };
 
             serverList.Add(ptr);
 
-            var season = new ServerCache
+            var season = new ScreepsServer("season")
             {
-                Type = SourceProviderType.Official,
+                Official = true,
                 Name = "SEASONAL Screeps.com",
                 Address = { HostName = "screeps.com", Path = "/season", Port = "443", Ssl = true },
             };

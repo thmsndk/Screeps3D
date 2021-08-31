@@ -13,7 +13,10 @@ namespace Screeps_API
     [RequireComponent(typeof(ScreepsSocket))]
     public class ScreepsAPI : BaseSingleton<ScreepsAPI>
     {
-        public static ServerCache Cache { get; /*private*/ set; }
+        /// <summary>
+        /// The server you are currently connected too
+        /// </summary>
+        public static IScreepsServer Server { get; /*private*/ set; }
         public static ScreepsHTTP Http { get; private set; }
         public static ScreepsSocket Socket { get; private set; }
         public static ScreepsUser Me { get; private set; }
@@ -32,7 +35,7 @@ namespace Screeps_API
 
         public static long Time { get; internal set; }
         public static bool IsConnected { get; private set; }
-        
+
         public static event Action<bool> OnConnectionStatusChange;
         public static event Action<long> OnTick;
         public static event Action OnShutdown;
@@ -58,18 +61,19 @@ namespace Screeps_API
         }
 
         // Use this for initialization
-        public void Connect(ServerCache cache)
+        public void Connect(IScreepsServer server)
         {
-            Cache = cache;
-            
+            Server = server;
+
             // configure HTTP
-            Http.Auth(o =>
+            Http.Auth(server, o =>
             {
                 NotifyText.Message("Success", Color.green, 1);
                 Socket.Connect();
                 Http.GetUser(AssignUser);
             }, () =>
             {
+                NotifyText.Message("login failed", Color.red, 1);
                 Debug.Log("login failed");
             });
         }
@@ -84,11 +88,11 @@ namespace Screeps_API
 
         internal void UpdateTime(long currentTime)
         {
-            if(currentTime == Time)
+            if (currentTime == Time)
             {
                 return;
             }
-            if(currentTime - Time > 1)
+            if (currentTime - Time > 1)
             {
                 Debug.LogWarning("Lost ticks count: " + (currentTime - Time));
             }
@@ -141,7 +145,7 @@ namespace Screeps_API
                     yield return new WaitForSeconds(1);
                 }
 
-                Http.Request("GET", "/api/user/world-start-room", null, GetShardSetTime);
+                Http.Request("GET", "/api/user/world-start-room", body: null, onSuccess: GetShardSetTime);
             }
         }
 
@@ -162,7 +166,7 @@ namespace Screeps_API
 
                 WorldStartRooms = worldStartRooms.list.Select(x => x.str).ToList();
 
-                Http.Request("GET", $"/api/game/time?shard={shard}", null, SetTime);
+                Http.Request("GET", $"/api/game/time?shard={shard}", body: null, onSuccess: SetTime);
             }
         }
 
@@ -172,7 +176,7 @@ namespace Screeps_API
             var timeData = new JSONObject(obj)["time"];
             if (timeData != null)
             {
-                Time = (int) timeData.n;
+                Time = (int)timeData.n;
                 //Debug.Log($"time/tick is now {Time}");
             }
         }

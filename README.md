@@ -62,6 +62,8 @@ After installation you can open the project in unity, and in the asset menu you 
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. If there is an existing issue you would like to tackle, please mention that in the issue to allow others to collab with you :)
 
+You can also join the official screeps discord and participate in [#screeps3D](https://discord.gg/wt2rZ9VnDE)
+
 ## Feature Comparison with official client
 This is an attempt at a feature comparison table.
 

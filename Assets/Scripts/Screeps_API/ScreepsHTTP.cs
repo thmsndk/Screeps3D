@@ -12,8 +12,6 @@ namespace Screeps_API
 {
     public class ScreepsHTTP : MonoBehaviour
     {
-        public string Token { get; private set; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -26,13 +24,18 @@ namespace Screeps_API
         /// <param name="skipAuth"></param>
         /// <param name="noNotification">If true UI notification will not be displayed on error.</param>
         /// <returns></returns>
-        public IEnumerator<UnityWebRequestAsyncOperation> Request(string requestMethod, string path, RequestBody body = null,
+        public IEnumerator<UnityWebRequestAsyncOperation> Request(string requestMethod, string path, IScreepsServer server = null, RequestBody body = null,
             Action<string> onSuccess = null, Action onError = null, int timeout = 0, bool skipAuth = false, bool noNotification = false)
         {
+            if (server == null)
+            {
+                server = ScreepsAPI.Server;
+            }
+
             // TODO: all theese requests needs to be queued to not hit request limits
             //Debug.Log(string.Format("HTTP: attempting {0} to {1}", requestMethod, path));
             UnityWebRequest www;
-            var fullPath = path.StartsWith("/api") ? ScreepsAPI.Cache.Address.Http(path) : path;
+            var fullPath = path.StartsWith("/api") ? server.Address.Http(path) : path;
             if (requestMethod == UnityWebRequest.kHttpVerbGET)
             {
                 if (body != null)
@@ -88,22 +91,30 @@ namespace Screeps_API
                         NotifyText.Message(string.Format("HTTP: error ({1}), reason: {0}", outcome.error,
                             outcome.responseCode));
                     }
+
                     Debug.Log(string.Format("HTTP: error ({1}), reason: {0}", outcome.error, outcome.responseCode));
+
                     if (onError != null)
                     {
                         onError();
                     }
                     else
                     {
+                        if (outcome.responseCode == 404)
+                        {
+                            Debug.LogError($"{outcome.uri} 404 received, returning");
+                            return;
+                        }
+
                         if (skipAuth)
                         {
-                            Request(requestMethod, path, body, onSuccess);
+                            Request(requestMethod, path, server, body, onSuccess);
                         }
                         else
                         {
-                            Auth((reply) =>
+                            Auth(server, (reply) =>
                             {
-                                Request(requestMethod, path, body, onSuccess);
+                                Request(requestMethod, path, server, body, onSuccess);
                             }, () =>
                             {
                                 ScreepsAPI.Instance.AuthFailure();
@@ -113,15 +124,29 @@ namespace Screeps_API
                 }
                 else
                 {
-                    // Debug.Log(string.Format("HTTP: success, data: \n{0}", outcome.downloadHandler.text));
+                    // Update token from response header
+                    if (responseHeaders != null)
+                    {
+                        var xTokenHeader = responseHeaders.Where(x => x.Key.StartsWith("X-Token"));
+
+                        if (xTokenHeader.Any())
+                        {
+                            foreach (var header in xTokenHeader)
+                            {
+                                server.AuthToken = header.Value;
+                            }
+                        }
+                    }
+
+                    //Debug.Log(string.Format("HTTP: success, data: {0}\n{1}", outcome.url, outcome.downloadHandler.text));
                     if (outcome.downloadHandler.text.Contains("token"))
                     {
                         var reply = new JSONObject(outcome.downloadHandler.text);
                         var token = reply["token"];
                         if (token != null)
                         {
-                            Token = token.str;
-                            Debug.Log($"HTTP: found a token! {Token}");
+                            server.AuthToken = token.str;
+                            //Debug.Log($"HTTP: found a token! {token.str}");
                         }
                     }
 
@@ -131,82 +156,82 @@ namespace Screeps_API
 
             www.timeout = timeout;
 
-            var request = SendRequest(www, onComplete);
+            var request = SendRequest(www, onComplete, server);
 
             StartCoroutine(request);
 
             return request;
         }
 
-        private IEnumerator<UnityWebRequestAsyncOperation> SendRequest(UnityWebRequest www, Action<UnityWebRequest> onComplete)
+        private IEnumerator<UnityWebRequestAsyncOperation> SendRequest(UnityWebRequest www, Action<UnityWebRequest> onComplete, IScreepsServer server)
         {
-            if (Token != null)
+            if (server?.AuthToken != null)
             {
-                www.SetRequestHeader("X-Token", Token);
-                www.SetRequestHeader("X-Username", Token);
+                www.SetRequestHeader("X-Token", server.AuthToken);
+                www.SetRequestHeader("X-Username", server.AuthToken);
             }
             yield return www.SendWebRequest();
             onComplete(www);
         }
 
-        public void Auth(Action<string> onSuccess, Action onError = null, bool noNotification = false)
+        public void Auth(IScreepsServer server, Action<string> onSuccess, Action onError = null, bool noNotification = false)
         {
-            if (!string.IsNullOrEmpty(ScreepsAPI.Cache.Credentials.Token))
+            if (!string.IsNullOrEmpty(server.Credentials.Token))
             {
-                Token = ScreepsAPI.Cache.Credentials.Token;
-                Request("GET", "/api/auth/me", null, onSuccess, onError, noNotification: noNotification);
+                server.AuthToken = server.Credentials.Token;
+                Request("GET", "/api/auth/me", server, null, onSuccess, onError, noNotification: noNotification);
             }
             else
             {
                 var body = new RequestBody();
-                body.AddField("email", ScreepsAPI.Cache.Credentials.Email);
-                body.AddField("password", ScreepsAPI.Cache.Credentials.Password);
-                Request("POST", "/api/auth/signin", body, onSuccess, onError, noNotification: noNotification);
+                body.AddField("email", server.Credentials.Email);
+                body.AddField("password", server.Credentials.Password);
+                Request("POST", "/api/auth/signin", server, body, onSuccess, onError, noNotification: noNotification);
             }
         }
 
-        public void GetUser(Action<string> onSuccess, bool noNotification = false)
+        public void GetUser(Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
-            Request("GET", "/api/auth/me", null, onSuccess, noNotification: noNotification);
+            Request("GET", "/api/auth/me", server, null, onSuccess, noNotification: noNotification);
         }
 
-        public void ConsoleInput(string message, bool noNotification = false)
+        public void ConsoleInput(string message, IScreepsServer server = null, bool noNotification = false)
         {
             var body = new RequestBody();
             body.AddField("expression", message);
             body.AddField("shard", "shard0");
-            Request("POST", "/api/user/console", body, noNotification: noNotification);
+            Request("POST", "/api/user/console", server, body, noNotification: noNotification);
         }
 
-        public void GetRoom(string roomName, string shard, Action<string> callback, bool noNotification = false)
+        public void GetRoom(string roomName, string shard, Action<string> callback, IScreepsServer server = null, bool noNotification = false)
         {
             var body = new RequestBody();
             body.AddField("room", roomName);
             body.AddField("encoded", "0");
             body.AddField("shard", shard);
 
-            Request("GET", "/api/game/room-terrain", body, callback, noNotification: noNotification);
+            Request("GET", "/api/game/room-terrain", server, body, callback, noNotification: noNotification);
         }
 
-        public void GetRooms(string userId, Action<string> onSuccess, bool noNotification = false)
+        public void GetRooms(string userId, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             var body = new RequestBody();
             body.AddField("id", userId);
-            Request("GET", "/api/user/rooms", body, onSuccess, noNotification: noNotification);
+            Request("GET", "/api/user/rooms", server, body, onSuccess, noNotification: noNotification);
         }
 
-        public void GetServerList(Action<string> onSuccess, Action onError, bool noNotification = false)
+        public void GetServerList(Action<string> onSuccess, Action onError, IScreepsServer server = null, bool noNotification = false)
         {
-            Request("POST", "https://screeps.com/api/servers/list", onSuccess: onSuccess, onError: onError, skipAuth: true, noNotification: noNotification);
+            Request("POST", "https://screeps.com/api/servers/list", server, onSuccess: onSuccess, onError: onError, skipAuth: true, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetVersion(Action<string> onSuccess, Action onError, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetVersion(Action<string> onSuccess, Action onError, IScreepsServer server = null, bool noNotification = false)
         {
             // this call does not require authentication, and thus we only need the hostname
-            return Request("GET", "/api/version", onSuccess: onSuccess, onError: onError, timeout: 2, skipAuth: true, noNotification: noNotification);
+            return Request("GET", "/api/version", server, onSuccess: onSuccess, onError: onError, timeout: 2, skipAuth: true, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetMapStats(List<string> rooms, string shard, string statName, Action<string, string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetMapStats(List<string> rooms, string shard, string statName, Action<string, string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             /*
              https://github.com/screepers/node-screeps-api/blob/HEAD/docs/Endpoints.md
@@ -231,10 +256,10 @@ namespace Screeps_API
                 onSuccess(shard, json);
             };
 
-            return Request("POST", "/api/game/map-stats", body, onSuccess: onRequestSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/map-stats", server, body, onSuccess: onRequestSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GenerateUniqueFlagName(string shard, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GenerateUniqueFlagName(string shard, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             // POST https://screeps.com/api/game/gen-unique-flag-name
             /* body
@@ -245,11 +270,11 @@ namespace Screeps_API
             var body = new RequestBody();
             body.AddField("shard", shard);
 
-            return Request("POST", "/api/game/gen-unique-flag-name", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/gen-unique-flag-name", server, body, onSuccess: onSuccess, noNotification: noNotification);
 
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> CreateFlag(string shard, string room, int x, int y, string name, int color, int secondaryColor, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> CreateFlag(string shard, string room, int x, int y, string name, int color, int secondaryColor, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/game/create-flag
             // request: {"x":38,"y":23,"name":"Flag1","color":10,"secondaryColor":7,"room":"E19S38","shard":"shard3"}
@@ -264,10 +289,10 @@ namespace Screeps_API
             body.AddField("color", color);
             body.AddField("secondaryColor", secondaryColor);
 
-            return Request("POST", "/api/game/create-flag", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/create-flag", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> ChangeFlagColor(string shard, string room, string name, int color, int secondaryColor, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> ChangeFlagColor(string shard, string room, string name, int color, int secondaryColor, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             // POST https://screeps.com/api/game/change-flag-color
             // Request: {"room":"E19S38","shard":"shard3","name":"Flag1","color":10,"secondaryColor":7}
@@ -280,10 +305,10 @@ namespace Screeps_API
             body.AddField("color", color);
             body.AddField("secondaryColor", secondaryColor);
 
-            return Request("POST", "/api/game/change-flag-color", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/change-flag-color", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> RemoveFlag(string shard, string room, string name, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> RemoveFlag(string shard, string room, string name, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/game/remove-flag
             // request: {"room":"E19S38","shard":"shard3","name":"Flag2"}
@@ -294,10 +319,10 @@ namespace Screeps_API
             body.AddField("room", room);
             body.AddField("name", name);
 
-            return Request("POST", "/api/game/remove-flag", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/remove-flag", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> CheckUniqueFlag(string shard, string name, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> CheckUniqueFlag(string shard, string name, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             // POST https://screeps.com/api/game/check-unique-flag-name
             // Request: {"name":"Flag1","shard":"shard3"}
@@ -307,14 +332,14 @@ namespace Screeps_API
             body.AddField("shard", shard);
             body.AddField("name", name);
 
-            return Request("POST", "/api/game/check-unique-flag-name", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/check-unique-flag-name", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
-            return CreateConstructionsite(shard, room, x, y, structureType, null, onSuccess, noNotification);
+            return CreateConstructionsite(shard, room, x, y, structureType, null, onSuccess, server, noNotification);
         }
-        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, string name, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> CreateConstructionsite(string shard, string room, int x, int y, string structureType, string name, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/game/create-construction
             // request: {"room":"E19S35","shard":"shard3","name":"spawnName","structureType":"container","x":23,"y":29}
@@ -331,10 +356,10 @@ namespace Screeps_API
             body.AddField("x", x);
             body.AddField("y", y);
 
-            return Request("POST", "/api/game/create-construction", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/create-construction", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetWorldStatus(Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetWorldStatus(Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             /*
              https://github.com/screepers/node-screeps-api/blob/HEAD/docs/Endpoints.md
@@ -346,19 +371,19 @@ namespace Screeps_API
                 status can be lost, empty or normal, lost is when you loose all your spawns, empty is when you have respawned and not placed your spawn yet.
                 */
 
-            return Request("GET", "/api/user/world-status", onSuccess: onSuccess, noNotification: noNotification);
+            return Request("GET", "/api/user/world-status", server, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> Respawn(Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> Respawn(Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/user/respawn
             var body = new RequestBody();
             body.Add(new JSONObject()); // an empty object is required in the request
 
-            return Request("POST", "/api/user/respawn", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/user/respawn", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetRespawnProhibitedRooms(Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetRespawnProhibitedRooms(Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             /*
              [GET] https://screeps.com/api/user/respawn-prohibited-rooms
@@ -368,10 +393,10 @@ namespace Screeps_API
                 }
                 */
 
-            return Request("GET", "/api/user/respawn-prohibited-rooms", onSuccess: onSuccess, noNotification: noNotification);
+            return Request("GET", "/api/user/respawn-prohibited-rooms", server, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> PlaceSpawn(string shard, string room, int x, int y, string name, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> PlaceSpawn(string shard, string room, int x, int y, string name, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/game/place-spawn
             // request: {"room":"E19S35","shard":"shard3","name":"spawnName","x":23,"y":29}
@@ -389,10 +414,10 @@ namespace Screeps_API
             body.AddField("x", x);
             body.AddField("y", y);
 
-            return Request("POST", "/api/game/place-spawn", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/place-spawn", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> AddObjectIntent(string shard, string room, string name, JSONObject intent, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> AddObjectIntent(string shard, string room, string name, JSONObject intent, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             //  POST https://screeps.com/api/game/add-object-intent
             /* request: {
@@ -420,10 +445,10 @@ namespace Screeps_API
 
             Debug.LogError(body.ToString());
 
-            return Request("POST", "/api/game/add-object-intent", body, onSuccess: onSuccess, noNotification: noNotification);
+            return Request("POST", "/api/game/add-object-intent", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> DestroyStructureObjectIntent(string shard, string room, string id, string userId, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> DestroyStructureObjectIntent(string shard, string room, string id, string userId, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             var list = new JSONObject();
             var intent = new JSONObject();
@@ -434,45 +459,51 @@ namespace Screeps_API
             intent.AddField("user", userId);
 
 
-            return AddObjectIntent(shard, room, "destroyStructure", list, onSuccess);
+            return AddObjectIntent(shard, room, "destroyStructure", list, onSuccess, server, noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetUserByName(string username, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetUserByName(string username, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             // https://screeps.com/api/user/find?username=thmsn
             // {"ok":1,"user":{"_id":"5a44e109ac5a5f1d0146916e","username":"thmsn","badge":{"type":16,"color1":"#e026e3","color2":"#060606","color3":"#020202","param":54,"flip":false},"gcl":72599362}}
 
-            return Request("GET", $"/api/user/find?username={username}", onSuccess: onSuccess, noNotification: noNotification);
+            return Request("GET", $"/api/user/find?username={username}", server, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetUsersRoomsByUserId(string userId, Action<string> onSuccess, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetUsersRoomsByUserId(string userId, Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
         {
             // https://screeps.com/api/user/rooms?id=5a44e109ac5a5f1d0146916e
             // {"ok":1,"shards":{"shard0":[],"shard1":[],"shard2":[],"shard3":["E18S37","E19S36","E19S38"]},"reservations":{"shard0":[],"shard1":[],"shard2":[],"shard3":[]}}
-            return Request("GET", $"/api/user/find?username={userId}", onSuccess: onSuccess, noNotification: noNotification);
+            return Request("GET", $"/api/user/find?username={userId}", server, onSuccess: onSuccess, noNotification: noNotification);
         }
 
 
 
         /* Experimental */
-        public IEnumerator<UnityWebRequestAsyncOperation> GetExperimentalNukes(Action<string> onSuccess)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetExperimentalNukes(Action<string> onSuccess, IScreepsServer server = null)
         {
             /*
              // https://screeps.com/api/experimental/nukes
              // for PS it requires screepsmod-admin-utils or another mod that implements the endpoint
             */
 
-            return Request("GET", "/api/experimental/nukes", onSuccess: onSuccess);
+            return Request("GET", "/api/experimental/nukes", server, onSuccess: onSuccess);
         }
 
-        public IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response)
+        public IEnumerator GetRoomTexture(string shard, string roomName, Action<Texture> response, IScreepsServer server = null)
         {
+            if (server == null)
+            {
+                server = ScreepsAPI.Server;
+            }
+
+            // TODO: this url should not be hardcoded
             var roomTextureUrl = $"https://d3os7yery2usni.cloudfront.net/map/{shard}/{roomName}.png";
 
-            if (ScreepsAPI.Cache.Type != SourceProviderType.Official)
+            if (!ScreepsAPI.Server.Official)
             {
                 // Private servers runs with a different url.
-                roomTextureUrl = ScreepsAPI.Cache.Address.Http($"/assets/map/{roomName}.png");
+                roomTextureUrl = server.Address.Http($"/assets/map/{roomName}.png");
             }
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(roomTextureUrl);

@@ -16,7 +16,7 @@ namespace Screeps3D.Rooms
         {
             _room = room;
             
-            if (ScreepsAPI.Cache.Address.HostName.ToLowerInvariant() == "screeps.com")
+            if (ScreepsAPI.Server.Address.HostName.ToLowerInvariant() == "screeps.com")
             {
                 _path = string.Format("room:{0}/{1}", room.ShardName, room.RoomName);
             } else

@@ -4,6 +4,7 @@ using Tacticsoft;
 using Screeps_API;
 using System;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace Screeps3D.Menus.ServerList
 {
@@ -14,10 +15,13 @@ namespace Screeps3D.Menus.ServerList
         public TableView m_tableView;
 
         public int m_numRows;
-        private int m_numInstancesCreated = 0;
-        private CacheList _servers;
 
         public OnServerSelected onServerSelected;
+
+        private int m_numInstancesCreated = 0;
+        private List<IScreepsServer> _servers;
+
+        private IScreepsServer selectedServer;
 
         //Register as the TableView's delegate (required) and data source (optional)
         //to receive the calls
@@ -38,7 +42,7 @@ namespace Screeps3D.Menus.ServerList
         //Will be called by the TableView to know what is the height of each row
         public float GetHeightForRowInTableView(TableView tableView, int row)
         {
-            return ((RectTransform) m_cellPrefab.transform).rect.height;
+            return ((RectTransform)m_cellPrefab.transform).rect.height;
         }
 
         //Will be called by the TableView when a cell needs to be created for display
@@ -53,8 +57,10 @@ namespace Screeps3D.Menus.ServerList
             }
 
             var server = _servers[row];
-
+            
             cell.SetServer(server);
+            
+            cell.SetSelectedState(selectedServer);
             return cell;
         }
 
@@ -62,16 +68,18 @@ namespace Screeps3D.Menus.ServerList
 
         #region Table View event handlers
 
-        internal void UpdateServerList(CacheList servers)
+        internal void UpdateServerList(List<IScreepsServer> servers)
         {
-            _servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object without cache
+            _servers = servers; // Temporary to get something rendered, we should have a proper "serverlist" object where we can set "Selected" property
             m_tableView.ReloadData();
         }
 
         #endregion
 
-        private void OnServerSelected(ServerCache server)
+        private void OnServerSelected(IScreepsServer server)
         {
+            selectedServer = server;
+
             onServerSelected?.Invoke(server);
         }
     }

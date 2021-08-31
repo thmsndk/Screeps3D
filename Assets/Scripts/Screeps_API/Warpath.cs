@@ -31,7 +31,7 @@ namespace Screeps_API
             if (connected)
             {
                 var disableLoan = new List<string> { "/ptr", "/season" };
-                if (ScreepsAPI.Cache.Type == SourceProviderType.Official && !disableLoan.Contains(ScreepsAPI.Cache.Address.Path))
+                if (ScreepsAPI.Server.Official && !disableLoan.Contains(ScreepsAPI.Server.Address.Path))
                 {
                     // On official we need to start a timer that pulls data from LOAN e.g. https://www.leagueofautomatednations.com/vk/battles.json
                     // TODO: considering LOAN data is "old", we might want to sprinkle the experimental PVP endpoint ontop of this to get more accurate "pvp timestamps"
@@ -40,6 +40,7 @@ namespace Screeps_API
                 }
                 else
                 {
+                    // TODO: should detect if warpath socket feature is actually enabled.
                     ScreepsAPI.Socket.Subscribe(string.Format("warpath:battles", ScreepsAPI.Me.UserId), RecieveData);
                 }
             }
@@ -125,7 +126,7 @@ namespace Screeps_API
 
         private void UnpackData(JSONObject obj)
         {
-            if (!ScreepsAPI.Cache.Official)
+            if (!ScreepsAPI.Server.Official)
             {
                 UnpackWarpathData(obj);
             }

@@ -29,16 +29,16 @@ namespace Screeps_API
                 Socket.Close();
             }
 
-            var protocol = ScreepsAPI.Cache.Address.Ssl ? "wss" : "ws";
-            var port = ScreepsAPI.Cache.Type == SourceProviderType.Official ? "" : string.Format(":{0}", ScreepsAPI.Cache.Address.Ssl ? "443" : ScreepsAPI.Cache.Address.Port);
+            var protocol = ScreepsAPI.Server.Address.Ssl ? "wss" : "ws";
+            var port = ScreepsAPI.Server.Official ? "" : string.Format(":{0}", ScreepsAPI.Server.Address.Ssl ? "443" : ScreepsAPI.Server.Address.Port);
 
-            var path = ScreepsAPI.Cache.Address.Path;
+            var path = ScreepsAPI.Server.Address.Path;
             if (path.StartsWith("/") && path.EndsWith("/"))
             {
                 path = path.Substring(1);
             }
 
-            var url = string.Format("{0}://{1}{2}{3}/socket/websocket", protocol, ScreepsAPI.Cache.Address.HostName, port, path);
+            var url = string.Format("{0}://{1}{2}{3}/socket/websocket", protocol, ScreepsAPI.Server.Address.HostName, port, path);
             Debug.Log(url);
 
             Socket = new WebSocket(url);
@@ -55,7 +55,7 @@ namespace Screeps_API
             try
             {
                 Debug.Log("Socket Open");
-                Socket.Send(string.Format("auth {0}", ScreepsAPI.Http.Token));
+                Socket.Send(string.Format("auth {0}", ScreepsAPI.Server.AuthToken));
                 if (OnOpen != null) OnOpen.Invoke(e);
             } catch (Exception exception)
             {

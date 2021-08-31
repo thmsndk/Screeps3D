@@ -18,7 +18,7 @@ public class ServerInfo : MonoBehaviour
     {
         lastTick = DateTime.Now;
         ScreepsAPI.OnTick += ScreepsAPI_OnTick; // Tick may drift because the ScreepsAPI.Time seems to not be updated with the last recieved tick from websocket.
-        this.ServerHostname.SetText(ScreepsAPI.Cache.Address.HostName.ToLowerInvariant());
+        this.ServerHostname.SetText(ScreepsAPI.Server.Address.HostName.ToLowerInvariant());
     }
 
     private void ScreepsAPI_OnTick(long time)

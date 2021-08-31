@@ -28,8 +28,12 @@ namespace Screeps_API
         {
             _users = new Dictionary<string, ScreepsUser>();
         }
-        
         internal ScreepsUser CacheUser(JSONObject data)
+        {
+            return CacheUser(null, data);
+        }
+
+        internal ScreepsUser CacheUser(string id, JSONObject data)
         {
             lock (_lockObj)
             {
@@ -39,7 +43,15 @@ namespace Screeps_API
                     data = data["user"];
                 }
 
-                var id = data["_id"].str;
+                // TODO: xxscreeps does not have _id, and the id is actually the key when unpacking room objects
+                if (id == null)
+                {
+                    var idProperty = data["_id"];
+                    if (idProperty != null && !idProperty.IsNull)
+                    {
+                        id = idProperty.str;
+                    }
+                }
 
                 if (_users.ContainsKey(id)) return _users[id];
 

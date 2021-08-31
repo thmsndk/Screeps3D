@@ -23,6 +23,8 @@ namespace Screeps3D.Rooms
 
         private void Unpack(JSONObject roomData)
         {
+            //Debug.Log($"{this._room.Name} Unpack:\n{roomData}");
+
             if (roomData.HasField("gameTime"))
                 _room.GameTime = (long) roomData["gameTime"].n;
             UnpackUsers(roomData);
@@ -46,8 +48,16 @@ namespace Screeps3D.Rooms
                 
                 if (!_room.Objects.ContainsKey(id))
                 {
-                    var roomObject = ObjectManager.Instance.GetInstance(id, objectData);
-                    _room.Objects[id] = roomObject;
+                    try
+                    {
+                        var roomObject = ObjectManager.Instance.GetInstance(id, objectData);
+                        _room.Objects[id] = roomObject;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError(ex);
+                        //throw;
+                    }
                 }
             }
 
@@ -95,7 +105,7 @@ namespace Screeps3D.Rooms
             foreach (var id in usersData.keys)
             {
                 var userData = usersData[id];
-                ScreepsAPI.UserManager.CacheUser(userData);
+                ScreepsAPI.UserManager.CacheUser(id, userData);
             }
         }
 

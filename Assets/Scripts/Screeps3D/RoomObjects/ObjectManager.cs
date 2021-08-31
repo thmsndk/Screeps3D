@@ -26,7 +26,8 @@ namespace Screeps3D.RoomObjects
             var typeData = data["type"];
             if (typeData == null)
             {
-                throw new Exception("type data was not found for new roomObject, there may be a caching problem");
+                Debug.LogError(data.ToString());
+                throw new Exception($"type data was not found for new roomObject with id {id}, there may be a caching problem");
             }
 
             var type = typeData.str;

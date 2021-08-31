@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Screeps_API;
 using Assets.Scripts.Screeps_API.ServerListProviders;
+using Assets.Scripts.Screeps3D.Main;
 using Common;
 using Screeps3D;
 using Screeps3D.Menus.ServerList;
@@ -15,22 +19,19 @@ namespace Screeps_API
     public class ScreepsLogin : MonoBehaviour
     {
         [SerializeField] private ScreepsAPI _api = default;
-        [SerializeField] private Toggle _save = default;
-        [SerializeField] private Toggle _ssl = default;
-        [SerializeField] private TMP_InputField _port = default;
-        [SerializeField] private TMP_InputField _username = default;
-        [SerializeField] private TMP_InputField _password = default;
-        [SerializeField] private TMP_InputField _token = default;
-        [SerializeField] private TMP_Dropdown _serverSelect = default;
         [SerializeField] private Button _connect = default;
         [SerializeField] private FadePanel _panel = default;
         [SerializeField] private Button _addServer = default;
         [SerializeField] private Button _removeServer = default;
         [SerializeField] private Button _editServer = default;
         [SerializeField] private Button _exit = default;
+        [SerializeField] private ChooseSS3UnifiedCredentialsFileLocationPopup _chooseSS3UnifiedCredentialsFileLocationPopup = default;
+        [SerializeField] private EditServerPopup _editServerPopup = default;
+
         public Action<Credentials, Address> OnSubmit;
         public string secret = "abc123";
-        private CacheList _servers;
+
+        private List<IScreepsServer> _servers;
         private int _serverIndex;
         private string _savePath = "servers";
 
@@ -40,22 +41,30 @@ namespace Screeps_API
 
         private bool editServer = false;
 
+        private IScreepsServer selectedServer;
+
         private void Start()
         {
             GameManager.OnModeChange += OnModeChange;
-            serverListProviders.Add(new OfficialServerListProvider());
-            serverListProviders.Add(new OfficialCommunityServerListProvider());
-            serverListProviders.Add(new SS3UCFServerListProvider());
+            serverListProviders.Add(new SS3UCFServerListProvider()); // Load all servers/credentials the user has supplied, it is important that this is the first entry.
+            serverListProviders.Add(new OfficialServerListProvider()); // Add official servers, in case the user does not have any servers
+            serverListProviders.Add(new OfficialCommunityServerListProvider()); // Add community servers provided by the official team.
             // TODO: SS3 Unified Credentials File .ini
             // https://screeps.online/ ?
+            
+            if (HasUnifiedCredentials())
+            {
+                StartCoroutine(LoadServers());
 
-            LoadServers();
-            //UpdateServerDropdown();
-            UpdateFieldVisibility();
-            UpdateFieldContent();
+                UpdateFieldVisibility();
+            }
+            else
+            {
+                _chooseSS3UnifiedCredentialsFileLocationPopup.OnOkClicked += SS3UnifiedCredentialsFileLocationSelected;
+                _chooseSS3UnifiedCredentialsFileLocationPopup?.gameObject?.SetActive(true);
+            }
 
             _connect.onClick.AddListener(OnConnect);
-            _serverSelect.onValueChanged.AddListener(OnServerChange);
             _addServer.onClick.AddListener(OnAddServer);
             _removeServer.onClick.AddListener(OnRemoveServer);
             _editServer.onClick.AddListener(OnEditServer);
@@ -90,6 +99,14 @@ namespace Screeps_API
         {
             editServer = true;
             UpdateFieldVisibility();
+            ShowEditServerDialog();
+
+        }
+
+        private void ShowEditServerDialog()
+        {
+            _editServerPopup?.SetServer(selectedServer);
+            _editServerPopup?.gameObject?.SetActive(true);
         }
 
         private void OnRemoveServer()
@@ -119,7 +136,7 @@ namespace Screeps_API
 
         private void OnAddServer()
         {
-            PlayerInput.Get("Server Hostname\n<size=12>example: 127.0.0.1</size>", OnSubmitServer);
+            PlayerInput.Get("Server Hostname\n<size=12>example: \n127.0.0.1 | http://127.0.0.1:21025 | servername </size>", OnSubmitServer);
         }
 
         private void OnSubmitServer(string input)
@@ -129,8 +146,9 @@ namespace Screeps_API
                 return;
             }
 
-            var server = new ServerCache
-            { Type = SourceProviderType.Custom, Address = { HostName = input, Port = "21025" } };
+            var ss3Server = new ScreepsServer(input);
+            ss3Server.Address.HostName = input;
+            ss3Server.Address.Port = "21025";
 
             // split/parse http url and port and assign properly e.g. http://screeps.reggaemuffin.me:21025
             var urlPattern =
@@ -139,35 +157,53 @@ namespace Screeps_API
 
             if (match.Success)
             {
+
                 var protocol = match.Groups["protocol"].Value;
-                var hostName = match.Groups["hostname"].Value;
+                var hostname = match.Groups["hostname"].Value;
                 var port = match.Groups["port"].Value;
 
-                if (!string.IsNullOrEmpty(hostName))
+                
+
+                if (!string.IsNullOrEmpty(hostname))
                 {
-                    server.Address.HostName = hostName;
+                    ss3Server.Address.HostName = hostname;
                 }
 
                 if (protocol.ToLowerInvariant() == "https" || port == "443")
                 {
-                    port = "443";
-                    server.Address.Ssl = true;
+                    if (string.IsNullOrEmpty(port))
+                    {
+                        port = "443";
+                    }
+
+                    ss3Server.Address.Ssl = true;
                 }
 
                 if (!string.IsNullOrEmpty(port))
                 {
-                    server.Address.Port = port;
+                    ss3Server.Address.Port = port;
                 }
             }
+            else
+            {
+                // inform the player that adding it failed.
+            }
 
-            _servers.Add(server);
-            OnServerChange(_servers.IndexOf(server));
-            UpdateServerList();
-            SaveManager.Save(_savePath, _servers);
+            SS3UnifiedCredentials.SaveServer(ss3Server);
+
+            _servers.Add(ss3Server);
+
+            OnServerSelected(ss3Server);
+
+            OnEditServer();
         }
 
-        private void OnServerSelected(ServerCache server)
+        private void OnServerSelected(IScreepsServer server)
         {
+            QueryAndUpdateServerInfo(server);
+
+            selectedServer = server;
+
             int serverIndex = _servers.IndexOf(server);
             //_serverSelect.value = serverIndex; // Updates dropdown
             OnServerChange(serverIndex);
@@ -175,178 +211,175 @@ namespace Screeps_API
 
         private void OnServerChange(int serverIndex)
         {
-            if (_serverIndex != -1)
-            {
-                // deselect previous server
-                var previousServer = _servers[_serverIndex];
-                if (previousServer != null)
-                {
-                    previousServer.Selected = false;
-                }
-            }
-
-            // select new server
-            var selectedServer = _servers[serverIndex];
-            if (selectedServer != null)
-            {
-                selectedServer.Selected = true;
-            }
-
             UpdateServerList();
 
             editServer = false;
-            PlayerPrefs.SetInt("serverIndex", serverIndex);
+            PlayerPrefs.SetInt("serverIndex", serverIndex); // TODO: persist server key instead
             _serverIndex = serverIndex;
             UpdateFieldVisibility();
-            UpdateFieldContent();
+        }
+
+        private void SS3UnifiedCredentialsFileLocationSelected()
+        {
+            _chooseSS3UnifiedCredentialsFileLocationPopup?.gameObject?.SetActive(false);
+            StartCoroutine(LoadServers());
         }
 
         private void UpdateFieldVisibility()
         {
-            if (_serverIndex == -1)
+            if (selectedServer == null)
             {
-                _username.gameObject.SetActive(false);
-                _password.gameObject.SetActive(false);
-                _token.gameObject.SetActive(false);
-
                 _removeServer.gameObject.SetActive(false);
                 return;
             }
 
-            var selectedServer = _servers[_serverIndex];
-            var isPublic = (selectedServer.Type == SourceProviderType.Official);
-
-            //_ssl.gameObject.SetActive(!isPublic);
-            //_port.gameObject.SetActive(!isPublic);
-
-            var showCredentialInput =
-                string.IsNullOrEmpty(!isPublic ? selectedServer.Credentials.Email : selectedServer.Credentials.Token) ||
-                editServer;
-
-            _username.gameObject.SetActive(!isPublic && showCredentialInput);
-            _password.gameObject.SetActive(!isPublic && showCredentialInput);
-            _token.gameObject.SetActive(isPublic && showCredentialInput);
-
-            _removeServer.gameObject.SetActive(selectedServer.Type != SourceProviderType.Official);
-
-            if (!isPublic && (string.IsNullOrEmpty(selectedServer.Address.Port) || editServer))
-            {
-                _port.gameObject.SetActive(true);
-            }
-            else
-            {
-                _port.gameObject.SetActive(false);
-            }
+            _removeServer.gameObject.SetActive(!selectedServer.Official);
         }
 
-        private void UpdateFieldContent()
+        private bool HasUnifiedCredentials()
         {
-            if (_serverIndex == -1)
+            try
             {
-                return;
+                var ss3ConfigPath = SS3UnifiedCredentials.GetScreepsConfigFilePath();
+
+                if (ss3ConfigPath != null)
+                {
+                    return true;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            var cache = _servers[_serverIndex];
-            _port.text = cache.Address.Port ?? "21025";
-            _username.text = cache.Credentials.Email ?? "";
-            _token.text = cache.Credentials.Token ?? "";
-            _password.text = cache.Credentials.Password ?? "";
-            _ssl.isOn = cache.Address.Ssl;
-            _save.isOn = cache.SaveCredentials;
+            return false;
         }
 
-        private void LoadServers()
+        private IEnumerator LoadServers()
         {
-            //SaveManager.Save(_savePath, new CacheList()); // clear servers
-
-            _servers = SaveManager.Load<CacheList>(_savePath) ?? new CacheList();
-
-            Debug.Log($"Loaded {_servers.Count} servers from servers.dat");
-
-            // query saved servers, should probably only query the ones where source == custom cause the providers will query the others
-            foreach (var server in _servers)
-            {
-                QueryAndUpdateServerInfo(server);
-            }
+            _servers = new List<IScreepsServer>();
 
             foreach (var provider in serverListProviders)
             {
+                var finishedLoading = false;
+
                 provider.Load(servers =>
                 {
+                    //Debug.LogError($"{provider.GetType()}");
                     foreach (var server in servers)
                     {
                         if (provider.MergeWithCache)
                         {
-                            var cachedServer = _servers.SingleOrDefault(cache =>
-                                cache.Name == server.Name
-                                && cache.Address.HostName == server.Address.HostName
-                                && cache.Address.Path == server.Address.Path
-                                && cache.Address.Port == server.Address.Port);
+                            // TODO: a "display name" or the "name" property in the yaml file can be used to merge the different providers
 
-                            if (cachedServer == null)
+                            //Debug.LogError($"{server.Name} => {server.Address.Http()}");
+
+                            if (!server.HasCredentials)
                             {
-                                _servers.Add(server);
+                                // Official community server does not have any credentials, we can however update entries from SS3 with the server name
+                                var existingServer = _servers.FirstOrDefault(s => s.HasCredentials
+                                && s.Address.HostName == server.Address.HostName
+                                && s.Address.Path == server.Address.Path
+                                && s.Address.Port == server.Address.Port);
+
+
+                                if (existingServer == null)
+                                {
+                                    _servers.Add(server);
+                                }
+                                else
+                                {
+
+                                    //Debug.LogError($"{server.Name} => {server.Address.Http()} ==> {existingServer.Address.Http()}");
+
+                                    existingServer.Name = server.Name;
+                                    existingServer.Meta.LikeCount = server.Meta.LikeCount;
+
+                                    // Update credentials
+                                    if (!string.IsNullOrEmpty(server.Credentials.Token))
+                                    {
+                                        existingServer.Credentials.Token = server.Credentials.Token;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(server.Credentials.Email))
+                                    {
+                                        existingServer.Credentials.Email = server.Credentials.Email;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(server.Credentials.Password))
+                                    {
+                                        existingServer.Credentials.Password = server.Credentials.Password;
+                                    }
+                                }
                             }
                             else
                             {
-                                cachedServer.Persist = server.Persist;
-                                cachedServer.Name = server.Name;
-                                cachedServer.LikeCount = server.LikeCount;
-
-                                //Backwards compatibility
-                                cachedServer.Type = server.Type;
-
-                                // Update credentials
-                                if (!string.IsNullOrEmpty(server.Credentials.Token))
-                                {
-                                    cachedServer.Credentials.Token = server.Credentials.Token;
-                                }
-
-                                if (!string.IsNullOrEmpty(server.Credentials.Email))
-                                {
-                                    cachedServer.Credentials.Email = server.Credentials.Email;
-                                }
-
-                                if (!string.IsNullOrEmpty(server.Credentials.Password))
-                                {
-                                    cachedServer.Credentials.Password = server.Credentials.Password;
-                                }
+                                // Add as a new server
+                                _servers.Add(server);
                             }
                         }
                         else
                         {
                             _servers.AddRange(servers);
-                            // TODO: servers also need to be marked if they should be saved to the cachelist or not. e.g. SS3 should not be persisted, they already contain passwords
                             // TODO: server icon
                         }
 
                         QueryAndUpdateServerInfo(server);
                     }
 
-                    var sortedCache = new CacheList();
-                    sortedCache.AddRange(_servers.OrderByDescending(s => s.Type == SourceProviderType.Official)
-                        .ThenByDescending(s => s.LikeCount)
+                    
+
+                    _servers = _servers.OrderByDescending(s => s.Official)
+                        .ThenByDescending(s => s.Meta.LikeCount)
                         .ThenBy(s => s.Address.Path)
-                        .ThenBy(s => s.Address.HostName));
-                    _servers = sortedCache;
+                        .ThenBy(s => s.Address.HostName).ToList();
 
                     // preselecting selected server might be an issue when the selected server status is not saved for like SS3
-                    _serverIndex = sortedCache.FindIndex(s => s.Selected);
+                    //_serverIndex = sortedCache.FindIndex(s => s.Selected);
 
-                    UpdateServerList();
+                    
+
+                    finishedLoading = true;
                 });
+
+                while (!finishedLoading)
+                {
+                    yield return new WaitForSeconds(1);
+                }
             }
+
+            UpdateServerList();
+
         }
 
-        private void QueryAndUpdateServerInfo(ServerCache server)
+        private void QueryAndUpdateServerInfo(IScreepsServer server)
         {
             // Get status of servers, should probably be async for each server and a coroutine.
             // Need to double wrap it to keep a reference to the server
-            ScreepsAPI.Cache = server;
+
             server.Online = null;
+
             Action<string> queryServerInfoCallback = str =>
             {
                 UpdateServerVersionInfo(server, str);
+
+                // TODO: get world status, that does require us to have credentials available to lookup
+
+                // Do we have admin utils?
+                // TODO: /stats, if we have a username in credentials we can find our user stats, if we have token/password we could user other endpoints and just auth, 
+                // leaning mostly towards /stats for private servers, and /api/user/overview for official servers
+
+                // TODO: cache our badge? /api/auth/me gives a lot of details, requires us to auth though, and we don't get owned rooms, we do get cpu allocated to shards and their shardnames, as well as credits and resources
+                // /api/user/rooms?id={userId} gives us owned rooms but requires us to have the user id
+
+                // TODO: message count?
+
+                // TODO: a tooltip that shows features / welcome message on hover or on click
+
                 UpdateServerList();
             };
 
@@ -357,11 +390,53 @@ namespace Screeps_API
                 UpdateServerList();
             };
 
-            var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, noNotification: true);
+            var stuff = ScreepsAPI.Http.GetVersion(queryServerInfoCallback, queryServerInfoErrorCallback, server, noNotification: true);
             //stuff.Current
+
+            if (server.Credentials.HasCredentials)
+            {
+                Action<string> queryAuthMeCallback = str =>
+                {
+                    UpdateServerAuthInfo(server, str);
+
+                    UpdateServerList();
+                };
+
+                ScreepsAPI.Http.GetUser(queryAuthMeCallback, server, noNotification: true);
+
+                Action<string> queryWorldStatusCallback = str =>
+                {
+                    var obj = new JSONObject(str);
+                    if (Enum.TryParse<WorldStatus>(obj["status"].str, true, out var worldStatus)) { 
+                        server.Meta.WorldStatus = worldStatus;
+                    }
+
+                    UpdateServerList();
+                };
+
+                ScreepsAPI.Http.GetWorldStatus(queryWorldStatusCallback, server, noNotification: true);
+            }
+        }
+        
+        private static void UpdateServerAuthInfo(IScreepsServer server, string str)
+        {
+            var obj = new JSONObject(str);
+            var me = ScreepsAPI.UserManager.CacheUser(obj);
+            server.Meta.Me = me;
+
+            var GCL_POW = 2.4;
+            var GCL_MULTIPLY = 1000000;
+
+            var gclObject = obj["gcl"];
+            if (gclObject != null && !gclObject.IsNull)
+            {
+                var gcl = (int)obj["gcl"].n;
+                var gclLevel = Math.Floor(Math.Pow((gcl) / GCL_MULTIPLY, 1 / GCL_POW)) + 1;
+                server.Meta.GlobalControlLevel = gclLevel;
+            }
         }
 
-        private static void UpdateServerVersionInfo(ServerCache server, string str)
+        private static void UpdateServerVersionInfo(IScreepsServer server, string str)
         {
             // {"ok":1,"package":159,"protocol":13,"serverData":{"historyChunkSize":100,"shards":["shard0","shard1","shard2","shard3"]},"users":1606}
             var obj = new JSONObject(str);
@@ -375,29 +450,42 @@ namespace Screeps_API
                 // screeps-admin-utils adds shards, default server does not have it
                 var shards = serverData["shards"];
 
-                server.ShardNames = new List<string>();
                 if (shards != null && !shards.IsNull)
                 {
+                    server.Meta.ShardNames.Clear();
                     foreach (var shard in shards.list)
                     {
                         if (!shard.IsNull)
                         {
-                            server.ShardNames.Add(shard.str);
+                            server.Meta.ShardNames.Add(shard.str);
                         }
                     }
                 }
 
-                if (server.ShardNames.Count == 0)
+                if (server.Meta.ShardNames.Count == 0)
                 {
                     // if server does not have a shardname set, version seems to return null
-                    server.ShardNames.Add("shard0");
+                    server.Meta.ShardNames.Add("shard0");
+                }
+
+                var features = serverData["features"];
+                if (features != null && !features.IsNull)
+                {
+                    server.Meta.Features.Clear();
+                    foreach (var feature in features.list)
+                    {
+                        if (!feature.IsNull)
+                        {
+                            server.Meta.Features.Add(feature["name"].ToString().Trim('"'), feature["version"].ToString().Trim('"'));
+                        }
+                    }
                 }
             }
 
             server.Online = true;
             // TODO: timestamp of online status?
-            server.Users = users;
-            server.Version = "v" + (server.Type == SourceProviderType.Official ? package != null ? package.n.ToString() : string.Empty : packageVersion.str);
+            server.Meta.Users = users;
+            server.Meta.Version = "v" + (packageVersion != null ? packageVersion.str : package.n.ToString());
         }
 
         private void UpdateServerList()
@@ -412,70 +500,19 @@ namespace Screeps_API
 
         private void OnConnect()
         {
-            var cache = _servers[_serverIndex];
-            cache.SaveCredentials = _save.isOn;
-            //cache.Address.Port = _port.text;
-            //cache.Address.Ssl = _ssl.isOn;
+            var server = _servers[_serverIndex];
+            
+            QueryAndUpdateServerInfo(server);
 
-            if (cache.SaveCredentials)
+            if (!server.HasCredentials)
             {
-                cache.Credentials.Email = _username.text;
-                cache.Credentials.Password = _password.text;
-                cache.Credentials.Token = _token.text;
+                ShowEditServerDialog(); // TODO: supply the fact that the server is in "Edit Credentials" mode, only connect after pressing OK
             }
-
-            // TODO: When saving servers, we do not wish to persist servers we've gotten from third party sources, 
-            // UNLESS we have saved credentials for them that we did not get from the third party source.
-            // If we however already have credentials from the third party source, then we don't want to save it either.
-
-            // Sources column
-            // Official, UCF, Custom
-
-            // TODO: look into SSL
-
-            var filteredServers = new CacheList();
-            filteredServers.AddRange(_servers.Where(s => s.HasCredentials && s.Persist));
-
-            SaveManager.Save(_savePath, filteredServers);
-            NotifyText.Message("Connecting...");
-            _api.Connect(cache);
-        }
-    }
-
-    [Serializable]
-    public class Credentials
-    {
-        public string Token;
-        public string Email;
-        public string Password;
-    }
-
-    [Serializable]
-    public class Address
-    {
-        public bool Ssl;
-        public string HostName;
-        public string Port;
-        public string Path = "/";
-
-        public string Http(string path = "")
-        {
-            if (path.StartsWith("/") && Path.EndsWith("/"))
+            else
             {
-                path = path.Substring(1);
+                NotifyText.Message("Connecting...");
+                _api.Connect(server);
             }
-
-            var protocol = Ssl ? "https" : "http";
-            var port = HostName.ToLowerInvariant() == "screeps.com" ? "" : string.Format(":{0}", this.Port);
-            var url = string.Format("{0}://{1}{2}{3}{4}", protocol, HostName, port, this.Path, path);
-            //Debug.Log(url);
-            return url;
         }
-    }
-
-    // The Binary Formatter checks for the serializable attribute, thus this workaround
-    [Serializable]
-    public class CacheList : List<ServerCache>
-    {
     }
 }

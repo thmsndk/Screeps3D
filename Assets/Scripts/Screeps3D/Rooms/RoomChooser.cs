@@ -158,6 +158,12 @@ namespace Screeps3D.Rooms
                     yield return new WaitForSeconds(1);
                 }
 
+                // quick fix for /api/user/rooms not existing in xxscreeps? this needs to be reworked either way.
+                foreach (var shard in ScreepsAPI.ShardInfo.ShardInfo)
+                {
+                    _shards.Add(shard.Key);
+                }
+
                 ScreepsAPI.Http.GetRooms(ScreepsAPI.Me.UserId, InitializeChooser);
             }
             else
@@ -291,20 +297,20 @@ namespace Screeps3D.Rooms
                     var ownedRooms = shardRoomInfo.Where(r => r.Value.User != null && r.Value.User.UserId != Constants.InvaderUserId)
                         .Select(r => r.Value);
 
-                        if (ownedRooms.Any())
-                        {
-                            var random = new System.Random();
-                            var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
-                            var roomName = room?.RoomName;
+                    if (ownedRooms.Any())
+                    {
+                        var random = new System.Random();
+                        var room = ownedRooms.ElementAt(random.Next(ownedRooms.Count()));
+                        var roomName = room?.RoomName;
 
-                            Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
-                            _roomInput.text = roomName;
-                            this.GetAndChooseRoom(roomName);
-                        }
-                        else
-                        {
-                            Debug.Log($"Could not find any owned rooms :/");
-                        }
+                        Debug.Log($"Going to room {roomName} owned by {room?.User?.Username}");
+                        _roomInput.text = roomName;
+                        this.GetAndChooseRoom(roomName);
+                    }
+                    else
+                    {
+                        Debug.Log($"Could not find any owned rooms :/");
+                    }
                     //});
 
 
@@ -378,13 +384,13 @@ namespace Screeps3D.Rooms
             // the pvp list probably belongs in a twitch extension https://www.twitch.tv/p/extensions/
             // Still a little spammy with every 30 seconds, should probably collect pvp details in a warpath fashion and put the message on a "warpath" timer
 
-            if (ScreepsAPI.Cache.Official)
+            if (ScreepsAPI.Server.Official)
             {
                 //// requires screepsmod-admin-utils
                 //https://botarena.screepspl.us/api/experimental/pvp?interval=100
                 var body = new RequestBody();
                 body.AddField("interval", "100");
-                ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body, (jsonString) =>
+                ScreepsAPI.Http.Request("GET", "/api/experimental/pvp", body: body, onSuccess: (jsonString) =>
                 {
                     var obj = new JSONObject(jsonString);
                     var rooms = obj["pvp"][_shardInput.value]["rooms"].list;
@@ -409,7 +415,7 @@ namespace Screeps3D.Rooms
 
 
                     /*
-                     * {
+                    * {
                         "ok": 1,
                         "time": 43584,
                         "pvp": {
@@ -421,7 +427,7 @@ namespace Screeps3D.Rooms
                                 }
                             }
                         }
-                     */
+                    */
                 });
 
             }
@@ -794,8 +800,8 @@ namespace Screeps3D.Rooms
 
         private string GetServerPrefKey(string prefKey)
         {
-            var hostname = ScreepsAPI.Cache.Address.HostName;
-            var port = ScreepsAPI.Cache.Address.Port;
+            var hostname = ScreepsAPI.Server.Address.HostName;
+            var port = ScreepsAPI.Server.Address.Port;
 
             return string.Format("{0} {1} {2}", hostname, port, prefKey);
         }

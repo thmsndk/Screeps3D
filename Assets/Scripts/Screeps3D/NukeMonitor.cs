@@ -128,7 +128,7 @@ namespace Assets.Scripts.Screeps3D
                                     nukes.Add(nuke);
 
                                     // TODO: shards cause crashes in player when loaded from other shards, and not sure this check works for private servers due to shardname on playerposition being Shard0 :/
-                                    if (PlayerPosition.Instance.ShardName == nukesShardName || !ScreepsAPI.Cache.Official)
+                                    if (PlayerPosition.Instance.ShardName == nukesShardName || !ScreepsAPI.Server.Official)
                                     {
                                         CurrentShardNukes.Add(key, new NukeMissileOverlay(nuke));
                                     }
