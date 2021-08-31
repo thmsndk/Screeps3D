@@ -36,8 +36,8 @@ namespace Screeps3D.RoomObjects
             Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
 
             Texture2D texture = new Texture2D(width, height);
-            Debug.LogError("Resources to draw " + resources.Count);
-            Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+            // Debug.LogError("Resources to draw " + resources.Count);
+            // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
             for (int y = 0; y < height; y++)
             {
                 if (y >= nextResourceAt)
@@ -54,7 +54,7 @@ namespace Screeps3D.RoomObjects
                         nextResourceAt = y + 1000 * percent;
                     }
                     color = Constants.GetComplexResourceColor(resources[resourceIndex]);
-                    Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+                    // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
                 }
 
                 for (int x = 0; x < Mathf.CeilToInt(width); x++)

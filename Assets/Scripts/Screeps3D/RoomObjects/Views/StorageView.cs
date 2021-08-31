@@ -9,7 +9,8 @@ namespace Screeps3D.RoomObjects.Views
     public class StorageView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay = default;
-        [SerializeField] private Renderer _storageContents = default;
+        [SerializeField] private Renderer _storageStore = default;
+        [SerializeField] private Renderer _storageStoreTop = default;
 
         private Storage _storage;
 
@@ -20,21 +21,25 @@ namespace Screeps3D.RoomObjects.Views
         {
             _storage = roomObject as Storage;
             AdjustScale();
-            _storageContents.materials[0].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[0].SetTexture("EmissionTexture", _storage.CreateStorageTexture());
-
-            _storageContents.materials[1].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[1].SetTexture("EmissionTexture", _storage.getLastStoreKeyTexture());
+            var storeTexture = _storage.CreateStorageTexture();
+            _storageStore.materials[0].SetFloat("SizeMultiplier", .85f);
+            _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+            _storageStoreTop.materials[0].SetFloat("SizeMultiplier", .05f);
+            _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
+            _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
         }
 
         public void Delta(JSONObject data)
         {
             AdjustScale();
-            _storageContents.materials[0].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[0].SetTexture("EmissionTexture", _storage.CreateStorageTexture());
-
-            _storageContents.materials[1].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[1].SetTexture("EmissionTexture", _storage.getLastStoreKeyTexture());
+            var storeTexture = _storage.CreateStorageTexture();
+            _storageStore.materials[0].SetFloat("SizeMultiplier", .85f);
+            _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+            _storageStoreTop.materials[0].SetFloat("SizeMultiplier", .05f);
+            _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
+            _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
         }
 
         public void Unload(RoomObject roomObject)

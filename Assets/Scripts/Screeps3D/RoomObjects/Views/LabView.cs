@@ -8,6 +8,7 @@ namespace Screeps3D.RoomObjects.Views
     public class LabView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _mineral = default;
+        [SerializeField] private Renderer _mineralMesh = default;
         [SerializeField] private ScaleAxes _energy = default;
         private LineRenderer _lineRenderer;
         private Lab _lab;
@@ -21,6 +22,8 @@ namespace Screeps3D.RoomObjects.Views
         {
             _lab = roomObject as Lab;
             UpdateDisplays();
+            _mineralMesh.materials[0].SetFloat("EmissionStrength", .05f);
+            _mineralMesh.materials[0].SetTexture("EmissionTexture", _lab.CreateStorageTexture());
         }
 
         public void Delta(JSONObject data)

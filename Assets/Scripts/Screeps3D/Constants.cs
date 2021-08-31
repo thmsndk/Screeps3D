@@ -187,17 +187,20 @@ namespace Screeps3D
             }
             if (ResourceColors.ContainsKey(resourceType) == true)
             {
+                // simple resource
                 return ResourceColors[resourceType];
             }
             if (Char.IsUpper(resourceType.ToCharArray(0, 1)[0]) == false)
             {
-                Debug.LogWarning("Unsupported mineralType (deposit/commodity)");
+                Debug.LogWarning("Unsupported mineralType (deposit/commodity) [" + resourceType.ToCharArray(0, 1) + "]");
                 return new Color32(0, 0, 0, 255);
             }
             if (resourceType.Length == 5)
             {
+                // from XUH2O we want the U
                 return ResourceColors[resourceType[1].ToString()];
             }
+            // from anything else we want 1st characer UH, ZK, KHO2 etc
             return ResourceColors[resourceType[0].ToString()];
         }
 

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MineralEmission
-  m_Shader: {fileID: -6465566751694194690, guid: 9c7411cd7d7cd2d46a055dc140a24ac8,
+  m_Shader: {fileID: -6465566751694194690, guid: c82142bbf4fba56489dac4e7b46d4cd0,
     type: 3}
   m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT
   m_LightmapFlags: 1
@@ -28,7 +28,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - EmissionTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:

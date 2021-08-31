@@ -68,7 +68,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - EmissionStrength: 1.6
+    - EmissionStrength: 0.8
+    - Vector1_6ac8434104eb404084ee61ca9df079c2: 1
     - _AddPrecomputedVelocity: 0
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 0

@@ -9,7 +9,7 @@ namespace Screeps3D.RoomObjects.Views
     public class TerminalView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay = default;
-        [SerializeField] private Renderer _storageContents = default;
+        [SerializeField] private Renderer _terminalStore = default;
         private Terminal _terminal;
 
         public void Init()
@@ -20,22 +20,22 @@ namespace Screeps3D.RoomObjects.Views
         {
             _terminal = roomObject as Terminal;
             AdjustScale();
-            _storageContents.materials[0].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
+            _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
-            _storageContents.materials[1].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[1].SetTexture("EmissionTexture", _terminal.getLastStoreKeyTexture());
+            _terminalStore.materials[1].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[1].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
         }
 
         public void Delta(JSONObject data)
         {
             AdjustScale();
-            _storageContents.materials[0].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
+            _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
-            _storageContents.materials[1].SetFloat("EmissionStrength", .01f);
-            _storageContents.materials[1].SetTexture("EmissionTexture", _terminal.getLastStoreKeyTexture());
+            _terminalStore.materials[1].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[1].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
         }
 
         public void Unload(RoomObject roomObject)
