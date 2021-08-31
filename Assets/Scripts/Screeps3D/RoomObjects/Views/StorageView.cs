@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Numerics;
+using Common;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,10 +23,13 @@ namespace Screeps3D.RoomObjects.Views
             _storage = roomObject as Storage;
             AdjustScale();
             var storeTexture = _storage.CreateStorageTexture();
-            _storageStore.materials[0].SetFloat("SizeMultiplier", .85f);
+
+            _storageStore.materials[0].SetFloat("ySize", _storage.TotalResources / _storage.TotalCapacity);
             _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
             _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
-            _storageStoreTop.materials[0].SetFloat("SizeMultiplier", .05f);
+
+            _storageStoreTop.materials[0].SetFloat("xSize", .2f);
+            _storageStoreTop.materials[0].SetFloat("ySize", .2f);
             _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
             _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
         }
@@ -34,10 +38,12 @@ namespace Screeps3D.RoomObjects.Views
         {
             AdjustScale();
             var storeTexture = _storage.CreateStorageTexture();
-            _storageStore.materials[0].SetFloat("SizeMultiplier", .85f);
+            _storageStore.materials[0].SetFloat("ySize", _storage.TotalResources / _storage.TotalCapacity);
             _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
             _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
-            _storageStoreTop.materials[0].SetFloat("SizeMultiplier", .05f);
+
+            _storageStoreTop.materials[0].SetFloat("xSize", .2f);
+            _storageStoreTop.materials[0].SetFloat("ySize", .2f);
             _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
             _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
         }

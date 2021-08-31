@@ -23,8 +23,8 @@ namespace Screeps3D.RoomObjects.Views
             _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
             _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
-            _terminalStore.materials[1].SetFloat("EmissionStrength", .05f);
-            _terminalStore.materials[1].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
+            _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
         }
 
@@ -34,8 +34,8 @@ namespace Screeps3D.RoomObjects.Views
             _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
             _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
 
-            _terminalStore.materials[1].SetFloat("EmissionStrength", .05f);
-            _terminalStore.materials[1].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
+            _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal.CreateStorageTexture());
         }
 
         public void Unload(RoomObject roomObject)
