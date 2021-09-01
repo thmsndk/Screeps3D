@@ -180,7 +180,7 @@ namespace Screeps3D.RoomObjects
                 Rotation = Quaternion.LookRotation(newForward);
         }
 
-        public Texture2D CreateStorageTexture()
+        public Texture2D CreateStoreTexture()
         {
             this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             List<string> resources = new List<string>(this.Store.Keys);

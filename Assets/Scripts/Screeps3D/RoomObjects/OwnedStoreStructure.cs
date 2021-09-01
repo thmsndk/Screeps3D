@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualBasic;
+using System.Collections.Generic;
 using Common;
 using System.Linq;
 using System.Collections;
@@ -21,17 +22,37 @@ namespace Screeps3D.RoomObjects
             Capacity = new Dictionary<string, float>();
         }
 
-        public Texture2D CreateStorageTexture(Boolean excludeEnergy)
+        public Texture2D CreateResourceTexture(string resource)
         {
-            this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            List<string> resources = new List<string>(this.Store.Keys);
+            int height = 1;
+            int width = 1;
+            Texture2D texture = new Texture2D(width, height);
+            texture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
+            texture.Apply();
+            return texture;
+        }
+
+        public Texture2D CreateStoreTexture(bool excludeEnergy = false)
+        {
+            var storeCopy = this.Store;
+            var storeCapacity = this.TotalResources;
+
+            if (excludeEnergy)
+            {
+                if (storeCopy.ContainsKey("energy"))
+                {
+                    storeCapacity = -storeCopy["energy"];
+                }
+            }
+            storeCopy.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            List<string> resources = new List<string>(storeCopy.Keys);
 
             int height = 1000;
             int width = 10;
             float yStep = 0.01f;
 
             int resourceIndex = 0;
-            float percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+            float percent = (float)System.Math.Round(storeCopy[resources[resourceIndex]] / storeCapacity, 3);
             float nextResourceAt = 1000 * percent;
             Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
 
@@ -50,9 +71,15 @@ namespace Screeps3D.RoomObjects
                     }
                     else
                     {
-                        percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+                        if (excludeEnergy && resources[resourceIndex] == "energy")
+                        {
+                            resourceIndex += 1;
+                            continue;
+                        }
+                        percent = (float)System.Math.Round(storeCopy[resources[resourceIndex]] / storeCapacity, 3);
                         nextResourceAt = y + 1000 * percent;
                     }
+
                     color = Constants.GetComplexResourceColor(resources[resourceIndex]);
                     // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
                 }

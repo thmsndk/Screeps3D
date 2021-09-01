@@ -170,7 +170,7 @@ namespace Screeps3D
             {Constants.BaseMineral.Zynthium, new   Color32(253,211,136,255)},
             {Constants.BaseMineral.Catalyst, new   Color32(255,119,119,255)},
             // GHODIUM
-            {"G", new   Color32(11,11,11,255)},
+            {"G", new   Color32(240,240,240,255)},
             // DEPOSITS
             {Constants.BaseDeposit.Biomass, new   Color32(38,110,0,255)},
             {Constants.BaseDeposit.Metal, new   Color32(128,58,0,255)},

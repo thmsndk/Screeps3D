@@ -110,7 +110,7 @@ namespace Screeps3D.RoomObjects.Views
         private void RendeCreepStore()
         {
             var storeUsage = _creep.TotalResources / _creep.TotalCapacity;
-            var storeTexture = _creep.CreateStorageTexture();
+            var storeTexture = _creep.CreateStoreTexture();
 
             _creepStore.materials[0].SetFloat("ySize", 0.2f);
             _creepStore.materials[0].SetFloat("xSize", 0.2f);
