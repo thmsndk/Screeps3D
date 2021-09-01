@@ -18,25 +18,27 @@ namespace Screeps3D.RoomObjects.Views
         public void Init()
         {
         }
+
         public void Load(RoomObject roomObject)
         {
             _storage = roomObject as Storage;
             AdjustScale();
-            var storeTexture = _storage.CreateStoreTexture();
-
-            _storageStore.materials[0].SetFloat("ySize", _storage.TotalResources / _storage.TotalCapacity);
-            _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
-            _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
-
-            _storageStoreTop.materials[0].SetFloat("xSize", .2f);
-            _storageStoreTop.materials[0].SetFloat("ySize", .2f);
-            _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
-            _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
+            UpdateStore();
         }
 
         public void Delta(JSONObject data)
         {
             AdjustScale();
+            UpdateStore();
+        }
+
+        public void Unload(RoomObject roomObject)
+        {
+        }
+
+        private void UpdateStore()
+        {
+
             var storeTexture = _storage.CreateStoreTexture();
             _storageStore.materials[0].SetFloat("ySize", _storage.TotalResources / _storage.TotalCapacity);
             _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
@@ -46,10 +48,6 @@ namespace Screeps3D.RoomObjects.Views
             _storageStoreTop.materials[0].SetFloat("ySize", .2f);
             _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
             _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
-        }
-
-        public void Unload(RoomObject roomObject)
-        {
         }
 
         private void AdjustScale()

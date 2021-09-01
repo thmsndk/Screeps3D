@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _size: {fileID: 7742996645516054710}
   _energyBall: {fileID: 33170276741953630}
+  _energyBallMesh: {fileID: 23595222432236784}
 --- !u!1 &1767748588947060
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,10 +160,11 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 283ff4931ac559448b843bc4b862d2f8, type: 2}
+  - {fileID: 2100000, guid: 380184507bad5c640818b9b4bdc5d604, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,6 +185,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &114893741742096790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +307,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -329,3 +333,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

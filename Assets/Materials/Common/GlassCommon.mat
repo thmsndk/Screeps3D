@@ -36,6 +36,7 @@ Material:
   - DistortionVectors
   - MOTIONVECTORS
   - RayTracingPrepass
+  - TransparentDepthPrepass
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -212,7 +213,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - FresnelPower: 1.67
+    - FresnelPower: 0.2
     - SmoothValue: 0.95
     - _AORemapMax: 1
     - _AORemapMin: 0
@@ -355,7 +356,7 @@ Material:
     - _TransparentBackfaceEnable: 1
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 1
-    - _TransparentDepthPrepassEnable: 1
+    - _TransparentDepthPrepassEnable: 0
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
@@ -372,7 +373,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - BaseColor: {r: 0.28675684, g: 0.31383443, b: 0.33962262, a: 0}
+    - BaseColor: {r: 0.33673015, g: 0.39006317, b: 0.4433962, a: 0}
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}

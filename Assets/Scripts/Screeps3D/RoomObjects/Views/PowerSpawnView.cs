@@ -6,6 +6,7 @@ namespace Screeps3D.RoomObjects.Views
     public class PowerSpawnView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _energyDisplay = default;
+        [SerializeField] private Renderer _energyStore = default;
         [SerializeField] private ScaleAxes _powerDisplay = default;
         private PowerSpawn _powerSpawn;
 
@@ -17,11 +18,16 @@ namespace Screeps3D.RoomObjects.Views
         {
             _powerSpawn = roomObject as PowerSpawn;
             AdjustScale();
+            _energyStore.materials[0].SetFloat("EmissionStrength", .5f);
+            _energyStore.materials[0].SetFloat("xSize", 0.4f);
+            _energyStore.materials[0].SetFloat("ySize", 0.4f);
+            _energyStore.materials[0].SetTexture("EmissionTexture", _powerSpawn.CreateResourceTexture("energy"));
         }
 
         public void Delta(JSONObject data)
-        {            
-        if (data.HasField("store") && data.keys.Count > 0) {
+        {
+            if (data.HasField("store") && data.keys.Count > 0)
+            {
                 AdjustScale();
             }
         }
@@ -34,11 +40,13 @@ namespace Screeps3D.RoomObjects.Views
         {
             if (_powerSpawn != null)
             {
-                if(_powerSpawn.Store.ContainsKey("energy")) {
+                if (_powerSpawn.Store.ContainsKey("energy"))
+                {
                     _energyDisplay.SetVisibility(_powerSpawn.Store["energy"] / 5000);
                 }
-                if(_powerSpawn.Store.ContainsKey("power")) {
-                _powerDisplay.SetVisibility(_powerSpawn.Store["power"] / 100);
+                if (_powerSpawn.Store.ContainsKey("power"))
+                {
+                    _powerDisplay.SetVisibility(_powerSpawn.Store["power"] / 100);
                 }
             }
         }

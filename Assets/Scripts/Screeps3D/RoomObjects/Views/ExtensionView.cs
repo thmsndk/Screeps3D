@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
-    public class ExtensionView: MonoBehaviour, IObjectViewComponent
+    public class ExtensionView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private ScaleAxes _size = default;
         [SerializeField] private MeshFilter _energyBall = default;
+        [SerializeField] private Renderer _energyBallMesh = default;
         private Extension _extension;
 
         public void Init()
@@ -20,6 +21,10 @@ namespace Screeps3D.RoomObjects.Views
             var euler = transform.eulerAngles;
             euler.y = Random.Range(0.0f, 360.0f);
             _energyBall.transform.eulerAngles = euler;
+            _energyBallMesh.materials[0].SetFloat("EmissionStrength", .5f);
+            _energyBallMesh.materials[0].SetFloat("xSize", 0.4f);
+            _energyBallMesh.materials[0].SetFloat("ySize", 0.4f);
+            _energyBallMesh.materials[0].SetTexture("EmissionTexture", _extension.CreateResourceTexture("energy"));
 
         }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33561972033423760}
   - component: {fileID: 23315227329694000}
   - component: {fileID: 114179113684168554}
-  - component: {fileID: 114346166130023336}
+  - component: {fileID: 695660675104876323}
   m_Layer: 9
   m_Name: Energy
   m_TagString: Untagged
@@ -57,10 +57,11 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 283ff4931ac559448b843bc4b862d2f8, type: 2}
+  - {fileID: 2100000, guid: 380184507bad5c640818b9b4bdc5d604, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,6 +82,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &114179113684168554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotation: {x: 1, y: 3, z: 1}
   _mutateRandomly: 1
---- !u!114 &114346166130023336
+--- !u!114 &695660675104876323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,12 +106,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1275094987410784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
+  m_Script: {fileID: 11500000, guid: f5721b936de04561a74b227908f4b2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animateOnStart: 0
-  _visibleOnStart: 0
+  _animateOnStart: 1
+  _visibleOnStart: 1
   _speed: 0.2
+  _x: 1
+  _y: 1
+  _z: 1
 --- !u!1 &1363259909303362
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,6 +170,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -189,6 +195,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1602502594321142
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +207,8 @@ GameObject:
   - component: {fileID: 4046090968496898}
   - component: {fileID: 5246212088305578759}
   - component: {fileID: 114088148478528538}
-  - component: {fileID: 114446360825459598}
   - component: {fileID: 114209607288282374}
+  - component: {fileID: 7914964424907188318}
   m_Layer: 9
   m_Name: spawn
   m_TagString: Untagged
@@ -251,19 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c143c9faac4c8193ea547a8365995a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114446360825459598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602502594321142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15064da12a114219a2108bd81c01ede9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _energyDisplay: {fileID: 114346166130023336}
 --- !u!114 &114209607288282374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +273,20 @@ MonoBehaviour:
   _animateOnStart: 1
   _visibleOnStart: 1
   _speed: 0.2
+--- !u!114 &7914964424907188318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602502594321142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18b30d9462322646b0495b39130e440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _energyBall: {fileID: 23315227329694000}
+  _energyBallScale: {fileID: 695660675104876323}
 --- !u!1 &1709444850411510
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +343,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -359,3 +368,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

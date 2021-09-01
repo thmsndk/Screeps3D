@@ -7,6 +7,7 @@ namespace Screeps3D.RoomObjects.Views
     {
         private LineRenderer _lineRenderer;
         private Link _link;
+        [SerializeField] private Renderer _linkEnergy = default;
 
         public void Init()
         {
@@ -16,6 +17,10 @@ namespace Screeps3D.RoomObjects.Views
         public void Load(RoomObject roomObject)
         {
             _link = roomObject as Link;
+            _linkEnergy.materials[0].SetFloat("EmissionStrength", .5f);
+            _linkEnergy.materials[0].SetFloat("xSize", 0.4f);
+            _linkEnergy.materials[0].SetFloat("ySize", 0.4f);
+            _linkEnergy.materials[0].SetTexture("EmissionTexture", _link.CreateResourceTexture("energy"));
         }
 
         public void Delta(JSONObject data)
