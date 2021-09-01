@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using Common;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -6,7 +10,10 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _creepCore = default;
+        [SerializeField] private Renderer _creepStore = default;
+        [SerializeField] private ScaleAxes _creepStoreDisplay = default;
         [SerializeField] private Renderer _doritoCore = default;
+
         [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private Light _underLight = default;
 
@@ -93,10 +100,23 @@ namespace Screeps3D.RoomObjects.Views
             //     setHorse(true);
             // }
 
+
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
-
             ScaleCreepSize();
+            RendeCreepStore();
+        }
+
+        private void RendeCreepStore()
+        {
+            var storeUsage = _creep.TotalResources / _creep.TotalCapacity;
+            var storeTexture = _creep.CreateStorageTexture();
+
+            _creepStore.materials[0].SetFloat("ySize", 0.2f);
+            _creepStore.materials[0].SetFloat("xSize", 0.2f);
+            _creepStore.materials[0].SetFloat("EmissionStrength", .05f);
+            _creepStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+            _creepStoreDisplay.SetVisibility(storeUsage);
         }
 
         private void ScaleCreepSize()
@@ -137,6 +157,7 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             ScaleCreepSize();
+            RendeCreepStore();
             _dead = _dead || _creep.TTL == 1;
             if (_dead)
             {

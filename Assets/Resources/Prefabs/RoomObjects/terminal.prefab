@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f9e531ed5dc4db080e2f4bc6641b78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _energyDisplay: {fileID: 8524615598880923048}
+  _storeDisplay: {fileID: 8524615598880923048}
   _terminalStore: {fileID: 8483612197024116415}
 --- !u!114 &8524615598880923048
 MonoBehaviour:

@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c626be679875466a8e5e4dde292a8442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _energyDisplay: {fileID: 2839434099421224860}
+  _storeDisplay: {fileID: 2839434099421224860}
   _storageStore: {fileID: 6093478203858235024}
   _storageStoreTop: {fileID: 3440779297372932637}
 --- !u!114 &-1734665259134141203

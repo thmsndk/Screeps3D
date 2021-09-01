@@ -9,7 +9,7 @@ namespace Screeps3D.RoomObjects.Views
 {
     public class StorageView : MonoBehaviour, IObjectViewComponent
     {
-        [SerializeField] private ScaleAxes _energyDisplay = default;
+        [SerializeField] private ScaleAxes _storeDisplay = default;
         [SerializeField] private Renderer _storageStore = default;
         [SerializeField] private Renderer _storageStoreTop = default;
 
@@ -54,9 +54,9 @@ namespace Screeps3D.RoomObjects.Views
 
         private void AdjustScale()
         {
-            if (_storage != null)
+            if (_storage != null && _storeDisplay != null)
             {
-                _energyDisplay.SetVisibility(_storage.TotalResources / _storage.TotalCapacity);
+                _storeDisplay.SetVisibility(_storage.TotalResources / _storage.TotalCapacity);
             }
         }
     }

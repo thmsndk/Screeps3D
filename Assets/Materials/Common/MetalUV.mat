@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MetalUV
-  m_Shader: {fileID: -6465566751694194690, guid: c82142bbf4fba56489dac4e7b46d4cd0,
+  m_Shader: {fileID: -6465566751694194690, guid: f0d748a401e09e449a0809cbe5c0e292,
     type: 3}
   m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT
   m_LightmapFlags: 4
@@ -31,7 +31,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: 78cc52ab35fd5804799dc229cdd44a64, type: 3}
+        m_Texture: {fileID: 2800000, guid: 499249bdbff1caf43960eecca86e5832, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_11286322:
@@ -86,6 +86,7 @@ Material:
     - NormalStrenght: 0.6
     - SmoothStrength: 0
     - UVScale: 1
+    - Vector1_6ac8434104eb404084ee61ca9df079c2: 0
     - Vector1_A84FA659: 1
     - Vector1_E094F33F: 0.5
     - Vector1_E11C7DA1: 0.5

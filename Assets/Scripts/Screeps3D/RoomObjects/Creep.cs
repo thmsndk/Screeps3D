@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
-using Screeps3D.Effects;
+﻿using Screeps3D.Effects;
 using Screeps3D.Rooms;
 using Screeps_API;
+using Common;
 using UnityEngine;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Screeps3D.RoomObjects
 {
@@ -93,25 +96,25 @@ namespace Screeps3D.RoomObjects
                 UnpackUtility.Owner(this, data);
                 UnpackUtility.Name(this, data);
             }
-            
+
             UnpackUtility.HitPoints(this, data);
             UnpackUtility.ActionLog(this, data);
 
             var ageData = data["ageTime"];
             if (ageData != null)
             {
-                AgeTime = (long) ageData.n;
+                AgeTime = (long)ageData.n;
             }
-            
+
             var fatigueData = data["fatigue"];
             if (fatigueData != null)
             {
                 Fatigue = fatigueData.n;
             }
-            
+
             Body.Unpack(data, initial);
         }
-        
+
         internal override void Delta(JSONObject delta, Room room)
         {
             if (!Initialized)
@@ -123,7 +126,7 @@ namespace Screeps3D.RoomObjects
             {
                 Unpack(delta, false);
             }
-            
+
             if (Room != room || !Shown)
             {
                 EnterRoom(room);
@@ -132,16 +135,16 @@ namespace Screeps3D.RoomObjects
             // Acquire previous position before updating it.
             PrevPosition = Position; // TODO: this really belongs before unpacking, pretty sure whatever PrevPosition stuff was supposed to do, it aint working like this.
 
-            SetPosition(); 
+            SetPosition();
             AssignBumpPosition();
             AssignRotation();
-            
+
             if (Actions.ContainsKey("say") && !Actions["say"].IsNull)
                 EffectsUtility.Speech(this, Actions["say"]["message"].str, Actions["say"]["isPublic"].b);
-            
+
             if (View != null)
                 View.Delta(delta);
-            
+
             RaiseDeltaEvent(delta);
         }
 
@@ -175,6 +178,51 @@ namespace Screeps3D.RoomObjects
 
             if (newForward != Vector3.zero)
                 Rotation = Quaternion.LookRotation(newForward);
+        }
+
+        public Texture2D CreateStorageTexture()
+        {
+            this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            List<string> resources = new List<string>(this.Store.Keys);
+
+            int height = 1000;
+            int width = 10;
+            float yStep = 0.01f;
+
+            int resourceIndex = 0;
+            float percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+            float nextResourceAt = 1000 * percent;
+            Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+
+            Texture2D texture = new Texture2D(width, height);
+            // Debug.LogError("Resources to draw " + resources.Count);
+            // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+            for (int y = 0; y < height; y++)
+            {
+                if (y >= nextResourceAt)
+                {
+                    resourceIndex += 1;
+                    if (resourceIndex >= resources.Count)
+                    {
+                        resourceIndex -= 1;
+                        nextResourceAt = height + 1;
+                    }
+                    else
+                    {
+                        percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
+                        nextResourceAt = y + 1000 * percent;
+                    }
+                    color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+                    // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
+                }
+
+                for (int x = 0; x < Mathf.CeilToInt(width); x++)
+                {
+                    texture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
+                }
+            }
+            texture.Apply();
+            return texture;
         }
     }
 }

@@ -758,9 +758,9 @@ GameObject:
   - component: {fileID: 7050490153179765744}
   - component: {fileID: 4276625254055043759}
   - component: {fileID: 6036472755327936418}
-  - component: {fileID: 2626415949459344270}
+  - component: {fileID: 8549010388097395444}
   m_Layer: 0
-  m_Name: energy
+  m_Name: store
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -807,7 +807,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 283ff4931ac559448b843bc4b862d2f8, type: 2}
+  - {fileID: 2100000, guid: 380184507bad5c640818b9b4bdc5d604, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -829,7 +829,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2626415949459344270
+--- !u!114 &8549010388097395444
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -838,12 +838,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7156402938527203619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c0dbd230caa4450b371bfe864d7906a, type: 3}
+  m_Script: {fileID: 11500000, guid: f5721b936de04561a74b227908f4b2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animateOnStart: 1
   _visibleOnStart: 1
   _speed: 0.2
+  _x: 1
+  _y: 1
+  _z: 1
 --- !u!1 &7263842300111012398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,7 +1269,6 @@ GameObject:
   - component: {fileID: -3500898658809121333}
   - component: {fileID: 9218302257170397443}
   - component: {fileID: -6725527238025093273}
-  - component: {fileID: -6007905696904912852}
   - component: {fileID: -1981475767877070329}
   - component: {fileID: -296322938788407102}
   - component: {fileID: 9031987205251728300}
@@ -1338,25 +1340,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _badge: {fileID: 4099124959884727395}
   _creepCore: {fileID: 4446368497938209821}
+  _creepStore: {fileID: 6036472755327936418}
+  _creepStoreDisplay: {fileID: 8549010388097395444}
   _doritoCore: {fileID: 7557115380528264354}
   _rotationRoot: {fileID: 5178771384550497116}
   _underLight: {fileID: 7390957952053060928}
   _wingLeft: {fileID: 8803472005155635480}
   _wingRight: {fileID: 6383300503220738902}
   _horse: {fileID: 1154445858026572484}
---- !u!114 &-6007905696904912852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8180200459206781263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afadf59b851a4e9980e7cf0bff584b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _storeDisplay: {fileID: 2626415949459344270}
 --- !u!114 &-1981475767877070329
 MonoBehaviour:
   m_ObjectHideFlags: 0

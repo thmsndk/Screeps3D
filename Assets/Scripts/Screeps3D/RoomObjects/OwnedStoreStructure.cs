@@ -21,7 +21,7 @@ namespace Screeps3D.RoomObjects
             Capacity = new Dictionary<string, float>();
         }
 
-        public Texture2D CreateStorageTexture()
+        public Texture2D CreateStorageTexture(Boolean excludeEnergy)
         {
             this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             List<string> resources = new List<string>(this.Store.Keys);
@@ -65,17 +65,6 @@ namespace Screeps3D.RoomObjects
             texture.Apply();
             return texture;
         }
-
-        public Texture getLastStoreKeyTexture()
-        {
-            List<string> resources = new List<string>(this.Store.Keys);
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(1, 1, Constants.GetComplexResourceColor(resources[resources.Count - 1]));
-            texture.Apply();
-            return texture;
-        }
-
-
 
         internal override void Unpack(JSONObject data, bool initial)
         {
