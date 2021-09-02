@@ -108,6 +108,14 @@ namespace Screeps3D
 
         public static class CreepBodyPartColors
         {
+            public const string MoveHex = "#A9B7C6";
+            public const string WorkHex = "#FFE56D";
+            public const string AttackHex = "#F93842";
+            public const string RangedAttackHex = "#5D80B2";
+            public const string HealHex = "#65FD62";
+            public const string ToughHex = "#FFFFFF";
+            public const string ClaimHex = "#B99CFB";
+            public const string CarryHex = "#777777";
             public static readonly Color Move;
             public static readonly Color Work;
             public static readonly Color Attack;
@@ -119,14 +127,14 @@ namespace Screeps3D
 
             static CreepBodyPartColors()
             {
-                ColorUtility.TryParseHtmlString("#A9B7C6", out Move);
-                ColorUtility.TryParseHtmlString("#FFE56D", out Work);
-                ColorUtility.TryParseHtmlString("#F93842", out Attack);
-                ColorUtility.TryParseHtmlString("#5D80B2", out RangedAttack);
-                ColorUtility.TryParseHtmlString("#65FD62", out Heal);
-                ColorUtility.TryParseHtmlString("#FFFFFF", out Tough);
-                ColorUtility.TryParseHtmlString("#B99CFB", out Claim);
-                ColorUtility.TryParseHtmlString("#777777", out Carry);
+                ColorUtility.TryParseHtmlString(MoveHex, out Move);
+                ColorUtility.TryParseHtmlString(WorkHex, out Work);
+                ColorUtility.TryParseHtmlString(AttackHex, out Attack);
+                ColorUtility.TryParseHtmlString(RangedAttackHex, out RangedAttack);
+                ColorUtility.TryParseHtmlString(HealHex, out Heal);
+                ColorUtility.TryParseHtmlString(ToughHex, out Tough);
+                ColorUtility.TryParseHtmlString(ClaimHex, out Claim);
+                ColorUtility.TryParseHtmlString(CarryHex, out Carry);
             }
         }
 

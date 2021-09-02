@@ -80,11 +80,17 @@ namespace Assets.Scripts.Screeps3D.Tools.ConstructionSite
 
         private void OnRoomChange()
         {
-            playerPositionRoom.ObjectStream.OnData -= OnRoomData;
+            if (playerPositionRoom != null && playerPositionRoom.ObjectStream != null)
+            {
+                playerPositionRoom.ObjectStream.OnData -= OnRoomData;
+            }
 
             playerPositionRoom = PlayerPosition.Instance.Room;
 
-            playerPositionRoom.ObjectStream.OnData += OnRoomData;
+            if (playerPositionRoom != null && playerPositionRoom.ObjectStream != null)
+            {
+                playerPositionRoom.ObjectStream.OnData += OnRoomData;
+            }
 
             UpdateAvailable();
         }
