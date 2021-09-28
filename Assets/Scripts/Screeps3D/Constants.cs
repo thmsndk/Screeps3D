@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Globalization;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -129,6 +130,46 @@ namespace Screeps3D
                 ColorUtility.TryParseHtmlString("#777777", out Carry);
             }
         }
+
+        /*
+        put this as some static method that populates dictionary ?
+        public Texture2D CreateResourceTexture(string resource)
+        {
+            int height = 1;
+            int width = 1;
+
+
+            this._storeTexture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
+            this._storeTexture.Apply();
+            return texture;
+        }
+        */
+
+        public static class EnergyColorTexture
+        {
+            private static Texture2D Energy;
+
+            private static void Init()
+            {
+                if (Energy != null)
+                {
+                    return;
+                }
+
+                Debug.LogError("1st request for energy texture which is null - creating a one");
+                Energy = new Texture2D(1, 1);
+                Energy.SetPixel(1, 1, GetComplexResourceColor("energy"));
+                Energy.Apply(true, true);
+            }
+
+            public static Texture2D Get()
+            {
+                Init();
+                return Energy;
+            }
+        }
+
+
 
         public static class CreepBodyPartBoostColors
         {

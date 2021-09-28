@@ -47,11 +47,12 @@ namespace Screeps3D.RoomObjects.Views
 
         private void UpdateMineralStore()
         {
+            _lab.SetSingleResourceTexture(_lab.ResourceType);
             _mineral.SetVisibility(_lab.ResourceAmount / _lab.ResourceCapacity /*3000*/);
             _mineralMesh.materials[0].SetFloat("EmissionStrength", .05f);
             _mineralMesh.materials[0].SetFloat("xSize", 0.3f);
             _mineralMesh.materials[0].SetFloat("ySize", 0.3f * _lab.ResourceAmount / _lab.ResourceCapacity);
-            _mineralMesh.materials[0].SetTexture("EmissionTexture", _lab.CreateResourceTexture(_lab.ResourceType));
+            _mineralMesh.materials[0].SetTexture("EmissionTexture", _lab._storeTexture);
         }
 
         private void UpdateEnergyStore()
@@ -60,10 +61,11 @@ namespace Screeps3D.RoomObjects.Views
             var energyCapacity = _lab.Capacity.ContainsKey(Constants.TypeResource) ? _lab.Capacity[Constants.TypeResource] : 0f;
             _energy.SetVisibility(energy / energyCapacity);
 
+            _lab.SetSingleResourceTexture("energy");
             _energyMesh.materials[0].SetFloat("EmissionStrength", .15f);
             _energyMesh.materials[0].SetFloat("xSize", 0.2f);
             _energyMesh.materials[0].SetFloat("ySize", 0.2f * energy / energyCapacity);
-            _energyMesh.materials[0].SetTexture("EmissionTexture", _lab.CreateResourceTexture("energy"));
+            _energyMesh.materials[0].SetTexture("EmissionTexture", Constants.EnergyColorTexture.Get());
         }
 
         private void ShowReaction()

@@ -104,18 +104,21 @@ namespace Screeps3D.RoomObjects.Views
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
             ScaleCreepSize();
-            RendeCreepStore();
+            RenderCreepStore();
         }
 
-        private void RendeCreepStore()
+        private void RenderCreepStore()
         {
             var storeUsage = _creep.TotalResources / _creep.TotalCapacity;
-            var storeTexture = _creep.CreateStoreTexture();
+            // var storeTexture = _creep.CreateStoreTexture();
 
             _creepStore.materials[0].SetFloat("ySize", 0.2f);
             _creepStore.materials[0].SetFloat("xSize", 0.2f);
             _creepStore.materials[0].SetFloat("EmissionStrength", .05f);
-            _creepStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+
+            _creep.UpdateStoreTexture();
+            _creepStore.materials[0].SetTexture("EmissionTexture", _creep._storeTexture);
+
             _creepStoreDisplay.SetVisibility(storeUsage);
         }
 
@@ -157,7 +160,7 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             ScaleCreepSize();
-            RendeCreepStore();
+            RenderCreepStore();
             _dead = _dead || _creep.TTL == 1;
             if (_dead)
             {
@@ -169,7 +172,11 @@ namespace Screeps3D.RoomObjects.Views
         private void Update()
         {
             if (_creep == null)
+            {
+                Destroy(_creep._storeTexture);
+                Resources.UnloadUnusedAssets();
                 return;
+            }
 
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 

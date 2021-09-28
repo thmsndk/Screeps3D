@@ -20,7 +20,7 @@ namespace Screeps3D.RoomObjects.Views
             _linkEnergy.materials[0].SetFloat("EmissionStrength", .5f);
             _linkEnergy.materials[0].SetFloat("xSize", 0.4f);
             _linkEnergy.materials[0].SetFloat("ySize", 0.4f);
-            _linkEnergy.materials[0].SetTexture("EmissionTexture", _link.CreateResourceTexture("energy"));
+            _linkEnergy.materials[0].SetTexture("EmissionTexture", Constants.EnergyColorTexture.Get());
         }
 
         public void Delta(JSONObject data)

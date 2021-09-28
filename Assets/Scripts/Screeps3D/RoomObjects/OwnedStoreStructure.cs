@@ -12,6 +12,7 @@ namespace Screeps3D.RoomObjects
     {
         public float TotalCapacity { get; set; }
         public float TotalResources { get; set; }
+        public Texture2D? _storeTexture;
 
         public Dictionary<string, float> Store { get; private set; }
         public Dictionary<string, float> Capacity { get; private set; }
@@ -22,17 +23,22 @@ namespace Screeps3D.RoomObjects
             Capacity = new Dictionary<string, float>();
         }
 
-        public Texture2D CreateResourceTexture(string resource)
+        public void SetSingleResourceTexture(string resource)
         {
             int height = 1;
             int width = 1;
-            Texture2D texture = new Texture2D(width, height);
-            texture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
-            texture.Apply();
-            return texture;
+            if (this._storeTexture == null)
+            {
+                Debug.LogError("Single Store structure without store texture - creating a new one");
+                this._storeTexture = new Texture2D(width, height);
+            }
+            this._storeTexture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
+            this._storeTexture.Apply();
         }
 
-        public Texture2D CreateStoreTexture(bool excludeEnergy = false)
+
+
+        public void UpdateStoreTexture(bool excludeEnergy = false)
         {
             var storeCopy = this.Store;
             var storeCapacity = this.TotalResources;
@@ -56,7 +62,11 @@ namespace Screeps3D.RoomObjects
             float nextResourceAt = 1000 * percent;
             Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
 
-            Texture2D texture = new Texture2D(width, height);
+            if (this._storeTexture == null)
+            {
+                Debug.LogError("Owned structure without store texture - creating a new one");
+                this._storeTexture = new Texture2D(width, height);
+            }
             // Debug.LogError("Resources to draw " + resources.Count);
             // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
             for (int y = 0; y < height; y++)
@@ -86,11 +96,10 @@ namespace Screeps3D.RoomObjects
 
                 for (int x = 0; x < Mathf.CeilToInt(width); x++)
                 {
-                    texture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
+                    _storeTexture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
                 }
             }
-            texture.Apply();
-            return texture;
+            _storeTexture.Apply();
         }
 
         internal override void Unpack(JSONObject data, bool initial)

@@ -21,7 +21,7 @@ namespace Screeps3D.RoomObjects.Views
             _energyBall.materials[0].SetFloat("EmissionStrength", .5f);
             _energyBall.materials[0].SetFloat("xSize", 0.4f);
             _energyBall.materials[0].SetFloat("ySize", 0.4f);
-            _energyBall.materials[0].SetTexture("EmissionTexture", _spawn.CreateResourceTexture("energy"));
+            _energyBall.materials[0].SetTexture("EmissionTexture", Constants.EnergyColorTexture.Get());
 
         }
 

@@ -39,15 +39,19 @@ namespace Screeps3D.RoomObjects.Views
         private void UpdateStore()
         {
 
-            var storeTexture = _storage.CreateStoreTexture();
+            // var storeTexture = _storage.CreateStoreTexture();
+            _storage.UpdateStoreTexture();
+
             _storageStore.materials[0].SetFloat("ySize", _storage.TotalResources / _storage.TotalCapacity);
             _storageStore.materials[0].SetFloat("EmissionStrength", .05f);
-            _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+            // _storageStore.materials[0].SetTexture("EmissionTexture", storeTexture);
+            _storageStore.materials[0].SetTexture("EmissionTexture", _storage._storeTexture);
 
             _storageStoreTop.materials[0].SetFloat("xSize", .2f);
             _storageStoreTop.materials[0].SetFloat("ySize", .2f);
             _storageStoreTop.materials[0].SetFloat("EmissionStrength", .05f);
-            _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
+            // _storageStoreTop.materials[0].SetTexture("EmissionTexture", storeTexture);
+            _storageStoreTop.materials[0].SetTexture("EmissionTexture", _storage._storeTexture);
         }
 
         private void AdjustScale()
