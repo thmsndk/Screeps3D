@@ -35,8 +35,6 @@ namespace Screeps3D.RoomObjects.Views
         }
         private void UpdateStore()
         {
-
-            // var storeTexture = CreateStoreTexture();
             UpdateStoreTexture();
 
             _containerStore.materials[0].SetFloat("xSize", .2f);
@@ -78,7 +76,7 @@ namespace Screeps3D.RoomObjects.Views
 
             if (this._storeTexture == null)
             {
-                Debug.LogError("Owned structure without store texture - creating a new one");
+                Debug.Log("Container without store texture - creating a new one");
                 this._storeTexture = new Texture2D(width, height);
             }
             // Debug.LogError("Resources to draw " + resources.Count);

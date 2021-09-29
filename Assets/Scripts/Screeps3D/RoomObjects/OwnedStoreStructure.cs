@@ -29,7 +29,7 @@ namespace Screeps3D.RoomObjects
             int width = 1;
             if (this._storeTexture == null)
             {
-                Debug.LogError("Single Store structure without store texture - creating a new one");
+                Debug.Log("Single Store structure without store texture - creating a new one");
                 this._storeTexture = new Texture2D(width, height);
             }
             this._storeTexture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
@@ -64,7 +64,7 @@ namespace Screeps3D.RoomObjects
 
             if (this._storeTexture == null)
             {
-                Debug.LogError("Owned structure without store texture - creating a new one");
+                Debug.Log("Owned structure without store texture - creating a new one");
                 this._storeTexture = new Texture2D(width, height);
             }
             // Debug.LogError("Resources to draw " + resources.Count);

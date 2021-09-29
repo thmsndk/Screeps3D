@@ -20,7 +20,6 @@ namespace Screeps3D.RoomObjects.Views
         {
             _terminal = roomObject as Terminal;
             AdjustScale();
-            // var storeTexture = _terminal.CreateStoreTexture();
             _terminal.UpdateStoreTexture();
             _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
             _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal._storeTexture);
@@ -30,7 +29,6 @@ namespace Screeps3D.RoomObjects.Views
         public void Delta(JSONObject data)
         {
             AdjustScale();
-            // var storeTexture = _terminal.CreateStoreTexture();
             _terminal.UpdateStoreTexture();
             _terminalStore.materials[0].SetFloat("EmissionStrength", .05f);
             _terminalStore.materials[0].SetTexture("EmissionTexture", _terminal._storeTexture);
