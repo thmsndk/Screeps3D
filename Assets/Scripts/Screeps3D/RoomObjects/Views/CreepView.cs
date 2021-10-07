@@ -173,7 +173,7 @@ namespace Screeps3D.RoomObjects.Views
         {
             if (_creep == null)
             {
-                Destroy(_creep._storeTexture);
+                //Destroy(_creep._storeTexture);
                 Resources.UnloadUnusedAssets();
                 return;
             }
