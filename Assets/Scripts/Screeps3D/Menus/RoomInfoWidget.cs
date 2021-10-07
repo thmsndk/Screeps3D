@@ -8,12 +8,14 @@ using Screeps3D.RoomObjects;
 using Screeps_API;
 using System.Linq;
 using System;
+using Common;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Screeps3D.Menus
 {
     public class RoomInfoWidget : MonoBehaviour
     {
-        public RoomInfoPlayerWidget RoomInfoPlayerWidgetPrefab;
+        private const string RoomInfoPlayerWidgetPrefab = "Prefabs/RoomInfoPlayerWidget";
 
         private Room playerPositionRoom;
 
@@ -25,6 +27,8 @@ namespace Assets.Scripts.Screeps3D.Menus
             {
                 Destroy(child.gameObject);
             }
+
+            PoolLoader.Preload(RoomInfoPlayerWidgetPrefab, 2);
         }
 
         private void OnEnable()
@@ -33,7 +37,10 @@ namespace Assets.Scripts.Screeps3D.Menus
 
             // register for ticks/delta or room updates
             playerPositionRoom = PlayerPosition.Instance.Room;
-            playerPositionRoom.ObjectStream.OnData += OnRoomData;
+            if (playerPositionRoom != null)
+            {
+                playerPositionRoom.ObjectStream.OnData += OnRoomData; 
+            }
         }
 
         // Update is called once per frame
@@ -103,7 +110,8 @@ namespace Assets.Scripts.Screeps3D.Menus
                     if (gameObject == null)
                     {
                         Debug.Log("Spawning room info for " + item.Key.Username);
-                        gameObject = Instantiate(RoomInfoPlayerWidgetPrefab, this.transform).gameObject;
+                        gameObject = PoolLoader.Load(RoomInfoPlayerWidgetPrefab); //Instantiate(RoomInfoPlayerWidgetPrefab, this.transform).gameObject;
+                        gameObject.transform.SetParent(this.transform);
                         gameObject.name = item.Key.UserId;
                     }
 
@@ -112,10 +120,25 @@ namespace Assets.Scripts.Screeps3D.Menus
                     // crude initial way
                     widget.BadgeAndLabel.SetOwner(item.Key);
                     widget.StatsLabel.text = item.Value.Where(x => x.Value > 0).Select(x => "<color="+ConvertBodyPartToHexColor(x.Key)+">" + x.Value + "" + x.Key.Substring(0, 1).ToUpper() + "</color>").Aggregate((s1, s2) => s1 + " " + s2);
+                    gameObject.gameObject.SetActive(true);
                 }
             }
-            
-            // TODO loop children and disable other plays
+
+            // loop children and disable other plays
+            foreach (Transform child in this.transform)
+            {
+                var hasData = data.Any(x => x.Key.UserId == child.name);
+                if (!hasData)
+                {
+                    child.gameObject.SetActive(false);
+                    PoolLoader.Return(RoomInfoPlayerWidgetPrefab, child.gameObject);
+                }
+            }
+
+            // There is a strange issue where the first time, they are horizontally aligned
+            var vlg = GetComponent<VerticalLayoutGroup>();
+            vlg.SetLayoutVertical();
+            vlg.SetLayoutHorizontal();
         }
 
         private string ConvertBodyPartToHexColor(string partType)
