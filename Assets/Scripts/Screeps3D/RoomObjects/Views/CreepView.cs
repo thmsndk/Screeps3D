@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using Common;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Screeps3D.RoomObjects.Views
 {
@@ -6,7 +10,10 @@ namespace Screeps3D.RoomObjects.Views
     {
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _creepCore = default;
+        [SerializeField] private Renderer _creepStore = default;
+        [SerializeField] private ScaleAxes _creepStoreDisplay = default;
         [SerializeField] private Renderer _doritoCore = default;
+
         [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private Light _underLight = default;
 
@@ -93,10 +100,26 @@ namespace Screeps3D.RoomObjects.Views
             //     setHorse(true);
             // }
 
+
             _rotTarget = transform.rotation;
             _posTarget = roomObject.Position;
-
             ScaleCreepSize();
+            RenderCreepStore();
+        }
+
+        private void RenderCreepStore()
+        {
+            var storeUsage = _creep.TotalResources / _creep.TotalCapacity;
+            // var storeTexture = _creep.CreateStoreTexture();
+
+            _creepStore.materials[0].SetFloat("ySize", 0.2f);
+            _creepStore.materials[0].SetFloat("xSize", 0.2f);
+            _creepStore.materials[0].SetFloat("EmissionStrength", .05f);
+
+            _creep.UpdateStoreTexture();
+            _creepStore.materials[0].SetTexture("EmissionTexture", _creep._storeTexture);
+
+            _creepStoreDisplay.SetVisibility(storeUsage);
         }
 
         private void ScaleCreepSize()
@@ -137,6 +160,7 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             ScaleCreepSize();
+            RenderCreepStore();
             _dead = _dead || _creep.TTL == 1;
             if (_dead)
             {
@@ -148,7 +172,11 @@ namespace Screeps3D.RoomObjects.Views
         private void Update()
         {
             if (_creep == null)
+            {
+                Destroy(_creep._storeTexture);
+                Resources.UnloadUnusedAssets();
                 return;
+            }
 
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _posTarget, ref _posRef, .5f);
 

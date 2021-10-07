@@ -15,7 +15,7 @@ namespace Screeps3D.RoomObjects
         "hits":500,
         "hitsMax":500,
         "mineralAmount":0,
-        "cooldown":0,
+        "cooldownTime":0,
         "mineralType":null,
         "mineralCapacity":3000,
         "energy":1080,
@@ -24,13 +24,13 @@ namespace Screeps3D.RoomObjects
             "runReaction":null || "runReaction":{"x1":19,"y1":31,"x2":18,"y2":32}
         }
     }*/
-    public class Lab : OwnedStoreStructure, IActionObject, IResourceObject, ICooldownObject//, IEnergyObject
+    public class Lab : OwnedStoreStructure, IActionObject, IResourceObject, ICooldownTime//, IEnergyObject
     {
         public float ResourceAmount { get; set; }
         public float ResourceCapacity { get; set; }
         public string ResourceType { get; set; }
 
-        public float Cooldown { get; set; }
+        public long CooldownTime { get; set; }
         public Dictionary<string, JSONObject> Actions { get; set; }
 
         public Lab()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Globalization;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -138,6 +139,46 @@ namespace Screeps3D
             }
         }
 
+        /*
+        put this as some static method that populates dictionary ?
+        public Texture2D CreateResourceTexture(string resource)
+        {
+            int height = 1;
+            int width = 1;
+
+
+            this._storeTexture.SetPixel(1, 1, Constants.GetComplexResourceColor(resource));
+            this._storeTexture.Apply();
+            return texture;
+        }
+        */
+
+        public static class EnergyColorTexture
+        {
+            private static Texture2D Energy;
+
+            private static void Init()
+            {
+                if (Energy != null)
+                {
+                    return;
+                }
+
+                Debug.LogError("1st request for energy texture which is null - creating a one");
+                Energy = new Texture2D(1, 1);
+                Energy.SetPixel(1, 1, GetComplexResourceColor("energy"));
+                Energy.Apply(true, true);
+            }
+
+            public static Texture2D Get()
+            {
+                Init();
+                return Energy;
+            }
+        }
+
+
+
         public static class CreepBodyPartBoostColors
         {
             public static readonly Color BOOST_TYPE_UH_UO;
@@ -168,6 +209,7 @@ namespace Screeps3D
             {"other", new Color32(204, 204, 204, 255)},
             {"energy", new Color32(118, 93, 0, 255)},
             {"power", new Color32(255, 0, 0, 255)},
+            {"battery", new Color32(217, 213, 0, 255)},
             // MINERALS
             {Constants.BaseMineral.Hydrogen, new   Color32(205,205,205,255)},
             {Constants.BaseMineral.Oxygen, new   Color32(205,205,205,255)},
@@ -177,7 +219,7 @@ namespace Screeps3D
             {Constants.BaseMineral.Zynthium, new   Color32(253,211,136,255)},
             {Constants.BaseMineral.Catalyst, new   Color32(255,119,119,255)},
             // GHODIUM
-            {"G", new   Color32(11,11,11,255)},
+            {"G", new   Color32(240,240,240,255)},
             // DEPOSITS
             {Constants.BaseDeposit.Biomass, new   Color32(38,110,0,255)},
             {Constants.BaseDeposit.Metal, new   Color32(128,58,0,255)},
@@ -194,17 +236,20 @@ namespace Screeps3D
             }
             if (ResourceColors.ContainsKey(resourceType) == true)
             {
+                // simple resource
                 return ResourceColors[resourceType];
             }
             if (Char.IsUpper(resourceType.ToCharArray(0, 1)[0]) == false)
             {
-                Debug.LogWarning("Unsupported mineralType (deposit/commodity)");
+                Debug.LogWarning("Unsupported mineralType (deposit/commodity) [" + resourceType.ToCharArray(0, 1) + "]");
                 return new Color32(0, 0, 0, 255);
             }
             if (resourceType.Length == 5)
             {
+                // from XUH2O we want the U
                 return ResourceColors[resourceType[1].ToString()];
             }
+            // from anything else we want 1st characer UH, ZK, KHO2 etc
             return ResourceColors[resourceType[0].ToString()];
         }
 
